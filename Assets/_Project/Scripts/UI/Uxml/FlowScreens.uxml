@@ -3,16 +3,36 @@
     <ui:VisualElement name="flow-root" class="flow-root">
         <ui:VisualElement name="setup-screen" class="flow-screen">
             <ui:Label class="flow-title" text="Mejnun" />
-            <ui:Label class="flow-copy" text="Choose your seats and names." />
+            <ui:Label class="flow-copy" text="Play solo against bots, or pass one device around. Bots can fill any seat." />
+            <ui:DropdownField name="mode-field" label="Mode" />
             <ui:IntegerField name="seat-count-field" label="Seats" value="3" />
             <ui:VisualElement name="player-name-fields" class="player-name-fields">
-                <ui:TextField name="player-name-0" label="Player 1" value="Player 1" />
-                <ui:TextField name="player-name-1" label="Player 2" value="Player 2" />
-                <ui:TextField name="player-name-2" label="Player 3" value="Player 3" />
-                <ui:TextField name="player-name-3" label="Player 4" value="Player 4" />
-                <ui:TextField name="player-name-4" label="Player 5" value="Player 5" />
-                <ui:TextField name="player-name-5" label="Player 6" value="Player 6" />
+                <ui:VisualElement name="seat-row-0" class="seat-row">
+                    <ui:TextField name="player-name-0" class="seat-name" label="Seat 1" value="Player 1" />
+                    <ui:DropdownField name="seat-kind-0" class="seat-kind" />
+                </ui:VisualElement>
+                <ui:VisualElement name="seat-row-1" class="seat-row">
+                    <ui:TextField name="player-name-1" class="seat-name" label="Seat 2" value="Player 2" />
+                    <ui:DropdownField name="seat-kind-1" class="seat-kind" />
+                </ui:VisualElement>
+                <ui:VisualElement name="seat-row-2" class="seat-row">
+                    <ui:TextField name="player-name-2" class="seat-name" label="Seat 3" value="Player 3" />
+                    <ui:DropdownField name="seat-kind-2" class="seat-kind" />
+                </ui:VisualElement>
+                <ui:VisualElement name="seat-row-3" class="seat-row">
+                    <ui:TextField name="player-name-3" class="seat-name" label="Seat 4" value="Player 4" />
+                    <ui:DropdownField name="seat-kind-3" class="seat-kind" />
+                </ui:VisualElement>
+                <ui:VisualElement name="seat-row-4" class="seat-row">
+                    <ui:TextField name="player-name-4" class="seat-name" label="Seat 5" value="Player 5" />
+                    <ui:DropdownField name="seat-kind-4" class="seat-kind" />
+                </ui:VisualElement>
+                <ui:VisualElement name="seat-row-5" class="seat-row">
+                    <ui:TextField name="player-name-5" class="seat-name" label="Seat 6" value="Player 6" />
+                    <ui:DropdownField name="seat-kind-5" class="seat-kind" />
+                </ui:VisualElement>
             </ui:VisualElement>
+            <ui:Label name="setup-error" class="flow-error" text="" />
             <ui:Button name="start-match-button" class="flow-button primary-flow-button" text="Start game" />
         </ui:VisualElement>
         <ui:VisualElement name="dealer-question-screen" class="flow-screen">

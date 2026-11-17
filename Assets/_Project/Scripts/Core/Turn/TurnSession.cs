@@ -197,6 +197,7 @@ namespace Mejnun.Core
                 moves.Add(new Move(command));
             }
 
+            TryAutoGoDown(replay);
             return CommandResult.Success();
         }
 
@@ -240,6 +241,7 @@ namespace Mejnun.Core
                 moves.Add(new Move(command));
             }
 
+            TryAutoGoDown(replay);
             return CommandResult.Success();
         }
 
@@ -285,6 +287,7 @@ namespace Mejnun.Core
                 moves.Add(new Move(command));
             }
 
+            TryAutoGoDown(replay);
             return CommandResult.Success();
         }
 
@@ -370,6 +373,35 @@ namespace Mejnun.Core
             }
 
             return hasNewMeld;
+        }
+
+        internal IReadOnlyList<int> NewMeldIds()
+        {
+            var meldIds = new List<int>();
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var meld = state.Board[meldIndex];
+                if (!StartSnapshot.HasMeld(meld.Id))
+                {
+                    meldIds.Add(meld.Id);
+                }
+            }
+
+            return meldIds;
+        }
+
+        private void TryAutoGoDown(bool replay)
+        {
+            if (state.PlayerPhases[Seat] != PlayerPhase.NotDown || !CanGoDown())
+            {
+                return;
+            }
+
+            state.PlayerPhases[Seat] = PlayerPhase.Down;
+            if (!replay)
+            {
+                events.RaiseWentDown(Seat);
+            }
         }
 
         private void Rebuild()

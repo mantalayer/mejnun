@@ -19,11 +19,13 @@ namespace Mejnun.Game
         private bool moving;
         private bool faceUp;
         private bool selected;
+        private bool hinted;
 
         public byte CardId { get; private set; }
         public byte Deck { get; private set; }
         public bool IsFaceUp => faceUp;
         public bool IsSelected => selected;
+        public bool IsHinted => hinted;
         public Sprite CurrentFaceSprite => faceSprite;
         public SpriteRenderer Renderer => spriteRenderer;
 
@@ -63,10 +65,14 @@ namespace Mejnun.Game
         public void SetSelected(bool isSelected)
         {
             selected = isSelected;
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.color = selected ? new Color(1f, 0.82f, 0.36f, 1f) : Color.white;
-            }
+            ApplyTint();
+        }
+
+        /// <summary>"Highlight playable" hint tint. Selection wins when a card is both.</summary>
+        public void SetHinted(bool isHinted)
+        {
+            hinted = isHinted;
+            ApplyTint();
         }
 
         public void SetSortingOrder(int sortingOrder)
@@ -123,7 +129,28 @@ namespace Mejnun.Game
 
             spriteRenderer.sprite = faceUp ? faceSprite : backSprite;
             spriteRenderer.enabled = spriteRenderer.sprite != null;
-            spriteRenderer.color = selected ? new Color(1f, 0.82f, 0.36f, 1f) : Color.white;
+            ApplyTint();
+        }
+
+        private void ApplyTint()
+        {
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+
+            if (selected)
+            {
+                spriteRenderer.color = new Color(1f, 0.82f, 0.36f, 1f);
+            }
+            else if (hinted)
+            {
+                spriteRenderer.color = new Color(0.72f, 1f, 0.72f, 1f);
+            }
+            else
+            {
+                spriteRenderer.color = Color.white;
+            }
         }
 
         private Vector3 Snap(Vector3 position)

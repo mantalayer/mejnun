@@ -56,6 +56,7 @@ namespace Mejnun.Game
         private bool pointerDown;
         private bool pointerIsTouch;
         private int touchId;
+        private int ignoredTouchId = -1;
         private bool dragging;
         private bool longPressStarted;
         private Vector2 pointerStart;
@@ -111,11 +112,46 @@ namespace Mejnun.Game
         private bool ProcessTouchInput()
         {
             var touches = EnhancedTouch.activeTouches;
+            if (ignoredTouchId >= 0)
+            {
+                for (var index = 0; index < touches.Count; index++)
+                {
+                    var ignoredTouch = touches[index];
+                    if (ignoredTouch.touchId != ignoredTouchId)
+                    {
+                        continue;
+                    }
+
+                    if (ignoredTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended ||
+                        ignoredTouch.phase == UnityEngine.InputSystem.TouchPhase.Canceled)
+                    {
+                        ignoredTouchId = -1;
+                    }
+
+                    trackingPinch = false;
+                    return true;
+                }
+
+                ignoredTouchId = -1;
+            }
+
             if (touches.Count >= 2)
             {
                 if (pointerDown)
                 {
                     CancelPointer();
+                }
+
+                for (var index = 0; index < touches.Count; index++)
+                {
+                    if (!UiPointerBlocker.IsOverUi(touches[index].screenPosition))
+                    {
+                        continue;
+                    }
+
+                    ignoredTouchId = touches[index].touchId;
+                    trackingPinch = false;
+                    return true;
                 }
 
                 var first = touches[0].screenPosition;
@@ -155,6 +191,12 @@ namespace Mejnun.Game
                     CancelPointer();
                 }
 
+                if (UiPointerBlocker.IsOverUi(position))
+                {
+                    ignoredTouchId = touch.touchId;
+                    return true;
+                }
+
                 BeginPointer(position, true, touch.touchId);
             }
 
@@ -180,6 +222,11 @@ namespace Mejnun.Game
             var position = mouse.position.ReadValue();
             if (mouse.leftButton.wasPressedThisFrame)
             {
+                if (UiPointerBlocker.IsOverUi(position))
+                {
+                    return;
+                }
+
                 BeginPointer(position, false, 0);
             }
 

@@ -31,14 +31,19 @@ namespace Mejnun.Game.Tests
             var endTurn = root.Q<Button>("end-turn-button");
             var drawPass = root.Q<Button>("draw-pass-button");
             var undo = root.Q<Button>("undo-button");
-            var goDown = root.Q<Button>("go-down-button");
+            var turnPopup = root.Q<Label>("turn-popup");
+            var goneDownPopup = root.Q<Label>("gone-down-popup");
+            var goneDownTag = root.Q<Label>("gone-down-tag");
             var opponents = root.Q<VisualElement>("opponents-strip");
 
             Assert.That(endTurn, Is.Not.Null);
             Assert.That(endTurn.enabledInHierarchy, Is.False);
             Assert.That(drawPass.text, Is.EqualTo("Draw"));
             Assert.That(undo.enabledInHierarchy, Is.False);
-            Assert.That(goDown.style.display.value, Is.EqualTo(DisplayStyle.None));
+            Assert.That(root.Q<Button>("go-down-button"), Is.Null);
+            Assert.That(turnPopup, Is.Not.Null);
+            Assert.That(goneDownPopup, Is.Not.Null);
+            Assert.That(goneDownTag, Is.Not.Null);
             Assert.That(opponents.childCount, Is.EqualTo(3));
 
             matchFlow.Game.State.DrawPile.Clear();

@@ -110,6 +110,11 @@ namespace Mejnun.Game
             PanByScreenDelta(screenDelta, true);
         }
 
+        public void Pan(Vector2 screenDelta, Vector2 screenPosition)
+        {
+            PanByScreenDelta(screenDelta, screenPosition, true);
+        }
+
         public Vector3 SnapWorldPosition(Vector3 position, float pixelsPerUnit)
         {
             if (pixelsPerUnit <= 0f)
@@ -142,7 +147,7 @@ namespace Mejnun.Game
 
             var pointer = mouse.position.ReadValue();
             var scroll = mouse.scroll.ReadValue().y;
-            if (Mathf.Abs(scroll) > 0.01f)
+            if (Mathf.Abs(scroll) > 0.01f && !UiPointerBlocker.IsOverUi(pointer))
             {
                 var factor = Mathf.Pow(1.1f, scroll / 120f * zoomSensitivity);
                 ZoomAtScreenPoint(factor, pointer, true);

@@ -3,6 +3,7 @@
   "rootNamespace": "Mejnun.Game.Tests",
   "references": [
     "Mejnun.Core",
+    "Mejnun.AI",
     "Mejnun.Cosmetics",
     "Mejnun.Game",
     "Mejnun.UI"

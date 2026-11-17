@@ -27,6 +27,22 @@ namespace Mejnun.Game.Tests
             Assert.That(DeckLayoutPresetUtility.GetBlankSpriteIndex(), Is.EqualTo(53));
         }
 
+        [TestCase(Suit.Diamonds, Rank.Queen, 47)]
+        [TestCase(Suit.Spades, Rank.Queen, 48)]
+        [TestCase(Suit.Clubs, Rank.Jack, 18)]
+        [TestCase(Suit.Hearts, Rank.Jack, 19)]
+        [TestCase(Suit.Hearts, Rank.Queen, 20)]
+        [TestCase(Suit.Clubs, Rank.Ace, 25)]
+        [TestCase(Suit.Hearts, Rank.Ace, 24)]
+        [TestCase(Suit.Clubs, Rank.Two, 0)]
+        [TestCase(Suit.Hearts, Rank.Ten, 17)]
+        [TestCase(Suit.Diamonds, Rank.King, 50)]
+        public void ZigZag_MapsFacesToExpectedSpriteSlots(Suit suit, Rank rank, int expectedIndex)
+        {
+            Assert.That(DeckLayoutPresetUtility.GetFaceSpriteIndex(DeckLayoutPreset.ZigZag, suit, rank),
+                Is.EqualTo(expectedIndex));
+        }
+
         [Test]
         public void Resolve_UsesRequestedSkinOrPerDeckFallback()
         {

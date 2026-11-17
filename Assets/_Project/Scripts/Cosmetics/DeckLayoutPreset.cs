@@ -38,7 +38,8 @@ namespace Mejnun.Cosmetics
             var visualRank = rank == Rank.Ace ? 12 : rankIndex - (int)Rank.Two;
             var pairIndex = suit == Suit.Clubs || suit == Suit.Hearts ? 0 : 1;
             var firstSuit = pairIndex == 0 ? suit == Suit.Clubs : suit == Suit.Spades;
-            var firstSlot = visualRank % 2 == 0 ? firstSuit : !firstSuit;
+            var startsWithFirstSuit = visualRank <= 8 ? visualRank % 2 == 0 : visualRank % 2 != 0;
+            var firstSlot = startsWithFirstSuit == firstSuit;
             return pairIndex * 27 + visualRank * 2 + (firstSlot ? 0 : 1);
         }
 

@@ -7,6 +7,70 @@
     padding-bottom: 12px;
 }
 
+.popup-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.turn-popup,
+.gone-down-popup {
+    position: absolute;
+    left: 0;
+    right: 0;
+    color: rgb(248, 248, 240);
+    background-color: rgba(8, 18, 14, 0.9);
+    border-radius: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 30px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    opacity: 0;
+    scale: 0.9 0.9;
+    transition-property: opacity, scale;
+    transition-duration: 180ms;
+}
+
+.turn-popup {
+    top: 36%;
+}
+
+.gone-down-popup {
+    top: 46%;
+    color: rgb(22, 32, 24);
+    background-color: rgb(177, 224, 120);
+}
+
+.gone-down-tag {
+    position: absolute;
+    width: 200px;
+    height: 32px;
+    color: rgb(22, 32, 24);
+    background-color: rgb(177, 224, 120);
+    border-radius: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    opacity: 0;
+    scale: 0.9 0.9;
+    transition-property: opacity, scale;
+    transition-duration: 180ms;
+}
+
+.popup-visible {
+    opacity: 1;
+    scale: 1 1;
+}
+
 .hud-bar {
     flex-direction: row;
     align-items: center;

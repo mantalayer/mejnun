@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Style src="../Uss/table.uss" />
-    <ui:VisualElement name="hud-root" class="hud-root">
+    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
         <ui:VisualElement name="top-bar" class="hud-bar top-bar">
             <ui:VisualElement class="game-status">
                 <ui:Label name="turn-label" class="status-label" text="Seat 1's turn" />
@@ -13,10 +13,15 @@
             <ui:Button name="draw-pass-button" class="hud-button" text="Draw" />
             <ui:Button name="undo-button" class="hud-button" text="Undo" />
             <ui:Button name="revert-button" class="hud-button" text="Revert" />
-            <ui:Button name="go-down-button" class="hud-button accent-button" text="Go down" />
             <ui:Button name="sort-suit-button" class="hud-button" text="Sort: suit" />
             <ui:Button name="sort-rank-button" class="hud-button" text="Sort: rank" />
             <ui:Button name="fit-board-button" class="hud-button" text="Fit board" />
+            <ui:Button name="hint-button" class="hud-button" text="Hint: off" />
+        </ui:VisualElement>
+        <ui:VisualElement name="popup-layer" class="popup-layer" picking-mode="Ignore">
+            <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
+            <ui:Label name="gone-down-popup" class="gone-down-popup" text="Gone Down" picking-mode="Ignore" />
+            <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

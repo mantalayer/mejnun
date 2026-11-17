@@ -1,6 +1,6 @@
 # Mejnun — Game Design & Implementation Plan
 
-Status: draft v2 (2026-11-16), written from two interview rounds with Brennan, plus answers to the v1 open questions (§11). **M1 (rules engine) is complete** (§9).
+Status: draft v2 (2026-11-16), written from two interview rounds with Brennan, plus answers to the v1 open questions (§11). **M1 (rules engine), M2 (hot-seat prototype) and M3 (AI) are complete** (§9).
 Engine: Unity 6000.4.0f1 · URP 17.4 · Input System 1.19 · Wwise 2025.1.12
 Targets: iOS, Android, Windows, macOS (Steam for desktop).
 
@@ -159,16 +159,27 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
   - In hot-seat, only the active player can rearrange the board. The arrangement is kept for the whole game, so every player sees the same table.
   - This doesn't replace long-press on a set. Long-press still moves the set's *cards* into another set or a new group, which is an engine move.
   - On PC, the same left-drag on the grab area works, and the cursor changes to a grab hand over it.
+- **Pick-up feel, deck-builder style** (added in v2.2): any card you drag is physically *picked up* and travels with your finger.
+  - On pickup the card lifts: it scales up slightly (about 1.15×), rises above every other card, gets a soft drop shadow, and tilts a little in the direction of motion. It follows the pointer with light smoothing, offset slightly above the finger so the finger never hides it. A `Play_Card_Pickup` sound and haptic tick play.
+  - **Group pickup**: if the pressed hand card is part of a multi-selection, pressing and holding it picks up **every selected card**, and they travel as a small fanned stack under the finger. The cards left in the hand close the gaps. The same applies to the run tail or whole set that a long-press on a board set picks up.
+  - **Reorganize the hand**: while the held card(s) are over the hand, the hand opens a gap at the insertion point (neighbours slide aside), and dropping inserts them there. A group keeps its relative order. Like sorting, this is a view-only `HandOrder` change, not an engine move and not an Undo step.
+  - **Dropping**: on a legal target the cards tween into their slot. A cancel (dropping where they started, or outside any target) tweens them back to where they were picked up. Illegal drops spring back as described below.
+  - The board drop preview (the target highlight) stays. The lifted card is just the presentation on top of it.
 - A drop that's illegal (for example a board card onto the hand, or touching the board before going down) springs the card back with a haptic buzz and the `Play_Card_Invalid` sound. Temporarily *invalid sets* are always allowed and get a red outline.
 - Haptics on mobile for pickup, long-press, drop and invalid.
 - On PC: left-drag = drag, holding the left button = long-press, the wheel zooms, and right/middle-drag pans. Keyboard shortcuts are optional extras: Ctrl+Z undo, R revert, Space end turn, D draw.
 - A gesture tutorial covers drag, long-press-split and pinch in the first solo game, with tooltips the first time each gesture is relevant.
 
 ### 3.5 AI (`Mejnun.AI`)
-- One shared **solver** asks: given the board cards (B), a subset of hand cards (H) and the go-down constraint, what is a valid partition of B ∪ H′ that maximises |H′|? It works as exact-cover-style backtracking over candidate melds, with memoisation and a time budget. It runs on a worker thread and returns the best result so far when time runs out.
+- One shared **solver** (`MeldSolver`) asks: given the board cards (B), a subset of hand cards (H) and the go-down constraint, what is a valid partition of B ∪ H′ that maximises |H′|?
+  - *As built (M3)*: an exact, memoised dynamic programme over the values A(low), 2 … K, A(high), one suit at a time. Doubles are interchangeable for validity, so it works on (suit, rank) counts and tracks the open runs per suit (at most two) and the same-kind cards per rank.
+  - The shared aces (low *or* high) are handled with a result vector per state, one entry per "aces kept for ace-high" combination (at most 81), instead of extra state. That keeps it exact and fast: the worst late-game turn (90+ board cards, all 8 aces) takes about 20 ms on .NET and about 60 ms in the editor.
+  - A deterministic state budget (no clock) replaces the time budget. If it is ever exceeded, Hard falls back to Medium's local search.
+  - The bot plans on a snapshot copy of the game on a worker thread (`Task.Run`), and every command is validated by the engine on that copy before it is returned.
 - **Easy**: only plays new sets from hand plus simple extensions of existing sets. It occasionally "misses" plays on purpose.
 - **Medium**: extensions, splits, and taking from 4-card same-kind sets, using greedy rearrangement with local search.
-- **Hard**: a full board re-partition via the solver. It holds cards back strategically (voluntary draw is legal) and tracks which doubles have been seen.
+- **Hard**: a full board re-partition via the solver. Before going down it searches the hand's 3-card sets for the go-down that unlocks the biggest same-turn board play.
+  - *Not built yet (tuning backlog)*: strategic hold-back (a voluntary draw is legal) and tracking which doubles have been seen. Hard already beats Easy 96% of the time without them.
 - Bots play with a visible "thinking" delay and animated moves, executed as real `TurnSession` commands so the replay is visible.
 - The **"Highlight playable" hint** reuses the solver at Easy depth.
 - Bots also take over disconnected online seats (§4.4).
@@ -334,9 +345,9 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 |---|---|---|---|
 | **M0** | Project setup ✅ | git + LFS, Unity/Wwise `.gitignore`/`.gitattributes`, `Assets/_Project` layout, this plan | Clean first commit |
 | **M1** | Rules engine ✅ | `Mejnun.Core` (cards, deck, RNG, `MeldValidator`, `GameState`, `TurnSession` with undo/revert/go-down/timeout, end conditions, snapshot serialization) | ≥ 95% line coverage in EditMode tests. Every rule in §1 has a named test. *Met: 123 EditMode tests pass, 95.3% line coverage* |
-| **M2** | Playable hot-seat prototype | Table scene, card prefab, `DeckSkin` Classic + Classic Ivory + importer, the two-faces-per-game assignment, hand and board views, the full §3.4 gesture set, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device |
-| **M3** | AI | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone |
-| **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment, drag-to-reposition sets (§3.3, §3.4) | Usability pass on a small phone and a 4K PC |
+| **M2** | Playable hot-seat prototype ✅ | Table scene, card prefab, `DeckSkin` Classic + Classic Ivory + importer, the two-faces-per-game assignment, hand and board views, the full §3.4 gesture set, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device. *Met: playtested by Brennan; 124 EditMode and 19 PlayMode tests pass* |
+| **M3** | AI ✅ | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone. *Met in the editor: Hard beat Easy 481/500 (96.2%), the slowest Hard turn was 61 ms, and 158 EditMode and 22 PlayMode tests pass. The on-device phone timing is still to be measured* |
+| **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment, drag-to-reposition sets (§3.3, §3.4), deck-builder pick-up and drag: cards follow the finger, selected cards are picked up as a group, the hand opens a gap so held cards can be reorganized (§3.4) | Usability pass on a small phone and a 4K PC |
 | **M5** | Audio | Wwise events/banks, AudioService/Director, music states, timer tension | Every `GameEvent` with a sound mapped |
 | **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, 2nd test deck skin via Addressables | A second skin with a different sheet layout imports and plays |
 | **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync, reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4 |
@@ -355,6 +366,7 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 - **Net**: snapshot round-trip serialization, a command replay that matches the host state, and a hidden-hand leak test that asserts no client payload contains another player's cards.
 - **PlayMode**: a scripted pass-and-play smoke game and orientation layout snapshots.
 - **Board arrangement**: repositioning a set changes only the layout order (no command, unchanged `GameState`, unchanged undo stack). New sets are appended, removed sets are dropped, and the order survives Undo, Revert and an aspect change.
+- **Pick-up and drag**: a held card follows the pointer and returns to its slot on cancel. Holding a selected card lifts every selected card. Dropping a held group into the hand reorders it as a block (relative order kept, no command, unchanged undo stack).
 - CI (optional, later): Unity Test Runner in batch mode on push.
 
 ---
@@ -377,6 +389,7 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 | 11 | Bots in pass-and-play | Yes, mixed freely | §2 |
 | 12 | Online timer | Always on online; host picks a preset, default 90 s | §4.5 |
 | 13 | Split | Gestures only, no tools; long-press picks up the tail of a straight | §3.4 |
+| 14 | Dragging feel | Deck-builder style: held cards lift and follow the finger; holding a selected card picks up the whole selection; the hand opens a gap so held cards can be reorganized | §3.4, M4 |
 | Q-B | After a stalemate | A tie is a Stalemate and prompts for a new dealer; a sole player with the fewest cards wins normally and deals next | §1.10 |
 
 ### 11.2 Still open (new, smaller; the defaults in the text apply until answered)

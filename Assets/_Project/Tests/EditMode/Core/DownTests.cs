@@ -45,9 +45,7 @@ namespace Mejnun.Core.Tests
             Assert.That(game.CanGoDown(), Is.False);
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"), CardTarget.NewMeld(0))).Ok,
                 Is.True);
-            Assert.That(game.CanGoDown(), Is.True);
-
-            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
             Assert.That(game.CanGoDown(), Is.False);
         }
 

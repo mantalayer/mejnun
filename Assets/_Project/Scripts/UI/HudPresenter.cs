@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Mejnun.Core;
 using Mejnun.Game;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Mejnun.UI
         [SerializeField] private UIDocument uiDocument;
         [SerializeField] private TableController tableController;
         [SerializeField] private TableView tableView;
+        [SerializeField] private MatchFlow matchFlow;
 
         private VisualElement root;
         private VisualElement opponentsStrip;
@@ -20,10 +22,21 @@ namespace Mejnun.UI
         private Button drawPassButton;
         private Button undoButton;
         private Button revertButton;
-        private Button goDownButton;
         private Button sortSuitButton;
         private Button sortRankButton;
         private Button fitBoardButton;
+        private Button hintButton;
+        private Label turnPopup;
+        private Label goneDownPopup;
+        private Label goneDownTag;
+        private IVisualElementScheduledItem turnPopupHide;
+        private IVisualElementScheduledItem goneDownPopupHide;
+        private IReadOnlyList<int> revealedDownMeldIds;
+        private int revealedDownSeat = -1;
+        private int revealedDownTurnNumber = -1;
+        private MejnunGame announcedGame;
+        private int announcedTurnNumber = -1;
+        private bool hasAnnouncedTurn;
 
         private void Awake()
         {
@@ -42,6 +55,11 @@ namespace Mejnun.UI
                 tableView = FindAnyObjectByType<TableView>();
             }
 
+            if (matchFlow == null)
+            {
+                matchFlow = FindAnyObjectByType<MatchFlow>();
+            }
+
             CacheElements();
             RegisterButtons();
         }
@@ -51,8 +69,15 @@ namespace Mejnun.UI
             if (tableController != null)
             {
                 tableController.Synchronized += OnSynchronized;
+                tableController.WentDown += OnWentDown;
+                tableController.DownRevealed += OnDownRevealed;
                 tableController.GameWon += OnGameResult;
                 tableController.GameStalemate += OnGameResult;
+            }
+
+            if (matchFlow != null)
+            {
+                matchFlow.ScreenChanged += OnMatchFlowScreenChanged;
             }
         }
 
@@ -61,14 +86,25 @@ namespace Mejnun.UI
             if (tableController != null)
             {
                 tableController.Synchronized -= OnSynchronized;
+                tableController.WentDown -= OnWentDown;
+                tableController.DownRevealed -= OnDownRevealed;
                 tableController.GameWon -= OnGameResult;
                 tableController.GameStalemate -= OnGameResult;
             }
+
+            if (matchFlow != null)
+            {
+                matchFlow.ScreenChanged -= OnMatchFlowScreenChanged;
+            }
+
+            turnPopupHide?.Pause();
+            goneDownPopupHide?.Pause();
         }
 
         private void Update()
         {
             HandleKeyboardShortcuts();
+            UpdateDownRevealTag();
         }
 
         private void CacheElements()
@@ -86,10 +122,13 @@ namespace Mejnun.UI
             drawPassButton = root.Q<Button>("draw-pass-button");
             undoButton = root.Q<Button>("undo-button");
             revertButton = root.Q<Button>("revert-button");
-            goDownButton = root.Q<Button>("go-down-button");
             sortSuitButton = root.Q<Button>("sort-suit-button");
             sortRankButton = root.Q<Button>("sort-rank-button");
             fitBoardButton = root.Q<Button>("fit-board-button");
+            hintButton = root.Q<Button>("hint-button");
+            turnPopup = root.Q<Label>("turn-popup");
+            goneDownPopup = root.Q<Label>("gone-down-popup");
+            goneDownTag = root.Q<Label>("gone-down-tag");
         }
 
         private void RegisterButtons()
@@ -98,15 +137,127 @@ namespace Mejnun.UI
             if (drawPassButton != null) drawPassButton.clicked += DrawOrPass;
             if (undoButton != null) undoButton.clicked += Undo;
             if (revertButton != null) revertButton.clicked += Revert;
-            if (goDownButton != null) goDownButton.clicked += GoDown;
             if (sortSuitButton != null) sortSuitButton.clicked += SortBySuit;
             if (sortRankButton != null) sortRankButton.clicked += SortByRank;
             if (fitBoardButton != null) fitBoardButton.clicked += FitBoard;
+            if (hintButton != null) hintButton.clicked += ToggleHints;
         }
 
         private void OnSynchronized(GameState state, TurnSession turn)
         {
             Refresh(state, turn);
+            TryAnnounceTurn(state);
+        }
+
+        private void OnWentDown(int seat)
+        {
+            if (tableController != null && tableController.InputEnabled &&
+                tableController.Game.State.CurrentSeat == seat)
+            {
+                goneDownPopupHide = ShowPopup(goneDownPopup, goneDownPopupHide);
+            }
+        }
+
+        private void OnDownRevealed(int seat, IReadOnlyList<int> meldIds)
+        {
+            if (tableController == null || tableController.Game == null)
+            {
+                return;
+            }
+
+            revealedDownSeat = seat;
+            revealedDownMeldIds = meldIds;
+            revealedDownTurnNumber = tableController.Game.State.TurnNumber + 1;
+        }
+
+        private void OnMatchFlowScreenChanged(MatchFlowScreen screen)
+        {
+            if (screen == MatchFlowScreen.Turn && tableController != null && tableController.Game != null)
+            {
+                TryAnnounceTurn(tableController.Game.State);
+            }
+        }
+
+        private void TryAnnounceTurn(GameState state)
+        {
+            if (tableController == null || tableController.Game == null || state == null ||
+                state.Phase != GamePhase.Playing || state.CurrentSeat < 0 || state.CurrentSeat >= state.Hands.Count ||
+                IsBotSeat(state.CurrentSeat) || (matchFlow != null && matchFlow.Screen != MatchFlowScreen.Turn))
+            {
+                return;
+            }
+
+            var game = tableController.Game;
+            if (hasAnnouncedTurn && announcedGame == game && announcedTurnNumber == state.TurnNumber)
+            {
+                return;
+            }
+
+            announcedGame = game;
+            announcedTurnNumber = state.TurnNumber;
+            hasAnnouncedTurn = true;
+            if (turnPopup != null)
+            {
+                turnPopup.text = GetPlayerName(state.CurrentSeat) + "'s Turn";
+                turnPopupHide = ShowPopup(turnPopup, turnPopupHide);
+            }
+        }
+
+        private void UpdateDownRevealTag()
+        {
+            if (revealedDownMeldIds == null || tableController == null || tableController.Game == null)
+            {
+                return;
+            }
+
+            var state = tableController.Game.State;
+            if (state.TurnNumber != revealedDownTurnNumber)
+            {
+                ClearDownRevealTag();
+                return;
+            }
+
+            if (goneDownTag == null || root == null || root.panel == null || tableView == null ||
+                tableView.ViewCamera == null)
+            {
+                return;
+            }
+
+            if (!tableView.TryGetMeldsAnchor(revealedDownMeldIds, out var world))
+            {
+                ClearDownRevealTag();
+                return;
+            }
+
+            var panelPosition = RuntimePanelUtils.CameraTransformWorldToPanel(root.panel, world, tableView.ViewCamera);
+            goneDownTag.text = GetPlayerName(revealedDownSeat) + " · Gone Down";
+            goneDownTag.style.left = panelPosition.x - 100f;
+            goneDownTag.style.top = panelPosition.y - 36f;
+            goneDownTag.AddToClassList("popup-visible");
+        }
+
+        private void ClearDownRevealTag()
+        {
+            revealedDownMeldIds = null;
+            revealedDownSeat = -1;
+            revealedDownTurnNumber = -1;
+            if (goneDownTag != null)
+            {
+                goneDownTag.RemoveFromClassList("popup-visible");
+            }
+        }
+
+        private static IVisualElementScheduledItem ShowPopup(Label popup,
+            IVisualElementScheduledItem scheduledHide)
+        {
+            if (popup == null)
+            {
+                return scheduledHide;
+            }
+
+            scheduledHide?.Pause();
+            popup.AddToClassList("popup-visible");
+            return popup.schedule.Execute(() => popup.RemoveFromClassList("popup-visible")).StartingIn(1600);
         }
 
         private void OnGameResult(GameResult result)
@@ -127,9 +278,12 @@ namespace Mejnun.UI
 
             var game = tableController.Game;
             var activeSeat = state.CurrentSeat;
+            var interactive = tableController.InputEnabled;
             if (turnLabel != null)
             {
-                turnLabel.text = "Seat " + (activeSeat + 1) + "'s turn";
+                turnLabel.text = IsBotSeat(activeSeat)
+                    ? GetSeatLabel(activeSeat) + " is thinking…"
+                    : GetSeatLabel(activeSeat) + "'s turn";
             }
 
             if (drawPileLabel != null)
@@ -140,33 +294,33 @@ namespace Mejnun.UI
             if (drawPassButton != null)
             {
                 drawPassButton.text = state.DrawPile.Count == 0 ? "Pass" : "Draw";
+                drawPassButton.SetEnabled(interactive);
             }
 
             if (endTurnButton != null)
             {
-                endTurnButton.SetEnabled(game.CanEndTurn());
+                endTurnButton.SetEnabled(interactive && game.CanEndTurn());
             }
 
             if (undoButton != null)
             {
-                undoButton.SetEnabled(tableController.UndoGroupCount > 0);
+                undoButton.SetEnabled(interactive && tableController.UndoGroupCount > 0);
             }
 
             if (revertButton != null)
             {
-                revertButton.SetEnabled(turn != null && turn.Moves.Count > 0);
+                revertButton.SetEnabled(interactive && turn != null && turn.Moves.Count > 0);
             }
 
-            if (goDownButton != null)
-            {
-                var canGoDown = game.CanGoDown();
-                goDownButton.style.display = canGoDown ? DisplayStyle.Flex : DisplayStyle.None;
-                goDownButton.SetEnabled(canGoDown);
-            }
-
-            var hasCards = state.Hands[activeSeat].Count > 0;
+            var hasCards = interactive && state.Hands[activeSeat].Count > 0;
             if (sortSuitButton != null) sortSuitButton.SetEnabled(hasCards);
             if (sortRankButton != null) sortRankButton.SetEnabled(hasCards);
+            if (hintButton != null)
+            {
+                hintButton.text = tableController.HintsEnabled ? "Hint: on" : "Hint: off";
+                hintButton.SetEnabled(interactive);
+            }
+
             RefreshSeats(state);
         }
 
@@ -180,7 +334,8 @@ namespace Mejnun.UI
             opponentsStrip.Clear();
             for (var seat = 0; seat < state.Hands.Count; seat++)
             {
-                var label = new Label("Seat " + (seat + 1) + "  ·  " + state.Hands[seat].Count);
+                var label = new Label(GetPlayerName(seat) + (IsBotSeat(seat) ? " (bot)" : string.Empty) + "  ·  " +
+                                      state.Hands[seat].Count);
                 label.AddToClassList("seat-chip");
                 if (seat == state.CurrentSeat)
                 {
@@ -192,9 +347,32 @@ namespace Mejnun.UI
             }
         }
 
+        private bool IsBotSeat(int seat)
+        {
+            return matchFlow != null && matchFlow.IsBotSeat(seat);
+        }
+
+        private string GetPlayerName(int seat)
+        {
+            return matchFlow != null && matchFlow.SeatCount > 0 ? matchFlow.GetPlayerName(seat) : "Seat " + (seat + 1);
+        }
+
+        private string GetSeatLabel(int seat)
+        {
+            return matchFlow != null && matchFlow.SeatCount > 0 ? matchFlow.GetSeatLabel(seat) : "Seat " + (seat + 1);
+        }
+
+        private void ToggleHints()
+        {
+            if (tableController != null)
+            {
+                tableController.SetHintsEnabled(!tableController.HintsEnabled);
+            }
+        }
+
         private void EndTurn()
         {
-            if (tableController != null && tableController.Game != null)
+            if (tableController != null && tableController.InputEnabled)
             {
                 tableController.ApplyCommand(GameCommand.EndTurn(tableController.Game.State.CurrentSeat));
             }
@@ -202,7 +380,7 @@ namespace Mejnun.UI
 
         private void DrawOrPass()
         {
-            if (tableController != null && tableController.Game != null)
+            if (tableController != null && tableController.InputEnabled)
             {
                 tableController.ApplyCommand(GameCommand.DrawOrPass(tableController.Game.State.CurrentSeat));
             }
@@ -210,19 +388,17 @@ namespace Mejnun.UI
 
         private void Undo()
         {
-            tableController?.UndoGesture();
+            if (tableController != null && tableController.InputEnabled)
+            {
+                tableController.UndoGesture();
+            }
         }
 
         private void Revert()
         {
-            tableController?.RevertTurn();
-        }
-
-        private void GoDown()
-        {
-            if (tableController != null && tableController.Game != null)
+            if (tableController != null && tableController.InputEnabled)
             {
-                tableController.ApplyCommand(GameCommand.GoDown(tableController.Game.State.CurrentSeat));
+                tableController.RevertTurn();
             }
         }
 
@@ -238,7 +414,7 @@ namespace Mejnun.UI
 
         private void SortHand(bool bySuit)
         {
-            if (tableController == null || tableController.Game == null || tableView == null)
+            if (tableController == null || !tableController.InputEnabled || tableView == null)
             {
                 return;
             }
