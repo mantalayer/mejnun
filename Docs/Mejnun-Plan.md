@@ -1,6 +1,6 @@
 # Mejnun — Game Design & Implementation Plan
 
-Status: draft v2 (2026-11-16), written from two interview rounds with Brennan, plus answers to the v1 open questions (§11).
+Status: draft v2 (2026-11-16), written from two interview rounds with Brennan, plus answers to the v1 open questions (§11). **M1 (rules engine) is complete** (§9).
 Engine: Unity 6000.4.0f1 · URP 17.4 · Input System 1.19 · Wwise 2025.1.12
 Targets: iOS, Android, Windows, macOS (Steam for desktop).
 
@@ -77,7 +77,7 @@ Each player is either **Not down** (the starting phase) or **Down**.
 - If every active player passes in a row without placing a card, the game ends:
   - If exactly one player has the **fewest cards in hand**, they win. This is a normal win screen. The "MEJNUN!" moment is reserved for actually emptying your hand.
   - If two or more players share the fewest cards, the game is declared a **Stalemate**: there is no winner, and no win XP or win stats are awarded.
-  - After a stalemate, the same dealer deals again, since nobody won *(assumed, see Q-B)*.
+  - After a Stalemate, the next game's dealer is chosen through the dealer-question prompt.
 
 ### 1.11 Hand helpers (UI, not rules)
 - Sort by suit, sort by rank, drag to reorder manually.
@@ -123,9 +123,10 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - `Card` (readonly struct: `Id`, `Suit`, `Rank`, `Deck`) and `Rank` (Ace..King). An ace's role (low/high) is decided per straight by the validator.
 - `Meld` holds an id plus an ordered `List<Card>`. `MeldValidator.Classify(meld)` returns `SameKind | StraightLow | StraightHigh | Invalid(reason)`. The reasons drive UI tooltips: "double", "too short", "mixed suits", and so on.
 - `GameState` holds seats, hands, board (melds), draw pile, current seat, dealer, phase per player, turn number, timer, RNG seed, and `DeckFaces[2]`, the face-skin id for each physical deck (§3.6). Core treats skin ids as opaque strings.
-- `TurnSession` holds the start-of-turn snapshot and a move list: `MoveCard(cardId, from, to, index)`, `SplitMeld`, `MergeMelds`, `GoDown`. It supports Undo, Revert and `CanEndTurn()`, plus timeout resolution (§1.9).
-- Commands carry the player's **intent**. The engine validates every one. It is identical locally and online, where clients send commands and the host applies them.
-- A deterministic `Xoshiro`/`PCG` RNG is seeded per game, so games can be replayed for bug reports and tests.
+- `TurnSession` holds the start-of-turn snapshot (`BoardSnapshot`: board plus hand) and a move list (`MoveCards`, `SplitMeld`, `MergeMelds`, `GoDown`). **Undo** drops the last move and replays the rest from the snapshot; **Revert** clears the list. It also provides `CanEndTurn()` and timeout resolution (§1.9). Straights are kept in canonical rank order after every move, while same-kind and invalid groups keep insertion order.
+- Commands carry the player's **intent**. There is a single entry point, `MejnunGame.Apply(in GameCommand)` → `CommandResult { Ok, Error }`. The engine validates every command, and an illegal one returns a `RuleError` without changing state (it never throws for player mistakes). It is identical locally and online, where clients send commands and the host applies them, and the command list doubles as the replay log.
+- A deterministic **PCG32** RNG (serialisable state) is seeded per game and drives the Fisher–Yates shuffle, the random dealer and the face pick, so games can be replayed for bug reports and tests. Core uses no `System.Random` or time APIs.
+- `SnapshotSerializer` writes a versioned binary snapshot (card ids as bytes) of the full state, the in-progress turn and the RNG state. The same seed plus the same commands produce identical snapshot bytes.
 - `GameEvents` are emitted as plain C# events (CardDealt, CardMoved, MeldBecameValid, WentDown, TurnEnded, Drew, Won, …). Presentation, audio and network all subscribe to them.
 
 ### 3.3 Presentation
@@ -289,7 +290,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 ---
 
 ## 6. Persistence
-- Local: settings, cosmetics, inventory, XP and stats, paused local games (snapshot JSON), plus a replay of the last game for debugging.
+- Local: settings, cosmetics, inventory, XP and stats, paused local games (`SnapshotSerializer` binary snapshots), plus a replay of the last game (seed + command list) for debugging.
 - Cloud: inventory and progression in UGS Cloud Save (linked accounts). Online paused games live in Cloud Code storage.
 - A save schema version and migrations are in place from day one.
 
@@ -322,7 +323,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | # | Milestone | Key deliverables | Exit criteria |
 |---|---|---|---|
 | **M0** | Project setup ✅ | git + LFS, Unity/Wwise `.gitignore`/`.gitattributes`, `Assets/_Project` layout, this plan | Clean first commit |
-| **M1** | Rules engine | `Mejnun.Core` (cards, deck, RNG, `MeldValidator`, `GameState`, `TurnSession` with undo/revert/go-down/timeout, end conditions, snapshot serialization) | ≥ 95% line coverage in EditMode tests. Every rule in §1 has a named test |
+| **M1** | Rules engine ✅ | `Mejnun.Core` (cards, deck, RNG, `MeldValidator`, `GameState`, `TurnSession` with undo/revert/go-down/timeout, end conditions, snapshot serialization) | ≥ 95% line coverage in EditMode tests. Every rule in §1 has a named test. *Met: 123 EditMode tests pass, 95.3% line coverage* |
 | **M2** | Playable hot-seat prototype | Table scene, card prefab, `DeckSkin` Classic + Classic Ivory + importer, the two-faces-per-game assignment, hand and board views, the full §3.4 gesture set, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device |
 | **M3** | AI | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone |
 | **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment | Usability pass on a small phone and a 4K PC |
@@ -338,7 +339,7 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 ---
 
 ## 10. Testing strategy
-- **Core (EditMode)**: a table-driven validator test for every set rule (aces, doubles, sizes, mixed suits); turn flows (go-down only from hand, go-down then board use in the same turn, End-turn gating, undo past go-down, revert, all four timeout outcomes, empty-pile pass, a sole-fewest win versus a tied **Stalemate**, the winner deals next, the dealer repeats after a stalemate); and deterministic seeded deal tests.
+- **Core (EditMode)**: a table-driven validator test for every set rule (aces, doubles, sizes, mixed suits); turn flows (go-down only from hand, go-down then board use in the same turn, End-turn gating, undo past go-down, revert, all four timeout outcomes, empty-pile pass, a sole-fewest win versus a tied **Stalemate**, the fewest-cards winner deals next, a new dealer prompt after a Stalemate); and deterministic seeded deal tests.
 - **Faces**: the two picked faces are always distinct, always come from the pool, are deterministic for a given seed, fall back to the base faces when the pool is too small, and both deck indexes render with their assigned skin.
 - **AI**: solver correctness on curated puzzles, a fuzz test (random states, so every solver output must be a valid board), and difficulty benchmarks.
 - **Net**: snapshot round-trip serialization, a command replay that matches the host state, and a hidden-hand leak test that asserts no client payload contains another player's cards.
@@ -365,10 +366,10 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 | 11 | Bots in pass-and-play | Yes, mixed freely | §2 |
 | 12 | Online timer | Always on online; host picks a preset, default 90 s | §4.5 |
 | 13 | Split | Gestures only, no tools; long-press picks up the tail of a straight | §3.4 |
+| Q-B | After a stalemate | A tie is a Stalemate and prompts for a new dealer; a sole player with the fewest cards wins normally and deals next | §1.10 |
 
 ### 11.2 Still open (new, smaller; the defaults in the text apply until answered)
 - **Q-A Classic mapping**: confirm the zig-zag sprite order in the importer once it exists (unchanged from v1).
-- **Q-B After a stalemate**: does the same dealer deal again (default), or is a new dealer chosen with the question prompt? Also, if exactly one player has the fewest cards, is that a win (default), or is any empty-pile ending a stalemate?
 - **Q-C Language variants**: Simplified or Traditional Chinese (or both)? Brazilian or European Portuguese? One neutral Spanish, or Spain and Latin America?
 - **Q-D RTL table**: should the board and hand also mirror for Arabic/Persian players, or stay left-to-right as proposed?
 - **Q-E Faces in solo**: should bots contribute random catalogue faces to the pool (default), or should solo use only the player's own faces?
