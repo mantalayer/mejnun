@@ -1,0 +1,24 @@
+namespace Mejnun.Core
+{
+    public enum RuleError : byte
+    {
+        None,
+        WrongPhase,
+        NotYourTurn,
+        InvalidSeat,
+        NotDownBoardAccess,
+        BoardCardToHand,
+        UnknownCard,
+        UnknownMeld,
+        NothingToUndo,
+        GoDownInvalid,
+        CannotEndTurn,
+        InvalidTarget,
+        DuplicateCard,
+        EmptyMove,
+        InvalidSplit,
+        InvalidMerge,
+        GameFinished,
+        UnsupportedCommand
+    }
+}
