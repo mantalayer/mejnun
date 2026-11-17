@@ -43,7 +43,6 @@ namespace Mejnun.Core.Tests
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H"),
                 CardTarget.NewMeld(0))).Ok, Is.True);
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("4H"), CardTarget.Meld(1, 2))).Ok, Is.True);
-            Assert.That(game.Apply(GameCommand.GoDown(0)).Ok, Is.True);
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H"), CardTarget.Hand(0))).Ok, Is.True);
             Assert.That(game.Apply(GameCommand.Undo(0)).Ok, Is.True);
             Assert.That(game.Apply(GameCommand.Revert(0)).Ok, Is.True);

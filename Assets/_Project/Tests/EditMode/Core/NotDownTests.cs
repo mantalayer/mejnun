@@ -17,7 +17,7 @@ namespace Mejnun.Core.Tests
             Assert.That(game.State.Hands[0].Count, Is.EqualTo(1));
             Assert.That(game.State.Board.Count, Is.EqualTo(1));
             Assert.That(MeldValidator.Classify(game.State.Board[0].Cards).Kind, Is.EqualTo(MeldKind.StraightLow));
-            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
-        public void NotDown_GoDownAllowsMultipleValidHandOnlySets()
+        public void NotDown_MultipleValidHandOnlySetsAutomaticallyGoDown()
         {
             var game = NewGame();
             GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C", "6C", "7C", "8D");
@@ -87,23 +87,19 @@ namespace Mejnun.Core.Tests
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("5C", "6C", "7C"),
                 CardTarget.NewMeld(0))).Ok, Is.True);
 
-            var result = game.Apply(GameCommand.GoDown(0));
-
-            Assert.That(result.Ok, Is.True);
             Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+            Assert.That(game.CanGoDown(), Is.False);
             Assert.That(game.State.Board.Count, Is.EqualTo(2));
         }
 
         [Test]
-        public void NotDown_GoDownThenAllowsExistingBoardAccessInSameTurn()
+        public void NotDown_AutomaticGoDownAllowsExistingBoardAccessInSameTurn()
         {
             var game = NewGame();
             GameBuilder.SetBoard(game, new[] { "8C", "9C", "10C" });
             GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"),
                 CardTarget.NewMeld(0))).Ok, Is.True);
-            Assert.That(game.Apply(GameCommand.GoDown(0)).Ok, Is.True);
-
             var result = game.Apply(GameCommand.MoveCards(0, Ids("8C"), CardTarget.NewMeld(0)));
 
             Assert.That(result.Ok, Is.True);
@@ -112,13 +108,15 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
-        public void NotDown_UndoPastGoDownReturnsPlayerToNotDown()
+        public void NotDown_UndoingTheSetReturnsPlayerToNotDown()
         {
             var game = NewGame();
             GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
-            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"),
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H"),
                 CardTarget.NewMeld(0))).Ok, Is.True);
-            Assert.That(game.Apply(GameCommand.GoDown(0)).Ok, Is.True);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("4H"), CardTarget.Meld(1, 2))).Ok, Is.True);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
 
             Assert.That(game.Apply(GameCommand.Undo(0)).Ok, Is.True);
 
@@ -128,6 +126,82 @@ namespace Mejnun.Core.Tests
             Assert.That(game.Apply(GameCommand.Undo(0)).Ok, Is.True);
             Assert.That(game.State.Board, Is.Empty);
             Assert.That(game.State.Hands[0].Count, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void NotDown_UndoAndRedoRaisesWentDownAgain()
+        {
+            var game = NewGame();
+            GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
+            var wentDown = 0;
+            game.Events.WentDown += seat => wentDown++;
+
+            var move = GameCommand.MoveCards(0, Ids("2H", "3H", "4H"), CardTarget.NewMeld(0));
+            Assert.That(game.Apply(move).Ok, Is.True);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+            Assert.That(wentDown, Is.EqualTo(1));
+
+            Assert.That(game.Apply(GameCommand.Undo(0)).Ok, Is.True);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+            Assert.That(game.Apply(move).Ok, Is.True);
+
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+            Assert.That(wentDown, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void NotDown_InvalidHandSetDoesNotGoDown()
+        {
+            var game = NewGame();
+            GameBuilder.SetHand(game, 0, "2H", "4H", "5H", "9C");
+            var wentDown = 0;
+            game.Events.WentDown += seat => wentDown++;
+
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "4H", "5H"),
+                CardTarget.NewMeld(0))).Ok, Is.True);
+
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+            Assert.That(wentDown, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void NotDown_EndTurnRevealsTheNewSetsToEveryone()
+        {
+            var game = NewGame();
+            GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
+            var revealedSeat = -1;
+            System.Collections.Generic.IReadOnlyList<int> revealedMelds = null;
+            game.Events.DownRevealed += (seat, meldIds) =>
+            {
+                revealedSeat = seat;
+                revealedMelds = meldIds;
+            };
+
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"),
+                CardTarget.NewMeld(0))).Ok, Is.True);
+            Assert.That(revealedMelds, Is.Null);
+            var meldId = game.State.Board[0].Id;
+
+            Assert.That(game.Apply(GameCommand.EndTurn(0)).Ok, Is.True);
+
+            Assert.That(revealedSeat, Is.EqualTo(0));
+            Assert.That(revealedMelds, Is.EqualTo(new[] { meldId }));
+        }
+
+        [Test]
+        public void Down_EndTurnDoesNotRevealAgainForPlayerAlreadyDown()
+        {
+            var game = NewGame();
+            GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var revealed = 0;
+            game.Events.DownRevealed += (seat, meldIds) => revealed++;
+
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"),
+                CardTarget.NewMeld(0))).Ok, Is.True);
+            Assert.That(game.Apply(GameCommand.EndTurn(0)).Ok, Is.True);
+
+            Assert.That(revealed, Is.EqualTo(0));
         }
 
         private static MejnunGame NewGame()

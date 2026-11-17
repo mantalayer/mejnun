@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Mejnun.Core
 {
@@ -12,6 +13,7 @@ namespace Mejnun.Core
         public event Action<int, MeldKind> MeldBecameValid;
         public event Action<int, InvalidReason> MeldBecameInvalid;
         public event Action<int> WentDown;
+        public event Action<int, IReadOnlyList<int>> DownRevealed;
         public event Action<int> Undone;
         public event Action<int> BoardReverted;
         public event Action<int, Card> Drew;
@@ -58,6 +60,11 @@ namespace Mejnun.Core
         internal void RaiseWentDown(int seat)
         {
             WentDown?.Invoke(seat);
+        }
+
+        internal void RaiseDownRevealed(int seat, IReadOnlyList<int> meldIds)
+        {
+            DownRevealed?.Invoke(seat, meldIds);
         }
 
         internal void RaiseUndone(int seat)

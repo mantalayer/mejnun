@@ -53,6 +53,28 @@
     margin-bottom: 3px;
 }
 
+.seat-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.seat-name {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.seat-kind {
+    width: 150px;
+    margin-left: 6px;
+}
+
+.flow-error {
+    color: rgb(255, 146, 120);
+    font-size: 14px;
+    white-space: normal;
+    margin-top: 6px;
+}
+
 .seat-options {
     flex-direction: row;
     flex-wrap: wrap;

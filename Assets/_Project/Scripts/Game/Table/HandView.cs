@@ -16,7 +16,7 @@ namespace Mejnun.Game
 
         public void Layout(IReadOnlyList<Card> hand, HandOrder order, int seat,
             IReadOnlyDictionary<byte, CardView> views, Camera camera, TableCamera tableCamera, Vector2 cardSize,
-            float pixelsPerUnit)
+            float pixelsPerUnit, float moveDuration = -1f)
         {
             if (hand == null || order == null || views == null || camera == null)
             {
@@ -38,8 +38,9 @@ namespace Mejnun.Game
             var rowWidth = cardSize.x + (cardCount - 1) * step;
             var maxScroll = Mathf.Max(0f, rowWidth - viewportWidth);
             scrollOffset = Mathf.Clamp(scrollOffset, 0f, maxScroll);
-            var firstX = -rowWidth * 0.5f + cardSize.x * 0.5f - scrollOffset;
-            var y = -camera.orthographicSize + cardSize.y * 0.5f + bottomMargin;
+            var cameraPosition = camera.transform.position;
+            var firstX = cameraPosition.x - rowWidth * 0.5f + cardSize.x * 0.5f - scrollOffset;
+            var y = cameraPosition.y - camera.orthographicSize + cardSize.y * 0.5f + bottomMargin;
             for (var index = 0; index < cardCount; index++)
             {
                 var card = orderedCards[index];
@@ -55,7 +56,7 @@ namespace Mejnun.Game
                     position = tableCamera.SnapWorldPosition(position, pixelsPerUnit);
                 }
 
-                view.MoveTo(position);
+                view.MoveTo(position, moveDuration);
             }
         }
 

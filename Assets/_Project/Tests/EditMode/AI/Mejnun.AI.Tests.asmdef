@@ -1,0 +1,24 @@
+{
+  "name": "Mejnun.AI.Tests",
+  "rootNamespace": "Mejnun.AI.Tests",
+  "references": [
+    "Mejnun.Core",
+    "Mejnun.AI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": true,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

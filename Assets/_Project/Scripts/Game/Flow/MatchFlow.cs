@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mejnun.AI;
 using Mejnun.Core;
 using UnityEngine;
 
@@ -23,8 +24,11 @@ namespace Mejnun.Game
         [SerializeField] private DealerQuestions dealerQuestions;
 
         private string[] playerNames = Array.Empty<string>();
+        private SeatConfig[] seats = Array.Empty<SeatConfig>();
         private System.Random questionRandom = new System.Random();
+        private BotTurnDriver botDriver;
         private int handoffSeat = -1;
+        private int revealedSeat = -1;
 
         public MejnunGame Game { get; private set; }
         public TableController Controller => tableController;
@@ -35,6 +39,25 @@ namespace Mejnun.Game
         public string DealerQuestion { get; private set; }
         public int CurrentSeat => Game == null ? -1 : Game.State.CurrentSeat;
         public ulong RoundSeed { get; private set; }
+        public BotTurnDriver BotDriver => botDriver;
+        public IReadOnlyList<SeatConfig> Seats => seats;
+
+        public int HumanCount
+        {
+            get
+            {
+                var count = 0;
+                for (var seat = 0; seat < seats.Length; seat++)
+                {
+                    if (!seats[seat].IsBot)
+                    {
+                        count++;
+                    }
+                }
+
+                return count;
+            }
+        }
 
         public event Action<MatchFlowScreen> ScreenChanged;
 
@@ -94,6 +117,17 @@ namespace Mejnun.Game
             {
                 tableView = FindAnyObjectByType<TableView>();
             }
+
+            botDriver = GetComponent<BotTurnDriver>();
+            if (botDriver == null)
+            {
+                botDriver = gameObject.AddComponent<BotTurnDriver>();
+            }
+
+            if (tableController != null)
+            {
+                tableController.SetSeatInputFilter(seat => !IsBotSeat(seat));
+            }
         }
 
         private void OnEnable()
@@ -123,14 +157,67 @@ namespace Mejnun.Game
                 return false;
             }
 
-            playerNames = new string[seatCount];
+            var humans = new SeatConfig[seatCount];
             for (var seat = 0; seat < seatCount; seat++)
             {
-                var name = names != null && seat < names.Count ? names[seat] : null;
-                playerNames[seat] = string.IsNullOrWhiteSpace(name) ? "Player " + (seat + 1) : name.Trim();
+                humans[seat] = SeatConfig.Human(names != null && seat < names.Count ? names[seat] : null);
+            }
+
+            return StartMatch(humans, seed);
+        }
+
+        /// <summary>Starts a match with any mix of local humans and bots (at least one human).</summary>
+        public bool StartMatch(IReadOnlyList<SeatConfig> seatConfigs, ulong? seed = null)
+        {
+            if (seatConfigs == null || seatConfigs.Count < 2 || seatConfigs.Count > 6)
+            {
+                return false;
+            }
+
+            var hasHuman = false;
+            for (var seat = 0; seat < seatConfigs.Count; seat++)
+            {
+                hasHuman |= !seatConfigs[seat].IsBot;
+            }
+
+            if (!hasHuman)
+            {
+                return false;
+            }
+
+            seats = new SeatConfig[seatConfigs.Count];
+            playerNames = new string[seatConfigs.Count];
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                var config = seatConfigs[seat];
+                var name = config.Name;
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    name = (config.IsBot ? "Bot " : "Player ") + (seat + 1);
+                }
+
+                playerNames[seat] = name.Trim();
+                seats[seat] = new SeatConfig(playerNames[seat], config.IsBot, config.Difficulty);
+            }
+
+            if (botDriver != null)
+            {
+                botDriver.Configure(tableController, seats);
             }
 
             return StartRound(null, seed ?? CreateSeed());
+        }
+
+        public bool IsBotSeat(int seat)
+        {
+            return seat >= 0 && seat < seats.Length && seats[seat].IsBot;
+        }
+
+        /// <summary>The player's name, with the bot difficulty for bot seats (e.g. "Riley (Hard bot)").</summary>
+        public string GetSeatLabel(int seat)
+        {
+            var name = GetPlayerName(seat);
+            return IsBotSeat(seat) ? name + " (" + seats[seat].Difficulty + " bot)" : name;
         }
 
         public CommandResult ChooseDealer(int seat)
@@ -160,6 +247,8 @@ namespace Mejnun.Game
                 return false;
             }
 
+            revealedSeat = CurrentSeat;
+            tableView.SetViewerSeat(-1);
             tableView.SetHandVisible(true);
             SetScreen(MatchFlowScreen.Turn);
             return true;
@@ -200,8 +289,15 @@ namespace Mejnun.Game
                 : dealerQuestions.GetRandomQuestion(questionRandom);
             LastResult = null;
             handoffSeat = -1;
+            revealedSeat = -1;
+            if (botDriver != null)
+            {
+                botDriver.Stop();
+            }
+
             if (tableView != null)
             {
+                tableView.SetViewerSeat(-1);
                 tableView.SetHandVisible(false);
             }
 
@@ -218,13 +314,70 @@ namespace Mejnun.Game
                 return;
             }
 
-            handoffSeat = state.CurrentSeat;
+            var seat = state.CurrentSeat;
+            handoffSeat = seat;
+            if (IsBotSeat(seat))
+            {
+                ShowBotTurn();
+                return;
+            }
+
+            // The handoff screen only appears when the device must pass to a different human.
+            if (HumanCount <= 1 || seat == revealedSeat)
+            {
+                revealedSeat = seat;
+                if (tableView != null)
+                {
+                    tableView.SetViewerSeat(-1);
+                    tableView.SetHandVisible(true);
+                }
+
+                SetScreen(MatchFlowScreen.Turn);
+                return;
+            }
+
             if (tableView != null)
             {
                 tableView.SetHandVisible(false);
             }
 
             SetScreen(MatchFlowScreen.Handoff);
+        }
+
+        private void ShowBotTurn()
+        {
+            if (tableView != null)
+            {
+                // With a single human, they keep watching their own hand while bots play.
+                // With several humans, no hand is shown, so nobody's cards are revealed to the wrong person.
+                var human = SoleHumanSeat();
+                tableView.SetViewerSeat(human);
+                tableView.SetHandVisible(human >= 0);
+            }
+
+            SetScreen(MatchFlowScreen.Turn);
+            if (botDriver != null)
+            {
+                botDriver.Evaluate();
+            }
+        }
+
+        private int SoleHumanSeat()
+        {
+            if (HumanCount != 1)
+            {
+                return -1;
+            }
+
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                if (!seats[seat].IsBot)
+                {
+                    return seat;
+                }
+            }
+
+            return -1;
         }
 
         private void OnGameWon(GameResult result)
@@ -240,8 +393,14 @@ namespace Mejnun.Game
         private void ShowResults(GameResult result)
         {
             LastResult = result;
+            if (botDriver != null)
+            {
+                botDriver.Stop();
+            }
+
             if (tableView != null)
             {
+                tableView.SetViewerSeat(-1);
                 tableView.SetHandVisible(false);
             }
 

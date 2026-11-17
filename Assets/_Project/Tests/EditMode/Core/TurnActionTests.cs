@@ -20,19 +20,23 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
-        public void Turn_EndingWithValidHandOnlySetImplicitlyGoesDown()
+        public void Turn_PlacingValidHandOnlySetGoesDownAndEndTurnRevealsIt()
         {
             var game = NewGame();
             GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
+            var wentDownSeat = -1;
+            var revealedSeat = -1;
+            game.Events.WentDown += seat => wentDownSeat = seat;
+            game.Events.DownRevealed += (seat, meldIds) => revealedSeat = seat;
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"),
                 CardTarget.NewMeld(0))).Ok, Is.True);
-            var wentDownSeat = -1;
-            game.Events.WentDown += seat => wentDownSeat = seat;
+            Assert.That(wentDownSeat, Is.EqualTo(0));
+            Assert.That(revealedSeat, Is.EqualTo(-1));
 
             var result = game.Apply(GameCommand.EndTurn(0));
 
             Assert.That(result.Ok, Is.True);
-            Assert.That(wentDownSeat, Is.EqualTo(0));
+            Assert.That(revealedSeat, Is.EqualTo(0));
             Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
             Assert.That(game.State.CurrentSeat, Is.EqualTo(1));
             Assert.That(game.State.TurnNumber, Is.EqualTo(2));

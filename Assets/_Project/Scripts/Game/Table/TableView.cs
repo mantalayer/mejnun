@@ -23,8 +23,12 @@ namespace Mejnun.Game
         private readonly HandOrder handOrder = new HandOrder();
         private bool poolReady;
         private bool handVisible = true;
+        private int viewerSeat = -1;
         private Vector2 cardSize = new Vector2(0.64f, 0.97f);
         private float pixelsPerUnit = 100f;
+        private Vector3 lastHandCameraPosition;
+        private float lastHandCameraOrthographicSize;
+        private bool hasHandCameraState;
 
         public GameState CurrentState { get; private set; }
         public TurnSession CurrentTurn { get; private set; }
@@ -33,11 +37,64 @@ namespace Mejnun.Game
         public IReadOnlyDictionary<byte, CardView> ActiveCards => activeCards;
         public int ActiveCardCount => activeCards.Count;
         public bool HandVisible => handVisible;
+        public Camera ViewCamera => tableCamera == null ? null : tableCamera.Camera;
+
+        /// <summary>The seat whose hand is shown, or -1 to follow the current seat.</summary>
+        public int ViewerSeat => viewerSeat;
         public BoardLayoutResult CurrentBoardLayout => boardView == null ? null : boardView.CurrentLayout;
+
+        public bool TryGetMeldsAnchor(IReadOnlyList<int> meldIds, out Vector3 world)
+        {
+            world = default;
+            if (meldIds == null || boardView == null || boardView.CurrentLayout == null)
+            {
+                return false;
+            }
+
+            var layout = boardView.CurrentLayout;
+            for (var idIndex = 0; idIndex < meldIds.Count; idIndex++)
+            {
+                for (var meldIndex = 0; meldIndex < layout.Melds.Count; meldIndex++)
+                {
+                    var meldLayout = layout.Melds[meldIndex];
+                    if (meldLayout.MeldId == meldIds[idIndex])
+                    {
+                        var bounds = meldLayout.Bounds;
+                        world = boardView.transform.TransformPoint(new Vector3(bounds.center.x, bounds.yMax, 0f));
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         private void Awake()
         {
             PreparePool();
+        }
+
+        private void LateUpdate()
+        {
+            if (!handVisible || CurrentState == null || handView == null || tableCamera == null ||
+                tableCamera.Camera == null)
+            {
+                return;
+            }
+
+            var camera = tableCamera.Camera;
+            var cameraPosition = camera.transform.position;
+            if (hasHandCameraState && cameraPosition == lastHandCameraPosition &&
+                Mathf.Approximately(camera.orthographicSize, lastHandCameraOrthographicSize))
+            {
+                return;
+            }
+
+            var seat = DisplaySeat(CurrentState);
+            if (seat >= 0 && seat < CurrentState.Hands.Count)
+            {
+                LayoutHand(seat, 0f);
+            }
         }
 
         public void Sync(GameState state, TurnSession turn)
@@ -52,7 +109,7 @@ namespace Mejnun.Game
             CurrentTurn = turn;
             visibleCardIds.Clear();
 
-            var activeSeat = state.CurrentSeat;
+            var activeSeat = DisplaySeat(state);
             var activeHand = activeSeat >= 0 && activeSeat < state.Hands.Count
                 ? state.Hands[activeSeat]
                 : null;
@@ -102,11 +159,9 @@ namespace Mejnun.Game
                 }
             }
 
-            if (handVisible && activeHand != null && handView != null && tableCamera != null &&
-                tableCamera.Camera != null)
+            if (handVisible && activeHand != null)
             {
-                handView.Layout(activeHand, handOrder, activeSeat, activeCards, tableCamera.Camera, tableCamera,
-                    cardSize, pixelsPerUnit);
+                LayoutHand(activeSeat);
             }
         }
 
@@ -126,7 +181,7 @@ namespace Mejnun.Game
             var distance = Mathf.Abs(camera.transform.position.z);
             var world = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, distance));
             world.z = 0f;
-            var activeSeat = CurrentState.CurrentSeat;
+            var activeSeat = DisplaySeat(CurrentState);
             var activeHand = activeSeat >= 0 && activeSeat < CurrentState.Hands.Count
                 ? CurrentState.Hands[activeSeat]
                 : null;
@@ -177,7 +232,8 @@ namespace Mejnun.Game
                     : GestureHit.MeldGap(boardHit.MeldId, boardHit.InsertIndex);
             }
 
-            if (activeHand != null && world.y <= -camera.orthographicSize + cardSize.y + 0.12f)
+            if (activeHand != null &&
+                world.y <= camera.transform.position.y - camera.orthographicSize + cardSize.y + 0.12f)
             {
                 return GestureHit.HandArea(activeHand.Count);
             }
@@ -190,6 +246,28 @@ namespace Mejnun.Game
             if (tableCamera != null)
             {
                 tableCamera.FitBoard();
+            }
+        }
+
+        public void PanCamera(Vector2 screenDelta, Vector2 screenPosition)
+        {
+            if (tableCamera != null)
+            {
+                tableCamera.Pan(screenDelta, screenPosition);
+            }
+        }
+
+        public void SetViewerSeat(int seat)
+        {
+            if (viewerSeat == seat)
+            {
+                return;
+            }
+
+            viewerSeat = seat;
+            if (CurrentState != null)
+            {
+                Sync(CurrentState, CurrentTurn);
             }
         }
 
@@ -215,7 +293,7 @@ namespace Mejnun.Game
                 return;
             }
 
-            var seat = CurrentState.CurrentSeat;
+            var seat = DisplaySeat(CurrentState);
             if (seat < 0 || seat >= CurrentState.Hands.Count)
             {
                 return;
@@ -223,8 +301,28 @@ namespace Mejnun.Game
 
             var worldDelta = -screenDelta * tableCamera.Camera.orthographicSize * 2f / Screen.height;
             handView.Scroll(worldDelta);
-            handView.Layout(CurrentState.Hands[seat], handOrder, seat, activeCards, tableCamera.Camera, tableCamera,
-                cardSize, pixelsPerUnit);
+            LayoutHand(seat);
+        }
+
+        private void LayoutHand(int seat, float moveDuration = -1f)
+        {
+            if (!handVisible || CurrentState == null || handView == null || tableCamera == null ||
+                tableCamera.Camera == null || seat < 0 || seat >= CurrentState.Hands.Count)
+            {
+                return;
+            }
+
+            var camera = tableCamera.Camera;
+            handView.Layout(CurrentState.Hands[seat], handOrder, seat, activeCards, camera, tableCamera, cardSize,
+                pixelsPerUnit, moveDuration);
+            lastHandCameraPosition = camera.transform.position;
+            lastHandCameraOrthographicSize = camera.orthographicSize;
+            hasHandCameraState = true;
+        }
+
+        private int DisplaySeat(GameState state)
+        {
+            return viewerSeat >= 0 && viewerSeat < state.Hands.Count ? viewerSeat : state.CurrentSeat;
         }
 
         private void AddVisibleCard(Card card, GameState state)

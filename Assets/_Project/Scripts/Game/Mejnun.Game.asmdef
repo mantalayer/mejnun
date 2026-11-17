@@ -3,6 +3,7 @@
   "rootNamespace": "Mejnun.Game",
   "references": [
     "Mejnun.Core",
+    "Mejnun.AI",
     "Mejnun.Cosmetics",
     "Unity.InputSystem"
   ],

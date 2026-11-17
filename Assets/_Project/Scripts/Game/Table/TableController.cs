@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mejnun.AI;
 using Mejnun.Core;
 using UnityEngine;
 
@@ -13,17 +14,29 @@ namespace Mejnun.Game
 
         private readonly Stack<int> undoGroups = new Stack<int>();
         private readonly GestureInterpreter gestureInterpreter = new GestureInterpreter();
+        private HashSet<byte> hintedCardIds = new HashSet<byte>();
+        private Func<int, bool> seatInputFilter;
+        private bool hintsEnabled;
         private MejnunGame game;
         private IFeedbackSink feedbackSink;
         private GestureHit dragSource;
         private bool dragActive;
         private bool handScrollActive;
+        private bool panActive;
 
         public MejnunGame Game => game;
         public int UndoGroupCount => undoGroups.Count;
         public IReadOnlyList<byte> SelectedCardIds => gestureInterpreter.SelectedCardIds;
+        public bool HintsEnabled => hintsEnabled;
+        public IReadOnlyCollection<byte> HintedCardIds => hintedCardIds;
+
+        /// <summary>True when the local player may act: a game is in progress and the current seat accepts input.</summary>
+        public bool InputEnabled => game != null && game.State.Phase == GamePhase.Playing &&
+                                    (seatInputFilter == null || seatInputFilter(game.State.CurrentSeat));
 
         public event Action<GameState, TurnSession> Synchronized;
+        public event Action<int> WentDown;
+        public event Action<int, IReadOnlyList<int>> DownRevealed;
         public event Action<RuleError> InvalidGesture;
         public event Action<GameResult> GameWon;
         public event Action<GameResult> GameStalemate;
@@ -76,6 +89,30 @@ namespace Mejnun.Game
             undoGroups.Clear();
             gestureInterpreter.ClearSelection();
             SynchronizeViews();
+        }
+
+        /// <summary>Decides which seats take local input (bots don't). Null means every seat does.</summary>
+        public void SetSeatInputFilter(Func<int, bool> filter)
+        {
+            seatInputFilter = filter;
+            RefreshHints();
+            RefreshSelection();
+        }
+
+        public void SetHintsEnabled(bool enabled)
+        {
+            if (hintsEnabled == enabled)
+            {
+                return;
+            }
+
+            hintsEnabled = enabled;
+            RefreshHints();
+            RefreshSelection();
+            if (game != null)
+            {
+                Synchronized?.Invoke(game.State, game.Turn);
+            }
         }
 
         public CommandResult ExecuteGesture(GestureInput input)
@@ -277,10 +314,16 @@ namespace Mejnun.Game
             if (tableView != null)
             {
                 tableView.Sync(game.State, game.Turn);
+                RefreshHints();
                 RefreshSelection();
             }
 
             Synchronized?.Invoke(game.State, game.Turn);
+        }
+
+        private void RefreshHints()
+        {
+            hintedCardIds = hintsEnabled && InputEnabled ? PlayableHints.Find(game.State) : new HashSet<byte>();
         }
 
         private void RefreshSelection()
@@ -293,6 +336,7 @@ namespace Mejnun.Game
             foreach (var pair in tableView.ActiveCards)
             {
                 pair.Value.SetSelected(gestureInterpreter.IsSelected(pair.Key));
+                pair.Value.SetHinted(hintedCardIds.Contains(pair.Key));
             }
         }
 
@@ -300,6 +344,41 @@ namespace Mejnun.Game
         {
             if (game == null || tableView == null)
             {
+                return;
+            }
+
+            if (pointerGesture.Kind == PointerGestureKind.DragStarted)
+            {
+                dragSource = tableView.HitTest(pointerGesture.StartPosition);
+                handScrollActive = dragSource.Kind == GestureHitKind.HandArea;
+                dragActive = dragSource.Kind == GestureHitKind.HandCard ||
+                             dragSource.Kind == GestureHitKind.BoardCard;
+                panActive = !dragActive && !handScrollActive;
+                if (panActive)
+                {
+                    return;
+                }
+            }
+
+            if (panActive)
+            {
+                if (pointerGesture.Kind == PointerGestureKind.DragUpdated)
+                {
+                    tableView.PanCamera(pointerGesture.Delta, pointerGesture.Position);
+                }
+                else if (pointerGesture.Kind == PointerGestureKind.DragEnded ||
+                         pointerGesture.Kind == PointerGestureKind.Cancelled)
+                {
+                    panActive = false;
+                }
+
+                return;
+            }
+
+            if (!InputEnabled)
+            {
+                dragActive = false;
+                handScrollActive = false;
                 return;
             }
 
@@ -323,10 +402,6 @@ namespace Mejnun.Game
                     Haptics.LongPress();
                     break;
                 case PointerGestureKind.DragStarted:
-                    dragSource = tableView.HitTest(pointerGesture.StartPosition);
-                    handScrollActive = dragSource.Kind == GestureHitKind.HandArea;
-                    dragActive = dragSource.Kind == GestureHitKind.HandCard ||
-                                 dragSource.Kind == GestureHitKind.BoardCard;
                     if (dragActive)
                     {
                         Haptics.Pickup();
@@ -415,6 +490,8 @@ namespace Mejnun.Game
 
             game.Events.Won += HandleWon;
             game.Events.Stalemate += HandleStalemate;
+            game.Events.WentDown += HandleWentDown;
+            game.Events.DownRevealed += HandleDownRevealed;
         }
 
         private void UnsubscribeFromGame()
@@ -426,6 +503,18 @@ namespace Mejnun.Game
 
             game.Events.Won -= HandleWon;
             game.Events.Stalemate -= HandleStalemate;
+            game.Events.WentDown -= HandleWentDown;
+            game.Events.DownRevealed -= HandleDownRevealed;
+        }
+
+        private void HandleWentDown(int seat)
+        {
+            WentDown?.Invoke(seat);
+        }
+
+        private void HandleDownRevealed(int seat, IReadOnlyList<int> meldIds)
+        {
+            DownRevealed?.Invoke(seat, meldIds);
         }
 
         private void HandleWon(GameResult result)

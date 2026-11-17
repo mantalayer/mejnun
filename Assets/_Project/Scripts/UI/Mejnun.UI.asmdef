@@ -4,6 +4,7 @@
   "references": [
     "Mejnun.Game",
     "Mejnun.Core",
+    "Mejnun.AI",
     "Unity.InputSystem"
   ],
   "includePlatforms": [],

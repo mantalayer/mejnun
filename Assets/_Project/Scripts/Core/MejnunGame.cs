@@ -212,6 +212,12 @@ namespace Mejnun.Core
                 }
             }
 
+            if (Turn.StartSnapshot.PlayerPhase == PlayerPhase.NotDown &&
+                State.PlayerPhases[State.CurrentSeat] == PlayerPhase.Down)
+            {
+                Events.RaiseDownRevealed(State.CurrentSeat, Turn.NewMeldIds());
+            }
+
             State.ConsecutivePasses = 0;
             AdvanceTurn();
             return CommandResult.Success();
