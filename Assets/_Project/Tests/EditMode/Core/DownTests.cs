@@ -36,6 +36,22 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
+        public void CanGoDown_IsTrueOnlyForValidHandOnlyNewMeldsWhileNotDown()
+        {
+            var game = NewGame();
+            GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.NotDown);
+
+            Assert.That(game.CanGoDown(), Is.False);
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"), CardTarget.NewMeld(0))).Ok,
+                Is.True);
+            Assert.That(game.CanGoDown(), Is.True);
+
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            Assert.That(game.CanGoDown(), Is.False);
+        }
+
+        [Test]
         public void Down_CanMergeMelds()
         {
             var game = NewGame();

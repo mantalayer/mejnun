@@ -1,0 +1,82 @@
+using Mejnun.Game;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Mejnun.UI
+{
+    public sealed class MatchFlowPresenter : MonoBehaviour
+    {
+        [SerializeField] private UIDocument uiDocument;
+        [SerializeField] private MatchFlow matchFlow;
+
+        private VisualElement flowRoot;
+        private SetupScreen setupScreen;
+        private DealerQuestionScreen dealerQuestionScreen;
+        private HandoffScreen handoffScreen;
+        private ResultsScreen resultsScreen;
+
+        private void Awake()
+        {
+            if (uiDocument == null)
+            {
+                uiDocument = GetComponent<UIDocument>();
+            }
+
+            if (matchFlow == null)
+            {
+                matchFlow = FindAnyObjectByType<MatchFlow>();
+            }
+
+            var root = uiDocument.rootVisualElement;
+            flowRoot = root.Q<VisualElement>("flow-root");
+            setupScreen = new SetupScreen(root, matchFlow);
+            dealerQuestionScreen = new DealerQuestionScreen(root, matchFlow);
+            handoffScreen = new HandoffScreen(root, matchFlow);
+            resultsScreen = new ResultsScreen(root, matchFlow);
+            ShowScreen(matchFlow.Screen);
+        }
+
+        private void OnEnable()
+        {
+            if (matchFlow != null)
+            {
+                matchFlow.ScreenChanged += ShowScreen;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (matchFlow != null)
+            {
+                matchFlow.ScreenChanged -= ShowScreen;
+            }
+        }
+
+        private void ShowScreen(MatchFlowScreen screen)
+        {
+            if (flowRoot == null)
+            {
+                return;
+            }
+
+            flowRoot.style.display = screen == MatchFlowScreen.Turn ? DisplayStyle.None : DisplayStyle.Flex;
+            setupScreen.SetVisible(screen == MatchFlowScreen.Setup);
+            dealerQuestionScreen.SetVisible(screen == MatchFlowScreen.DealerQuestion);
+            handoffScreen.SetVisible(screen == MatchFlowScreen.Handoff);
+            resultsScreen.SetVisible(screen == MatchFlowScreen.Results);
+
+            if (screen == MatchFlowScreen.DealerQuestion)
+            {
+                dealerQuestionScreen.Refresh();
+            }
+            else if (screen == MatchFlowScreen.Handoff)
+            {
+                handoffScreen.Refresh();
+            }
+            else if (screen == MatchFlowScreen.Results)
+            {
+                resultsScreen.Refresh();
+            }
+        }
+    }
+}

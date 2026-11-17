@@ -33,6 +33,11 @@ namespace Mejnun.Core
             return Turn != null && Turn.CanEndTurn();
         }
 
+        public bool CanGoDown()
+        {
+            return Turn != null && Turn.CanGoDown();
+        }
+
         internal void RefreshTurnSession()
         {
             if (State.Phase == GamePhase.Playing)

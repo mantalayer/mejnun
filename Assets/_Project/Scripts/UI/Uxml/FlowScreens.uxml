@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Uss/flow.uss" />
+    <ui:VisualElement name="flow-root" class="flow-root">
+        <ui:VisualElement name="setup-screen" class="flow-screen">
+            <ui:Label class="flow-title" text="Mejnun" />
+            <ui:Label class="flow-copy" text="Choose your seats and names." />
+            <ui:IntegerField name="seat-count-field" label="Seats" value="3" />
+            <ui:VisualElement name="player-name-fields" class="player-name-fields">
+                <ui:TextField name="player-name-0" label="Player 1" value="Player 1" />
+                <ui:TextField name="player-name-1" label="Player 2" value="Player 2" />
+                <ui:TextField name="player-name-2" label="Player 3" value="Player 3" />
+                <ui:TextField name="player-name-3" label="Player 4" value="Player 4" />
+                <ui:TextField name="player-name-4" label="Player 5" value="Player 5" />
+                <ui:TextField name="player-name-5" label="Player 6" value="Player 6" />
+            </ui:VisualElement>
+            <ui:Button name="start-match-button" class="flow-button primary-flow-button" text="Start game" />
+        </ui:VisualElement>
+        <ui:VisualElement name="dealer-question-screen" class="flow-screen">
+            <ui:Label class="flow-title" text="Who deals?" />
+            <ui:Label name="dealer-question-label" class="flow-copy" text="Who should deal this game?" />
+            <ui:VisualElement name="dealer-seat-options" class="seat-options" />
+            <ui:Button name="random-dealer-button" class="flow-button primary-flow-button" text="Random" />
+        </ui:VisualElement>
+        <ui:VisualElement name="handoff-screen" class="flow-screen handoff-screen">
+            <ui:Label name="handoff-message" class="flow-title" text="Pass to Player 1 — tap to reveal" />
+            <ui:Button name="reveal-hand-button" class="flow-button primary-flow-button" text="Tap to reveal" />
+        </ui:VisualElement>
+        <ui:VisualElement name="results-screen" class="flow-screen">
+            <ui:Label name="result-title" class="flow-title" text="Game over" />
+            <ui:Label name="result-message" class="flow-copy" text="" />
+            <ui:Button name="rematch-button" class="flow-button primary-flow-button" text="Rematch" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

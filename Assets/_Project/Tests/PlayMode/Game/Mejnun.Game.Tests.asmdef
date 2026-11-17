@@ -1,0 +1,24 @@
+{
+  "name": "Mejnun.Game.Tests",
+  "rootNamespace": "Mejnun.Game.Tests",
+  "references": [
+    "Mejnun.Core",
+    "Mejnun.Cosmetics",
+    "Mejnun.Game",
+    "Mejnun.UI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

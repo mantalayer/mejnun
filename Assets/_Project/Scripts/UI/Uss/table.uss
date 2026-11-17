@@ -1,0 +1,105 @@
+.hud-root {
+    flex-grow: 1;
+    justify-content: space-between;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.hud-bar {
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(8, 18, 14, 0.82);
+    border-radius: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.top-bar {
+    min-height: 54px;
+}
+
+.game-status {
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.status-label {
+    color: rgb(248, 248, 240);
+    font-size: 16px;
+-unity-font-style: bold;
+}
+
+.secondary-label {
+    color: rgb(195, 211, 199);
+    font-size: 13px;
+-unity-font-style: normal;
+}
+
+.opponents-strip {
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.seat-chip {
+    color: rgb(231, 236, 228);
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 13px;
+}
+
+.seat-chip.active-seat {
+    color: rgb(18, 30, 20);
+    background-color: rgb(177, 224, 120);
+-unity-font-style: bold;
+}
+
+.bottom-bar {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hud-button {
+    min-width: 88px;
+    height: 42px;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    color: rgb(244, 246, 239);
+    background-color: rgb(50, 67, 57);
+    border-radius: 5px;
+    border-width: 0;
+    font-size: 14px;
+}
+
+.hud-button:hover {
+    background-color: rgb(70, 91, 75);
+}
+
+.hud-button:disabled {
+    color: rgba(230, 235, 228, 0.45);
+    background-color: rgb(48, 54, 49);
+}
+
+.primary-button {
+    color: rgb(22, 32, 24);
+    background-color: rgb(177, 224, 120);
+-unity-font-style: bold;
+}
+
+.accent-button {
+    color: rgb(22, 32, 24);
+    background-color: rgb(239, 195, 92);
+-unity-font-style: bold;
+}
