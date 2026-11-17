@@ -1,6 +1,6 @@
 # Mejnun — Game Design & Implementation Plan
 
-Status: draft v1 (2026-11-16), written from two interview rounds with Brennan.
+Status: draft v2 (2026-11-16), written from two interview rounds with Brennan, plus answers to the v1 open questions (§11).
 Engine: Unity 6000.4.0f1 · URP 17.4 · Input System 1.19 · Wwise 2025.1.12
 Targets: iOS, Android, Windows, macOS (Steam for desktop).
 
@@ -29,7 +29,7 @@ The rules engine implements this section exactly. Anything that isn't covered he
 ### 1.4 Deal
 - Cards are dealt one at a time, starting with the player left of the dealer and going clockwise, until everyone has **11 cards**.
 - The remaining cards (104 − 11·N, so 82 to 38) form the face-down **draw pile** in the centre.
-- The **first turn** goes to the player left of the dealer *(assumed, see Q1)*.
+- The **first turn** goes to the player left of the dealer (confirmed).
 
 ### 1.5 Objective
 - The first player to get rid of every card in their hand wins, and the game ends at once. The win moment ("MEJNUN!") plays **automatically**.
@@ -65,7 +65,7 @@ Each player is either **Not down** (the starting phase) or **Down**.
 - A card that came from your hand can go back to your hand during the same turn. Cards that **started the turn on the board** can never go into a hand.
 
 ### 1.9 Timed mode (optional, chosen by the host)
-- Presets: **30 / 60 / 90 / 120 s** per turn, or Off.
+- Presets: **30 / 60 / 90 / 120 s** per turn, or Off. Off is only available offline, because online games are always timed (§4.5).
 - On timeout:
   1. No hand card placed, board valid → **keep** the rearranged board and **draw**.
   2. No hand card placed, board invalid → revert, then draw.
@@ -74,11 +74,16 @@ Each player is either **Not down** (the starting phase) or **Down**.
 
 ### 1.10 Empty draw pile
 - Once the pile is empty, "Draw" becomes **"Pass"**: the player draws nothing and the board is reverted.
-- If every active player passes in a row without placing a card, the game ends and the player with the **fewest cards in hand** wins *(tie-break: see Q2)*.
+- If every active player passes in a row without placing a card, the game ends:
+  - If exactly one player has the **fewest cards in hand**, they win. This is a normal win screen. The "MEJNUN!" moment is reserved for actually emptying your hand.
+  - If two or more players share the fewest cards, the game is declared a **Stalemate**: there is no winner, and no win XP or win stats are awarded.
+  - After a stalemate, the same dealer deals again, since nobody won *(assumed, see Q-B)*.
 
 ### 1.11 Hand helpers (UI, not rules)
 - Sort by suit, sort by rank, drag to reorder manually.
-- "Highlight playable" hint: optional in Settings. It's disabled in ranked or quick-match online games *(see Q3)*.
+- "Highlight playable" hint: a personal setting offline.
+  - Online, it's a **per-lobby toggle** chosen by the host (default Off) and shown in the lobby rules summary. When it's Off, the hint is unavailable to every player in that game.
+  - Quick match always uses hints Off (§4.2).
 
 ---
 
@@ -87,8 +92,8 @@ Each player is either **Not down** (the starting phase) or **Down**.
 | Mode | Seats | Authority | Notes |
 |---|---|---|---|
 | **Solo vs AI** | 1 human + 1–5 bots | Local engine | Easy / Medium / Hard per bot |
-| **Pass & play** | 2–6 humans (+ optional bots) | Local engine | Handoff screen ("Pass to Sam — tap to reveal") between turns |
-| **Online live** | 2–6 (bots can fill seats) | Host-authoritative over UGS Relay | Room codes, quick match, friends invites |
+| **Pass & play** | 2–6 seats, any mix of local humans and bots (at least 1 human) | Local engine | Handoff screen ("Pass to Sam — tap to reveal") between human turns. It's skipped when consecutive turns are bots |
+| **Online live** | 2–6 (bots can fill seats) | Host-authoritative over UGS Relay | Room codes, quick match, friends invites. **Always timed** (§4.5) |
 
 The same pure-C# `Mejnun.Core` engine runs every mode. Only the input source changes (local touch, AI, or network).
 
@@ -117,7 +122,7 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 ### 3.2 Core model
 - `Card` (readonly struct: `Id`, `Suit`, `Rank`, `Deck`) and `Rank` (Ace..King). An ace's role (low/high) is decided per straight by the validator.
 - `Meld` holds an id plus an ordered `List<Card>`. `MeldValidator.Classify(meld)` returns `SameKind | StraightLow | StraightHigh | Invalid(reason)`. The reasons drive UI tooltips: "double", "too short", "mixed suits", and so on.
-- `GameState` holds seats, hands, board (melds), draw pile, current seat, dealer, phase per player, turn number, timer, and RNG seed.
+- `GameState` holds seats, hands, board (melds), draw pile, current seat, dealer, phase per player, turn number, timer, RNG seed, and `DeckFaces[2]`, the face-skin id for each physical deck (§3.6). Core treats skin ids as opaque strings.
 - `TurnSession` holds the start-of-turn snapshot and a move list: `MoveCard(cardId, from, to, index)`, `SplitMeld`, `MergeMelds`, `GoDown`. It supports Undo, Revert and `CanEndTurn()`, plus timeout resolution (§1.9).
 - Commands carry the player's **intent**. The engine validates every one. It is identical locally and online, where clients send commands and the host applies them.
 - A deterministic `Xoshiro`/`PCG` RNG is seeded per game, so games can be replayed for bug reports and tests.
@@ -129,15 +134,24 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - **Zoom & pan**: pinch or two-finger drag on touch; wheel, right/middle-drag or trackpad on PC. A "fit board" button and automatic fit after each change unless the user zoomed manually.
 - **Hand**: a fanned or scrollable row at the bottom (landscape), or a two-row grid (portrait), with sort buttons.
 - **HUD and menus** use **UI Toolkit** (recommended): USS responsive classes handle portrait/landscape and safe areas, it integrates cleanly with Unity Localization, and the "mixed" art direction (pixel cards with smooth modern UI) fits it well. uGUI is avoided apart from world-space bits if needed.
+  - The deciding factor: UI Toolkit's **Advanced Text Generator** (HarfBuzz + ICU, opt-in in Unity 6.4) is the built-in way to shape **Arabic and Persian** right-to-left text. TextMeshPro would need a third-party RTL plugin (§7).
 
 ### 3.4 Input (touch-first; the mouse acts as touch)
 - Input System with `EnhancedTouch`. One `PointerRouter` turns touch and mouse into the same tap, drag, long-press and pinch gestures.
-- Interactions:
-  - **Drag & drop** a card from hand or board onto a set, between two cards of a straight (insert), onto empty space (new group), or back to hand (only cards from your hand).
-  - **Tap-select then tap-target** as an accessible alternative, especially for small phones.
-  - **Long-press a straight segment** to split it at that point, or drag the tail end to split.
-  - Haptics on mobile for pickup, drop and invalid.
-- On PC the mouse works as a pointer. Keyboard shortcuts are optional extras: Ctrl+Z undo, R revert, Space end turn, D draw.
+- **Design rule: there are no modal tools** (no scissors, no "split mode"). Every action is a direct, discoverable gesture, and the same result can usually be reached in more than one way.
+
+| Gesture | On a hand card | On a board card | On empty board |
+|---|---|---|---|
+| **Drag** | Drag up onto a set, a gap in a straight, or empty space to play it. Drag sideways within the hand to reorder | Move that one card. Pulling it out of the middle of a straight leaves two pieces, so splitting happens naturally | Pan (when zoomed in) |
+| **Long-press, then drag** (~350 ms, haptic tick) | Pick up the card plus any other selected hand cards as a group | **Straight**: pick up the pressed card *and everything after it*, so dropping the tail elsewhere splits the run. **Same kind**, or the first card of a straight: pick up the whole set | none |
+| **Tap** | Toggle selection (multi-select is allowed). Then tap a target to place every selected card, e.g. tap 3 hand cards, then tap empty space to go down | Select, then tap a target to move | Drop the selected card(s) here as a new group |
+| **Double-tap** | Quick-place: put it on the first set it validly extends, if any *(proposed; online it counts as a hint, so it follows the lobby hint toggle)* | Send a card you placed this turn back to your hand | Fit the whole board to the screen |
+| **Pinch / two-finger drag** | none | Zoom / pan | Zoom / pan |
+
+- A drop that's illegal (for example a board card onto the hand, or touching the board before going down) springs the card back with a haptic buzz and the `Play_Card_Invalid` sound. Temporarily *invalid sets* are always allowed and get a red outline.
+- Haptics on mobile for pickup, long-press, drop and invalid.
+- On PC: left-drag = drag, holding the left button = long-press, the wheel zooms, and right/middle-drag pans. Keyboard shortcuts are optional extras: Ctrl+Z undo, R revert, Space end turn, D draw.
+- A gesture tutorial covers drag, long-press-split and pinch in the first solo game, with tooltips the first time each gesture is relevant.
 
 ### 3.5 AI (`Mejnun.AI`)
 - One shared **solver** asks: given the board cards (B), a subset of hand cards (H) and the go-down constraint, what is a valid partition of B ∪ H′ that maximises |H′|? It works as exact-cover-style backtracking over candidate melds, with memoisation and a time budget. It runs on a worker thread and returns the best result so far when time runs out.
@@ -152,18 +166,30 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - `DeckSkin : ScriptableObject` contains `id`, `displayName`, `Sprite[52]` faces indexed by `(suit, rank)`, a `cardBack` default, a `blank` (or highlight) sprite, a `filterMode`/pixel-art flag, `pixelsPerUnit`, and an `UnlockRequirement` reference.
 - **Per-skin mapping**: the editor tool **Mejnun ▸ Deck Skin Importer** takes a sliced texture and shows a 4×13 grid. You assign each slot by click, or apply a layout preset ("row-major", "interleaved zig-zag"). The result is saved into the SO.
   - `cards.png` (Classic) is already sliced into 54 sprites `cards_0..53` (64×97, point filter). Row 1 zig-zags clubs/hearts (2♣ 2♥ 3♥ 3♣ 4♣ 4♥ …) and ends with the card back. Row 2 zig-zags spades/diamonds the same way and ends with a blank card. The importer preset reproduces this, and the mapping gets checked visually in the importer grid.
+  - `ClassicIvory/cards_ivory.png` is the **second base face** (added in v2). It's a palette swap of Classic: ivory paper, navy ink, crimson red. It uses the identical slicing (`cards_ivory_0..53`), so the same layout preset applies, and it's a placeholder until the real second-deck art replaces it in place.
+- **Two faces per game** (the "two real decks" rule):
+  - Every game uses **exactly two different face skins**, one per physical deck, just like shuffling two real decks together. `DeckFaces[0]` is used for cards with `Deck == 0` and `DeckFaces[1]` for `Deck == 1`. A game never shows one face for both decks.
+  - **Pool** = the union of face skins owned by every *human* in the game. Two **free base faces** (Classic and Classic Ivory) are owned by everyone, so the pool always has at least 2.
+    - In solo, each bot also adds one random face from the full catalogue, so solo players can get a peek at locked faces too *(proposed, see Q-E)*.
+  - The two faces are picked **uniformly at random, without repetition**, with the game's seeded RNG at deal time. They're stored in `GameState` and snapshots, so all clients, reconnects and replays agree.
+  - A face the local player **doesn't own** gets a small "Not unlocked yet" badge on the results screen, linking to how to unlock it. That's the "exciting glimpse" moment.
+  - A nice side effect: the two cards of a **double now look different**, which makes the board easier to read.
+  - Every client must be able to render every face. Face skins are small (around 15 KB each), so all faces **ship in the build**. Addressables remote download stays an option if the catalogue grows. If a face fails to load, the client falls back to the base face for that deck index.
+  - "Equipping" a face skin therefore isn't a thing. Owning one adds it to the pools of the games you're in. (Possible later extra: a "favourites" weighting.)
 - Other cosmetic SOs: `CardBack`, `TableFelt` (sprite/material), `Avatar`, `MejnunShout` (a Wwise Switch value plus a VFX prefab).
 - `CosmeticCatalog` lists every item. `PlayerInventory` stores owned and equipped items (local save + UGS Cloud Save).
-- Unlock sources: **play progression** (XP per game and win, levels), **achievements** (Steam / Game Center / Google Play via the platform layer, plus local ones), and **IAP** (Unity IAP, behind `IEntitlements`, not committed yet).
-- Packaging: the base skin ships in the build. Extra skins become **Addressables** groups, so they can be downloaded or patched later without an app update.
-- **Online**: each player's equipped *card back*, *avatar* and *shout* are sent at session join. Card **faces** come from the local player's own skin choice, since everyone sees their own preferred face art.
+- Unlock sources: **play progression** (XP per game and win, levels), **achievements** (Steam / Game Center / Google Play via the platform layer, plus local ones), and **IAP** (Unity IAP, behind `IEntitlements`). Mobile ships with Remove ads (§5.3), and cosmetic packs aren't committed yet.
+- Packaging: the two base faces ship in the build. Other cosmetics can become **Addressables** groups, so they can be downloaded or patched later without an app update.
+- **Online**: each player's owned face ids plus their equipped *card back*, *avatar* and *shout* are sent at session join. The host builds the face pool (above).
+  - The draw pile uses the viewing player's equipped back. Opponents' hand stacks show that opponent's back.
+  - A back is never tied to a deck index, so a back never reveals which deck the next drawn card comes from.
 
 ### 3.7 Audio (Wwise)
 - `AudioService` is the only code that calls `AkSoundEngine` or `AK.Wwise.Event`. Gameplay raises `GameEvents`, and an `AudioDirector` maps them to Wwise events.
 - First-pass event list: `Play_UI_Click`, `Play_Card_Pickup`, `Play_Card_Drop`, `Play_Card_Invalid`, `Play_Card_Shuffle`, `Play_Card_Deal`, `Play_Card_Draw`, `Play_Meld_Valid`, `Play_GoDown`, `Play_Turn_Start`, `Play_Timer_Tick`, `Play_Timer_Warning`, `Play_Mejnun_Shout` (Switch `Shout_Type` per cosmetic), `Play_Win_Stinger`, `Play_Lose_Stinger`, `Music_Menu`, `Music_Game`.
 - RTPC `Timer_Tension` (0–1) and RTPC `Board_Complexity` (optional, for music intensity). States `Game_Phase` (Menu / Dealing / Playing / Results).
 - Banks: `Init` and `Main` to start with. SoundBanks are **committed to git** (decided), so the game builds without Wwise Authoring installed.
-- Platform plugins: the Mac/Windows integration is present. The **iOS and Android Wwise platform packages must be installed** through the Wwise Launcher before the mobile milestones (M8).
+- Platform plugins: the Mac/Windows integration is committed. **iOS and Android** integration files now appear in the working tree, so it looks like they were installed through the Wwise Launcher. They still need to be reviewed and committed, and the iOS/Android SoundBank platforms added in the Wwise project, before M8.
 
 ---
 
@@ -177,7 +203,11 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 
 ### 4.2 Finding games
 - **Room codes**: Session join code, 6 characters.
-- **Quick match**: Matchmaker or session query, filtered by player count and timer preset. Bots fill after a timeout *(see Q4)*.
+- **Quick match**: Matchmaker or session query.
+  - The only filter is player count (2–6, or "Any"). The rules are fixed so the player pool doesn't fragment: 90 s timer, hints Off.
+  - **Bot fill is a player setting** (Settings ▸ Online ▸ *Fill empty quick-match seats with bots*): **Off (humans only)**, After 30 s, or After 60 s. The default is After 60 s.
+  - When the wait expires, empty seats are filled with Medium bots **only if every human in the forming session allows bots**. The longest wait chosen applies. Otherwise the game keeps waiting for humans, and it can start early once at least 2 humans are in and everyone taps Ready.
+  - Bots are always clearly labelled as bots.
 - **Friends**: UGS Friends, plus platform friends (Steam invites and rich presence through the platform layer). Game Center and Google Play come later.
 
 ### 4.3 Accounts
@@ -185,7 +215,7 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - Optional linking to **Apple / Google Play Games / Steam / Unity Player Accounts**, which keeps unlocks and inventory across devices through Cloud Save.
 
 ### 4.4 Disconnects, pause/resume, host migration
-- **A client drops**: their seat goes into the *disconnected* state, and their turns auto-time-out at the current timer, or 60 s if untimed. The **host gets a prompt** with three choices:
+- **A client drops**: their seat goes into the *disconnected* state, and their turns auto-time-out at the lobby's turn timer (online is always timed, §4.5). The **host gets a prompt** with three choices:
   1. **Wait / auto-pass** (the default while waiting).
   2. **Let AI take over** the seat. The bot difficulty is chosen by the host, and the player gets the seat back if they reconnect.
   3. **Save & pause**: the full snapshot is stored, everyone is returned to the lobby or menu, and the game can be resumed later from "Paused games".
@@ -195,6 +225,10 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
   - The session or lobby **host migration** elects a new host, for example the next seat clockwise. The new host starts NGO, fetches the snapshot through Cloud Code, and the others reconnect. At most the in-progress turn is lost; that turn is replayed from its start.
   - The same snapshot store backs **Save & pause / resume later**.
   - ⚠ The first task of M7 is a **spike** to confirm how far Multiplayer Services host migration and Cloud Code snapshot storage support this flow. If they don't, the fallback is an "end game, save snapshot, the remaining players re-create the session from the snapshot" flow.
+
+### 4.5 Online rules & timer
+- Online games are **always timed**, so nobody can stall a live game. The host picks **30 / 60 / 90 / 120 s**, and the default is **90 s**. "Off" is only available offline.
+- Lobby rule toggles (host only, shown to everyone before Ready): timer preset, hints (Off by default), bot difficulty for filled seats, and the dealer-question pack.
 
 ---
 
@@ -213,20 +247,44 @@ Port these and rename the namespace `TerraFirma.Platform` → `Mejnun.Platform`:
 ### 5.2 Automated build / upload (port from terra-firma's Editor tooling)
 - `SteamUploader`, `SteamUploadWindow`, `SteamUploadConfig` (+ asset), `SteamUploadLocalSettings` (stored in ignored `UserSettings/MejnunSteamUpload.json`), `SteamBuildVersion` (major/minor/revision bump, restored on a failed build), `SteamBuildGit` (commits ProjectSettings and adds an annotated `vX.Y.Z` tag).
 - What carries over unchanged: ContentBuilder `content/<app>/<depot>/<os>/` layout, steamcmd cached-login check that opens Terminal for Steam Guard, VDF generation, an empty branch skips `SetLive`, the default branch is rejected, and `*_DoNotShip` folders are stripped.
-- Menu: **Mejnun ▸ Steam ▸ Upload…**. It needs a new Steam App ID and depot IDs for Mejnun *(Q5)*.
-- **Unity 6 Build Profiles**, one per store and edition:
-  - `Steam Windows – Paid`, `Steam macOS – Paid` (`MEJNUN_STEAM;MEJNUN_PAID`)
-  - `iOS – Paid`, `iOS – Free+Ads` (`MEJNUN_ADS`), `Android – Paid`, `Android – Free+Ads`
-- Mobile upload automation is a later phase: either extend the window with **fastlane** lanes (TestFlight and the Play internal track) or use Unity Build Automation *(Q6)*.
+- Menu: **Mejnun ▸ Steam ▸ Upload…**.
+  - There's no Steam app yet (§5.5). Until then, development uses Valve's test App ID **480** (Spacewar) in `steam_appid.txt`, and the uploader window stays disabled until real App and depot IDs are entered in `SteamUploadConfig`.
+- **Unity 6 Build Profiles**, one per store:
+  - `Steam Windows` and `Steam macOS`: `MEJNUN_STEAM`, paid, no ads, no IAP.
+  - `iOS` and `Android`: `MEJNUN_MOBILE`. Free, with ads and a "Remove ads" purchase (§5.3).
+  - `Dev` (any platform): Null platform services, debug menu, no ads.
 
-### 5.3 Monetization
-- **Paid edition**: no ads. On Steam this is the only edition.
-- **Ad-supported edition**: interstitials between games (frequency-capped) and an optional rewarded ad (for example, double XP). It uses **Unity LevelPlay** (`com.unity.services.levelplay`) behind an `IAdsService` with a Null implementation for paid builds.
-- IAP isn't committed yet. `IEntitlements` and the cosmetic `UnlockRequirement.Purchase` type keep the door open with no rework.
+#### Mobile build & upload automation (recommended: local fastlane, driven from the editor)
+You asked for "as automated as possible", and you develop on a Mac. The recommendation is to mirror the Steam flow: **one editor window, one click**.
+- **Mejnun ▸ Mobile ▸ Build & Upload…** shares the version-bump and git-tag code with the Steam window. One version number is used everywhere, and the iOS build number and Android `versionCode` auto-increment.
+- **Android**: Unity builds a signed `.aab`, with the upload keystore path and passwords kept in ignored `UserSettings/`. Then `fastlane supply` uploads it to the **Play internal testing** track, using a Google Cloud service-account JSON key.
+- **iOS**: Unity exports the Xcode project. `fastlane gym` archives and signs it, and `fastlane pilot` uploads to **TestFlight**. Signing is handled by `fastlane match`, with certificates in a private git repo. An App Store Connect **API key (.p8)** is used instead of a password, so there are no 2FA prompts.
+- `fastlane deliver` and `supply` can also push the **localized store listings and screenshots** from `Store/metadata/` in the repo, which covers all 11 languages without clicking through the store dashboards.
+- Why not Unity Build Automation (cloud) first: it's billed per build-minute, and it needs the same certificates and keys anyway. It mainly helps teams without a Mac. It, or GitHub Actions with GameCI, can be added later on top of the same fastlane lanes.
+- I'll set this up with you step by step in M8. The one-time account work is in §5.5, and it should start earlier because store verification takes days to weeks.
+
+### 5.3 Monetization (decided)
+- **Steam (desktop)**: a **paid** app. No ads and no IAP at launch.
+- **Mobile (iOS & Android)**: **one free app** per store, with ads and a non-consumable **"Remove ads"** IAP.
+  - Ads are **Unity LevelPlay** (`com.unity.services.levelplay`) behind `IAdsService`, with a Null implementation on desktop and dev builds. There are interstitials between games (frequency-capped, never mid-game, never in the first sessions) and optional rewarded ads (for example, double XP).
+  - The **Remove ads** purchase uses **Unity IAP** (`com.unity.purchasing`) behind `IEntitlements` (`EntitlementId.RemoveAds`). It disables interstitials. Rewarded ads stay available because they're opt-in. A **Restore purchases** button is required by Apple.
+  - So **IAP is needed at launch** on mobile. Cosmetic IAP packs can reuse the same plumbing later (`UnlockRequirement.Purchase`), and nothing is committed beyond Remove ads.
+- **Privacy & consent** for ads: the iOS App Tracking Transparency prompt, a GDPR/UK consent dialog for EEA/UK users, the Apple privacy manifest and the Google Play Data Safety form. Ads must also stay off for users who declare they're under 13, or the app avoids targeting children.
+- Remove ads is per store: buying it on iOS doesn't remove ads on Android *(see Q-F)*.
 
 ### 5.4 Orientation & devices
 - Both orientations on phones and tablets. Layout reacts to aspect changes at runtime, with safe-area handling for notches.
-- Minimum targets *(Q7)*: iOS 15+, Android 8 (API 26)+, Windows 10+, macOS 12+.
+- Minimum targets (confirmed): iOS 15+, Android 8 (API 26)+, Windows 10+, macOS 12+.
+
+### 5.5 Store accounts & one-time setup checklist
+Nothing exists yet. This is the order to do it in, ideally before M7, so review lead times don't block M8.
+
+| Store | Steps | Cost |
+|---|---|---|
+| **Steam** | Steamworks partner account (tax and bank info) → pay the Steam Direct fee → you receive the **App ID**. Create depots for Windows and macOS, plus a `beta` branch. Then add the achievements and rich-presence tokens. A demo app can be added later as a separate App ID | US$100 per app (recoupable) |
+| **Apple** | Apple Developer Program (individual or organisation; organisations need a D-U-N-S number) → bundle id `com.<you>.mejnun` → app record in App Store Connect → an App Store Connect API key for fastlane → a private git repo for `fastlane match` | US$99 per year |
+| **Google** | Play Console developer account (identity verification) → create the app → upload the first `.aab` **manually** once (the API can't do the very first upload) → service account with release permissions for fastlane. New *personal* accounts must run a closed test with a minimum number of testers for 14 days before production, so plan for that | US$25 once |
+| **Unity** | A UGS project linked to this Unity project: Authentication, Multiplayer Services, Cloud Save/Code, LevelPlay (ad network accounts) and IAP | Free tiers to start |
 
 ---
 
@@ -236,8 +294,23 @@ Port these and rename the namespace `TerraFirma.Platform` → `Mejnun.Platform`:
 - A save schema version and migrations are in place from day one.
 
 ## 7. Localization
-- `com.unity.localization` from the start. All UI strings and the dealer questions go into String Tables, and Smart Strings handle plurals ("3 cards left").
-- Fonts need to cover the target scripts. The language list is still to be confirmed *(Q8)*.
+- `com.unity.localization` from the start. All UI strings and the dealer questions go into String Tables, and Smart Strings handle plurals ("3 cards left"). Arabic has six plural forms, and Smart Strings' plural rules cover that.
+- **Launch languages (11)**: English, Arabic, Persian, Armenian, Spanish, German, Italian, French, Japanese, Chinese, Portuguese.
+  - Locale codes are `en`, `ar`, `fa`, `hy`, `es`, `de`, `it`, `fr`, `ja`, `zh-Hans` and `pt-BR`. Simplified Chinese and Brazilian Portuguese are assumptions *(see Q-C)*.
+  - The game follows the device language, with a picker in Settings.
+- **Fonts** (dynamic font assets with a fallback chain, all OFL-licensed):
+  - Noto Sans for Latin text (accents for es/de/it/fr/pt).
+  - **Vazirmatn** or Noto Sans Arabic for `ar` and `fa`. Both cover the Persian letters پ چ ژ گ and the Persian ی/ک forms.
+  - Noto Sans Armenian.
+  - Noto Sans JP and Noto Sans SC.
+  - CJK fonts are several MB each, so the CJK/Arabic font files go in per-locale Addressable groups. Player nicknames can contain any script and fall back through the whole chain.
+- **Right-to-left** (`ar`, `fa`):
+  - Enable the Advanced Text Generator (`-unity-text-generator: advanced` on the UI root).
+  - A `.rtl` class on the root mirrors the HUD and menus (row-reverse, mirrored icons such as back arrows).
+  - The **cards and board stay left-to-right**, so straights read A→K the same for everyone at an online table *(see Q-D)*.
+  - Numbers in UI text (timer, card counts) use locale digits (Eastern Arabic in `ar`, Persian in `fa`). Card art is unaffected.
+- **Dealer questions** are written per language (culturally adapted), not translated literally. Each language ships with at least 20.
+- Workflow: Unity Localization's **Google Sheets** extension (or CSV) round-trips the string tables, with machine translation first and a native-speaker review before release. The small amount of text keeps this cheap. Store listings are localized from the same sheet and pushed by fastlane.
 
 ## 8. Accessibility & settings
 - Colour-blind-friendly suit tinting (four-colour deck option per skin), adjustable card size, a reduced-motion option, haptics on/off, left-handed hand placement, and audio buses (Master/Music/SFX/Voice) through Wwise RTPCs.
@@ -250,21 +323,23 @@ Port these and rename the namespace `TerraFirma.Platform` → `Mejnun.Platform`:
 |---|---|---|---|
 | **M0** | Project setup ✅ | git + LFS, Unity/Wwise `.gitignore`/`.gitattributes`, `Assets/_Project` layout, this plan | Clean first commit |
 | **M1** | Rules engine | `Mejnun.Core` (cards, deck, RNG, `MeldValidator`, `GameState`, `TurnSession` with undo/revert/go-down/timeout, end conditions, snapshot serialization) | ≥ 95% line coverage in EditMode tests. Every rule in §1 has a named test |
-| **M2** | Playable hot-seat prototype | Table scene, card prefab, `DeckSkin` Classic + importer, hand and board views, drag/drop + tap-tap, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device |
+| **M2** | Playable hot-seat prototype | Table scene, card prefab, `DeckSkin` Classic + Classic Ivory + importer, the two-faces-per-game assignment, hand and board views, the full §3.4 gesture set, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device |
 | **M3** | AI | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone |
 | **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment | Usability pass on a small phone and a 4K PC |
 | **M5** | Audio | Wwise events/banks, AudioService/Director, music states, timer tension | Every `GameEvent` with a sound mapped |
 | **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, 2nd test deck skin via Addressables | A second skin with a different sheet layout imports and plays |
 | **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync, reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4 |
-| **M8** | Platforms & monetization | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads edition, Game Center / Play Games | Steam beta-branch upload from the editor. TestFlight and Play internal builds |
-| **M9** | Localization & polish | Languages, fonts, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Release-candidate checklist |
+| **M8** | Platforms & monetization | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads + consent, Unity IAP Remove ads + restore, mobile Build & Upload window + fastlane lanes, Game Center / Play Games | Steam beta-branch upload from the editor. One-click TestFlight and Play internal builds |
+| **M9** | Localization & polish | The 11 languages, the font chain, RTL mirroring, localized store listings, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Release-candidate checklist. Native-speaker review for `ar` and `fa` RTL screens |
 
 Suggested order: M1 → M2 → M3 → M4/M5 in parallel → M6 → M7 → M8 → M9. M7 can start after M2, since it only depends on Core and the views.
+Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Generator plus one RTL test locale (`ar`) in M4, so right-to-left layout issues show up early rather than in M9.
 
 ---
 
 ## 10. Testing strategy
-- **Core (EditMode)**: a table-driven validator test for every set rule (aces, doubles, sizes, mixed suits); turn flows (go-down only from hand, go-down then board use in the same turn, End-turn gating, undo past go-down, revert, all four timeout outcomes, empty-pile pass and stalemate end, the winner deals next); and deterministic seeded deal tests.
+- **Core (EditMode)**: a table-driven validator test for every set rule (aces, doubles, sizes, mixed suits); turn flows (go-down only from hand, go-down then board use in the same turn, End-turn gating, undo past go-down, revert, all four timeout outcomes, empty-pile pass, a sole-fewest win versus a tied **Stalemate**, the winner deals next, the dealer repeats after a stalemate); and deterministic seeded deal tests.
+- **Faces**: the two picked faces are always distinct, always come from the pool, are deterministic for a given seed, fall back to the base faces when the pool is too small, and both deck indexes render with their assigned skin.
 - **AI**: solver correctness on curated puzzles, a fuzz test (random states, so every solver output must be a valid board), and difficulty benchmarks.
 - **Net**: snapshot round-trip serialization, a command replay that matches the host state, and a hidden-hand leak test that asserts no client payload contains another player's cards.
 - **PlayMode**: a scripted pass-and-play smoke game and orientation layout snapshots.
@@ -272,17 +347,31 @@ Suggested order: M1 → M2 → M3 → M4/M5 in parallel → M6 → M7 → M8 →
 
 ---
 
-## 11. Open questions (please answer when convenient)
-1. **First player**: does the player **left of the dealer** start? *(assumed yes)*
-2. **Stalemate tie-break** when the pile is empty and two or more players share the fewest cards: shared win, lowest card-value total, or the player closest to the dealer's left?
-3. **Hints online**: should "Highlight playable" be allowed in online games (per-lobby toggle), or only offline?
-4. **Quick match bots**: should bots fill empty seats after N seconds, or must quick match always be all humans?
-5. **Steam App ID / depots** for Mejnun (new Steamworks app needed). Is there a demo app?
-6. **Mobile build automation**: fastlane from the editor window (like the Steam flow), or Unity Build Automation (cloud)?
-7. **Minimum OS versions** — are the defaults in §5.4 OK?
-8. **Launch languages** — you said "multiple". Which ones? (They affect font choices, e.g. Arabic/Persian need RTL support. The name Mejnun suggests Turkish/Persian/Arabic audiences.)
-9. **Mobile editions**: two separate store apps (Paid and Free+Ads), or one free app with a "Remove ads" purchase? This changes whether IAP is needed at launch.
-10. **Card faces for opponents' skins online**: is "everyone sees their own face skin" OK, or should a player's equipped skin show for the cards *they* play?
-11. **Bots in pass-and-play**: allow mixing local humans and bots? *(planned yes)*
-12. **Online timer default**: should online games force a timer (e.g. 90 s) so nobody can stall, while still letting the host pick a preset?
-13. **Split gesture**: is long-press-to-split (plus drag-the-end) the right feel, or should there be an explicit "scissors" tool?
+## 11. Decisions log & open questions
+
+### 11.1 Resolved in v2 (answers to the v1 questions)
+| # | Topic | Decision | Where |
+|---|---|---|---|
+| 1 | First player | Left of the dealer | §1.4 |
+| 2 | Tie on fewest cards when the pile is empty | **Stalemate** (no winner) | §1.10 |
+| 3 | Hints online | Per-lobby toggle (default Off; quick match Off) | §1.11, §4.5 |
+| 4 | Quick-match bots | Player setting: Off / 30 s / 60 s | §4.2 |
+| 5 | Steam | No Steam app yet. Use dev App ID 480 until it's created; demo later | §5.2, §5.5 |
+| 6 | Mobile automation | Local fastlane driven from an editor window (recommended), set up together in M8 | §5.2 |
+| 7 | Minimum OS | iOS 15, Android 8, Windows 10, macOS 12 | §5.4 |
+| 8 | Languages | en, ar, fa, hy, es, de, it, fr, ja, zh, pt | §7 |
+| 9 | Mobile editions | One free app with a "Remove ads" IAP; Steam is paid | §5.3 |
+| 10 | Card faces | Two distinct faces per game, randomly chosen from the faces the players own | §3.6 |
+| 11 | Bots in pass-and-play | Yes, mixed freely | §2 |
+| 12 | Online timer | Always on online; host picks a preset, default 90 s | §4.5 |
+| 13 | Split | Gestures only, no tools; long-press picks up the tail of a straight | §3.4 |
+
+### 11.2 Still open (new, smaller; the defaults in the text apply until answered)
+- **Q-A Classic mapping**: confirm the zig-zag sprite order in the importer once it exists (unchanged from v1).
+- **Q-B After a stalemate**: does the same dealer deal again (default), or is a new dealer chosen with the question prompt? Also, if exactly one player has the fewest cards, is that a win (default), or is any empty-pile ending a stalemate?
+- **Q-C Language variants**: Simplified or Traditional Chinese (or both)? Brazilian or European Portuguese? One neutral Spanish, or Spain and Latin America?
+- **Q-D RTL table**: should the board and hand also mirror for Arabic/Persian players, or stay left-to-right as proposed?
+- **Q-E Faces in solo**: should bots contribute random catalogue faces to the pool (default), or should solo use only the player's own faces?
+- **Q-F Remove ads across devices**: honour a Remove ads purchase from the other mobile store via a linked account (Cloud Save), or keep it per store (default)?
+- **Q-G Double-tap quick-place**: keep it as proposed in §3.4, or leave it out?
+- **Q-H Prices**: the Steam price and the Remove ads price tier.
