@@ -1,0 +1,89 @@
+.flow-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(5, 14, 10, 0.78);
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.flow-screen {
+    width: 82%;
+    max-width: 620px;
+    max-height: 92%;
+    align-items: stretch;
+    background-color: rgb(26, 43, 34);
+    border-radius: 12px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 22px;
+    padding-bottom: 22px;
+}
+
+.flow-title {
+    color: rgb(244, 246, 239);
+    font-size: 26px;
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+    white-space: normal;
+}
+
+.flow-copy {
+    color: rgb(205, 217, 205);
+    font-size: 16px;
+    white-space: normal;
+    margin-bottom: 12px;
+}
+
+.player-name-fields {
+    flex-direction: column;
+    max-height: 80%;
+    overflow: hidden;
+}
+
+.player-name-fields TextField {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.seat-options {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.flow-button,
+.seat-choice {
+    min-width: 112px;
+    height: 44px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: rgb(244, 246, 239);
+    background-color: rgb(54, 75, 61);
+    border-width: 0;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.primary-flow-button {
+    color: rgb(20, 31, 22);
+    background-color: rgb(177, 224, 120);
+    -unity-font-style: bold;
+}
+
+.handoff-screen {
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+}

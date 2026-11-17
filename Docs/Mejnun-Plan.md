@@ -132,6 +132,10 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 ### 3.3 Presentation
 - The **board and hand** are 2D world-space `SpriteRenderer` cards under an orthographic camera. That makes pinch-zoom and pan natural, keeps pixel-art cards crisp with point filtering and a per-zoom pixel snap, and lets cards tween cheaply.
 - **Auto-arranged board**: sets flow into rows using a wrap layout that depends on the viewport aspect, which handles both orientations. Straights auto-sort their cards, while same-kind sets keep insertion order. Each set shows a valid/invalid outline. An "empty area" drop zone creates a new group.
+- **Repositionable sets** (added in v2.1): players can drag a whole set to a new place on the board (§3.4) to group related sets or keep their working area together.
+  - The position is a **view-only arrangement**: a `BoardArrangement` order of meld ids in `Mejnun.Game`, like `HandOrder`. It never creates an engine move, never touches `GameState`, and doesn't use an Undo step.
+  - The wrap layout still decides rows and wrapping. It just lays sets out in arrangement order instead of creation order, so repositioning keeps working in both orientations and after aspect changes.
+  - New sets are appended at the end of the arrangement. Sets that disappear (merged or emptied) are dropped from it, and the remaining sets keep their relative order through Undo and Revert.
 - **Zoom & pan**: pinch or two-finger drag on touch; wheel, right/middle-drag or trackpad on PC. A "fit board" button and automatic fit after each change unless the user zoomed manually.
 - **Hand**: a fanned or scrollable row at the bottom (landscape), or a two-row grid (portrait), with sort buttons.
 - **HUD and menus** use **UI Toolkit** (recommended): USS responsive classes handle portrait/landscape and safe areas, it integrates cleanly with Unity Localization, and the "mixed" art direction (pixel cards with smooth modern UI) fits it well. uGUI is avoided apart from world-space bits if needed.
@@ -149,6 +153,12 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 | **Double-tap** | Quick-place: put it on the first set it validly extends, if any *(proposed; online it counts as a hint, so it follows the lobby hint toggle)* | Send a card you placed this turn back to your hand | Fit the whole board to the screen |
 | **Pinch / two-finger drag** | none | Zoom / pan | Zoom / pan |
 
+- **Drag a set to reposition it**: each set has a grab area (its outline frame plus a small grip tab above the cards). Dragging from there picks up the **whole set as a unit** and shows an insertion marker between sets. Dropping it puts the set at that position in the board arrangement (§3.3).
+  - Dropping it on empty board after the last set moves it to the end. Dropping it back where it started, or outside the board, cancels the move with no feedback.
+  - It's purely visual, so it's allowed for every set: before going down, on sets that were on the board at the start of the turn, and on invalid sets.
+  - In hot-seat, only the active player can rearrange the board. The arrangement is kept for the whole game, so every player sees the same table.
+  - This doesn't replace long-press on a set. Long-press still moves the set's *cards* into another set or a new group, which is an engine move.
+  - On PC, the same left-drag on the grab area works, and the cursor changes to a grab hand over it.
 - A drop that's illegal (for example a board card onto the hand, or touching the board before going down) springs the card back with a haptic buzz and the `Play_Card_Invalid` sound. Temporarily *invalid sets* are always allowed and get a red outline.
 - Haptics on mobile for pickup, long-press, drop and invalid.
 - On PC: left-drag = drag, holding the left button = long-press, the wheel zooms, and right/middle-drag pans. Keyboard shortcuts are optional extras: Ctrl+Z undo, R revert, Space end turn, D draw.
@@ -326,7 +336,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **M1** | Rules engine ✅ | `Mejnun.Core` (cards, deck, RNG, `MeldValidator`, `GameState`, `TurnSession` with undo/revert/go-down/timeout, end conditions, snapshot serialization) | ≥ 95% line coverage in EditMode tests. Every rule in §1 has a named test. *Met: 123 EditMode tests pass, 95.3% line coverage* |
 | **M2** | Playable hot-seat prototype | Table scene, card prefab, `DeckSkin` Classic + Classic Ivory + importer, the two-faces-per-game assignment, hand and board views, the full §3.4 gesture set, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device |
 | **M3** | AI | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone |
-| **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment | Usability pass on a small phone and a 4K PC |
+| **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment, drag-to-reposition sets (§3.3, §3.4) | Usability pass on a small phone and a 4K PC |
 | **M5** | Audio | Wwise events/banks, AudioService/Director, music states, timer tension | Every `GameEvent` with a sound mapped |
 | **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, 2nd test deck skin via Addressables | A second skin with a different sheet layout imports and plays |
 | **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync, reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4 |
@@ -344,6 +354,7 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 - **AI**: solver correctness on curated puzzles, a fuzz test (random states, so every solver output must be a valid board), and difficulty benchmarks.
 - **Net**: snapshot round-trip serialization, a command replay that matches the host state, and a hidden-hand leak test that asserts no client payload contains another player's cards.
 - **PlayMode**: a scripted pass-and-play smoke game and orientation layout snapshots.
+- **Board arrangement**: repositioning a set changes only the layout order (no command, unchanged `GameState`, unchanged undo stack). New sets are appended, removed sets are dropped, and the order survives Undo, Revert and an aspect change.
 - CI (optional, later): Unity Test Runner in batch mode on push.
 
 ---
@@ -376,3 +387,4 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 - **Q-F Remove ads across devices**: honour a Remove ads purchase from the other mobile store via a linked account (Cloud Save), or keep it per store (default)?
 - **Q-G Double-tap quick-place**: keep it as proposed in §3.4, or leave it out?
 - **Q-H Prices**: the Steam price and the Remove ads price tier.
+- **Q-I Board arrangement online**: should a set's position be shared with everyone at the table (it would then be sent as a small view-only message), or be a local preference per client (default)?

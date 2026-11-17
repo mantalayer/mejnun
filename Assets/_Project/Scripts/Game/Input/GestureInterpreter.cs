@@ -1,0 +1,448 @@
+using System.Collections.Generic;
+using Mejnun.Core;
+
+namespace Mejnun.Game
+{
+    public enum GestureType
+    {
+        Tap,
+        DoubleTap,
+        Drag,
+        LongPressDrag
+    }
+
+    public enum GestureHitKind
+    {
+        None,
+        HandCard,
+        BoardCard,
+        MeldGap,
+        HandArea,
+        EmptyBoard
+    }
+
+    public readonly struct GestureHit
+    {
+        private GestureHit(GestureHitKind kind, byte cardId, int meldId, int index, int targetIndex)
+        {
+            Kind = kind;
+            CardId = cardId;
+            MeldId = meldId;
+            Index = index;
+            TargetIndex = targetIndex;
+        }
+
+        public GestureHitKind Kind { get; }
+        public byte CardId { get; }
+        public int MeldId { get; }
+        public int Index { get; }
+        public int TargetIndex { get; }
+
+        public static GestureHit None => default;
+
+        public static GestureHit HandCard(byte cardId, int handIndex)
+        {
+            return new GestureHit(GestureHitKind.HandCard, cardId, 0, handIndex, handIndex);
+        }
+
+        public static GestureHit BoardCard(byte cardId, int meldId, int cardIndex, int targetIndex)
+        {
+            return new GestureHit(GestureHitKind.BoardCard, cardId, meldId, cardIndex, targetIndex);
+        }
+
+        public static GestureHit MeldGap(int meldId, int insertIndex)
+        {
+            return new GestureHit(GestureHitKind.MeldGap, 0, meldId, insertIndex, insertIndex);
+        }
+
+        public static GestureHit HandArea(int handIndex)
+        {
+            return new GestureHit(GestureHitKind.HandArea, 0, 0, handIndex, handIndex);
+        }
+
+        public static GestureHit EmptyBoard()
+        {
+            return new GestureHit(GestureHitKind.EmptyBoard, 0, 0, 0, 0);
+        }
+    }
+
+    public readonly struct GestureInput
+    {
+        public GestureInput(GestureType type, GestureHit source, GestureHit target)
+        {
+            Type = type;
+            Source = source;
+            Target = target;
+        }
+
+        public GestureType Type { get; }
+        public GestureHit Source { get; }
+        public GestureHit Target { get; }
+    }
+
+    public sealed class GestureResult
+    {
+        internal GestureResult(CommandBatch batch)
+        {
+            Batch = batch;
+        }
+
+        public CommandBatch Batch { get; }
+        public bool FitBoardRequested { get; internal set; }
+        public bool SelectionChanged { get; internal set; }
+        public bool ClearSelectionOnSuccess { get; internal set; }
+        public bool HandOrderChanged { get; internal set; }
+        public bool Denied { get; internal set; }
+        public byte ReorderedCardId { get; internal set; }
+        public int ReorderTargetIndex { get; internal set; }
+    }
+
+    public sealed class GestureInterpreter
+    {
+        private readonly List<byte> selectedCardIds = new List<byte>(Card.CardsPerDeck);
+
+        public IReadOnlyList<byte> SelectedCardIds => selectedCardIds;
+
+        public GestureResult Interpret(GestureInput input, GameState state, TurnSession turn)
+        {
+            var result = new GestureResult(new CommandBatch());
+            if (state == null || turn == null || state.CurrentSeat < 0)
+            {
+                return result;
+            }
+
+            switch (input.Type)
+            {
+                case GestureType.Tap:
+                    InterpretTap(input, state, turn, result);
+                    break;
+                case GestureType.DoubleTap:
+                    InterpretDoubleTap(input, state, turn, result);
+                    break;
+                case GestureType.Drag:
+                case GestureType.LongPressDrag:
+                    InterpretDrag(input, state, turn, result);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool IsSelected(byte cardId)
+        {
+            return selectedCardIds.Contains(cardId);
+        }
+
+        public void Complete(GestureResult result, bool succeeded)
+        {
+            if (result != null && succeeded && result.ClearSelectionOnSuccess && selectedCardIds.Count > 0)
+            {
+                selectedCardIds.Clear();
+            }
+        }
+
+        public void ClearSelection()
+        {
+            selectedCardIds.Clear();
+        }
+
+        private void InterpretTap(GestureInput input, GameState state, TurnSession turn, GestureResult result)
+        {
+            if (input.Source.Kind == GestureHitKind.HandCard)
+            {
+                ToggleSelection(input.Source.CardId);
+                result.SelectionChanged = true;
+                return;
+            }
+
+            var targetHit = input.Target.Kind == GestureHitKind.None ? input.Source : input.Target;
+            if (selectedCardIds.Count == 0 || !TryCreateTarget(targetHit, state, turn, out var target))
+            {
+                return;
+            }
+
+            AddMove(result.Batch, state.CurrentSeat, CopySelectedCardIds(), target);
+            result.ClearSelectionOnSuccess = true;
+        }
+
+        private void InterpretDoubleTap(GestureInput input, GameState state, TurnSession turn,
+            GestureResult result)
+        {
+            if (input.Source.Kind == GestureHitKind.EmptyBoard ||
+                (input.Source.Kind == GestureHitKind.HandCard && state.Board.Count == 0))
+            {
+                result.FitBoardRequested = true;
+                return;
+            }
+
+            if (input.Source.Kind == GestureHitKind.HandCard)
+            {
+                var card = Card.FromId(input.Source.CardId);
+                if (TryFindQuickPlaceTarget(card, state, turn, out var target))
+                {
+                    result.Batch.Add(GameCommand.MoveCards(state.CurrentSeat, new[] { card.Id }, target));
+                    result.ClearSelectionOnSuccess = true;
+                }
+
+                return;
+            }
+
+            if (input.Source.Kind == GestureHitKind.BoardCard &&
+                IsCardInStartHand(turn, input.Source.CardId))
+            {
+                result.Batch.Add(GameCommand.MoveCards(state.CurrentSeat, new[] { input.Source.CardId },
+                    CardTarget.Hand(state.Hands[state.CurrentSeat].Count)));
+                result.ClearSelectionOnSuccess = true;
+            }
+        }
+
+        private void InterpretDrag(GestureInput input, GameState state, TurnSession turn, GestureResult result)
+        {
+            if (input.Source.Kind == GestureHitKind.HandCard &&
+                (input.Target.Kind == GestureHitKind.HandCard || input.Target.Kind == GestureHitKind.HandArea))
+            {
+                result.HandOrderChanged = true;
+                result.ReorderedCardId = input.Source.CardId;
+                result.ReorderTargetIndex = input.Target.Kind == GestureHitKind.HandArea
+                    ? state.Hands[state.CurrentSeat].Count - 1
+                    : input.Target.Index;
+                return;
+            }
+
+            if (!TryCreateTarget(input.Target, state, turn, out var target))
+            {
+                return;
+            }
+
+            var seat = state.CurrentSeat;
+            if (input.Source.Kind == GestureHitKind.HandCard)
+            {
+                var ids = CopySelectedCardIds(input.Source.CardId);
+                AddMove(result.Batch, seat, ids, target);
+                result.ClearSelectionOnSuccess = true;
+                return;
+            }
+
+            if (input.Source.Kind != GestureHitKind.BoardCard)
+            {
+                return;
+            }
+
+            var meld = FindMeld(state.Board, input.Source.MeldId);
+            if (meld == null || input.Source.Index < 0 || input.Source.Index >= meld.Cards.Count)
+            {
+                return;
+            }
+
+            var classification = MeldValidator.Classify(meld.Cards);
+            if (input.Type == GestureType.LongPressDrag)
+            {
+                var ids = GetLongPressCardIds(meld, input.Source.Index, classification.Kind);
+                if (target.Kind == TargetKind.Hand)
+                {
+                    if (!AllFromStartHand(turn, ids))
+                    {
+                        result.Denied = true;
+                        return;
+                    }
+                }
+
+                AddMove(result.Batch, seat, ids, target);
+                result.ClearSelectionOnSuccess = true;
+                return;
+            }
+
+            if (target.Kind == TargetKind.Hand && !IsCardInStartHand(turn, input.Source.CardId))
+            {
+                result.Denied = true;
+                return;
+            }
+
+            if ((classification.Kind == MeldKind.StraightLow || classification.Kind == MeldKind.StraightHigh) &&
+                input.Source.Index > 0 && input.Source.Index < meld.Cards.Count - 1)
+            {
+                result.Batch.Add(GameCommand.SplitMeld(seat, meld.Id, input.Source.Index));
+            }
+
+            AddMove(result.Batch, seat, new[] { input.Source.CardId }, target);
+            result.ClearSelectionOnSuccess = true;
+        }
+
+        private bool TryCreateTarget(GestureHit hit, GameState state, TurnSession turn, out CardTarget target)
+        {
+            switch (hit.Kind)
+            {
+                case GestureHitKind.BoardCard:
+                    target = CardTarget.Meld(hit.MeldId, hit.TargetIndex);
+                    return true;
+                case GestureHitKind.MeldGap:
+                    target = CardTarget.Meld(hit.MeldId, hit.Index);
+                    return true;
+                case GestureHitKind.EmptyBoard:
+                    target = CardTarget.NewMeld(0);
+                    return true;
+                case GestureHitKind.HandCard:
+                    target = CardTarget.Hand(hit.Index);
+                    return true;
+                case GestureHitKind.HandArea:
+                    target = CardTarget.Hand(state.Hands[state.CurrentSeat].Count);
+                    return true;
+                default:
+                    target = default;
+                    return false;
+            }
+        }
+
+        private bool TryFindQuickPlaceTarget(Card card, GameState state, TurnSession turn, out CardTarget target)
+        {
+            var isNotDown = state.PlayerPhases[state.CurrentSeat] == PlayerPhase.NotDown;
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var meld = state.Board[meldIndex];
+                if (isNotDown && WasOnStartBoard(turn, meld.Id))
+                {
+                    continue;
+                }
+
+                var candidateCards = new List<Card>(meld.Cards.Count + 1);
+                for (var insertIndex = 0; insertIndex <= meld.Cards.Count; insertIndex++)
+                {
+                    candidateCards.Clear();
+                    for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                    {
+                        if (cardIndex == insertIndex)
+                        {
+                            candidateCards.Add(card);
+                        }
+
+                        candidateCards.Add(meld.Cards[cardIndex]);
+                    }
+
+                    if (insertIndex == meld.Cards.Count)
+                    {
+                        candidateCards.Add(card);
+                    }
+
+                    if (MeldValidator.Classify(candidateCards).IsValid)
+                    {
+                        target = CardTarget.Meld(meld.Id, insertIndex);
+                        return true;
+                    }
+                }
+            }
+
+            target = default;
+            return false;
+        }
+
+        private static byte[] GetLongPressCardIds(Meld meld, int cardIndex, MeldKind kind)
+        {
+            var firstIndex = kind == MeldKind.StraightLow || kind == MeldKind.StraightHigh
+                ? cardIndex > 0 ? cardIndex : 0
+                : 0;
+            var ids = new byte[meld.Cards.Count - firstIndex];
+            for (var index = firstIndex; index < meld.Cards.Count; index++)
+            {
+                ids[index - firstIndex] = meld.Cards[index].Id;
+            }
+
+            return ids;
+        }
+
+        private static void AddMove(CommandBatch batch, int seat, byte[] cardIds, CardTarget target)
+        {
+            if (cardIds.Length > 0)
+            {
+                batch.Add(GameCommand.MoveCards(seat, cardIds, target));
+            }
+        }
+
+        private static Meld FindMeld(IReadOnlyList<Meld> melds, int meldId)
+        {
+            for (var index = 0; index < melds.Count; index++)
+            {
+                if (melds[index].Id == meldId)
+                {
+                    return melds[index];
+                }
+            }
+
+            return null;
+        }
+
+        private static bool IsCardInStartHand(TurnSession turn, byte cardId)
+        {
+            var startHand = turn.StartSnapshot.Hand;
+            for (var index = 0; index < startHand.Count; index++)
+            {
+                if (startHand[index].Id == cardId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool AllFromStartHand(TurnSession turn, IReadOnlyList<byte> cardIds)
+        {
+            for (var index = 0; index < cardIds.Count; index++)
+            {
+                if (!IsCardInStartHand(turn, cardIds[index]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool WasOnStartBoard(TurnSession turn, int meldId)
+        {
+            var startBoard = turn.StartSnapshot.Board;
+            for (var index = 0; index < startBoard.Count; index++)
+            {
+                if (startBoard[index].Id == meldId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private byte[] CopySelectedCardIds()
+        {
+            return selectedCardIds.ToArray();
+        }
+
+        private byte[] CopySelectedCardIds(byte additionalCardId)
+        {
+            var ids = new List<byte>(selectedCardIds.Count + 1);
+            for (var index = 0; index < selectedCardIds.Count; index++)
+            {
+                ids.Add(selectedCardIds[index]);
+            }
+
+            if (!ids.Contains(additionalCardId))
+            {
+                ids.Add(additionalCardId);
+            }
+
+            return ids.ToArray();
+        }
+
+        private void ToggleSelection(byte cardId)
+        {
+            var index = selectedCardIds.IndexOf(cardId);
+            if (index >= 0)
+            {
+                selectedCardIds.RemoveAt(index);
+            }
+            else
+            {
+                selectedCardIds.Add(cardId);
+            }
+        }
+    }
+}
