@@ -19,7 +19,7 @@ namespace Mejnun.Core.Tests
             Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Finished));
             Assert.That(game.State.Result.Kind, Is.EqualTo(GameEndKind.EmptyHand));
             Assert.That(game.State.Result.Winner, Is.EqualTo(0));
-            Assert.That(game.State.Result.NextDealer, Is.EqualTo(0));
+            Assert.That(game.State.Result.NextFirstPlayer, Is.EqualTo(0));
             Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
             Assert.That(won, Is.SameAs(game.State.Result));
         }
@@ -72,7 +72,7 @@ namespace Mejnun.Core.Tests
             Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Finished));
             Assert.That(game.State.Result.Kind, Is.EqualTo(GameEndKind.FewestCards));
             Assert.That(game.State.Result.Winner, Is.EqualTo(0));
-            Assert.That(game.State.Result.NextDealer, Is.EqualTo(0));
+            Assert.That(game.State.Result.NextFirstPlayer, Is.EqualTo(0));
             Assert.That(won, Is.SameAs(game.State.Result));
         }
 
@@ -93,7 +93,7 @@ namespace Mejnun.Core.Tests
             Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Finished));
             Assert.That(game.State.Result.Kind, Is.EqualTo(GameEndKind.Stalemate));
             Assert.That(game.State.Result.Winner, Is.Null);
-            Assert.That(game.State.Result.NextDealer, Is.Null);
+            Assert.That(game.State.Result.NextFirstPlayer, Is.Null);
             Assert.That(stalemate, Is.SameAs(game.State.Result));
         }
 

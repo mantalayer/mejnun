@@ -16,24 +16,26 @@ The rules engine implements this section exactly. Anything that isn't covered he
 - Two cards with the same suit and rank (one from each deck) are **doubles**.
 
 ### 1.2 Players
-- **2–6 players** in every mode. Seats are arranged clockwise ("left of dealer" = next seat clockwise).
+- **2–6 players** in every mode. Seats are arranged clockwise; play passes to the next seat clockwise ("left").
 
-### 1.3 Choosing the dealer
-- If the previous game in this session/lobby had a winner, that winner deals.
-- On the first game, the game shows a random **"embarrassing question"** prompt ("Who showers the least?"). Players then pick the dealer:
+### 1.3 Choosing who goes first
+- There is no player dealer: the **computer always deals**. The only choice is who takes the first turn.
+- If the previous game in this session/lobby had a winner (by emptying their hand or by fewest cards), **that winner goes first**.
+- On the first game, after a Stalemate, or if the previous winner is no longer seated (e.g. they left the lobby or the seat count changed), the game shows a random **"embarrassing question"** prompt ("Who showers the least?"). Players then pick who goes first:
   - Local / pass-and-play: someone taps the chosen player's seat.
   - Online: everyone votes. The most votes wins, ties are broken at random, and the vote times out after 20 s, falling back to random.
   - Vs AI: the human taps a seat (bots included), or taps "Random".
 - Questions live in a localized data table (`DealerQuestions`), so more can be added or changed per language.
 
 ### 1.4 Deal
-- Cards are dealt one at a time, starting with the player left of the dealer and going clockwise, until everyone has **11 cards**.
+- The computer deals cards one at a time, starting with the first player and going clockwise, until everyone has **11 cards**.
 - The remaining cards (104 − 11·N, so 82 to 38) form the face-down **draw pile** in the centre.
-- The **first turn** goes to the player left of the dealer (confirmed).
+- The **first turn** goes to the player chosen in §1.3.
+- Engine note: the engine still stores a hidden `Dealer` seat, defined as the seat just before the first player; it has no player-facing meaning.
 
 ### 1.5 Objective
 - The first player to get rid of every card in their hand wins, and the game ends at once. The win moment ("MEJNUN!") plays **automatically**.
-- **Single round**: there is no scoring across rounds. The winner deals next game.
+- **Single round**: there is no scoring across rounds. The winner goes first next game.
 
 ### 1.6 Valid sets ("melds")
 | Type | Size | Rule |
@@ -51,7 +53,9 @@ Each player is either **Not down** (the starting phase) or **Down**.
 - The player may only build **new** sets, using **only cards from their hand**, and may not touch existing board sets.
 - They may put down **one or more** sets at once. There is **no minimum point value**.
 - As soon as at least one valid hand-only set is on the board and the player confirms, they are **Down**. They can then **keep playing in the same turn** with full board access. This is the "Same turn, but they cannot use the board to help them go down" answer.
-- Engine rule: the **go-down commit** checks that each committed set is valid and made only of cards that were in the player's hand at the start of the turn. Undoing past the commit point returns the player to Not down.
+- Engine rule: the **go-down commit** checks that each committed set is valid and made only of cards that were in the player's hand at the start of the turn. The engine commits automatically the moment the first valid hand-only set is complete.
+- Cards committed in the go-down **stay on the board for the rest of the turn**: they may be rearranged on the board, but cannot go back to the hand (`GoDownCardToHand`). Otherwise a player could go down, take the set back, and keep full board access for free.
+- Going down can still be undone: **Undo** past the commit point or **Revert** returns the committed cards to the hand and the player to Not down. Hand cards placed *after* going down can still return to the hand as usual.
 
 **Down**
 - The player may rearrange anything on the board: split straights, take a card from a 4-card same-kind set, merge, move single cards, add cards from hand, and build temporary invalid groups.
@@ -65,7 +69,8 @@ Each player is either **Not down** (the starting phase) or **Down**.
 - **Confirmations** (M4): destructive or turn-ending actions ask first with a small in-HUD dialog (Confirm / Cancel, Enter/Esc on PC): **Revert** when moves were made; **Draw/Pass** when cards were placed this turn (it throws them back); **Fix board** when it will return hand cards; **Leave/quit a game in progress**; and **New game / restart**. End turn needs no confirmation since it's only enabled for a valid board. Each prompt has a "Don't ask again" setting.
 - **Fix board**: repairs an invalid board while keeping valid placements from the player's hand whenever they still fit. Original board cards are preserved; invalid or unused hand cards are returned to the hand. It is one undo group, and falls back to Revert if no repair can be found within the solver budget.
 - **Revert**: restores the board exactly as it was at the start of the turn and returns every card the player placed to their hand. It always works and is distinct from Fix board.
-- A card that came from your hand can go back to your hand during the same turn. Cards that **started the turn on the board** can never go into a hand.
+- A card that came from your hand can go back to your hand during the same turn, except cards you went down with this turn (§1.7). Cards that **started the turn on the board** can never go into a hand.
+- **Fix board and hints**: the full repair above (which searches for the arrangement that keeps the most hand cards) is a hint, so it only runs while hints are on. With hints off, Fix board only returns hand cards sitting in invalid sets to the hand; if the board is still invalid after that, it falls back to Revert. Go-down cards are never returned by Fix board; the full repair re-homes them on the board instead.
 
 ### 1.9 Timed mode (optional, chosen by the host)
 - Presets: **30 / 60 / 90 / 120 s** per turn, or Off. Off is only available offline, because online games are always timed (§4.5).
@@ -74,14 +79,14 @@ Each player is either **Not down** (the starting phase) or **Down**.
   1. No hand card placed, board valid → keep the valid rearrangement, **draw**, and end the turn.
   2. No hand card placed, board invalid → restore the start-of-turn board, **draw**, and end the turn.
   3. Hand card(s) placed, board valid → end the turn normally, with **no draw**.
-  4. Hand card(s) placed, board invalid → run Fix board first, preserving valid hand placements and returning invalid/unused hand cards. If the repaired board is valid and at least one placed hand card remains, end without a draw; if repair fails, Revert and draw.
+  4. Hand card(s) placed, board invalid → undo the turn's moves one at a time (animated) until the board is valid. This never uses Fix board's solver, so waiting out the timer is never a free hint. If at least one placed hand card remains on the valid board, end without a draw; otherwise draw (cases 1–2).
 
 ### 1.10 Empty draw pile
 - Once the pile is empty, "Draw" becomes **"Pass"**: the player draws nothing and the board is reverted.
 - If every active player passes in a row without placing a card, the game ends:
   - If exactly one player has the **fewest cards in hand**, they win. This is a normal win screen. The "MEJNUN!" moment is reserved for actually emptying your hand.
   - If two or more players share the fewest cards, the game is declared a **Stalemate**: there is no winner, and no win XP or win stats are awarded.
-  - After a Stalemate, the next game's dealer is chosen through the dealer-question prompt.
+  - After a Stalemate, who goes first next game is chosen through the "Who goes first?" question prompt.
 
 ### 1.11 Hand helpers (UI, not rules)
 - Sort by suit, sort by rank, drag to reorder manually.

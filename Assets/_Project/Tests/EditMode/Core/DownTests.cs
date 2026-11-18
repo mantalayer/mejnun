@@ -141,6 +141,102 @@ namespace Mejnun.Core.Tests
             Assert.That(game.State.Board[0].Cards.Count, Is.EqualTo(2));
         }
 
+        [Test]
+        public void GoingDown_CardsCannotReturnToHandWhileKeepingDown()
+        {
+            var game = GoDownWithHeartsStraight();
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"), CardTarget.Hand(0)));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.GoDownCardToHand));
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("3H"), CardTarget.Hand(0))).Error,
+                Is.EqualTo(RuleError.GoDownCardToHand));
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+            Assert.That(game.State.Board[1].Cards.Count, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GoingDown_CanBeUndone()
+        {
+            var game = GoDownWithHeartsStraight();
+
+            Assert.That(game.Apply(GameCommand.Undo(0)).Ok, Is.True);
+
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+            Assert.That(game.State.Hands[0].Count, Is.EqualTo(4));
+            Assert.That(game.State.Board.Count, Is.EqualTo(1));
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("7C"), CardTarget.NewMeld(0))).Error,
+                Is.EqualTo(RuleError.NotDownBoardAccess));
+
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"), CardTarget.NewMeld(0))).Ok,
+                Is.True);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+        }
+
+        [Test]
+        public void GoingDown_CanBeReverted()
+        {
+            var game = GoDownWithHeartsStraight();
+
+            Assert.That(game.Apply(GameCommand.Revert(0)).Ok, Is.True);
+
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+            Assert.That(game.State.Hands[0].Count, Is.EqualTo(4));
+            Assert.That(game.Turn.IsGoDownCard(GameBuilder.ParseCard("3H").Id), Is.False);
+        }
+
+        [Test]
+        public void GoingDown_LaterHandCardsCanStillReturnToHand()
+        {
+            var game = GoDownWithHeartsStraight();
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("5C"), CardTarget.NewMeld(0))).Ok, Is.True);
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("5C"), CardTarget.Hand(0)));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(game.State.Hands[0], Does.Contain(GameBuilder.ParseCard("5C")));
+        }
+
+        [Test]
+        public void GoingDown_CanStillRearrangeGoDownCardsOnTheBoard()
+        {
+            var game = GoDownWithHeartsStraight();
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("4H"), CardTarget.NewMeld(0)));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("4H"), CardTarget.Hand(0))).Error,
+                Is.EqualTo(RuleError.GoDownCardToHand));
+        }
+
+        [Test]
+        public void GoingDown_LockSurvivesSnapshotRoundTrip()
+        {
+            var game = GoDownWithHeartsStraight();
+
+            var restored = SnapshotSerializer.Read(SnapshotSerializer.Write(game));
+
+            Assert.That(restored.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+            Assert.That(restored.Turn.IsGoDownCard(GameBuilder.ParseCard("3H").Id), Is.True);
+            Assert.That(restored.Apply(GameCommand.MoveCards(0, Ids("3H"), CardTarget.Hand(0))).Error,
+                Is.EqualTo(RuleError.GoDownCardToHand));
+            Assert.That(restored.Apply(GameCommand.Undo(0)).Ok, Is.True);
+            Assert.That(restored.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.NotDown));
+        }
+
+        private static MejnunGame GoDownWithHeartsStraight()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "7C", "8C", "9C" });
+            GameBuilder.SetHand(game, 0, "2H", "3H", "4H", "5C");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.NotDown);
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("2H", "3H", "4H"), CardTarget.NewMeld(0))).Ok,
+                Is.True);
+            Assert.That(game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
+            return game;
+        }
+
         private static MejnunGame NewGame()
         {
             return GameBuilder.Create(dealer: 1);

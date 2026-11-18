@@ -455,7 +455,7 @@ namespace Mejnun.Game
                 return CommandResult.Failure(RuleError.WrongPhase);
             }
 
-            var commands = BoardFixer.Plan(game);
+            var commands = BoardFixer.Plan(game, hintsEnabled);
             if (commands.Count == 0)
             {
                 return CommandResult.Success();
@@ -482,7 +482,7 @@ namespace Mejnun.Game
                 return false;
             }
 
-            var commands = BoardFixer.Plan(game);
+            var commands = BoardFixer.Plan(game, hintsEnabled);
             for (var index = 0; index < commands.Count; index++)
             {
                 if (commands[index].Type == CommandType.Revert)

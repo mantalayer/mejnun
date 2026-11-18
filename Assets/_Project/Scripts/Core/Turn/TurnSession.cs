@@ -9,6 +9,7 @@ namespace Mejnun.Core
         private readonly GameEvents events;
         private readonly List<Move> moves;
         private readonly ReadOnlyCollection<Move> readOnlyMoves;
+        private readonly HashSet<byte> goDownCardIds = new HashSet<byte>();
 
         internal TurnSession(GameState state, GameEvents events)
         {
@@ -28,11 +29,22 @@ namespace Mejnun.Core
             StartSnapshot = startSnapshot;
             this.moves = new List<Move>(moves);
             readOnlyMoves = this.moves.AsReadOnly();
+            if (StartSnapshot.PlayerPhase == PlayerPhase.NotDown && state.PlayerPhases[Seat] == PlayerPhase.Down)
+            {
+                // Replaying the turn recovers which cards the player went down with.
+                Rebuild();
+            }
         }
 
         public int Seat { get; }
         public BoardSnapshot StartSnapshot { get; }
         public IReadOnlyList<Move> Moves => readOnlyMoves;
+
+        /// <summary>True for a card the player went down with this turn; it must stay on the board unless undone.</summary>
+        public bool IsGoDownCard(byte cardId)
+        {
+            return goDownCardIds.Contains(cardId);
+        }
 
         public bool CanEndTurn()
         {
@@ -98,6 +110,11 @@ namespace Mejnun.Core
                         if (!StartSnapshot.HasCardFromHand(cardIds[index]))
                         {
                             return CommandResult.Failure(RuleError.BoardCardToHand);
+                        }
+
+                        if (goDownCardIds.Contains(cardIds[index]))
+                        {
+                            return CommandResult.Failure(RuleError.GoDownCardToHand);
                         }
                     }
 
@@ -352,7 +369,7 @@ namespace Mejnun.Core
                 return CommandResult.Failure(RuleError.GoDownInvalid);
             }
 
-            state.PlayerPhases[Seat] = PlayerPhase.Down;
+            MarkDown();
             if (!replay)
             {
                 events.RaiseWentDown(Seat);
@@ -369,7 +386,7 @@ namespace Mejnun.Core
                 return CommandResult.Failure(RuleError.GoDownInvalid);
             }
 
-            state.PlayerPhases[Seat] = PlayerPhase.Down;
+            MarkDown();
             events.RaiseWentDown(Seat);
             return CommandResult.Success();
         }
@@ -390,6 +407,7 @@ namespace Mejnun.Core
         internal CommandResult Revert()
         {
             StartSnapshot.Restore(state);
+            goDownCardIds.Clear();
             moves.Clear();
             events.RaiseBoardReverted(Seat);
             return CommandResult.Success();
@@ -399,6 +417,7 @@ namespace Mejnun.Core
         {
             var hadMoves = moves.Count > 0;
             StartSnapshot.Restore(state);
+            goDownCardIds.Clear();
             moves.Clear();
             if (hadMoves)
             {
@@ -462,16 +481,35 @@ namespace Mejnun.Core
                 return;
             }
 
-            state.PlayerPhases[Seat] = PlayerPhase.Down;
+            MarkDown();
             if (!replay)
             {
                 events.RaiseWentDown(Seat);
             }
         }
 
+        // Going down commits every hand card now on the board (all of it sits in the new go-down sets),
+        // so the player can't take the sets back and keep full board access. Undo/Revert clear the commit.
+        private void MarkDown()
+        {
+            state.PlayerPhases[Seat] = PlayerPhase.Down;
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var cards = state.Board[meldIndex].Cards;
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    if (StartSnapshot.HasCardFromHand(cards[cardIndex].Id))
+                    {
+                        goDownCardIds.Add(cards[cardIndex].Id);
+                    }
+                }
+            }
+        }
+
         private void Rebuild()
         {
             StartSnapshot.Restore(state);
+            goDownCardIds.Clear();
             for (var index = 0; index < moves.Count; index++)
             {
                 var command = moves[index].Command;
