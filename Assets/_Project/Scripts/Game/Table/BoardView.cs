@@ -478,7 +478,7 @@ namespace Mejnun.Game
                 }
 
                 CurrentLayout = BoardLayout.ComputeOrganic(board, cardSize, overlapSets, organicOrigins, hints,
-                    cpuPlacementArea, constrainedMeldIds, out var nextOrigins);
+                    cpuPlacementArea, constrainedMeldIds, out var nextOrigins, GameSettings.BoardCardSpread);
                 organicOrigins.Clear();
                 foreach (var pair in nextOrigins)
                 {
@@ -487,7 +487,8 @@ namespace Mejnun.Game
             }
             else
             {
-                CurrentLayout = BoardLayout.Compute(board, viewportAspect, cardSize, overlapSets);
+                CurrentLayout = BoardLayout.Compute(board, viewportAspect, cardSize, overlapSets,
+                    GameSettings.BoardCardSpread);
             }
 
             staleMeldIds.Clear();

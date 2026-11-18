@@ -8,6 +8,9 @@ namespace Mejnun.Game
 {
     public sealed class TableView : MonoBehaviour
     {
+        private const int MaximumDrawFlightCards = 3;
+        private const float DrawFlightDuration = 0.55f;
+
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private DeckSkinCatalog skinCatalog;
         [SerializeField] private BoardView boardView;
@@ -20,6 +23,7 @@ namespace Mejnun.Game
         private readonly HashSet<byte> visibleCardIds = new HashSet<byte>();
         private readonly List<byte> staleCardIds = new List<byte>(Card.CardCount);
         private readonly List<Card> hitTestHandCards = new List<Card>(Card.CardsPerDeck);
+        private readonly List<CardView> drawingCards = new List<CardView>();
         private readonly HandOrder handOrder = new HandOrder();
         private readonly Dictionary<byte, Vector3> liftedHandOffsets = new Dictionary<byte, Vector3>();
         private readonly Dictionary<byte, Vector3> liftedMeldOffsets = new Dictionary<byte, Vector3>();
@@ -48,9 +52,11 @@ namespace Mejnun.Game
         private float boardRightInset;
         private GameState lastSyncedState;
         private int lastDrawPileCount = -1;
+        private int[] lastHandCounts = Array.Empty<int>();
         private Vector2 drawPileScreenPosition;
         private float drawPileScreenHeight;
         private bool hasDrawPileScreenPosition;
+        private readonly Dictionary<int, Vector3> seatScreenRects = new Dictionary<int, Vector3>();
         private Func<int, bool> cpuSeatPredicate;
 
         public GameState CurrentState { get; private set; }
@@ -123,6 +129,7 @@ namespace Mejnun.Game
 
         private void LateUpdate()
         {
+            UpdateDrawingCards();
             if (tableCamera == null || tableCamera.Camera == null)
             {
                 return;
@@ -160,22 +167,12 @@ namespace Mejnun.Game
                 throw new ArgumentNullException(nameof(state));
             }
 
-            var cardsDrawingFromPile = new List<byte>();
-            var drawPileShrank = ReferenceEquals(lastSyncedState, state) && lastDrawPileCount > state.DrawPile.Count &&
-                                 hasDrawPileScreenPosition && IsFinite(drawPileScreenPosition.x) &&
-                                 IsFinite(drawPileScreenPosition.y);
-            var drawingSeat = DisplaySeat(state);
-            if (drawPileShrank && drawingSeat >= 0 && drawingSeat < state.Hands.Count)
+            if (lastSyncedState != null && !ReferenceEquals(lastSyncedState, state))
             {
-                var hand = state.Hands[drawingSeat];
-                for (var index = 0; index < hand.Count; index++)
-                {
-                    if (!activeCards.ContainsKey(hand[index].Id))
-                    {
-                        cardsDrawingFromPile.Add(hand[index].Id);
-                    }
-                }
+                ClearDrawingCards();
             }
+
+            var cardsDrawingFromPile = FindCardsDrawnFromPile(state, out var drawingSeat);
 
             PreparePool();
             EnsureHandRoot();
@@ -243,19 +240,9 @@ namespace Mejnun.Game
                 }
             }
 
-            if (cardsDrawingFromPile.Count > 0 && handRoot != null)
+            if (handRoot != null)
             {
-                var pilePosition = HandLocalPoint(drawPileScreenPosition);
-                for (var index = 0; index < cardsDrawingFromPile.Count; index++)
-                {
-                    if (activeCards.TryGetValue(cardsDrawingFromPile[index], out var cardView) &&
-                        cardView.transform.parent == handRoot)
-                    {
-                        cardView.transform.localPosition = pilePosition;
-                        cardView.SetStartScale(GetDrawPileScale(cardView));
-                        cardView.SetNextMoveDuration(0.55f);
-                    }
-                }
+                UpdateHandRoot();
             }
 
             if (handVisible && activeHand != null)
@@ -263,8 +250,18 @@ namespace Mejnun.Game
                 LayoutHand(activeSeat);
             }
 
+            if (cardsDrawingFromPile.Count > 0 && handRoot != null &&
+                seatScreenRects.TryGetValue(drawingSeat, out var seatScreenRect))
+            {
+                for (var index = 0; index < cardsDrawingFromPile.Count; index++)
+                {
+                    AnimateDrawnCard(cardsDrawingFromPile[index], seatScreenRect);
+                }
+            }
+
             lastSyncedState = state;
             lastDrawPileCount = state.DrawPile.Count;
+            RememberHandCounts(state);
         }
 
         public CardView GetCardView(byte cardId)
@@ -412,6 +409,18 @@ namespace Mejnun.Game
             hasDrawPileScreenPosition = true;
         }
 
+        public void SetSeatScreenRect(int seat, Vector2 screenPosition, float screenHeight)
+        {
+            if (seat < 0 || screenHeight <= 0f || !IsFinite(screenPosition.x) ||
+                !IsFinite(screenPosition.y) || !IsFinite(screenHeight))
+            {
+                seatScreenRects.Remove(seat);
+                return;
+            }
+
+            seatScreenRects[seat] = new Vector3(screenPosition.x, screenPosition.y, screenHeight);
+        }
+
         public void ShowDropPreview(GestureHit target, bool isValid, IReadOnlyList<byte> draggedCardIds,
             IReadOnlyCollection<byte> liftedCardIds, Vector2 screenPosition)
         {
@@ -440,26 +449,143 @@ namespace Mejnun.Game
             boardView?.ClearPendingNewMeldPoint();
         }
 
-        private float GetDrawPileScale(CardView cardView)
+        private List<Card> FindCardsDrawnFromPile(GameState state, out int drawingSeat)
         {
-            if (drawPileScreenHeight <= 0f || tableCamera == null || tableCamera.Camera == null ||
+            var cards = new List<Card>();
+            drawingSeat = -1;
+            var drawCount = lastDrawPileCount - state.DrawPile.Count;
+            if (!ReferenceEquals(lastSyncedState, state) || state.Phase != GamePhase.Playing ||
+                drawCount <= 0 || drawCount > MaximumDrawFlightCards ||
+                lastHandCounts.Length != state.Hands.Count || !hasDrawPileScreenPosition ||
+                !IsFinite(drawPileScreenPosition.x) || !IsFinite(drawPileScreenPosition.y))
+            {
+                return cards;
+            }
+
+            var gainedCount = 0;
+            for (var seat = 0; seat < state.Hands.Count; seat++)
+            {
+                var gained = state.Hands[seat].Count - lastHandCounts[seat];
+                if (gained <= 0)
+                {
+                    continue;
+                }
+
+                if (drawingSeat >= 0 || seat == DisplaySeat(state) || gained > MaximumDrawFlightCards ||
+                    !seatScreenRects.ContainsKey(seat))
+                {
+                    return cards;
+                }
+
+                drawingSeat = seat;
+                gainedCount = gained;
+            }
+
+            if (drawingSeat < 0 || gainedCount != drawCount)
+            {
+                drawingSeat = -1;
+                return cards;
+            }
+
+            var hand = state.Hands[drawingSeat];
+            for (var index = lastHandCounts[drawingSeat]; index < hand.Count; index++)
+            {
+                cards.Add(hand[index]);
+            }
+
+            return cards;
+        }
+
+        private void RememberHandCounts(GameState state)
+        {
+            if (lastHandCounts.Length != state.Hands.Count)
+            {
+                lastHandCounts = new int[state.Hands.Count];
+            }
+
+            for (var seat = 0; seat < state.Hands.Count; seat++)
+            {
+                lastHandCounts[seat] = state.Hands[seat].Count;
+            }
+        }
+
+        private void AnimateDrawnCard(Card card, Vector3 seatScreenRect)
+        {
+            var view = cardPool.Count == 0 ? InstantiateCardView() : cardPool.Pop();
+            view.gameObject.SetActive(true);
+            view.SetParentKeepWorld(handRoot, true);
+            var skin = ResolveSkin(CurrentState, card.Deck);
+            var face = skin == null ? null : skin.GetFace(card.Suit, card.Rank);
+            var back = GetCardBack(CurrentState, card.Deck);
+            view.ConfigureCamera(tableCamera, skin == null ? 100f : skin.PixelsPerUnit);
+            view.SetHinted(false);
+            view.SetLastCardWarning(false);
+            view.SetCard(card, face, back, false, false);
+
+            var seatScreenPosition = new Vector2(seatScreenRect.x, seatScreenRect.y);
+            var targetScale = GetScreenHeightScale(seatScreenPosition, seatScreenRect.z, view);
+            var pileScale = GetScreenHeightScale(drawPileScreenPosition, drawPileScreenHeight, view);
+            view.SetLayoutPose(Quaternion.identity, targetScale);
+            view.SetStartScale(pileScale / Mathf.Max(targetScale, 0.01f));
+            view.transform.localPosition = HandLocalPoint(drawPileScreenPosition);
+            view.SetSortingOrder(CardView.DragSortingOrder - 1);
+            view.MoveTo(HandLocalPoint(seatScreenPosition), DrawFlightDuration);
+            drawingCards.Add(view);
+        }
+
+        private float GetScreenHeightScale(Vector2 screenPosition, float screenHeight, CardView cardView)
+        {
+            if (screenHeight <= 0f || tableCamera == null || tableCamera.Camera == null ||
                 cardView == null || cardView.Renderer == null)
             {
-                return 0.08f;
+                return 1f;
             }
 
             var camera = tableCamera.Camera;
             var distance = Mathf.Abs(camera.transform.position.z);
-            var halfHeight = drawPileScreenHeight * 0.5f;
-            var top = camera.ScreenToWorldPoint(new Vector3(drawPileScreenPosition.x,
-                drawPileScreenPosition.y + halfHeight, distance));
-            var bottom = camera.ScreenToWorldPoint(new Vector3(drawPileScreenPosition.x,
-                drawPileScreenPosition.y - halfHeight, distance));
+            var halfHeight = screenHeight * 0.5f;
+            var top = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y + halfHeight, distance));
+            var bottom = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y - halfHeight, distance));
             var sprite = cardView.Renderer.sprite;
             var parentScale = cardView.transform.parent == null ? 1f : cardView.transform.parent.lossyScale.y;
-            var cardHeight = sprite == null ? 0f : sprite.bounds.size.y * cardView.BaseScale *
-                cardView.LayoutScale * parentScale;
-            return cardHeight <= 0f ? 0.08f : Mathf.Clamp(Mathf.Abs(top.y - bottom.y) / cardHeight, 0.01f, 1f);
+            var cardHeight = sprite == null ? 0f : sprite.bounds.size.y * cardView.BaseScale * parentScale;
+            return cardHeight <= 0f ? 1f : Mathf.Clamp(Mathf.Abs(top.y - bottom.y) / cardHeight, 0.01f, 1f);
+        }
+
+        private void UpdateDrawingCards()
+        {
+            for (var index = drawingCards.Count - 1; index >= 0; index--)
+            {
+                var view = drawingCards[index];
+                if (view != null && view.IsMoving)
+                {
+                    continue;
+                }
+
+                drawingCards.RemoveAt(index);
+                if (view != null)
+                {
+                    view.gameObject.SetActive(false);
+                    cardPool.Push(view);
+                }
+            }
+        }
+
+        private void ClearDrawingCards()
+        {
+            for (var index = 0; index < drawingCards.Count; index++)
+            {
+                var view = drawingCards[index];
+                if (view == null)
+                {
+                    continue;
+                }
+
+                view.gameObject.SetActive(false);
+                cardPool.Push(view);
+            }
+
+            drawingCards.Clear();
         }
 
         public void SetViewerSeat(int seat)
@@ -1010,7 +1136,7 @@ namespace Mejnun.Game
             {
                 view.SetLayoutPose(Quaternion.identity, 1f);
             }
-            view.SetCard(card, face, back, !(isHandCard && handConcealed), isSelected);
+            view.SetCard(card, face, back, !handConcealed, isSelected);
             var displaySeat = DisplaySeat(state);
             var hasSingleHandCard = isHandCard && displaySeat >= 0 && displaySeat < state.Hands.Count &&
                                     state.Hands[displaySeat].Count == 1;

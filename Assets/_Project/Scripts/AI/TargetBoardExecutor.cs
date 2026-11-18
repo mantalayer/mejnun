@@ -88,7 +88,7 @@ namespace Mejnun.AI
                     var resultingCards = new List<Card>(meld.Cards.Count + missing.Count);
                     resultingCards.AddRange(meld.Cards);
                     resultingCards.AddRange(missing);
-                    if (!MeldValidator.CanPlaceInto(meld.Cards, resultingCards))
+                    if (!MeldValidator.Classify(resultingCards).IsValid)
                     {
                         var cardsOutsideTarget = new List<Card>();
                         for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)

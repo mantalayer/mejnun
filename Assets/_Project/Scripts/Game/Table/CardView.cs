@@ -40,6 +40,7 @@ namespace Mejnun.Game
         public bool IsFaceUp => faceUp;
         public bool IsSelected => selected;
         public bool IsHinted => hinted;
+        public bool IsMoving => moving;
         public Sprite CurrentFaceSprite => faceSprite;
         public SpriteRenderer Renderer => spriteRenderer;
         public float BaseScale => baseScale;

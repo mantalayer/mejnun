@@ -75,7 +75,6 @@ namespace Mejnun.UI
         private Toggle hintJiggleToggle;
         private Toggle reducedMotionToggle;
         private Toggle hapticsToggle;
-        private Toggle handArcToggle;
         private Slider handArcAmountSlider;
         private Slider handSpreadSlider;
         private Slider handCardScaleSlider;
@@ -86,6 +85,7 @@ namespace Mejnun.UI
         private Toggle showFastForwardToggle;
         private Toggle overlapSetsToggle;
         private Toggle organicBoardToggle;
+        private Slider boardCardSpreadSlider;
         private Slider cardMessinessSlider;
         private Toggle easyOpeningDealToggle;
         private Action pendingConfirmAction;
@@ -234,7 +234,6 @@ namespace Mejnun.UI
             hintJiggleToggle = root.Q<Toggle>("hint-jiggle-toggle");
             reducedMotionToggle = root.Q<Toggle>("reduced-motion-toggle");
             hapticsToggle = root.Q<Toggle>("haptics-toggle");
-            handArcToggle = root.Q<Toggle>("hand-arc-toggle");
             handArcAmountSlider = root.Q<Slider>("hand-arc-amount-slider");
             handSpreadSlider = root.Q<Slider>("hand-spread-slider");
             handCardScaleSlider = root.Q<Slider>("hand-card-scale-slider");
@@ -247,6 +246,7 @@ namespace Mejnun.UI
             showFastForwardToggle = root.Q<Toggle>("show-fast-forward-toggle");
             overlapSetsToggle = root.Q<Toggle>("overlap-sets-toggle");
             organicBoardToggle = root.Q<Toggle>("organic-board-toggle");
+            boardCardSpreadSlider = root.Q<Slider>("board-card-spread-slider");
             cardMessinessSlider = root.Q<Slider>("card-messiness-slider");
             easyOpeningDealToggle = root.Q<Toggle>("easy-opening-deal-toggle");
         }
@@ -283,16 +283,6 @@ namespace Mejnun.UI
             hintJiggleToggle.RegisterValueChangedCallback(changeEvent => GameSettings.HintJiggle = changeEvent.newValue);
             reducedMotionToggle.RegisterValueChangedCallback(changeEvent => GameSettings.ReducedMotion = changeEvent.newValue);
             hapticsToggle.RegisterValueChangedCallback(changeEvent => GameSettings.HapticsEnabled = changeEvent.newValue);
-            if (handArcToggle != null)
-            {
-                handArcToggle.RegisterValueChangedCallback(changeEvent =>
-                {
-                    GameSettings.HandArc = changeEvent.newValue;
-                    tableView?.RefreshHandLayout();
-                });
-                handArcToggle.SetValueWithoutNotify(GameSettings.HandArc);
-            }
-
             RegisterHandSlider(handArcAmountSlider, GameSettings.HandArcAmount,
                 value => GameSettings.HandArcAmount = value);
             RegisterHandSlider(handSpreadSlider, GameSettings.HandSpread,
@@ -374,6 +364,19 @@ namespace Mejnun.UI
                     }
                 });
                 cardMessinessSlider.SetValueWithoutNotify(GameSettings.CardMessiness);
+            }
+
+            if (boardCardSpreadSlider != null)
+            {
+                boardCardSpreadSlider.RegisterValueChangedCallback(changeEvent =>
+                {
+                    GameSettings.BoardCardSpread = changeEvent.newValue;
+                    if (tableController?.Game != null)
+                    {
+                        tableView?.Sync(tableController.Game.State, tableController.Game.Turn);
+                    }
+                });
+                boardCardSpreadSlider.SetValueWithoutNotify(GameSettings.BoardCardSpread);
             }
 
             if (easyOpeningDealToggle != null)
@@ -564,6 +567,7 @@ namespace Mejnun.UI
 
         private void UpdateDrawPilePosition()
         {
+            UpdateOpponentCardPositions();
             if (drawPileStack == null || tableView == null || root == null || root.panel == null)
             {
                 return;
@@ -579,6 +583,37 @@ namespace Mejnun.UI
             {
                 tableView.SetDrawPileScreenRect(screenPosition, bounds.height * Screen.height /
                     Mathf.Max(root.panel.visualTree.worldBound.height, 1f));
+            }
+        }
+
+        private void UpdateOpponentCardPositions()
+        {
+            if (tableView == null || tableView.CurrentState == null || root == null || root.panel == null)
+            {
+                return;
+            }
+
+            var state = tableView.CurrentState;
+            var viewerSeat = tableView.ViewerSeat >= 0 ? tableView.ViewerSeat : state.CurrentSeat;
+            var panelHeight = Mathf.Max(root.panel.visualTree.worldBound.height, 1f);
+            for (var seat = 0; seat < state.Hands.Count; seat++)
+            {
+                if (seat == viewerSeat)
+                {
+                    continue;
+                }
+
+                var cards = root.Q<VisualElement>("opponent-cards-" + seat);
+                var bounds = cards == null ? default : cards.worldBound;
+                if (cards != null && bounds.width > 0f && bounds.height > 0f &&
+                    TryPanelToScreen(bounds.center, out var screenPosition))
+                {
+                    tableView.SetSeatScreenRect(seat, screenPosition, bounds.height * Screen.height / panelHeight);
+                }
+                else
+                {
+                    tableView.SetSeatScreenRect(seat, default, 0f);
+                }
             }
         }
 

@@ -12,7 +12,6 @@ namespace Mejnun.Game
         private const string HintJiggleKey = "settings.hints.jiggle";
         private const string ReducedMotionKey = "settings.reducedMotion";
         private const string HapticsKey = "settings.haptics";
-        private const string HandArcKey = "settings.hand.arc";
         private const string HandArcAmountKey = "settings.hand.arcAmount";
         private const string HandSpreadKey = "settings.hand.spread";
         private const string HandCardScaleKey = "settings.hand.cardScale";
@@ -24,6 +23,7 @@ namespace Mejnun.Game
         private const string ShowFastForwardKey = "settings.cpu.showFastForward";
         private const string OverlapSetsKey = "settings.board.overlapSets";
         private const string OrganicBoardKey = "settings.board.organic";
+        private const string BoardCardSpreadKey = "settings.board.cardSpread";
         private const string CardMessinessKey = "settings.board.cardMessiness";
         private const string EasyOpeningDealKey = "settings.game.easyOpeningDeal";
         private static readonly float[] CpuDelayMultipliers = { 6f, 4f, 3f, 2f, 1f, 0.5f };
@@ -75,12 +75,6 @@ namespace Mejnun.Game
         {
             get => Get(HapticsKey, true);
             set => Set(HapticsKey, value);
-        }
-
-        public static bool HandArc
-        {
-            get => Get(HandArcKey, true);
-            set => Set(HandArcKey, value);
         }
 
         public static float HandArcAmount
@@ -149,6 +143,12 @@ namespace Mejnun.Game
             set => Set(OrganicBoardKey, value);
         }
 
+        public static float BoardCardSpread
+        {
+            get => Mathf.Clamp(Get(BoardCardSpreadKey, 1f), 0.5f, 1.5f);
+            set => Set(BoardCardSpreadKey, Mathf.Clamp(value, 0.5f, 1.5f));
+        }
+
         public static float CardMessiness
         {
             get => Mathf.Clamp01(Get(CardMessinessKey, 0f));
@@ -177,7 +177,6 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(HintJiggleKey);
             PlayerPrefs.DeleteKey(ReducedMotionKey);
             PlayerPrefs.DeleteKey(HapticsKey);
-            PlayerPrefs.DeleteKey(HandArcKey);
             PlayerPrefs.DeleteKey(HandArcAmountKey);
             PlayerPrefs.DeleteKey(HandSpreadKey);
             PlayerPrefs.DeleteKey(HandCardScaleKey);
@@ -189,6 +188,7 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(ShowFastForwardKey);
             PlayerPrefs.DeleteKey(OverlapSetsKey);
             PlayerPrefs.DeleteKey(OrganicBoardKey);
+            PlayerPrefs.DeleteKey(BoardCardSpreadKey);
             PlayerPrefs.DeleteKey(CardMessinessKey);
             PlayerPrefs.DeleteKey(EasyOpeningDealKey);
             FastForward = false;

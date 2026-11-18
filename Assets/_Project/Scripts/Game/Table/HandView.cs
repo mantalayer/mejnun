@@ -94,7 +94,7 @@ namespace Mejnun.Game
                 var normalizedPosition = cardsPerRow <= 1
                     ? 0f
                     : (column - (cardsPerRow - 1) * 0.5f) / ((cardsPerRow - 1) * 0.5f);
-                var arcAmount = GameSettings.HandArc ? Mathf.Clamp(GameSettings.HandArcAmount, 0f, 1.5f) : 0f;
+                var arcAmount = Mathf.Clamp(GameSettings.HandArcAmount, 0f, 1.5f);
                 CalculateArcPose(normalizedPosition, arcAmount, out var arcOffset, out var angle);
                 view.SetLayoutPose(Quaternion.Euler(0f, 0f, angle), cardScale);
                 var centerY = bottomY + row * rowStep + arcOffset;

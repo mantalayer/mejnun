@@ -57,6 +57,31 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void CardSpread_IncreasesDistanceBetweenCardsWithinMeld()
+        {
+            var melds = CreateMelds(1, 3);
+            var cardSize = new Vector2(0.64f, 0.97f);
+            var compact = BoardLayout.Compute(melds, 1.6f, cardSize, false, 1f);
+            var expanded = BoardLayout.Compute(melds, 1.6f, cardSize, false, 1.5f);
+            var compactDistance = compact.Melds[0].CardRects[1].center.x - compact.Melds[0].CardRects[0].center.x;
+            var expandedDistance = expanded.Melds[0].CardRects[1].center.x - expanded.Melds[0].CardRects[0].center.x;
+
+            Assert.That(expandedDistance, Is.GreaterThan(compactDistance));
+
+            var preferred = new Dictionary<int, Vector2> { { 1, Vector2.zero } };
+            var compactOrganic = BoardLayout.ComputeOrganic(melds, cardSize, false, preferred, null, null, null,
+                out _, 1f);
+            var expandedOrganic = BoardLayout.ComputeOrganic(melds, cardSize, false, preferred, null, null, null,
+                out _, 1.5f);
+            compactDistance = compactOrganic.Melds[0].CardRects[1].center.x -
+                              compactOrganic.Melds[0].CardRects[0].center.x;
+            expandedDistance = expandedOrganic.Melds[0].CardRects[1].center.x -
+                               expandedOrganic.Melds[0].CardRects[0].center.x;
+
+            Assert.That(expandedDistance, Is.GreaterThan(compactDistance));
+        }
+
+        [Test]
         public void TryHit_ReturnsInsertionIndexForGapAndNewGroupTarget()
         {
             var layout = BoardLayout.Compute(CreateMelds(1, 3), 1.7f, new Vector2(0.64f, 0.97f));
