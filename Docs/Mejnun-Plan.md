@@ -1,6 +1,6 @@
 # Mejnun — Game Design & Implementation Plan
 
-Status: draft v2 (2026-11-16), written from two interview rounds with Brennan, plus answers to the v1 open questions (§11). **M1 (rules engine), M2 (hot-seat prototype) and M3 (AI) are complete** (§9).
+Status: draft v2 (2026-11-17), updated after the M4/M5 playtest. **M1 (rules engine), M2 (hot-seat prototype), M3 (AI), M4 (UX & UI) and M5 (Audio) are complete** (§9).
 Engine: Unity 6000.4.0f1 · URP 17.4 · Input System 1.19 · Wwise 2025.1.12
 Targets: iOS, Android, Windows, macOS (Steam for desktop).
 
@@ -61,16 +61,20 @@ Each player is either **Not down** (the starting phase) or **Down**.
 - **Draw / Pass**: always allowed, whether the player is down or not. It **reverts the board** to the start of the turn, returns every placed card to the hand, draws one card, and **ends the turn**.
 - **End turn**: only enabled when the board is valid **and** at least one hand card was placed (or a go-down happened).
 - **Undo**: steps back one move at a time within the turn.
-- **Revert** (the "make board valid" button): restores the board exactly as it was at the start of the turn and returns every card the player placed to their hand. It always works.
+- **Redo** (M4): re-applies the last undone gesture group within the same turn. The redo stack is cleared by any new move, Fix board, Revert, Draw/Pass, End turn or a timeout, and never crosses turns.
+- **Confirmations** (M4): destructive or turn-ending actions ask first with a small in-HUD dialog (Confirm / Cancel, Enter/Esc on PC): **Revert** when moves were made; **Draw/Pass** when cards were placed this turn (it throws them back); **Fix board** when it will return hand cards; **Leave/quit a game in progress**; and **New game / restart**. End turn needs no confirmation since it's only enabled for a valid board. Each prompt has a "Don't ask again" setting.
+- **Fix board**: repairs an invalid board while keeping valid placements from the player's hand whenever they still fit. Original board cards are preserved; invalid or unused hand cards are returned to the hand. It is one undo group, and falls back to Revert if no repair can be found within the solver budget.
+- **Revert**: restores the board exactly as it was at the start of the turn and returns every card the player placed to their hand. It always works and is distinct from Fix board.
 - A card that came from your hand can go back to your hand during the same turn. Cards that **started the turn on the board** can never go into a hand.
 
 ### 1.9 Timed mode (optional, chosen by the host)
 - Presets: **30 / 60 / 90 / 120 s** per turn, or Off. Off is only available offline, because online games are always timed (§4.5).
+- On timeout, show a brief **"Halas!"** (Arabic for "stop/finished") notification, not a blocking screen overlay.
 - On timeout:
-  1. No hand card placed, board valid → **keep** the rearranged board and **draw**.
-  2. No hand card placed, board invalid → revert, then draw.
-  3. Hand card(s) placed, board valid → the turn ends normally (no draw).
-  4. Hand card(s) placed, board invalid → revert, then draw.
+  1. No hand card placed, board valid → keep the valid rearrangement, **draw**, and end the turn.
+  2. No hand card placed, board invalid → restore the start-of-turn board, **draw**, and end the turn.
+  3. Hand card(s) placed, board valid → end the turn normally, with **no draw**.
+  4. Hand card(s) placed, board invalid → run Fix board first, preserving valid hand placements and returning invalid/unused hand cards. If the repaired board is valid and at least one placed hand card remains, end without a draw; if repair fails, Revert and draw.
 
 ### 1.10 Empty draw pile
 - Once the pile is empty, "Draw" becomes **"Pass"**: the player draws nothing and the board is reverted.
@@ -84,6 +88,7 @@ Each player is either **Not down** (the starting phase) or **Down**.
 - "Highlight playable" hint: a personal setting offline.
   - Online, it's a **per-lobby toggle** chosen by the host (default Off) and shown in the lobby rules summary. When it's Off, the hint is unavailable to every player in that game.
   - Quick match always uses hints Off (§4.2).
+  - Hints use an **outline, not a tint**, and may jiggle the playable cards. When enabled in the hint settings, they can also outline board cards that can be moved to free a hand play.
 
 ---
 
@@ -136,8 +141,11 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
   - The position is a **view-only arrangement**: a `BoardArrangement` order of meld ids in `Mejnun.Game`, like `HandOrder`. It never creates an engine move, never touches `GameState`, and doesn't use an Undo step.
   - The wrap layout still decides rows and wrapping. It just lays sets out in arrangement order instead of creation order, so repositioning keeps working in both orientations and after aspect changes.
   - New sets are appended at the end of the arrangement. Sets that disappear (merged or emptied) are dropped from it, and the remaining sets keep their relative order through Undo and Revert.
-- **Zoom & pan**: pinch or two-finger drag on touch; wheel, right/middle-drag or trackpad on PC. A "fit board" button and automatic fit after each change unless the user zoomed manually.
-- **Hand**: a fanned or scrollable row at the bottom (landscape), or a two-row grid (portrait), with sort buttons.
+- **Zoom & pan**: pinch or two-finger drag on touch; wheel, right/middle-drag or trackpad on PC. A "fit board" button and automatic fit after each change unless the user zoomed manually. The hand is a camera-independent screen layer: panning the board must not move the hand, and zooming the board must not change hand-card size or spacing.
+- **Responsive board and hand**: detect the current screen aspect at runtime and use the available board width before adding rows. Keep a bottom hand strip reserved when fitting the board; use a fanned or scrollable row in landscape and a two-row grid in portrait, with sort buttons.
+- **Opponent seats**: show physical card stacks along the screen edges, with one card back per card in each opponent's hand, so hand counts are visible without reading a number. Place stacks to communicate which opponents sit to the left and right of the local player.
+- **Last-card warning**: when a player has one card left, shake that player's card and show a pulsing exclamation mark above it; do not use a screen-wide overlay.
+- **Gone Down tag**: show the tag next to the newly placed sets briefly, then hide it after a few seconds rather than keeping it through the player's turn.
 - **HUD and menus** use **UI Toolkit** (recommended): USS responsive classes handle portrait/landscape and safe areas, it integrates cleanly with Unity Localization, and the "mixed" art direction (pixel cards with smooth modern UI) fits it well. uGUI is avoided apart from world-space bits if needed.
   - The deciding factor: UI Toolkit's **Advanced Text Generator** (HarfBuzz + ICU, opt-in in Unity 6.4) is the built-in way to shape **Arabic and Persian** right-to-left text. TextMeshPro would need a third-party RTL plugin (§7).
 
@@ -167,7 +175,13 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
   - The board drop preview (the target highlight) stays. The lifted card is just the presentation on top of it.
 - A drop that's illegal (for example a board card onto the hand, or touching the board before going down) springs the card back with a haptic buzz and the `Play_Card_Invalid` sound. Temporarily *invalid sets* are always allowed and get a red outline.
 - Haptics on mobile for pickup, long-press, drop and invalid.
-- On PC: left-drag = drag, holding the left button = long-press, the wheel zooms, and right/middle-drag pans. Keyboard shortcuts are optional extras: Ctrl+Z undo, R revert, Space end turn, D draw.
+- On PC: left-drag = drag, holding the left button = long-press, the wheel zooms, and right/middle-drag pans.
+- **PC keyboard shortcuts** (M4, shown in button tooltips and a `?` / F1 cheat sheet, rebindable later):
+  - Ctrl/Cmd+Z undo, Ctrl/Cmd+Shift+Z or Ctrl+Y redo.
+  - Space end turn, D draw/pass, R revert (with confirmation), F fix board.
+  - S sort by suit, K sort by rank, H toggle hints, Home / 0 fit board, +/− zoom, arrow keys pan.
+  - F1 or Shift+? opens the cheat sheet. Esc cancels a drag, clears the selection, closes a dialog or opens the pause menu; Enter confirms a dialog.
+  - Shortcuts are ignored while a text field has focus and when it isn't the local player's turn.
 - A gesture tutorial covers drag, long-press-split and pinch in the first solo game, with tooltips the first time each gesture is relevant.
 
 ### 3.5 AI (`Mejnun.AI`)
@@ -179,9 +193,9 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - **Easy**: only plays new sets from hand plus simple extensions of existing sets. It occasionally "misses" plays on purpose.
 - **Medium**: extensions, splits, and taking from 4-card same-kind sets, using greedy rearrangement with local search.
 - **Hard**: a full board re-partition via the solver. Before going down it searches the hand's 3-card sets for the go-down that unlocks the biggest same-turn board play.
-  - *Not built yet (tuning backlog)*: strategic hold-back (a voluntary draw is legal) and tracking which doubles have been seen. Hard already beats Easy 96% of the time without them.
+- **Bot styles (M4)**: Balanced uses the selected difficulty; Hold Back sometimes draws despite a legal play; Blocker uses Hard planning and public card-tracking clues to avoid exposing a known extension to an opponent. A down-player draw weakens the inference that they still hold cards that could have improved their board.
 - Bots play with a visible "thinking" delay and animated moves, executed as real `TurnSession` commands so the replay is visible.
-- The **"Highlight playable" hint** reuses the solver at Easy depth.
+- The **"Highlight playable" hint** reuses the solver at Easy depth; M4 changes its visual treatment to outline-and-jiggle and adds optional board-card move hints.
 - Bots also take over disconnected online seats (§4.4).
 
 ### 3.6 Deck art & cosmetics (data-driven, ready for unlocks)
@@ -335,7 +349,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 - Workflow: Unity Localization's **Google Sheets** extension (or CSV) round-trips the string tables, with machine translation first and a native-speaker review before release. The small amount of text keeps this cheap. Store listings are localized from the same sheet and pushed by fastlane.
 
 ## 8. Accessibility & settings
-- Colour-blind-friendly suit tinting (four-colour deck option per skin), adjustable card size, a reduced-motion option, haptics on/off, left-handed hand placement, and audio buses (Master/Music/SFX/Voice) through Wwise RTPCs.
+- Local `PlayerPrefs` settings cover per-action confirmation opt-outs, optional board-card hints, hint jiggle, reduced motion and haptics on/off. Colour-blind-friendly suit tinting (four-colour deck option per skin), adjustable card size, left-handed hand placement, and audio buses (Master/Music/SFX/Voice) remain later accessibility work.
 
 ---
 
@@ -347,8 +361,8 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **M1** | Rules engine ✅ | `Mejnun.Core` (cards, deck, RNG, `MeldValidator`, `GameState`, `TurnSession` with undo/revert/go-down/timeout, end conditions, snapshot serialization) | ≥ 95% line coverage in EditMode tests. Every rule in §1 has a named test. *Met: 123 EditMode tests pass, 95.3% line coverage* |
 | **M2** | Playable hot-seat prototype ✅ | Table scene, card prefab, `DeckSkin` Classic + Classic Ivory + importer, the two-faces-per-game assignment, hand and board views, the full §3.4 gesture set, auto-layout, zoom/pan, End/Draw/Undo/Revert, handoff screen, dealer question flow | 2–6 people can finish a pass-and-play game on Mac and an Android/iOS device. *Met: hot-seat playtest passed (Brennan, 2026-11-17); 124 EditMode and 19 PlayMode tests pass. Closed* |
 | **M3** | AI ✅ | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone. *Met in the editor: Hard beat Easy 481/500 (96.2%), the slowest Hard turn was 61 ms, and 158 EditMode and 22 PlayMode tests pass. The on-device phone timing is still to be measured* |
-| **M4** | UX & UI | UI Toolkit menus/HUD, portrait + landscape layouts, settings, timers, animations, results screen, MEJNUN moment, drag-to-reposition sets (§3.3, §3.4), deck-builder pick-up and drag: cards follow the finger, selected cards are picked up as a group, the hand opens a gap so held cards can be reorganized (§3.4) | Usability pass on a small phone and a 4K PC |
-| **M5** | Audio | Wwise events/banks, AudioService/Director, music states, timer tension | Every `GameEvent` with a sound mapped |
+| **M4** | UX & UI ✅ | UI Toolkit menus/HUD, responsive portrait + landscape layouts, persistent settings, per-turn timers/Halas!, Redo and confirmations, PC shortcuts/cheat sheet, results/counts/MEJNUN moment, visual meld rearrangement, lifted/group hand drag, opponent card-back stacks, last-card warning, outline-and-jiggle/board-move hints, bot hold-back/blocking styles, camera-independent hand, wide-screen board packing, Fix board, timeout repair, short Gone Down tag | All playtest feedback implemented or tracked later; targeted Unity suites pass; human usability pass on a small phone and 4K PC. *Met: playtest passed (Brennan, 2026-11-17); EditMode 169/169 and PlayMode 51/51 pass. Closed* |
+| **M5** | Audio ✅ | Wwise events/banks, AudioService/Director, music states, timer tension | Every `GameEvent` with a sound mapped. *Met: playtest passed (Brennan, 2026-11-17). Closed* |
 | **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, 2nd test deck skin via Addressables | A second skin with a different sheet layout imports and plays |
 | **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync, reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4 |
 | **M8** | Platforms & monetization | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads + consent, Unity IAP Remove ads + restore, mobile Build & Upload window + fastlane lanes, Game Center / Play Games | Steam beta-branch upload from the editor. One-click TestFlight and Play internal builds |
@@ -357,14 +371,19 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 Suggested order: M1 → M2 → M3 → M4/M5 in parallel → M6 → M7 → M8 → M9. M7 can start after M2, since it only depends on Core and the views.
 Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Generator plus one RTL test locale (`ar`) in M4, so right-to-left layout issues show up early rather than in M9.
 
+**M4 implementation (2026-11-17):** All gameplay/UI and playtest-feedback code is implemented, including the follow-up Redo, confirmation prompts and PC shortcuts. Added tests cover Redo, timer timeout/Halas event, bot hold-back and inference, card tracking, board arrangement, portrait hand rows and group hand ordering. Unity 6000.4.0f1 verification passes: EditMode 169/169 and PlayMode 51/51. The Advanced Text Generator project setting is not enabled, so its root USS declaration is deferred until the setting is enabled and an Arabic RTL locale can be checked. **Closed (2026-11-17): playtest passed; M4 is done.**
+
+**M5 (2026-11-17):** Unity audio IDs/service/director and the GameEvents mapper are implemented, including haptic and timer hooks; mapper PlayMode tests are added. The Wwise structure has been authored through WAAPI by `mejnun_WwiseProject/Tools/author_m5.py`, which is idempotent and safe to re-run. It created `Mejnun` Work Units holding 27 events, with empty Random/Switch/Music Playlist containers in UI/SFX/Music/Voice folders. Those folders route to the matching buses under Main Audio Bus. It also added `Game_Phase`, `Shout_Type`, `Timer_Tension`, `Board_Complexity`, and `Volume_Master/Music/SFX/Voice`; the volume parameters drive bus volume. The `Main` SoundBank includes the whole event Work Unit, and `Init` + `Main` are generated for Mac and Windows. **Closed (2026-11-17): playtest passed; M5 is done.**
+
 ---
 
 ## 10. Testing strategy
 - **Core (EditMode)**: a table-driven validator test for every set rule (aces, doubles, sizes, mixed suits); turn flows (go-down only from hand, go-down then board use in the same turn, End-turn gating, undo past go-down, revert, all four timeout outcomes, empty-pile pass, a sole-fewest win versus a tied **Stalemate**, the fewest-cards winner deals next, a new dealer prompt after a Stalemate); and deterministic seeded deal tests.
 - **Faces**: the two picked faces are always distinct, always come from the pool, are deterministic for a given seed, fall back to the base faces when the pool is too small, and both deck indexes render with their assigned skin.
-- **AI**: solver correctness on curated puzzles, a fuzz test (random states, so every solver output must be a valid board), and difficulty benchmarks.
+- **AI**: solver correctness on curated puzzles, a fuzz test (random states, so every solver output must be a valid board), difficulty benchmarks, and BoardFixer coverage for retaining valid placements, returning invalid hand cards, re-homing original cards, and timeout resolution.
 - **Net**: snapshot round-trip serialization, a command replay that matches the host state, and a hidden-hand leak test that asserts no client payload contains another player's cards.
-- **PlayMode**: a scripted pass-and-play smoke game and orientation layout snapshots.
+- **PlayMode**: a scripted pass-and-play smoke game, orientation and wide-screen layout snapshots, camera pan/zoom stability for the hand, Fix board/Gone Down HUD behavior, timer timeout, Redo, opponent card-back counts, and group hand reorder.
+- **M4 AI/UI**: Hold Back draws in cases where a balanced bot plays; inferred board extenders are ignored after a down-player draw; board arrangement does not mutate `GameState`; group reordering preserves relative card order.
 - **Board arrangement**: repositioning a set changes only the layout order (no command, unchanged `GameState`, unchanged undo stack). New sets are appended, removed sets are dropped, and the order survives Undo, Revert and an aspect change.
 - **Pick-up and drag**: a held card follows the pointer and returns to its slot on cancel. Holding a selected card lifts every selected card. Dropping a held group into the hand reorders it as a block (relative order kept, no command, unchanged undo stack).
 - CI (optional, later): Unity Test Runner in batch mode on push.
@@ -390,6 +409,11 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 | 12 | Online timer | Always on online; host picks a preset, default 90 s | §4.5 |
 | 13 | Split | Gestures only, no tools; long-press picks up the tail of a straight | §3.4 |
 | 14 | Dragging feel | Deck-builder style: held cards lift and follow the finger; holding a selected card picks up the whole selection; the hand opens a gap so held cards can be reorganized | §3.4, M4 |
+| 15 | Playtest: hand and board camera | Hand is a stable screen layer; camera motion must not move or resize it. Board row packing uses the available viewport width and fitting reserves the hand strip | §3.3, M4 |
+| 16 | Playtest: repair and timeout | Add Fix board separately from Revert; repair invalid timeout boards while preserving valid hand placements. No placed card means draw/end; a valid remaining placement ends without drawing | §1.8–1.9, M4 |
+| 17 | Playtest: HUD feedback | Opponent card stacks indicate counts and left/right seats; last-card warnings animate on the card; Gone Down tags expire; timeout notification says "Halas!" | §1.9, §3.3, M4 |
+| 18 | Playtest: hints and bots | Hints outline and jiggle, optionally suggesting board moves; bots gain hold-back and inferred-card blocking strategies | §1.11, §3.5, M4 |
+| 19 | Playtest: safety and PC controls | Add Redo; confirm destructive actions (Revert, Draw/Pass after placing, Fix board returning cards, leave/restart); full PC keyboard shortcuts with a cheat sheet | §1.8, §3.4, M4 |
 | Q-B | After a stalemate | A tie is a Stalemate and prompts for a new dealer; a sole player with the fewest cards wins normally and deals next | §1.10 |
 
 ### 11.2 Still open (new, smaller; the defaults in the text apply until answered)

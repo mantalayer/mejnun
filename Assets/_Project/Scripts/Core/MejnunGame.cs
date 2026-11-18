@@ -244,7 +244,7 @@ namespace Mejnun.Core
         {
             if (revertBoard)
             {
-                Turn.Revert();
+                Turn.RevertForTurnEnd();
             }
 
             var seat = State.CurrentSeat;
@@ -262,7 +262,7 @@ namespace Mejnun.Core
             {
                 if (!revertBoard)
                 {
-                    Turn.Revert();
+                    Turn.RevertForTurnEnd();
                 }
 
                 State.ConsecutivePasses++;

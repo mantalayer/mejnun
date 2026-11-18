@@ -13,6 +13,7 @@ namespace Mejnun.Game
         [SerializeField] private MonoBehaviour feedbackSinkBehaviour;
 
         private readonly Stack<int> undoGroups = new Stack<int>();
+        private readonly Stack<List<GameCommand>> redoGroups = new Stack<List<GameCommand>>();
         private readonly GestureInterpreter gestureInterpreter = new GestureInterpreter();
         private HashSet<byte> hintedCardIds = new HashSet<byte>();
         private Func<int, bool> seatInputFilter;
@@ -23,16 +24,26 @@ namespace Mejnun.Game
         private bool dragActive;
         private bool handScrollActive;
         private bool panActive;
+        private bool inputPaused;
+        private bool meldReorderActive;
+        private bool sweepSelectActive;
 
         public MejnunGame Game => game;
         public int UndoGroupCount => undoGroups.Count;
+        public int RedoGroupCount => redoGroups.Count;
+        public bool HasPlacedHandCard => HasPlacedHandCardOnBoard();
         public IReadOnlyList<byte> SelectedCardIds => gestureInterpreter.SelectedCardIds;
         public bool HintsEnabled => hintsEnabled;
         public IReadOnlyCollection<byte> HintedCardIds => hintedCardIds;
+        public int HandSeat => tableView == null ? -1 : tableView.HandSeat;
 
         /// <summary>True when the local player may act: a game is in progress and the current seat accepts input.</summary>
         public bool InputEnabled => game != null && game.State.Phase == GamePhase.Playing &&
-                                    (seatInputFilter == null || seatInputFilter(game.State.CurrentSeat));
+                                    !inputPaused && (seatInputFilter == null || seatInputFilter(game.State.CurrentSeat));
+
+        public bool HandInputEnabled => game != null && game.State.Phase == GamePhase.Playing && !inputPaused &&
+                                        HandSeat >= 0 && HandSeat < game.State.Hands.Count &&
+                                        (seatInputFilter == null || seatInputFilter(HandSeat));
 
         public event Action<GameState, TurnSession> Synchronized;
         public event Action<int> WentDown;
@@ -87,6 +98,7 @@ namespace Mejnun.Game
             }
 
             undoGroups.Clear();
+            redoGroups.Clear();
             gestureInterpreter.ClearSelection();
             SynchronizeViews();
         }
@@ -97,6 +109,35 @@ namespace Mejnun.Game
             seatInputFilter = filter;
             RefreshHints();
             RefreshSelection();
+        }
+
+        public void SetInputPaused(bool paused)
+        {
+            inputPaused = paused;
+            RefreshSelection();
+        }
+
+        public void ClearSelection()
+        {
+            gestureInterpreter.ClearSelection();
+            RefreshSelection();
+        }
+
+        public bool CancelActiveGesture()
+        {
+            var wasActive = dragActive || handScrollActive || panActive || meldReorderActive;
+            dragActive = false;
+            handScrollActive = false;
+            panActive = false;
+            meldReorderActive = false;
+            if (tableView != null)
+            {
+                tableView.EndHandLift();
+                tableView.EndMeldLift();
+                SynchronizeViews();
+            }
+
+            return wasActive;
         }
 
         public void SetHintsEnabled(bool enabled)
@@ -113,6 +154,12 @@ namespace Mejnun.Game
             {
                 Synchronized?.Invoke(game.State, game.Turn);
             }
+        }
+
+        public void RefreshHintOptions()
+        {
+            RefreshHints();
+            RefreshSelection();
         }
 
         public CommandResult ExecuteGesture(GestureInput input)
@@ -143,7 +190,9 @@ namespace Mejnun.Game
             {
                 if (tableView != null)
                 {
-                    tableView.HandOrder.Reorder(game.State.CurrentSeat, interpretation.ReorderedCardId,
+                    var reorderedCards = interpretation.ReorderedCardIds ??
+                                         new[] { interpretation.ReorderedCardId };
+                    tableView.HandOrder.ReorderGroup(game.State.CurrentSeat, reorderedCards,
                         interpretation.ReorderTargetIndex);
                     SynchronizeViews();
                 }
@@ -171,6 +220,32 @@ namespace Mejnun.Game
                 Haptics.Drop();
             }
             return result;
+        }
+
+        public CommandResult ExecuteHandGesture(GestureInput input)
+        {
+            if (game == null || tableView == null || !HandInputEnabled)
+            {
+                return CommandResult.Failure(RuleError.WrongPhase);
+            }
+
+            var seat = HandSeat;
+            var interpretation = gestureInterpreter.InterpretHandGesture(input, game.State.Hands[seat].Count);
+            if (interpretation.HandOrderChanged)
+            {
+                var reorderedCards = interpretation.ReorderedCardIds ??
+                                     new[] { interpretation.ReorderedCardId };
+                tableView.HandOrder.ReorderGroup(seat, reorderedCards, interpretation.ReorderTargetIndex);
+            }
+
+            SynchronizeViews();
+            if (interpretation.SelectionChanged)
+            {
+                Haptics.Pickup();
+            }
+
+            RefreshSelection();
+            return CommandResult.Success();
         }
 
         public CommandResult ExecuteBatch(CommandBatch batch)
@@ -211,17 +286,20 @@ namespace Mejnun.Game
             if (command.Type == CommandType.Revert)
             {
                 undoGroups.Clear();
+                redoGroups.Clear();
                 gestureInterpreter.ClearSelection();
             }
             else if (command.Type == CommandType.EndTurn || command.Type == CommandType.DrawOrPass ||
                      command.Type == CommandType.TimeoutTurn)
             {
                 undoGroups.Clear();
+                redoGroups.Clear();
                 gestureInterpreter.ClearSelection();
             }
             else if (command.Type == CommandType.MoveCards || command.Type == CommandType.SplitMeld ||
                      command.Type == CommandType.MergeMelds || command.Type == CommandType.GoDown)
             {
+                redoGroups.Clear();
                 undoGroups.Push(1);
             }
 
@@ -237,6 +315,20 @@ namespace Mejnun.Game
             }
 
             var commandCount = undoGroups.Pop();
+            var moves = game.Turn.Moves;
+            var firstIndex = moves.Count - commandCount;
+            if (firstIndex < 0)
+            {
+                undoGroups.Push(commandCount);
+                return CommandResult.Failure(RuleError.NothingToUndo);
+            }
+
+            var redoCommands = new List<GameCommand>(commandCount);
+            for (var index = firstIndex; index < moves.Count; index++)
+            {
+                redoCommands.Add(moves[index].Command);
+            }
+
             var undoneCount = 0;
             for (; undoneCount < commandCount; undoneCount++)
             {
@@ -254,6 +346,41 @@ namespace Mejnun.Game
             }
 
             gestureInterpreter.ClearSelection();
+            redoGroups.Push(redoCommands);
+            SynchronizeViews();
+            return CommandResult.Success();
+        }
+
+        public CommandResult RedoGesture()
+        {
+            if (game == null || redoGroups.Count == 0)
+            {
+                return CommandResult.Failure(RuleError.NothingToUndo);
+            }
+
+            var commands = redoGroups.Pop();
+            var applied = 0;
+            for (; applied < commands.Count; applied++)
+            {
+                var result = game.Apply(commands[applied]);
+                if (result.Ok)
+                {
+                    continue;
+                }
+
+                while (applied > 0)
+                {
+                    game.Apply(GameCommand.Undo(game.State.CurrentSeat));
+                    applied--;
+                }
+
+                redoGroups.Clear();
+                SynchronizeViews();
+                return result;
+            }
+
+            undoGroups.Push(commands.Count);
+            gestureInterpreter.ClearSelection();
             SynchronizeViews();
             return CommandResult.Success();
         }
@@ -266,6 +393,109 @@ namespace Mejnun.Game
             }
 
             return ApplyCommand(GameCommand.Revert(game.State.CurrentSeat));
+        }
+
+        public CommandResult FixBoard()
+        {
+            if (game == null)
+            {
+                return CommandResult.Failure(RuleError.WrongPhase);
+            }
+
+            var commands = BoardFixer.Plan(game);
+            if (commands.Count == 0)
+            {
+                return CommandResult.Success();
+            }
+
+            if (commands.Count == 1 && commands[0].Type == CommandType.Revert)
+            {
+                return ApplyCommand(commands[0]);
+            }
+
+            var batch = new CommandBatch();
+            for (var index = 0; index < commands.Count; index++)
+            {
+                batch.Add(commands[index]);
+            }
+
+            return ExecuteBatch(batch);
+        }
+
+        public bool FixBoardWouldReturnCards()
+        {
+            if (game == null)
+            {
+                return false;
+            }
+
+            var commands = BoardFixer.Plan(game);
+            for (var index = 0; index < commands.Count; index++)
+            {
+                if (commands[index].Type == CommandType.Revert)
+                {
+                    return HasPlacedHandCardOnBoard();
+                }
+
+                if (commands[index].Type == CommandType.MoveCards && commands[index].Target.Kind == TargetKind.Hand)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public CommandResult TimeoutTurn()
+        {
+            if (game == null)
+            {
+                return CommandResult.Failure(RuleError.WrongPhase);
+            }
+
+            if (!MeldValidator.IsBoardValid(game.State.Board) && HasPlacedHandCardOnBoard())
+            {
+                var fixResult = FixBoard();
+                if (!fixResult.Ok)
+                {
+                    return fixResult;
+                }
+
+                if (game.State.Phase != GamePhase.Playing)
+                {
+                    return CommandResult.Success();
+                }
+            }
+
+            return ApplyCommand(GameCommand.TimeoutTurn(game.State.CurrentSeat));
+        }
+
+        private bool HasPlacedHandCardOnBoard()
+        {
+            if (game == null || game.Turn == null)
+            {
+                return false;
+            }
+
+            var startHand = new HashSet<byte>();
+            for (var index = 0; index < game.Turn.StartSnapshot.Hand.Count; index++)
+            {
+                startHand.Add(game.Turn.StartSnapshot.Hand[index].Id);
+            }
+
+            for (var meldIndex = 0; meldIndex < game.State.Board.Count; meldIndex++)
+            {
+                var cards = game.State.Board[meldIndex].Cards;
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    if (startHand.Contains(cards[cardIndex].Id))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private CommandResult ApplyBatch(CommandBatch batch)
@@ -285,6 +515,7 @@ namespace Mejnun.Game
 
             if (appliedCount > 0)
             {
+                redoGroups.Clear();
                 undoGroups.Push(appliedCount);
             }
 
@@ -324,6 +555,10 @@ namespace Mejnun.Game
         private void RefreshHints()
         {
             hintedCardIds = hintsEnabled && InputEnabled ? PlayableHints.Find(game.State) : new HashSet<byte>();
+            if (hintsEnabled && InputEnabled && GameSettings.HintBoardMoves)
+            {
+                hintedCardIds.UnionWith(PlayableHints.FindBoardMoves(game.State));
+            }
         }
 
         private void RefreshSelection()
@@ -340,6 +575,31 @@ namespace Mejnun.Game
             }
         }
 
+        private void HighlightLongPress(GestureHit hit)
+        {
+            var cardIds = gestureInterpreter.GetLongPressCardIds(hit, game.State);
+            for (var index = 0; index < cardIds.Length; index++)
+            {
+                var cardView = tableView.GetCardView(cardIds[index]);
+                if (cardView != null)
+                {
+                    cardView.SetSelected(true);
+                }
+            }
+        }
+
+        private void UpdateSweepSelection(Vector2 position)
+        {
+            var hit = tableView.HitTest(position);
+            if (hit.Kind != GestureHitKind.HandCard || HandSeat < 0)
+            {
+                return;
+            }
+
+            gestureInterpreter.SelectHandRange(tableView.HandOrder.GetCardIds(HandSeat), dragSource.Index, hit.Index);
+            RefreshSelection();
+        }
+
         private void HandlePointerGesture(PointerGesture pointerGesture)
         {
             if (game == null || tableView == null)
@@ -349,11 +609,27 @@ namespace Mejnun.Game
 
             if (pointerGesture.Kind == PointerGestureKind.DragStarted)
             {
-                dragSource = tableView.HitTest(pointerGesture.StartPosition);
-                handScrollActive = dragSource.Kind == GestureHitKind.HandArea;
-                dragActive = dragSource.Kind == GestureHitKind.HandCard ||
-                             dragSource.Kind == GestureHitKind.BoardCard;
-                panActive = !dragActive && !handScrollActive;
+                dragSource = tableView.HitTest(pointerGesture.StartPosition, true);
+                sweepSelectActive = dragSource.Kind == GestureHitKind.HandCard && pointerGesture.IsLongPress &&
+                                    (InputEnabled || HandInputEnabled);
+                var boardDragWhileDisabled = !InputEnabled &&
+                                             (dragSource.Kind == GestureHitKind.BoardCard ||
+                                              dragSource.Kind == GestureHitKind.MeldGrip);
+                handScrollActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.HandArea;
+                meldReorderActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.MeldGrip;
+                dragActive = !sweepSelectActive && !boardDragWhileDisabled &&
+                             (dragSource.Kind == GestureHitKind.HandCard || dragSource.Kind == GestureHitKind.BoardCard);
+                panActive = !sweepSelectActive && (boardDragWhileDisabled ||
+                            (!dragActive && !handScrollActive && !meldReorderActive));
+                if (sweepSelectActive)
+                {
+                    UpdateSweepSelection(pointerGesture.StartPosition);
+                }
+                else if (dragSource.Kind == GestureHitKind.HandCard && (InputEnabled || HandInputEnabled))
+                {
+                    tableView.BeginHandLift(dragSource.CardId, gestureInterpreter.SelectedCardIds,
+                        pointerGesture.StartPosition);
+                }
                 if (panActive)
                 {
                     return;
@@ -377,8 +653,19 @@ namespace Mejnun.Game
 
             if (!InputEnabled)
             {
+                if (HandInputEnabled)
+                {
+                    HandleHandPointerGesture(pointerGesture);
+                    return;
+                }
+
                 dragActive = false;
                 handScrollActive = false;
+                meldReorderActive = false;
+                sweepSelectActive = false;
+                tableView.EndHandLift();
+                tableView.EndMeldLift();
+                SynchronizeViews();
                 return;
             }
 
@@ -400,8 +687,14 @@ namespace Mejnun.Game
                 }
                 case PointerGestureKind.LongPress:
                     Haptics.LongPress();
+                    HighlightLongPress(tableView.HitTest(pointerGesture.Position));
                     break;
                 case PointerGestureKind.DragStarted:
+                    if (meldReorderActive)
+                    {
+                        tableView.BeginMeldLift(dragSource.MeldId, pointerGesture.StartPosition);
+                    }
+
                     if (dragActive)
                     {
                         Haptics.Pickup();
@@ -409,9 +702,21 @@ namespace Mejnun.Game
 
                     break;
                 case PointerGestureKind.DragUpdated:
-                    if (handScrollActive)
+                    if (sweepSelectActive)
+                    {
+                        UpdateSweepSelection(pointerGesture.Position);
+                    }
+                    else if (handScrollActive)
                     {
                         tableView.ScrollHandByScreenDelta(pointerGesture.Delta.x);
+                    }
+                    else if (dragSource.Kind == GestureHitKind.HandCard)
+                    {
+                        tableView.UpdateHandLift(pointerGesture.Position);
+                    }
+                    else if (meldReorderActive)
+                    {
+                        tableView.UpdateMeldLift(pointerGesture.Position);
                     }
                     else
                     {
@@ -419,9 +724,26 @@ namespace Mejnun.Game
                     }
                     break;
                 case PointerGestureKind.DragEnded:
+                    if (sweepSelectActive)
+                    {
+                        sweepSelectActive = false;
+                        dragActive = false;
+                        tableView.EndHandLift();
+                        RefreshSelection();
+                        break;
+                    }
+
                     if (handScrollActive)
                     {
                         handScrollActive = false;
+                        break;
+                    }
+
+                    if (meldReorderActive)
+                    {
+                        tableView.EndMeldLift();
+                        tableView.ReorderMeldByScreenPosition(dragSource.MeldId, pointerGesture.Position);
+                        meldReorderActive = false;
                         break;
                     }
 
@@ -429,10 +751,20 @@ namespace Mejnun.Game
                     {
                         var target = tableView.HitTest(pointerGesture.Position);
                         var type = pointerGesture.IsLongPress ? GestureType.LongPressDrag : GestureType.Drag;
-                        ExecuteGesture(new GestureInput(type, dragSource, target));
+                        if (dragSource.Kind == GestureHitKind.HandCard)
+                        {
+                            tableView.EndHandLift();
+                        }
+
+                        var result = ExecuteGesture(new GestureInput(type, dragSource, target));
+                        if (pointerGesture.IsLongPress && result.Ok)
+                        {
+                            RefreshSelection();
+                        }
                     }
 
                     dragActive = false;
+                    tableView.EndHandLift();
                     if (tableView != null && tableView.CurrentBoardLayout != null)
                     {
                         var board = GetComponentInChildren<BoardView>();
@@ -444,14 +776,121 @@ namespace Mejnun.Game
 
                     break;
                 case PointerGestureKind.Cancelled:
+                    if (sweepSelectActive)
+                    {
+                        sweepSelectActive = false;
+                        dragActive = false;
+                        tableView.EndHandLift();
+                        RefreshSelection();
+                        break;
+                    }
+
                     dragActive = false;
                     handScrollActive = false;
+                    meldReorderActive = false;
+                    tableView.EndHandLift();
+                    tableView.EndMeldLift();
+                    SynchronizeViews();
                     var boardView = GetComponentInChildren<BoardView>();
                     if (boardView != null)
                     {
                         boardView.ClearDropPreview();
                     }
 
+                    break;
+            }
+        }
+
+        private void HandleHandPointerGesture(PointerGesture pointerGesture)
+        {
+            switch (pointerGesture.Kind)
+            {
+                case PointerGestureKind.Tap:
+                {
+                    var hit = tableView.HitTest(pointerGesture.Position);
+                    if (hit.Kind == GestureHitKind.HandCard)
+                    {
+                        ExecuteHandGesture(new GestureInput(GestureType.Tap, hit, GestureHit.None));
+                    }
+
+                    break;
+                }
+                case PointerGestureKind.LongPress:
+                    HighlightLongPress(tableView.HitTest(pointerGesture.Position));
+                    break;
+                case PointerGestureKind.DragStarted:
+                    if (dragActive)
+                    {
+                        Haptics.Pickup();
+                    }
+
+                    break;
+                case PointerGestureKind.DragUpdated:
+                    if (sweepSelectActive)
+                    {
+                        UpdateSweepSelection(pointerGesture.Position);
+                    }
+                    else if (handScrollActive)
+                    {
+                        tableView.ScrollHandByScreenDelta(pointerGesture.Delta.x);
+                    }
+                    else if (dragActive && dragSource.Kind == GestureHitKind.HandCard)
+                    {
+                        tableView.UpdateHandLift(pointerGesture.Position);
+                    }
+
+                    break;
+                case PointerGestureKind.DragEnded:
+                    if (sweepSelectActive)
+                    {
+                        sweepSelectActive = false;
+                        dragActive = false;
+                        tableView.EndHandLift();
+                        RefreshSelection();
+                        break;
+                    }
+
+                    if (handScrollActive)
+                    {
+                        handScrollActive = false;
+                        break;
+                    }
+
+                    if (dragActive && dragSource.Kind == GestureHitKind.HandCard)
+                    {
+                        var target = tableView.HitTest(pointerGesture.Position);
+                        var type = pointerGesture.IsLongPress ? GestureType.LongPressDrag : GestureType.Drag;
+                        tableView.EndHandLift();
+                        ExecuteHandGesture(new GestureInput(type, dragSource, target));
+                    }
+
+                    dragActive = false;
+                    tableView.EndHandLift();
+                    SynchronizeViews();
+                    break;
+                case PointerGestureKind.Cancelled:
+                    if (sweepSelectActive)
+                    {
+                        sweepSelectActive = false;
+                        dragActive = false;
+                        tableView.EndHandLift();
+                        RefreshSelection();
+                        break;
+                    }
+
+                    dragActive = false;
+                    handScrollActive = false;
+                    tableView.EndHandLift();
+                    tableView.EndMeldLift();
+                    SynchronizeViews();
+                    break;
+                default:
+                    dragActive = false;
+                    handScrollActive = false;
+                    meldReorderActive = false;
+                    tableView.EndHandLift();
+                    tableView.EndMeldLift();
+                    SynchronizeViews();
                     break;
             }
         }

@@ -10,6 +10,7 @@ namespace Mejnun.Game
         [SerializeField] private float maxOrthographicSize = 20f;
         [SerializeField] private float zoomSensitivity = 1f;
         [SerializeField] private float fitPadding = 1.12f;
+        [SerializeField, Range(0f, 0.45f)] private float bottomInsetFraction = 0.24f;
         [SerializeField] private PointerRouter pointerRouter;
 
         private Camera tableCamera;
@@ -19,6 +20,7 @@ namespace Mejnun.Game
         private bool hasBoardBounds;
 
         public Camera Camera => tableCamera;
+        public float BottomInsetFraction => bottomInsetFraction;
         public bool ManuallyAdjusted => manuallyAdjusted;
         public float ZoomFactor => baseOrthographicSize <= 0f
             ? 1f
@@ -83,7 +85,8 @@ namespace Mejnun.Game
             }
 
             var aspect = Mathf.Max(tableCamera.aspect, 0.01f);
-            var verticalSize = Mathf.Max(bounds.size.y * 0.5f, 0.5f);
+            var availableHeight = Mathf.Max(1f - bottomInsetFraction, 0.1f);
+            var verticalSize = Mathf.Max(bounds.size.y * 0.5f / availableHeight, 0.5f);
             var horizontalSize = Mathf.Max(bounds.size.x * 0.5f / aspect, 0.5f);
             var fitSize = Mathf.Clamp(Mathf.Max(verticalSize, horizontalSize) * padding,
                 minOrthographicSize, maxOrthographicSize);
@@ -91,7 +94,7 @@ namespace Mejnun.Game
             tableCamera.orthographicSize = fitSize;
             var position = tableCamera.transform.position;
             position.x = bounds.center.x;
-            position.y = bounds.center.y;
+            position.y = bounds.center.y - fitSize * bottomInsetFraction;
             tableCamera.transform.position = position;
             baseOrthographicSize = fitSize;
             if (resetManualAdjustment)
@@ -149,7 +152,8 @@ namespace Mejnun.Game
             var scroll = mouse.scroll.ReadValue().y;
             if (Mathf.Abs(scroll) > 0.01f && !UiPointerBlocker.IsOverUi(pointer))
             {
-                var factor = Mathf.Pow(1.1f, scroll / 120f * zoomSensitivity);
+                var sensitivity = zoomSensitivity * Mathf.Clamp(GameSettings.ZoomSensitivity, 0.25f, 5f);
+                var factor = Mathf.Pow(1.1f, scroll / 120f * sensitivity);
                 ZoomAtScreenPoint(factor, pointer, true);
             }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{5C85E2AB-FB2D-47BC-BBBC-E64E42F501EE}" SchemaVersion="133">
+	<Switches>
+		<WorkUnit Name="Mejnun" ID="{5C85E2AB-FB2D-47BC-BBBC-E64E42F501EE}" PersistMode="Standalone">
+			<ChildrenList>
+				<SwitchGroup Name="Shout_Type" ID="{38B5076E-ED88-40BB-BB98-904CDF9548C6}">
+					<ChildrenList>
+						<Switch Name="Default" ID="{08521076-043B-4210-A1EA-3FC68C1F389F}"/>
+					</ChildrenList>
+				</SwitchGroup>
+			</ChildrenList>
+		</WorkUnit>
+	</Switches>
+</WwiseDocument>

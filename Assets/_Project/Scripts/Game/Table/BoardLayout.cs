@@ -50,13 +50,28 @@ namespace Mejnun.Game
                 totalWidth += meldGap * (nonEmptyMeldCount - 1);
             }
 
-            var estimatedRows = totalCardCount == 0
-                ? 1
-                : Mathf.Max(1, Mathf.CeilToInt(Mathf.Sqrt(totalCardCount / viewportAspect)));
-            var rowWidth = Mathf.Max(cardSize.x, longestMeldWidth);
-            if (totalWidth > 0f)
+            var minimumRowWidth = Mathf.Max(cardSize.x, longestMeldWidth);
+            var rowWidth = minimumRowWidth;
+            var slotWidth = nonEmptyMeldCount == 0 ? 0f : meldGap;
+            var contentWidth = totalWidth + slotWidth + cardSize.x;
+            var bestFitScale = -1f;
+            var bestRowCount = int.MaxValue;
+            var candidateCount = Mathf.Max(1, nonEmptyMeldCount + 1);
+            for (var candidateRows = 1; candidateRows <= candidateCount; candidateRows++)
             {
-                rowWidth = Mathf.Max(rowWidth, totalWidth / estimatedRows);
+                var candidateWidth = Mathf.Max(minimumRowWidth, contentWidth / candidateRows) + 0.0001f;
+                GetLayoutMetrics(melds, candidateWidth, cardSize, cardGap, meldGap, out var candidateRowCount,
+                    out var candidateActualWidth);
+                var candidateHeight = candidateRowCount * cardSize.y + (candidateRowCount - 1) * rowGap;
+                var fitScale = Mathf.Min(viewportAspect / Mathf.Max(candidateActualWidth, 0.001f),
+                    1f / Mathf.Max(candidateHeight, 0.001f));
+                if (fitScale > bestFitScale + 0.00001f ||
+                    (Mathf.Abs(fitScale - bestFitScale) <= 0.00001f && candidateRowCount < bestRowCount))
+                {
+                    bestFitScale = fitScale;
+                    bestRowCount = candidateRowCount;
+                    rowWidth = candidateWidth;
+                }
             }
 
             var layouts = new List<BoardMeldLayout>(nonEmptyMeldCount);
@@ -160,6 +175,56 @@ namespace Mejnun.Game
             return count;
         }
 
+        private static void GetLayoutMetrics(IReadOnlyList<Meld> melds, float rowWidth, Vector2 cardSize,
+            float cardGap, float meldGap, out int rowCount, out float actualWidth)
+        {
+            var row = 0;
+            var cursorX = 0f;
+            actualWidth = 0f;
+            for (var meldIndex = 0; meldIndex < melds.Count; meldIndex++)
+            {
+                var cardCount = melds[meldIndex].Cards.Count;
+                if (cardCount == 0)
+                {
+                    continue;
+                }
+
+                var meldWidth = GetMeldWidth(cardCount, cardSize.x, cardGap);
+                if (cursorX > 0f && cursorX + meldGap + meldWidth > rowWidth)
+                {
+                    actualWidth = Mathf.Max(actualWidth, cursorX);
+                    row++;
+                    cursorX = 0f;
+                }
+
+                if (cursorX > 0f)
+                {
+                    cursorX += meldGap;
+                }
+
+                cursorX += meldWidth;
+            }
+
+            if (cursorX > 0f && cursorX + meldGap + cardSize.x > rowWidth)
+            {
+                actualWidth = Mathf.Max(actualWidth, cursorX);
+                row++;
+                cursorX = cardSize.x;
+            }
+            else
+            {
+                if (cursorX > 0f)
+                {
+                    cursorX += meldGap;
+                }
+
+                cursorX += cardSize.x;
+            }
+
+            actualWidth = Mathf.Max(actualWidth, cursorX);
+            rowCount = row + 1;
+        }
+
         private static float GetMeldWidth(int cardCount, float cardWidth, float cardGap)
         {
             return cardCount * cardWidth + (cardCount - 1) * cardGap;
@@ -218,6 +283,42 @@ namespace Mejnun.Game
         public float RowWidth { get; }
         public int RowCount { get; }
         public Vector2 CardSize => cardSize;
+
+        public bool TryHitMeldFrame(Vector2 point, out int meldId)
+        {
+            for (var meldIndex = 0; meldIndex < melds.Length; meldIndex++)
+            {
+                var meld = melds[meldIndex];
+                var hitBounds = meld.Bounds;
+                hitBounds.xMin -= cardSize.x * 0.18f;
+                hitBounds.xMax += cardSize.x * 0.18f;
+                hitBounds.yMin -= cardSize.y * 0.13f;
+                hitBounds.yMax += cardSize.y * 0.13f;
+                if (!hitBounds.Contains(point))
+                {
+                    continue;
+                }
+
+                var overCard = false;
+                for (var cardIndex = 0; cardIndex < meld.CardRectCount; cardIndex++)
+                {
+                    if (meld.GetCardRect(cardIndex).Contains(point))
+                    {
+                        overCard = true;
+                        break;
+                    }
+                }
+
+                if (!overCard)
+                {
+                    meldId = meld.MeldId;
+                    return true;
+                }
+            }
+
+            meldId = -1;
+            return false;
+        }
 
         public bool TryHit(Vector2 point, out BoardLayoutHit hit)
         {

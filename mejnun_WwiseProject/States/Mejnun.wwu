@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{23611610-9E83-43E1-9BF4-9958054BC001}" SchemaVersion="133">
+	<States>
+		<WorkUnit Name="Mejnun" ID="{23611610-9E83-43E1-9BF4-9958054BC001}" PersistMode="Standalone">
+			<ChildrenList>
+				<StateGroup Name="Game_Phase" ID="{C9EFAE16-98BB-414A-B19B-2291003306FA}">
+					<ChildrenList>
+						<State Name="None" ID="{25B92E4E-C33A-4603-A60D-120323CBF707}"/>
+						<State Name="Menu" ID="{6E56771D-9339-4CA5-A293-0E817FB571BD}"/>
+						<State Name="Dealing" ID="{09DAE302-5172-4DDE-A5D2-F91E669896B5}"/>
+						<State Name="Playing" ID="{914C2C32-A0FE-42A3-BF47-C54DC593A3AC}"/>
+						<State Name="Results" ID="{8A5272D2-742D-46A4-9BFE-6C7D0E1DD97D}"/>
+					</ChildrenList>
+				</StateGroup>
+			</ChildrenList>
+		</WorkUnit>
+	</States>
+</WwiseDocument>

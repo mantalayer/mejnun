@@ -127,6 +127,8 @@ namespace Mejnun.Core.Tests
             GameBuilder.SetHand(game, 0, "5C");
             GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
             GameBuilder.SetDrawPile(game, "AH");
+            var reverted = 0;
+            game.Events.BoardReverted += seat => reverted++;
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("3H"), CardTarget.NewMeld(0))).Ok, Is.True);
 
             var result = game.Apply(GameCommand.DrawOrPass(0));
@@ -139,6 +141,21 @@ namespace Mejnun.Core.Tests
             Assert.That(game.State.Hands[0], Does.Contain(GameBuilder.ParseCard("AH")));
             Assert.That(game.State.DrawPile, Is.Empty);
             Assert.That(game.State.CurrentSeat, Is.EqualTo(1));
+            Assert.That(reverted, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Turn_DrawOnUntouchedTurnDoesNotRevertBoard()
+        {
+            var game = NewGame();
+            GameBuilder.SetDrawPile(game, "AH");
+            var reverted = 0;
+            game.Events.BoardReverted += seat => reverted++;
+
+            var result = game.Apply(GameCommand.DrawOrPass(0));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(reverted, Is.Zero);
         }
 
         [Test]

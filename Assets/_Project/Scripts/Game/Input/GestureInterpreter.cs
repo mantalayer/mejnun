@@ -16,6 +16,7 @@ namespace Mejnun.Game
         None,
         HandCard,
         BoardCard,
+        MeldGrip,
         MeldGap,
         HandArea,
         EmptyBoard
@@ -48,6 +49,11 @@ namespace Mejnun.Game
         public static GestureHit BoardCard(byte cardId, int meldId, int cardIndex, int targetIndex)
         {
             return new GestureHit(GestureHitKind.BoardCard, cardId, meldId, cardIndex, targetIndex);
+        }
+
+        public static GestureHit MeldGrip(int meldId, int boardIndex)
+        {
+            return new GestureHit(GestureHitKind.MeldGrip, 0, meldId, boardIndex, boardIndex);
         }
 
         public static GestureHit MeldGap(int meldId, int insertIndex)
@@ -94,6 +100,7 @@ namespace Mejnun.Game
         public bool HandOrderChanged { get; internal set; }
         public bool Denied { get; internal set; }
         public byte ReorderedCardId { get; internal set; }
+        public IReadOnlyList<byte> ReorderedCardIds { get; internal set; }
         public int ReorderTargetIndex { get; internal set; }
     }
 
@@ -128,9 +135,88 @@ namespace Mejnun.Game
             return result;
         }
 
+        public GestureResult InterpretHandGesture(GestureInput input, int handCount)
+        {
+            var result = new GestureResult(new CommandBatch());
+            if (input.Type == GestureType.Tap && input.Source.Kind == GestureHitKind.HandCard)
+            {
+                ToggleSelection(input.Source.CardId);
+                result.SelectionChanged = true;
+                return result;
+            }
+
+            if ((input.Type != GestureType.Drag && input.Type != GestureType.LongPressDrag) ||
+                input.Source.Kind != GestureHitKind.HandCard ||
+                (input.Target.Kind != GestureHitKind.HandCard && input.Target.Kind != GestureHitKind.HandArea))
+            {
+                return result;
+            }
+
+            result.HandOrderChanged = true;
+            result.ReorderedCardId = input.Source.CardId;
+            result.ReorderedCardIds = CopySelectedCardIds(input.Source.CardId);
+            result.ReorderTargetIndex = input.Target.Kind == GestureHitKind.HandArea
+                ? handCount - 1
+                : input.Target.Index;
+            return result;
+        }
+
         public bool IsSelected(byte cardId)
         {
             return selectedCardIds.Contains(cardId);
+        }
+
+        public bool SelectHandRange(IReadOnlyList<byte> orderedHandIds, int anchorIndex, int currentIndex)
+        {
+            if (orderedHandIds == null || anchorIndex < 0 || anchorIndex >= orderedHandIds.Count ||
+                currentIndex < 0 || currentIndex >= orderedHandIds.Count)
+            {
+                return false;
+            }
+
+            var firstIndex = anchorIndex < currentIndex ? anchorIndex : currentIndex;
+            var lastIndex = anchorIndex > currentIndex ? anchorIndex : currentIndex;
+            var rangeCount = lastIndex - firstIndex + 1;
+            var changed = selectedCardIds.Count != rangeCount;
+            for (var index = 0; !changed && index < rangeCount; index++)
+            {
+                changed = selectedCardIds[index] != orderedHandIds[firstIndex + index];
+            }
+
+            if (!changed)
+            {
+                return false;
+            }
+
+            selectedCardIds.Clear();
+            for (var index = firstIndex; index <= lastIndex; index++)
+            {
+                selectedCardIds.Add(orderedHandIds[index]);
+            }
+
+            return true;
+        }
+
+        public byte[] GetLongPressCardIds(GestureHit source, GameState state)
+        {
+            if (source.Kind == GestureHitKind.HandCard)
+            {
+                return CopySelectedCardIds(source.CardId);
+            }
+
+            if (source.Kind != GestureHitKind.BoardCard || state == null)
+            {
+                return new byte[0];
+            }
+
+            var meld = FindMeld(state.Board, source.MeldId);
+            if (meld == null || source.Index < 0 || source.Index >= meld.Cards.Count)
+            {
+                return new byte[0];
+            }
+
+            var classification = MeldValidator.Classify(meld.Cards);
+            return GetLongPressCardIds(meld, source.Index, classification.Kind);
         }
 
         public void Complete(GestureResult result, bool succeeded)
@@ -203,6 +289,7 @@ namespace Mejnun.Game
             {
                 result.HandOrderChanged = true;
                 result.ReorderedCardId = input.Source.CardId;
+                result.ReorderedCardIds = CopySelectedCardIds(input.Source.CardId);
                 result.ReorderTargetIndex = input.Target.Kind == GestureHitKind.HandArea
                     ? state.Hands[state.CurrentSeat].Count - 1
                     : input.Target.Index;

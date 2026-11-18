@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{16890DCF-2D2B-4CFB-9739-4E756BD74A16}" SchemaVersion="133">
+	<GameParameters>
+		<WorkUnit Name="Mejnun" ID="{16890DCF-2D2B-4CFB-9739-4E756BD74A16}" PersistMode="Standalone">
+			<ChildrenList>
+				<GameParameter Name="Volume_Master" ID="{7A9BF6BE-C089-484E-8265-90049B4D1C95}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="100"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Volume_Music" ID="{E57C3351-C847-4D72-AA64-EBA37B4279F8}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="100"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Volume_SFX" ID="{4D026E6B-1A54-45B8-8684-7CB926D39343}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="100"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Volume_Voice" ID="{82FFFAF5-8BB3-480F-B411-80F77AB76E00}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="100"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Timer_Tension" ID="{4BEE4CD8-CA79-42C7-AFC3-C116E552370F}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="Max" Type="Real64" Value="1"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Board_Complexity" ID="{76FA059A-57C0-4743-831D-7F6FB0E5A93A}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="Max" Type="Real64" Value="1"/>
+					</PropertyList>
+				</GameParameter>
+			</ChildrenList>
+		</WorkUnit>
+	</GameParameters>
+</WwiseDocument>

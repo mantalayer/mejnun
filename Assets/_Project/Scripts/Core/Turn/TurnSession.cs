@@ -341,6 +341,17 @@ namespace Mejnun.Core
             return CommandResult.Success();
         }
 
+        internal void RevertForTurnEnd()
+        {
+            var hadMoves = moves.Count > 0;
+            StartSnapshot.Restore(state);
+            moves.Clear();
+            if (hadMoves)
+            {
+                events.RaiseBoardReverted(Seat);
+            }
+        }
+
         internal bool CanGoDown()
         {
             if (state.PlayerPhases[Seat] != PlayerPhase.NotDown)

@@ -68,6 +68,32 @@
     margin-left: 6px;
 }
 
+.seat-style {
+    width: 120px;
+    margin-left: 4px;
+}
+
+.mejnun-banner {
+    color: rgb(239, 195, 92);
+    font-size: 38px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+}
+
+.result-counts {
+    white-space: pre-wrap;
+    margin-top: 8px;
+}
+
+.rematch-confirm {
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(20, 33, 25);
+    border-radius: 8px;
+}
+
+
 .flow-error {
     color: rgb(255, 146, 120);
     font-size: 14px;

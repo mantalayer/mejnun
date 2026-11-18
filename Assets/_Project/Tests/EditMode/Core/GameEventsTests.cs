@@ -59,7 +59,7 @@ namespace Mejnun.Core.Tests
             Assert.That(invalidMelds, Is.GreaterThanOrEqualTo(2));
             Assert.That(wentDown, Is.EqualTo(1));
             Assert.That(undone, Is.EqualTo(1));
-            Assert.That(reverted, Is.EqualTo(3));
+            Assert.That(reverted, Is.EqualTo(1));
             Assert.That(drew, Is.EqualTo(1));
             Assert.That(passed, Is.EqualTo(1));
             Assert.That(turnEnded, Is.EqualTo(2));

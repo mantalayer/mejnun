@@ -291,7 +291,11 @@ namespace Mejnun.Game
             {
                 Emit(PointerGestureKind.DragEnded, position, position - lastPosition, longPressStarted, 1f);
             }
-            else if (!longPressStarted)
+            else if (longPressStarted)
+            {
+                Emit(PointerGestureKind.Cancelled, position, Vector2.zero, true, 1f);
+            }
+            else
             {
                 QueueTap(position);
             }

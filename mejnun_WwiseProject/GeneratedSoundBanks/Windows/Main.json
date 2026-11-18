@@ -1,0 +1,867 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "3161908922",
+    "Type": "User",
+    "GUID": "{E035F84E-ECC6-4CC8-B3F1-029FDDA3242F}",
+    "Language": "SFX",
+    "Hash": "{D5016FF2-BAFF-AF9C-A09D-FA9DA85DD0FB}",
+    "ObjectPath": "\\SoundBanks\\Mejnun\\Main",
+    "ShortName": "Main",
+    "Path": "Main.bnk",
+    "Media": [
+     {
+      "Id": "10540137",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 2.wav",
+      "CachePath": "59/{59CB4ADD-3A8B-A68A-6290-46FF16DE28EB}.wem"
+     },
+     {
+      "Id": "23233998",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 6.wav",
+      "CachePath": "51/{51C661EC-B64F-5E02-D7E0-2696A6952806}.wem"
+     },
+     {
+      "Id": "37294351",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 7.wav",
+      "CachePath": "88/{88A326AD-67C7-7DA7-18AE-7622F983C442}.wem"
+     },
+     {
+      "Id": "88696734",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Slide Slow 3.wav",
+      "CachePath": "5B/{5B0660DB-E632-4193-14B0-5936045FC12C}.wem"
+     },
+     {
+      "Id": "92620801",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Move Fast - With Whoosh 1.wav",
+      "CachePath": "AD/{AD6909C5-0B67-4A4B-5D2F-3016E18E69F6}.wem"
+     },
+     {
+      "Id": "103497374",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Coins Reward 3.wav",
+      "CachePath": "24/{248660D5-4947-E3FD-C42D-BAB99A45906B}.wem"
+     },
+     {
+      "Id": "156130487",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Move Fast - With Whoosh 2.wav",
+      "CachePath": "06/{06D2EB67-BFFA-2059-C887-9DB38DAD4746}.wem"
+     },
+     {
+      "Id": "172930794",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Slide Slow 1.wav",
+      "CachePath": "96/{961EBC74-4276-FEEA-6FDF-99AEA74BE47E}.wem"
+     },
+     {
+      "Id": "234069379",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Flip Natural 3.wav",
+      "CachePath": "A6/{A6B02310-F2E4-1733-B728-62136B5D06EB}.wem"
+     },
+     {
+      "Id": "294213001",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Discard 2.wav",
+      "CachePath": "F2/{F25C3A69-0926-7723-D40D-C8689D61513B}.wem"
+     },
+     {
+      "Id": "296756676",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Change Of Turns Stinger 6.wav",
+      "CachePath": "B0/{B03834C8-18CA-158B-9711-87D399CF777A}.wem"
+     },
+     {
+      "Id": "355085813",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "UI Wood Sound 2.wav",
+      "CachePath": "A0/{A0085417-ED3A-B136-A569-FE8AC75C2089}.wem"
+     },
+     {
+      "Id": "361181537",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Placement 4.wav",
+      "CachePath": "29/{29F2452F-C307-75EE-036B-64315686D75F}.wem"
+     },
+     {
+      "Id": "412578313",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Move Fast - With Whoosh 3.wav",
+      "CachePath": "42/{42CDFF86-0F36-022C-3879-0242BD39E4F9}.wem"
+     },
+     {
+      "Id": "413159305",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Slide Slow 2.wav",
+      "CachePath": "44/{44D6AF69-0346-9E40-362D-291D64D45386}.wem"
+     },
+     {
+      "Id": "427268354",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Placement 1.wav",
+      "CachePath": "22/{22298FB1-F35E-641E-7571-3B89F3A2B5E1}.wem"
+     },
+     {
+      "Id": "430629700",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Cards Shuffle Short Sequence 2.wav",
+      "CachePath": "57/{57C325EA-DD12-A2A3-CC39-F8C4021D99A7}.wem"
+     },
+     {
+      "Id": "442495150",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 3.wav",
+      "CachePath": "D3/{D3CD5A0A-998F-9321-06AB-6E8126E39B3D}.wem"
+     },
+     {
+      "Id": "448146646",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 7.wav",
+      "CachePath": "57/{57A4AF09-5C88-9AA1-9BA3-22314C8F1045}.wem"
+     },
+     {
+      "Id": "497904013",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "UI Back Action 1.wav",
+      "CachePath": "A4/{A4841263-486E-9E31-EC3A-0A20DAF48186}.wem"
+     },
+     {
+      "Id": "534013469",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Lift.wav",
+      "CachePath": "6E/{6E33A15C-B003-EA0C-3E0D-50E5E409CED9}.wem"
+     },
+     {
+      "Id": "578029637",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "UI Wood Sound 4.wav",
+      "CachePath": "45/{4564BE7A-6588-F641-6F7F-38B2D7517193}.wem"
+     },
+     {
+      "Id": "581828867",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 2.wav",
+      "CachePath": "F4/{F4B41F17-2C49-8201-0E1E-9E6F239444C0}.wem"
+     },
+     {
+      "Id": "588660385",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Placement 2.wav",
+      "CachePath": "37/{3743C38C-090B-D09C-04B3-347B5653C33C}.wem"
+     },
+     {
+      "Id": "591768834",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 5.wav",
+      "CachePath": "90/{90C6EDB0-94C6-9FF6-9AB1-1144D81A1DFB}.wem"
+     },
+     {
+      "Id": "594895720",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Flip Natural 5.wav",
+      "CachePath": "48/{48AB2C47-6E64-67CE-CF68-496E0B25C82D}.wem"
+     },
+     {
+      "Id": "666531232",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Slide Slow 4.wav",
+      "CachePath": "CA/{CAAABB57-E68E-4540-8C40-476EDC9F12F1}.wem"
+     },
+     {
+      "Id": "684871593",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Flip Natural 2.wav",
+      "CachePath": "40/{403A0260-EAA5-7543-3B6C-DA77E5B8A1B2}.wem"
+     },
+     {
+      "Id": "687731691",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 5.wav",
+      "CachePath": "09/{090782AC-B0A3-2846-06FA-ED1CAE798885}.wem"
+     },
+     {
+      "Id": "688466017",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "UI Wood Sound 5.wav",
+      "CachePath": "FC/{FCBF71D1-67A7-16F4-121B-1D1081387524}.wem"
+     },
+     {
+      "Id": "690129464",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Change Of Turns Stinger 3.wav",
+      "CachePath": "9F/{9F885BF5-591B-B426-6A40-170141F0AB0D}.wem"
+     },
+     {
+      "Id": "700172627",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 4.wav",
+      "CachePath": "2D/{2DBCF5C9-8EA6-5F00-0C86-1956CC3241EA}.wem"
+     },
+     {
+      "Id": "702930951",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 8.wav",
+      "CachePath": "AC/{ACB6087C-CC9B-33ED-A9AB-19D47729F39B}.wem"
+     },
+     {
+      "Id": "727902420",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Coin Fall 1.wav",
+      "CachePath": "5D/{5DC12118-7B3B-F374-393B-E321F24E8EB1}.wem"
+     },
+     {
+      "Id": "752208865",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 4.wav",
+      "CachePath": "92/{92722368-3466-FE58-739B-9BF74189EEEA}.wem"
+     },
+     {
+      "Id": "790269741",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Flip Natural 1.wav",
+      "CachePath": "0B/{0B6F8B3F-61E5-799E-F482-ACFA1A6B7350}.wem"
+     },
+     {
+      "Id": "797890009",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Cards Shuffle Short Sequence 1.wav",
+      "CachePath": "BE/{BE318EF3-81E1-0FB4-5C19-17025107038A}.wem"
+     },
+     {
+      "Id": "813608714",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Flip Natural 4.wav",
+      "CachePath": "07/{07C9BE96-FC02-D251-56AC-1335B7DBED4A}.wem"
+     },
+     {
+      "Id": "826325183",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "UI Wood Sound 3.wav",
+      "CachePath": "98/{98E679A2-2A22-B2BD-1BB5-79D7AC99F77D}.wem"
+     },
+     {
+      "Id": "875333067",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Placement 3.wav",
+      "CachePath": "9E/{9EDE61CB-D469-0143-77B9-70903BEE5CB9}.wem"
+     },
+     {
+      "Id": "942971863",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Dice Roll Single 1.wav",
+      "CachePath": "4B/{4B851968-E148-D8B9-5C1C-CAE1DAC4313D}.wem"
+     },
+     {
+      "Id": "959331636",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Cards Shuffle Short Sequence 2.wav",
+      "CachePath": "92/{9269673F-FAF4-8464-6389-75DCDA1BF8D5}.wem"
+     },
+     {
+      "Id": "977712186",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Cards Deal Sound 4.wav",
+      "CachePath": "E9/{E9E0EF9B-ABCB-F397-5AE6-D6657FF2B696}.wem"
+     },
+     {
+      "Id": "989643402",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Cards Deal Sound 3.wav",
+      "CachePath": "EE/{EE501F7C-8B74-B654-B245-B4785209DF01}.wem"
+     },
+     {
+      "Id": "1003591847",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 3.wav",
+      "CachePath": "AB/{ABE987C7-B312-ADBB-1C14-D808274C810B}.wem"
+     },
+     {
+      "Id": "1064900614",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 1.wav",
+      "CachePath": "5F/{5F9E0B08-5EF3-EB05-6560-B7255A748638}.wem"
+     },
+     {
+      "Id": "1070372830",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card Drop 6.wav",
+      "CachePath": "95/{95209058-3C47-877C-15F8-54507F3DD574}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "1072299391",
+      "Name": "Music_Game",
+      "ObjectPath": "\\Events\\Mejnun\\Music_Game",
+      "GUID": "{C2439A32-924D-4155-AF27-FEA13990DF70}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "1598298728",
+      "Name": "Music_Menu",
+      "ObjectPath": "\\Events\\Mejnun\\Music_Menu",
+      "GUID": "{DF18E2E5-4CFE-442F-90AE-54EF830819EF}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "1150067407",
+      "Name": "Play_Board_Revert",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Board_Revert",
+      "GUID": "{1B74DBB5-0478-48BD-8859-8F8291F268DF}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.8557596",
+      "DurationMax": "0.8557596",
+      "MediaRefs": [
+       {
+        "Id": "92620801"
+       },
+       {
+        "Id": "156130487"
+       },
+       {
+        "Id": "412578313"
+       },
+       {
+        "Id": "797890009"
+       },
+       {
+        "Id": "959331636"
+       }
+      ]
+     },
+     {
+      "Id": "2530612017",
+      "Name": "Play_Card_Deal",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_Deal",
+      "GUID": "{18B6ED7B-26BE-4BB6-939A-D9FFD62F3503}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.3509524",
+      "DurationMax": "0.5432653",
+      "MediaRefs": [
+       {
+        "Id": "234069379"
+       },
+       {
+        "Id": "594895720"
+       },
+       {
+        "Id": "684871593"
+       },
+       {
+        "Id": "790269741"
+       },
+       {
+        "Id": "813608714"
+       }
+      ]
+     },
+     {
+      "Id": "2796935317",
+      "Name": "Play_Card_Draw",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_Draw",
+      "GUID": "{23084022-ECD3-4386-AD41-960136C97D53}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.19712017",
+      "DurationMax": "0.33172336",
+      "MediaRefs": [
+       {
+        "Id": "361181537"
+       },
+       {
+        "Id": "427268354"
+       },
+       {
+        "Id": "588660385"
+       },
+       {
+        "Id": "875333067"
+       }
+      ]
+     },
+     {
+      "Id": "2830490744",
+      "Name": "Play_Card_Drop",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_Drop",
+      "GUID": "{F2F2E463-F653-43D6-8F86-203A23021201}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.22596371",
+      "DurationMax": "0.36537415",
+      "MediaRefs": [
+       {
+        "Id": "10540137"
+       },
+       {
+        "Id": "37294351"
+       },
+       {
+        "Id": "687731691"
+       },
+       {
+        "Id": "700172627"
+       },
+       {
+        "Id": "1003591847"
+       },
+       {
+        "Id": "1064900614"
+       },
+       {
+        "Id": "1070372830"
+       }
+      ]
+     },
+     {
+      "Id": "3991713996",
+      "Name": "Play_Card_Invalid",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_Invalid",
+      "GUID": "{02BD328E-FE98-4A42-B84A-253EADF8FC92}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.69817907",
+      "DurationMax": "0.83027947",
+      "MediaRefs": [
+       {
+        "Id": "294213001"
+       },
+       {
+        "Id": "355085813"
+       },
+       {
+        "Id": "430629700"
+       }
+      ]
+     },
+     {
+      "Id": "4091023330",
+      "Name": "Play_Card_LongPress",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_LongPress",
+      "GUID": "{796812B7-9947-4D25-BA5C-7022AADFAB64}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.42656267",
+      "DurationMax": "0.47880045",
+      "MediaRefs": [
+       {
+        "Id": "989643402"
+       }
+      ]
+     },
+     {
+      "Id": "2749464947",
+      "Name": "Play_Card_Pickup",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_Pickup",
+      "GUID": "{4B674327-33DF-4A65-A59D-DB2BC4AA4C51}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.26010892",
+      "DurationMax": "0.30932337",
+      "MediaRefs": [
+       {
+        "Id": "534013469"
+       }
+      ]
+     },
+     {
+      "Id": "4220340206",
+      "Name": "Play_Card_Shuffle",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Card_Shuffle",
+      "GUID": "{C94E2E08-72D9-43D0-AB77-326EB87FB0C1}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.0336508",
+      "DurationMax": "1.0336508",
+      "MediaRefs": [
+       {
+        "Id": "977712186"
+       }
+      ]
+     },
+     {
+      "Id": "1858408314",
+      "Name": "Play_Dealer_Chosen",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Dealer_Chosen",
+      "GUID": "{0CF8B992-F2C6-4F57-B3A5-A0D148849857}",
+      "DurationType": "OneShot",
+      "DurationMin": "3.692313",
+      "DurationMax": "3.692313",
+      "MediaRefs": [
+       {
+        "Id": "296756676"
+       }
+      ]
+     },
+     {
+      "Id": "2113182384",
+      "Name": "Play_GoDown",
+      "ObjectPath": "\\Events\\Mejnun\\Play_GoDown",
+      "GUID": "{FDE32157-2708-4B8E-BB3C-B25FE69CEA2D}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.7211565",
+      "DurationMax": "0.7211565",
+      "MediaRefs": [
+       {
+        "Id": "103497374"
+       },
+       {
+        "Id": "727902420"
+       },
+       {
+        "Id": "989643402"
+       }
+      ]
+     },
+     {
+      "Id": "3606041870",
+      "Name": "Play_Lose_Stinger",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Lose_Stinger",
+      "GUID": "{12A95562-32AD-4DFE-B78E-96C6BFEA70A8}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "2825832111",
+      "Name": "Play_Mejnun_Shout",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Mejnun_Shout",
+      "GUID": "{8F31BC16-E988-4873-9447-93406A26CA60}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "2198168116",
+      "Name": "Play_Meld_Invalid",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Meld_Invalid",
+      "GUID": "{CF9B65ED-F793-4807-8D3B-F341273E3DAE}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.44231293",
+      "DurationMax": "0.61537415",
+      "MediaRefs": [
+       {
+        "Id": "23233998"
+       },
+       {
+        "Id": "442495150"
+       },
+       {
+        "Id": "448146646"
+       },
+       {
+        "Id": "581828867"
+       },
+       {
+        "Id": "591768834"
+       },
+       {
+        "Id": "702930951"
+       },
+       {
+        "Id": "752208865"
+       },
+       {
+        "Id": "942971863"
+       }
+      ]
+     },
+     {
+      "Id": "3179716423",
+      "Name": "Play_Meld_Valid",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Meld_Valid",
+      "GUID": "{A3D6E1F3-8EA4-40D1-B280-4AF4D12209F2}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.7211565",
+      "DurationMax": "0.7211565",
+      "MediaRefs": [
+       {
+        "Id": "103497374"
+       }
+      ]
+     },
+     {
+      "Id": "1885680669",
+      "Name": "Play_Pass",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Pass",
+      "GUID": "{A2275440-4C12-4A68-84E2-C70BA98E4B25}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "3818448697",
+      "Name": "Play_Stalemate_Stinger",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Stalemate_Stinger",
+      "GUID": "{F4003018-0DB1-4A68-BB5E-3F202E1E8935}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "1457389367",
+      "Name": "Play_Timer_Halas",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Timer_Halas",
+      "GUID": "{A19DA164-DFA8-4913-AF46-B5A77B343BFF}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.3846258",
+      "DurationMax": "1.3846258",
+      "MediaRefs": [
+       {
+        "Id": "497904013"
+       }
+      ]
+     },
+     {
+      "Id": "4093125639",
+      "Name": "Play_Timer_Tick",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Timer_Tick",
+      "GUID": "{FB60C008-09BF-4D24-936D-2913FA6D1527}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.17789115",
+      "DurationMax": "0.17789115",
+      "MediaRefs": [
+       {
+        "Id": "826325183"
+       }
+      ]
+     },
+     {
+      "Id": "98812124",
+      "Name": "Play_Timer_Warning",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Timer_Warning",
+      "GUID": "{41950D91-438D-44F6-88E8-8048703BC97C}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.3509524",
+      "DurationMax": "0.3509524",
+      "MediaRefs": [
+       {
+        "Id": "688466017"
+       }
+      ]
+     },
+     {
+      "Id": "927528689",
+      "Name": "Play_Turn_End",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Turn_End",
+      "GUID": "{AC6EB2E0-824C-42F4-AA15-9671C9E01EA3}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "3588254728",
+      "Name": "Play_Turn_Start_Bot",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Turn_Start_Bot",
+      "GUID": "{F0418576-1615-4518-886F-CD89929F4803}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.46154195",
+      "DurationMax": "0.46154195",
+      "MediaRefs": [
+       {
+        "Id": "88696734"
+       },
+       {
+        "Id": "172930794"
+       },
+       {
+        "Id": "413159305"
+       },
+       {
+        "Id": "666531232"
+       }
+      ]
+     },
+     {
+      "Id": "3780346990",
+      "Name": "Play_Turn_Start_Player",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Turn_Start_Player",
+      "GUID": "{99BDF4E1-AD93-44E4-906D-A553DA4F16F9}",
+      "DurationType": "OneShot",
+      "DurationMin": "3.692313",
+      "DurationMax": "3.692313",
+      "MediaRefs": [
+       {
+        "Id": "690129464"
+       }
+      ]
+     },
+     {
+      "Id": "1749424733",
+      "Name": "Play_UI_Click",
+      "ObjectPath": "\\Events\\Mejnun\\Play_UI_Click",
+      "GUID": "{5E2D315F-E59F-4B24-8B87-3B085A90034C}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.16790688",
+      "DurationMax": "0.3718211",
+      "MediaRefs": [
+       {
+        "Id": "355085813"
+       },
+       {
+        "Id": "578029637"
+       }
+      ]
+     },
+     {
+      "Id": "770096812",
+      "Name": "Play_Undo",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Undo",
+      "GUID": "{3B407EAB-892A-4D5A-A4BB-0D9218AE2B98}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.19712017",
+      "DurationMax": "0.23557822",
+      "MediaRefs": [
+       {
+        "Id": "92620801"
+       },
+       {
+        "Id": "156130487"
+       },
+       {
+        "Id": "412578313"
+       }
+      ]
+     },
+     {
+      "Id": "4014770395",
+      "Name": "Play_Win_Stinger",
+      "ObjectPath": "\\Events\\Mejnun\\Play_Win_Stinger",
+      "GUID": "{DA558FDF-B221-45B1-A7E9-BEC450AF6ADE}",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     },
+     {
+      "Id": "2837384057",
+      "Name": "Stop_Music",
+      "ObjectPath": "\\Events\\Mejnun\\Stop_Music",
+      "GUID": "{25911797-7A35-4B59-8C51-E423FD74D253}",
+      "MaxAttenuation": "0",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     }
+    ],
+    "SwitchGroups": [
+     {
+      "Id": "3140450991",
+      "Name": "Shout_Type",
+      "ObjectPath": "\\Switches\\Mejnun\\Shout_Type",
+      "GUID": "{38B5076E-ED88-40BB-BB98-904CDF9548C6}",
+      "Switches": [
+       {
+        "Id": "782826392",
+        "Name": "Default",
+        "ObjectPath": "\\Switches\\Mejnun\\Shout_Type\\Default",
+        "GUID": "{08521076-043B-4210-A1EA-3FC68C1F389F}"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{040E620C-CD90-7D7C-8E1F-AEA0B60E7DC2}"
+ }
+}
