@@ -19,6 +19,8 @@ namespace Mejnun.Core
         InvalidSplit,
         InvalidMerge,
         GameFinished,
-        UnsupportedCommand
+        UnsupportedCommand,
+        DoubleInSet,
+        SetTooLarge
     }
 }

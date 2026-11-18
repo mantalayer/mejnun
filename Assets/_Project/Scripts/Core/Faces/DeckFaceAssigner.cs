@@ -20,7 +20,7 @@ namespace Mejnun.Core
                 throw new ArgumentNullException(nameof(rng));
             }
 
-            var candidates = new List<string>(facePool.Count + 2);
+            var candidates = new List<FaceChoiceGroup>(facePool.Count + 2);
             for (var index = 0; index < facePool.Count; index++)
             {
                 AddDistinct(candidates, facePool[index]);
@@ -40,25 +40,57 @@ namespace Mejnun.Core
                 candidates[otherIndex] = face;
             }
 
-            return new[] { candidates[0], candidates[1] };
+            return new[] { SelectFace(candidates[0], rng), SelectFace(candidates[1], rng) };
         }
 
-        private static void AddDistinct(List<string> faces, string face)
+        private static string SelectFace(FaceChoiceGroup group, Pcg32 rng)
+        {
+            if (group.Choices.Count == 1)
+            {
+                return group.Choices[0];
+            }
+
+            return group.Choices[rng.NextInt(group.Choices.Count)];
+        }
+
+        private static void AddDistinct(List<FaceChoiceGroup> faces, string face)
         {
             if (face == null)
             {
                 throw new ArgumentException("Face ids cannot be null.", nameof(face));
             }
 
+            var skinId = DeckFaceId.GetSkinId(face);
             for (var index = 0; index < faces.Count; index++)
             {
-                if (string.Equals(faces[index], face, StringComparison.Ordinal))
+                if (string.Equals(faces[index].SkinId, skinId, StringComparison.Ordinal))
                 {
+                    for (var choiceIndex = 0; choiceIndex < faces[index].Choices.Count; choiceIndex++)
+                    {
+                        if (string.Equals(faces[index].Choices[choiceIndex], face, StringComparison.Ordinal))
+                        {
+                            return;
+                        }
+                    }
+
+                    faces[index].Choices.Add(face);
                     return;
                 }
             }
 
-            faces.Add(face);
+            faces.Add(new FaceChoiceGroup(skinId, face));
+        }
+
+        private sealed class FaceChoiceGroup
+        {
+            public string SkinId { get; }
+            public List<string> Choices { get; }
+
+            public FaceChoiceGroup(string skinId, string face)
+            {
+                SkinId = skinId;
+                Choices = new List<string> { face };
+            }
         }
     }
 }

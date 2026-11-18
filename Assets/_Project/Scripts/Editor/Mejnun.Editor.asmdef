@@ -5,7 +5,8 @@
     "Mejnun.Core",
     "Mejnun.Cosmetics",
     "Mejnun.Game",
-    "Mejnun.UI"
+    "Mejnun.UI",
+    "Unity.2D.Sprite.Editor"
   ],
   "includePlatforms": [
     "Editor"

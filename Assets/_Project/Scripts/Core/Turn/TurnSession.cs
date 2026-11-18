@@ -151,6 +151,40 @@ namespace Mejnun.Core
                 }
             }
 
+            if (target.Kind == TargetKind.Meld || target.Kind == TargetKind.NewMeld)
+            {
+                var resultingCards = new List<Card>();
+                if (targetMeld != null)
+                {
+                    for (var meldCardIndex = 0; meldCardIndex < targetMeld.Cards.Count; meldCardIndex++)
+                    {
+                        var meldCard = targetMeld.Cards[meldCardIndex];
+                        var removed = false;
+                        for (var movedIndex = 0; movedIndex < cards.Length; movedIndex++)
+                        {
+                            if (!locations[movedIndex].IsHand && locations[movedIndex].MeldId == targetMeld.Id &&
+                                cards[movedIndex].Id == meldCard.Id)
+                            {
+                                removed = true;
+                                break;
+                            }
+                        }
+
+                        if (!removed)
+                        {
+                            resultingCards.Add(meldCard);
+                        }
+                    }
+                }
+
+                resultingCards.AddRange(cards);
+                var meldLimitError = CheckMeldLimits(resultingCards);
+                if (meldLimitError != RuleError.None)
+                {
+                    return CommandResult.Failure(meldLimitError);
+                }
+            }
+
             var affected = CaptureAffectedMelds(locations, targetMeld);
             for (var index = 0; index < locations.Length; index++)
             {
@@ -266,6 +300,15 @@ namespace Mejnun.Core
             }
 
             var before = MeldValidator.Classify(meld.Cards);
+            var mergedCards = new List<Card>(meld.Cards.Count + otherMeld.Cards.Count);
+            mergedCards.AddRange(meld.Cards);
+            mergedCards.AddRange(otherMeld.Cards);
+            var meldLimitError = CheckMeldLimits(mergedCards);
+            if (meldLimitError != RuleError.None)
+            {
+                return CommandResult.Failure(meldLimitError);
+            }
+
             var originalCount = meld.Cards.Count;
             for (var index = 0; index < otherMeld.Cards.Count; index++)
             {
@@ -555,6 +598,25 @@ namespace Mejnun.Core
                     state.Board.RemoveAt(index);
                 }
             }
+        }
+
+        private static RuleError CheckMeldLimits(IEnumerable<Card> cards)
+        {
+            var seen = new List<Card>();
+            foreach (var card in cards)
+            {
+                for (var index = 0; index < seen.Count; index++)
+                {
+                    if (card.IsDoubleOf(seen[index]))
+                    {
+                        return RuleError.DoubleInSet;
+                    }
+                }
+
+                seen.Add(card);
+            }
+
+            return seen.Count > 13 ? RuleError.SetTooLarge : RuleError.None;
         }
 
         private void EmitAffectedMeldChanges(List<MeldChange> affected, Meld newMeld, bool replay)

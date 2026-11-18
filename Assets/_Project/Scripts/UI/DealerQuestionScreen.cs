@@ -16,7 +16,7 @@ namespace Mejnun.UI
             matchFlow = flow;
             questionLabel = root.Q<Label>("dealer-question-label");
             seatOptions = root.Q<VisualElement>("dealer-seat-options");
-            root.Q<Button>("random-dealer-button").clicked += () => matchFlow.ChooseRandomDealer();
+            root.Q<Button>("random-dealer-button").clicked += () => matchFlow.ChooseRandomFirstPlayer();
         }
 
         public void SetVisible(bool visible)
@@ -31,7 +31,7 @@ namespace Mejnun.UI
             for (var seat = 0; seat < matchFlow.SeatCount; seat++)
             {
                 var seatIndex = seat;
-                var button = new Button(() => matchFlow.ChooseDealer(seatIndex))
+                var button = new Button(() => matchFlow.ChooseFirstPlayer(seatIndex))
                 {
                     text = matchFlow.GetPlayerName(seat)
                 };

@@ -19,6 +19,13 @@ namespace Mejnun.Game
         private const string HandLiftKey = "settings.hand.lift";
         private const string OpponentCardScaleKey = "settings.opponents.cardScale";
         private const string ZoomSensitivityKey = "settings.camera.zoomSensitivity";
+        private const string CpuSpeedKey = "settings.cpu.speed";
+        private const string ShowFastForwardKey = "settings.cpu.showFastForward";
+        private const string OverlapSetsKey = "settings.board.overlapSets";
+        private const string OrganicBoardKey = "settings.board.organic";
+        private const string CardMessinessKey = "settings.board.cardMessiness";
+        private const string EasyOpeningDealKey = "settings.game.easyOpeningDeal";
+        private static bool fastForward;
 
         public static bool ConfirmRevert
         {
@@ -110,6 +117,54 @@ namespace Mejnun.Game
             set => Set(ZoomSensitivityKey, value);
         }
 
+        public static int CpuSpeed
+        {
+            get => Mathf.Clamp(PlayerPrefs.GetInt(CpuSpeedKey, 2), 0, 3);
+            set
+            {
+                PlayerPrefs.SetInt(CpuSpeedKey, Mathf.Clamp(value, 0, 3));
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static float CpuDelayMultiplier => CpuSpeed == 0 ? 2f : CpuSpeed == 1 ? 1.5f : CpuSpeed == 2 ? 1f : 0.5f;
+
+        public static bool ShowFastForward
+        {
+            get => Get(ShowFastForwardKey, true);
+            set => Set(ShowFastForwardKey, value);
+        }
+
+        public static bool OverlapSets
+        {
+            get => Get(OverlapSetsKey, false);
+            set => Set(OverlapSetsKey, value);
+        }
+
+        public static bool OrganicBoard
+        {
+            get => Get(OrganicBoardKey, false);
+            set => Set(OrganicBoardKey, value);
+        }
+
+        public static float CardMessiness
+        {
+            get => Mathf.Clamp01(Get(CardMessinessKey, 0f));
+            set => Set(CardMessinessKey, Mathf.Clamp01(value));
+        }
+
+        public static bool EasyOpeningDeal
+        {
+            get => Get(EasyOpeningDealKey, false);
+            set => Set(EasyOpeningDealKey, value);
+        }
+
+        public static bool FastForward
+        {
+            get => fastForward;
+            set => fastForward = value;
+        }
+
         public static void ResetForTests()
         {
             PlayerPrefs.DeleteKey(ConfirmRevertKey);
@@ -127,6 +182,13 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(HandLiftKey);
             PlayerPrefs.DeleteKey(OpponentCardScaleKey);
             PlayerPrefs.DeleteKey(ZoomSensitivityKey);
+            PlayerPrefs.DeleteKey(CpuSpeedKey);
+            PlayerPrefs.DeleteKey(ShowFastForwardKey);
+            PlayerPrefs.DeleteKey(OverlapSetsKey);
+            PlayerPrefs.DeleteKey(OrganicBoardKey);
+            PlayerPrefs.DeleteKey(CardMessinessKey);
+            PlayerPrefs.DeleteKey(EasyOpeningDealKey);
+            FastForward = false;
         }
 
         private static bool Get(string key, bool defaultValue)

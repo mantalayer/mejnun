@@ -19,13 +19,14 @@
 .halas-popup,
 .gone-down-popup {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
+    max-width: 80%;
+    translate: -50% 0;
     color: rgb(248, 248, 240);
     background-color: rgba(8, 18, 14, 0.9);
     border-radius: 12px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 28px;
+    padding-right: 28px;
     padding-top: 12px;
     padding-bottom: 12px;
     font-size: 30px;
@@ -91,22 +92,79 @@
 }
 
 .top-bar {
+    align-self: flex-start;
     min-height: 54px;
 }
 
 .opponents-top {
     position: absolute;
-    top: 72px;
-    left: 0;
-    right: 0;
+    top: 62px;
+    left: 10%;
+    right: 10%;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
 }
 
+.marker-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.set-marker {
+    position: absolute;
+    min-width: 30px;
+    height: 30px;
+    color: rgb(22, 32, 24);
+    background-color: rgb(239, 195, 92);
+    border-radius: 15px;
+    font-size: 19px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.card-marker {
+    position: absolute;
+    min-width: 20px;
+    height: 20px;
+    color: rgb(22, 32, 24);
+    background-color: rgb(239, 195, 92);
+    border-radius: 10px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
 .game-status {
     flex-direction: column;
     min-width: 150px;
+}
+
+.draw-pile-status {
+    flex-direction: row;
+    align-items: center;
+    min-height: 46px;
+}
+
+.draw-pile-stack {
+    position: relative;
+    width: 48px;
+    height: 44px;
+    margin-left: 6px;
+    overflow: hidden;
+}
+
+.draw-pile-card {
+    position: absolute;
+    width: 22px;
+    height: 32px;
+    border-radius: 3px;
+    background-color: rgb(45, 70, 57);
+    border-width: 1px;
+    border-color: rgb(225, 225, 210);
 }
 
 .status-label {

@@ -184,6 +184,29 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void DoubleTapPlacesSelectedCardsAsANewMeld()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(3, out var straight);
+            var hand = game.State.Hands[game.State.CurrentSeat];
+            var interpreter = new GestureInterpreter();
+            interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap,
+                GestureHit.HandCard(straight[0], hand.IndexOf(Card.FromId(straight[0]))), GestureHit.None), hand.Count);
+            interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap,
+                GestureHit.HandCard(straight[1], hand.IndexOf(Card.FromId(straight[1]))), GestureHit.None), hand.Count);
+
+            var result = interpreter.Interpret(new GestureInput(GestureType.DoubleTap,
+                    GestureHit.HandCard(straight[2], hand.IndexOf(Card.FromId(straight[2]))), GestureHit.None),
+                game.State, game.Turn);
+
+            Assert.That(result.Batch.Count, Is.EqualTo(1));
+            Assert.That(result.ClearSelectionOnSuccess, Is.True);
+            Assert.That(result.Batch.Commands[0].CardIds, Is.EquivalentTo(straight));
+            Assert.That(game.Apply(result.Batch.Commands[0]).Ok, Is.True);
+            Assert.That(game.State.Board.Count, Is.EqualTo(1));
+            Assert.That(MeldValidator.IsBoardValid(game.State.Board), Is.True);
+        }
+
+        [Test]
         public void QuickPlaceIgnoresMeldsThatWereAlreadyOnTheBoardAtTurnStart()
         {
             var game = GestureTestGameFactory.CreateGameWithAccessibleStraightExtension(out _,

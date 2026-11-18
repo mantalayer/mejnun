@@ -39,6 +39,12 @@ namespace Mejnun.Game
 
         public bool IsPlaying => routine != null;
 
+        public bool FastForward
+        {
+            get => GameSettings.FastForward;
+            set => GameSettings.FastForward = value;
+        }
+
         public void SetPaused(bool isPaused)
         {
             paused = isPaused;
@@ -110,9 +116,14 @@ namespace Mejnun.Game
                                  (ulong)seat);
             var planning = Task.Run(() => BotBrain.PlanTurn(snapshot, difficulty, seed, style, knowledge));
             var waited = 0f;
-            while (!planning.IsCompleted || waited < thinkSeconds)
+            while (!planning.IsCompleted || paused ||
+                   (!FastForward && waited < thinkSeconds * GameSettings.CpuDelayMultiplier))
             {
-                waited += Time.deltaTime;
+                if (!paused && !FastForward)
+                {
+                    waited += Time.deltaTime;
+                }
+
                 yield return null;
             }
 
@@ -144,9 +155,24 @@ namespace Mejnun.Game
                     break;
                 }
 
-                if (index > 0 && stepSeconds > 0f)
+                if (index > 0)
                 {
-                    yield return new WaitForSeconds(stepSeconds);
+                    var waitedStep = 0f;
+                    while (!FastForward && waitedStep < stepSeconds * GameSettings.CpuDelayMultiplier)
+                    {
+                        if (!paused)
+                        {
+                            waitedStep += Time.deltaTime;
+                        }
+
+                        yield return null;
+                    }
+
+                    while (paused && IsStillTurn(game, seat, turnNumber))
+                    {
+                        yield return null;
+                    }
+
                     if (!IsStillTurn(game, seat, turnNumber))
                     {
                         break;

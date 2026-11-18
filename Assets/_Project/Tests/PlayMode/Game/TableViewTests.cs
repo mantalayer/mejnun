@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Mejnun.Core;
 using Mejnun.Game;
 using NUnit.Framework;
@@ -11,6 +12,78 @@ namespace Mejnun.Game.Tests
 {
     public sealed class TableViewTests
     {
+        [Test]
+        public void PhoneHandUpperRowDrawsBelowLowerRow()
+        {
+            const int cardsPerRow = 6;
+            Assert.That(HandView.CalculateSortingOrder(1, 0, cardsPerRow, 2),
+                Is.LessThan(HandView.CalculateSortingOrder(0, 0, cardsPerRow, 2)));
+            Assert.That(HandView.CalculateSortingOrder(1, 1, cardsPerRow, 2),
+                Is.GreaterThan(HandView.CalculateSortingOrder(1, 0, cardsPerRow, 2)));
+        }
+
+        [Test]
+        public void DraggedCardRemainsAboveBoardCardsAcrossLayout()
+        {
+            var oldOrganicBoard = GameSettings.OrganicBoard;
+            var boardObject = new GameObject("Board View Test");
+            try
+            {
+                GameSettings.OrganicBoard = false;
+                var boardView = boardObject.AddComponent<BoardView>();
+                var cards = new List<Card>();
+                var cardViews = new Dictionary<byte, CardView>();
+                for (var index = 0; index < 3; index++)
+                {
+                    var card = Card.FromId(index);
+                    cards.Add(card);
+                    var cardObject = new GameObject("Card View Test " + index);
+                    cardObject.transform.SetParent(boardObject.transform, false);
+                    var cardView = cardObject.AddComponent<CardView>();
+                    cardViews.Add(card.Id, cardView);
+                }
+
+                var liftedCardId = cards[1].Id;
+                var liftedCard = cardViews[liftedCardId];
+                liftedCard.SetSortingOrder(CardView.DragSortingOrder);
+                boardView.Layout(new[] { new Meld(1, cards) }, cardViews, 1f, new Vector2(0.64f, 0.97f),
+                    new HashSet<byte> { liftedCardId });
+
+                Assert.That(liftedCard.SortingOrder, Is.EqualTo(CardView.DragSortingOrder));
+                Assert.That(cardViews[cards[0].Id].SortingOrder, Is.EqualTo(10));
+                Assert.That(cardViews[cards[2].Id].SortingOrder, Is.EqualTo(12));
+            }
+            finally
+            {
+                GameSettings.OrganicBoard = oldOrganicBoard;
+                Object.DestroyImmediate(boardObject);
+            }
+        }
+
+        [Test]
+        public void DragSortingOrderExceedsHandAndPreviewLayers()
+        {
+            Assert.That(CardView.DragSortingOrder,
+                Is.GreaterThan(HandView.CalculateSortingOrder(0, 0, Card.CardCount, 1)));
+            Assert.That(CardView.DragSortingOrder, Is.GreaterThan(300 + Card.CardCount));
+            Assert.That(CardView.DragSortingOrder * 4, Is.GreaterThan(1000 + Card.CardCount));
+        }
+
+        [UnityTest]
+        public IEnumerator ChoosingFirstPlayerStartsThatSeat()
+        {
+            SceneManager.LoadScene("Table", LoadSceneMode.Single);
+            yield return null;
+
+            var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
+            Assert.That(matchFlow, Is.Not.Null);
+            Assert.That(matchFlow.StartMatch(3, new[] { "Sam", "Alex", "Lee" }, 20261118), Is.True);
+
+            Assert.That(matchFlow.ChooseFirstPlayer(0).Ok, Is.True);
+
+            Assert.That(matchFlow.Game.State.CurrentSeat, Is.EqualTo(0));
+        }
+
         [UnityTest]
         public IEnumerator Sync_RendersCardsUsingTheFaceAssignedToTheirDeck()
         {
@@ -142,7 +215,17 @@ namespace Mejnun.Game.Tests
             yield return new WaitForSeconds(0.3f);
 
             var tableView = Object.FindAnyObjectByType<TableView>();
-            var document = Object.FindAnyObjectByType<UIDocument>();
+            var documents = Object.FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
+            UIDocument document = null;
+            for (var index = 0; index < documents.Length; index++)
+            {
+                if (documents[index].rootVisualElement.Q<VisualElement>("bottom-bar") != null)
+                {
+                    document = documents[index];
+                    break;
+                }
+            }
+
             Assert.That(tableView, Is.Not.Null);
             Assert.That(document, Is.Not.Null);
             var bottomBar = document.rootVisualElement.Q<VisualElement>("bottom-bar");

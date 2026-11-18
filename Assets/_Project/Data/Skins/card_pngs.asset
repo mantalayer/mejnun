@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 666a77a2c9f854c95b90c522a681bd36, type: 3}
+  m_Name: card_pngs
+  m_EditorClassIdentifier: Mejnun.Cosmetics::Mejnun.Cosmetics.DeckSkin
+  id: card_pngs
+  displayName: Card Pngs
+  faces:
+  - {fileID: 21300000, guid: 4eb9aee52b1bc4415ad67850e86e15ca, type: 3}
+  - {fileID: 21300000, guid: ec1c13d6cdb164657ba930f42edf185f, type: 3}
+  - {fileID: 21300000, guid: 1aec772b4372e4273b039b2835270e7c, type: 3}
+  - {fileID: 21300000, guid: f28977c58db4d414ba370542adfee10e, type: 3}
+  - {fileID: 21300000, guid: 616d3c35905864d0586dab01e5678023, type: 3}
+  - {fileID: 21300000, guid: 33d64eaa8bf924adeac4618fa85ee216, type: 3}
+  - {fileID: 21300000, guid: 7341882e4c75a403bae51013bb29dfda, type: 3}
+  - {fileID: 21300000, guid: bdc9f95b17e8041fb93cb8193234d8f6, type: 3}
+  - {fileID: 21300000, guid: fe84f8509dfc44b5d924ec9114367842, type: 3}
+  - {fileID: 21300000, guid: b8dc3fefc6fe54387881bf4f1e3a8548, type: 3}
+  - {fileID: 21300000, guid: d0df593dbb616492691b7742068818c5, type: 3}
+  - {fileID: 21300000, guid: 882edb3ad5f5642e78709b354a01fa84, type: 3}
+  - {fileID: 21300000, guid: e478bc8e915db40c5a43b8957f2a72ff, type: 3}
+  - {fileID: 21300000, guid: 155108b62bef34d9f9861ba589abaf38, type: 3}
+  - {fileID: 21300000, guid: 2e5c222d08ec443a69a4c79d5e55a007, type: 3}
+  - {fileID: 21300000, guid: ed71c32346ef24a44bc98323fa8ef4b8, type: 3}
+  - {fileID: 21300000, guid: e0d0c2e69d0cc488c9a72de4e022da8a, type: 3}
+  - {fileID: 21300000, guid: 7d92db50a538d499782a37cad905055d, type: 3}
+  - {fileID: 21300000, guid: b7f5d08cc6bc94b8fa02dc62fe4b1826, type: 3}
+  - {fileID: 21300000, guid: 869c9ab79d01d4624b1e393710d96d1a, type: 3}
+  - {fileID: 21300000, guid: 9ae633d0c73194eccb816671f4648b67, type: 3}
+  - {fileID: 21300000, guid: f0b5913c15d77495daf5d08f567a2f4e, type: 3}
+  - {fileID: 21300000, guid: 1bef43168c3f343dfae900c72f17a54b, type: 3}
+  - {fileID: 21300000, guid: f4a058159b1a141fbb697142bac02a9a, type: 3}
+  - {fileID: 21300000, guid: 8d0ef007a73c44d07ab99255ef23a1a0, type: 3}
+  - {fileID: 21300000, guid: 9b571b6244b3e4694a58ee25888a4f98, type: 3}
+  - {fileID: 21300000, guid: 3052ef1eb833e4d98a53ee61024551f5, type: 3}
+  - {fileID: 21300000, guid: 545d199d7becc46b59e5a8e232a98673, type: 3}
+  - {fileID: 21300000, guid: b6ee42be5bf6047158e1fe8c751eda14, type: 3}
+  - {fileID: 21300000, guid: 2b7f5ec552f5146c296f29c44ad456f4, type: 3}
+  - {fileID: 21300000, guid: da3d9254f21a646638066d04ec38256f, type: 3}
+  - {fileID: 21300000, guid: c0f5e93803e0e427ab277146e2d99ead, type: 3}
+  - {fileID: 21300000, guid: cf553e77772fa4b56863303167f67083, type: 3}
+  - {fileID: 21300000, guid: f088bf96f3b1a48be93819267eae0bd4, type: 3}
+  - {fileID: 21300000, guid: 372930dc7a3174d20a3a30ccc5bedd2e, type: 3}
+  - {fileID: 21300000, guid: b56928d4c331f460c8741ee392ec1dbd, type: 3}
+  - {fileID: 21300000, guid: 24cd21dfd6a2b4ec79c9bb72aaacb7a3, type: 3}
+  - {fileID: 21300000, guid: 2e3d8452938f145cd941c80928551110, type: 3}
+  - {fileID: 21300000, guid: aed5e1915034449fdae98bc525e1b08e, type: 3}
+  - {fileID: 21300000, guid: 7209454c6519c4f0c80db6e1386c1606, type: 3}
+  - {fileID: 21300000, guid: 068c8ca0ad034492cade0320364f2e49, type: 3}
+  - {fileID: 21300000, guid: 2b2ebf00078294fd8ad9669c6625aae6, type: 3}
+  - {fileID: 21300000, guid: 2de410c3f1a1f474b83561625307b4d8, type: 3}
+  - {fileID: 21300000, guid: 47d165a9d373d45b4ac4843ad76332f1, type: 3}
+  - {fileID: 21300000, guid: b79416308614344279d32f1f43e8fb20, type: 3}
+  - {fileID: 21300000, guid: 37fb85b1006c14413b60fb146130acde, type: 3}
+  - {fileID: 21300000, guid: a88d46d036592495ca4d543c3cb0cbff, type: 3}
+  - {fileID: 21300000, guid: 59ee6acbbc4a64a46926b69ab9d5f1b3, type: 3}
+  - {fileID: 21300000, guid: 01ebbf05076a942fd81c7db611d786d7, type: 3}
+  - {fileID: 21300000, guid: 4737277f3da1b4574b77c2288cb489fa, type: 3}
+  - {fileID: 21300000, guid: 98d665397b01d4340ac2658e57cf3ca3, type: 3}
+  - {fileID: 21300000, guid: 713aa6b0d498e4544b58172f0cd5c989, type: 3}
+  cardBack: {fileID: 21300000, guid: 4054bd66eda9646728c3522b23a44872, type: 3}
+  alternateBacks:
+  - id: back_02
+    sprite: {fileID: 21300000, guid: 93359c76b7fd5488b89728fb06e3cc7e, type: 3}
+  - id: back_03
+    sprite: {fileID: 21300000, guid: 3931785a45bca4081895c729e1baeed1, type: 3}
+  blank: {fileID: 0}
+  pixelArt: 0
+  pixelsPerUnit: 100

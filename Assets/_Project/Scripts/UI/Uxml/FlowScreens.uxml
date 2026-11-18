@@ -40,13 +40,14 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label name="setup-error" class="flow-error" text="" />
+            <ui:Button name="resume-match-button" class="flow-button" text="Resume game" style="display: none" />
             <ui:Button name="start-match-button" class="flow-button primary-flow-button" text="Start game" />
         </ui:VisualElement>
         <ui:VisualElement name="dealer-question-screen" class="flow-screen">
-            <ui:Label class="flow-title" text="Who deals?" />
-            <ui:Label name="dealer-question-label" class="flow-copy" text="Who should deal this game?" />
+            <ui:Label class="flow-title" text="Who goes first?" />
+            <ui:Label name="dealer-question-label" class="flow-copy" text="Who should go first?" />
             <ui:VisualElement name="dealer-seat-options" class="seat-options" />
-            <ui:Button name="random-dealer-button" class="flow-button primary-flow-button" text="Random" />
+            <ui:Button name="random-dealer-button" class="flow-button primary-flow-button" text="Random first player" />
         </ui:VisualElement>
         <ui:VisualElement name="handoff-screen" class="flow-screen handoff-screen">
             <ui:Label name="handoff-message" class="flow-title" text="Pass to Player 1 — tap to reveal" />

@@ -220,6 +220,89 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
+        public void Turn_CannotMoveDoubleIntoMeld()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "2H", "3H", "4H" });
+            GameBuilder.SetHand(game, 0, "9C");
+            var doubleCard = Card.FromId(GameBuilder.ParseCard("3H").Id + Card.CardsPerDeck);
+            game.State.Hands[0].Add(doubleCard);
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalMeld = game.State.Board[0].Cards.ToArray();
+            var originalHand = game.State.Hands[0].ToArray();
+
+            var result = game.Apply(GameCommand.MoveCards(0, new[] { doubleCard.Id }, CardTarget.Meld(1, 3)));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.DoubleInSet));
+            CollectionAssert.AreEqual(originalMeld, game.State.Board[0].Cards);
+            CollectionAssert.AreEqual(originalHand, game.State.Hands[0]);
+            Assert.That(game.Turn.Moves, Is.Empty);
+        }
+
+        [Test]
+        public void Turn_CannotCreateNewMeldContainingDouble()
+        {
+            var game = NewGame();
+            GameBuilder.SetHand(game, 0, "3H");
+            var doubleCard = Card.FromId(GameBuilder.ParseCard("3H").Id + Card.CardsPerDeck);
+            game.State.Hands[0].Add(doubleCard);
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalHand = game.State.Hands[0].ToArray();
+
+            var result = game.Apply(GameCommand.MoveCards(0,
+                new[] { GameBuilder.ParseCard("3H").Id, doubleCard.Id }, CardTarget.NewMeld(0)));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.DoubleInSet));
+            Assert.That(game.State.Board, Is.Empty);
+            CollectionAssert.AreEqual(originalHand, game.State.Hands[0]);
+            Assert.That(game.Turn.Moves, Is.Empty);
+        }
+
+        [Test]
+        public void Turn_CannotMergeMeldsContainingDouble()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "2H", "3H", "4H" }, new[] { "3H", "3C", "3D" });
+            game.State.Board[1].Cards[0] = Card.FromId(GameBuilder.ParseCard("3H").Id + Card.CardsPerDeck);
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalFirst = game.State.Board[0].Cards.ToArray();
+            var originalSecond = game.State.Board[1].Cards.ToArray();
+
+            var result = game.Apply(GameCommand.MergeMelds(0, 1, 2));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.DoubleInSet));
+            Assert.That(game.State.Board.Count, Is.EqualTo(2));
+            CollectionAssert.AreEqual(originalFirst, game.State.Board[0].Cards);
+            CollectionAssert.AreEqual(originalSecond, game.State.Board[1].Cards);
+            Assert.That(game.Turn.Moves, Is.Empty);
+        }
+
+        [Test]
+        public void Turn_CannotGrowMeldBeyondThirteenCards()
+        {
+            var game = NewGame();
+            var hearts = new[]
+            {
+                "AH", "2H", "3H", "4H", "5H", "6H", "7H", "8H", "9H", "10H", "JH", "QH", "KH"
+            };
+            GameBuilder.SetBoard(game, hearts);
+            GameBuilder.SetHand(game, 0, "2C");
+            var extraCard = Card.FromId(GameBuilder.ParseCard("2C").Id + Card.CardsPerDeck);
+            game.State.Hands[0].Add(extraCard);
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+
+            var result = game.Apply(GameCommand.MoveCards(0, new[] { extraCard.Id }, CardTarget.Meld(1, 13)));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.SetTooLarge));
+            Assert.That(game.State.Board[0].Cards.Count, Is.EqualTo(13));
+            Assert.That(game.State.Hands[0], Does.Contain(extraCard));
+        }
+
+        [Test]
         public void Turn_GameCommandCardIdsAreDefensivelyCopied()
         {
             var ids = new byte[] { 1, 2 };

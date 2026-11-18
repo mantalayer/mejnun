@@ -320,6 +320,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **Steam** | Steamworks partner account (tax and bank info) → pay the Steam Direct fee → you receive the **App ID**. Create depots for Windows and macOS, plus a `beta` branch. Then add the achievements and rich-presence tokens. A demo app can be added later as a separate App ID | US$100 per app (recoupable) |
 | **Apple** | Apple Developer Program (individual or organisation; organisations need a D-U-N-S number) → bundle id `com.<you>.mejnun` → app record in App Store Connect → an App Store Connect API key for fastlane → a private git repo for `fastlane match` | US$99 per year |
 | **Google** | Play Console developer account (identity verification) → create the app → upload the first `.aab` **manually** once (the API can't do the very first upload) → service account with release permissions for fastlane. New *personal* accounts must run a closed test with a minimum number of testers for 14 days before production, so plan for that | US$25 once |
+| **Google Cloud** | Create a Cloud project → enable the Google Sheets API → create an OAuth desktop client for the Unity Localization Google Sheets extension → share the workbook with the account used by the extension | Free for the Sheets integration; Cloud Translation API v3 fallback usage may be billed |
 | **Unity** | A UGS project linked to this Unity project: Authentication, Multiplayer Services, Cloud Save/Code, LevelPlay (ad network accounts) and IAP | Free tiers to start |
 
 ---
@@ -345,8 +346,30 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
   - A `.rtl` class on the root mirrors the HUD and menus (row-reverse, mirrored icons such as back arrows).
   - The **cards and board stay left-to-right**, so straights read A→K the same for everyone at an online table *(see Q-D)*.
   - Numbers in UI text (timer, card counts) use locale digits (Eastern Arabic in `ar`, Persian in `fa`). Card art is unaffected.
-- **Dealer questions** are written per language (culturally adapted), not translated literally. Each language ships with at least 20.
-- Workflow: Unity Localization's **Google Sheets** extension (or CSV) round-trips the string tables, with machine translation first and a native-speaker review before release. The small amount of text keeps this cheap. Store listings are localized from the same sheet and pushed by fastlane.
+- **Dealer questions** are authored in English and auto-translated like UI strings. Each language ships with at least 20, and native speakers review the translations before release.
+
+### 7.1 Auto-translation workflow
+- **Tools and sheet layout:** Unity Localization's Google Sheets extension (included with `com.unity.localization`; no third-party plugin) pushes and pulls the String Tables. Google Translate in Sheets fills target cells with `GOOGLETRANSLATE`; Google Cloud Translation API v3 is the fallback if formula limits or quality are insufficient. Use one tab per String Table collection (`UI`, `DealerQuestions`) and a `StoreListings` tab in the same workbook. Each tab has `Key`, `en`, one translation column per locale, and a status for each target locale. Store listings continue to be localized from this workbook and pushed by fastlane.
+- **Translation formula:** for each target locale column, use `=IF($B2="","",GOOGLETRANSLATE($B2,"en","<Google-language-code>"))`. The source text is in column B; blank source cells remain blank.
+
+  | Unity locale | Google language code | Use |
+  |---|---|---|
+  | `en` | `en` | Source text; no formula |
+  | `ar` | `ar` | Arabic |
+  | `fa` | `fa` | Persian |
+  | `hy` | `hy` | Armenian |
+  | `es` | `es` | Spanish |
+  | `de` | `de` | German |
+  | `it` | `it` | Italian |
+  | `fr` | `fr` | French |
+  | `ja` | `ja` | Japanese |
+  | `zh-Hans` | `zh-CN` | Simplified Chinese |
+  | `pt-BR` | `pt` | Brazilian Portuguese |
+
+- **Push and pull:** configure the Unity-to-Sheets push to include only `Key` and `en`, never locale or status columns, so formulas and reviewer edits cannot be overwritten. Pull only the locale columns back into their matching String Tables; do not import `Key`, `en`, or status values. Pull before every build so all translations ship in the build and work offline, without runtime network access or an API key in the game.
+- **Review:** target cells start with the formula and a locale-specific status of `auto`. A reviewer replaces the formula with plain text and sets that locale's status to `reviewed`; later source pushes must preserve both. Review dealer questions as well as UI strings before release.
+- **Adding a language:** create its Unity Locale, add a sheet translation column with the matching Google language code and formula, then add its pull mapping. This requires no game-code change.
+- **Guardrails:** preserve Smart String placeholders such as `{0}` and `{count:plural:...}` and check them after pull; do not allow translation to break plural blocks. Write or verify Arabic six-form plural variants by hand. Keep right-to-left translations as plain text and check their rendering in the RTL UI.
 
 ## 8. Accessibility & settings
 - Local `PlayerPrefs` settings cover per-action confirmation opt-outs, optional board-card hints, hint jiggle, reduced motion and haptics on/off. Colour-blind-friendly suit tinting (four-colour deck option per skin), adjustable card size, left-handed hand placement, and audio buses (Master/Music/SFX/Voice) remain later accessibility work.
@@ -366,10 +389,11 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, 2nd test deck skin via Addressables | A second skin with a different sheet layout imports and plays |
 | **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync, reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4 |
 | **M8** | Platforms & monetization | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads + consent, Unity IAP Remove ads + restore, mobile Build & Upload window + fastlane lanes, Game Center / Play Games | Steam beta-branch upload from the editor. One-click TestFlight and Play internal builds |
-| **M9** | Localization & polish | The 11 languages, the font chain, RTL mirroring, localized store listings, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Release-candidate checklist. Native-speaker review for `ar` and `fa` RTL screens |
+| **M9** | Localization & polish | Install `com.unity.localization`; Google Sheets push/pull and auto-translated String Tables for all locales; the 11 languages, font chain, RTL mirroring, localized store listings, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Every String Table entry is non-empty in all locales; Smart String placeholders are checked after pull; release-candidate checklist and native-speaker review for `ar` and `fa` RTL screens |
 
 Suggested order: M1 → M2 → M3 → M4/M5 in parallel → M6 → M7 → M8 → M9. M7 can start after M2, since it only depends on Core and the views.
 Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Generator plus one RTL test locale (`ar`) in M4, so right-to-left layout issues show up early rather than in M9.
+The Google Sheets hookup can also start alongside the `ar` RTL test locale, so strings are synced from then on.
 
 **M4 implementation (2026-11-17):** All gameplay/UI and playtest-feedback code is implemented, including the follow-up Redo, confirmation prompts and PC shortcuts. Added tests cover Redo, timer timeout/Halas event, bot hold-back and inference, card tracking, board arrangement, portrait hand rows and group hand ordering. Unity 6000.4.0f1 verification passes: EditMode 169/169 and PlayMode 51/51. The Advanced Text Generator project setting is not enabled, so its root USS declaration is deferred until the setting is enabled and an Arabic RTL locale can be checked. **Closed (2026-11-17): playtest passed; M4 is done.**
 
@@ -414,6 +438,8 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 | 17 | Playtest: HUD feedback | Opponent card stacks indicate counts and left/right seats; last-card warnings animate on the card; Gone Down tags expire; timeout notification says "Halas!" | §1.9, §3.3, M4 |
 | 18 | Playtest: hints and bots | Hints outline and jiggle, optionally suggesting board moves; bots gain hold-back and inferred-card blocking strategies | §1.11, §3.5, M4 |
 | 19 | Playtest: safety and PC controls | Add Redo; confirm destructive actions (Revert, Draw/Pass after placing, Fix board returning cards, leave/restart); full PC keyboard shortcuts with a cheat sheet | §1.8, §3.4, M4 |
+| 20 | Translation workflow | Translate in the editor before builds through Unity Localization's Google Sheets extension and `GOOGLETRANSLATE`; use Google Cloud Translation API v3 only as a fallback | §7.1, M9 |
+| 21 | Dealer-question localization | Auto-translate dealer questions like other strings, then have native speakers review them before release | §7, §7.1 |
 | Q-B | After a stalemate | A tie is a Stalemate and prompts for a new dealer; a sole player with the fewest cards wins normally and deals next | §1.10 |
 
 ### 11.2 Still open (new, smaller; the defaults in the text apply until answered)
@@ -425,3 +451,4 @@ Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Gene
 - **Q-G Double-tap quick-place**: keep it as proposed in §3.4, or leave it out?
 - **Q-H Prices**: the Steam price and the Remove ads price tier.
 - **Q-I Board arrangement online**: should a set's position be shared with everyone at the table (it would then be sent as a small view-only message), or be a local preference per client (default)?
+- **Q-J Review depth**: should all 11 languages receive native-speaker review before release, or only `ar`/`fa`, with the rest shipping as machine translation?

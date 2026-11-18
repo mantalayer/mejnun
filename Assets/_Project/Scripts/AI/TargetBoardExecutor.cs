@@ -49,38 +49,221 @@ namespace Mejnun.AI
                 }
             }
 
-            for (var index = 0; index < targets.Count && game.State.Phase == GamePhase.Playing; index++)
+            var pending = new bool[targets.Count];
+            var pendingCount = 0;
+            for (var index = 0; index < targets.Count; index++)
             {
-                if (bases[index] == 0)
+                pending[index] = bases[index] != 0;
+                if (pending[index])
+                {
+                    pendingCount++;
+                }
+            }
+
+            while (pendingCount > 0 && game.State.Phase == GamePhase.Playing)
+            {
+                var progressed = false;
+                for (var index = 0; index < targets.Count; index++)
+                {
+                    if (!pending[index])
+                    {
+                        continue;
+                    }
+
+                    var meld = FindMeld(game.State.Board, bases[index]);
+                    if (meld == null)
+                    {
+                        return false;
+                    }
+
+                    var missing = MissingCards(meld, targets[index]);
+                    if (missing.Count == 0)
+                    {
+                        pending[index] = false;
+                        pendingCount--;
+                        progressed = true;
+                        break;
+                    }
+
+                    if (!CanAddCards(meld.Cards, missing))
+                    {
+                        continue;
+                    }
+
+                    if (!Apply(game, GameCommand.MoveCards(seat, Ids(missing),
+                            CardTarget.Meld(meld.Id, meld.Cards.Count)), output))
+                    {
+                        return false;
+                    }
+
+                    pending[index] = false;
+                    pendingCount--;
+                    progressed = true;
+                    break;
+                }
+
+                if (progressed)
                 {
                     continue;
                 }
 
-                var meld = FindMeld(game.State.Board, bases[index]);
-                if (meld == null)
+                var blockedIndex = 0;
+                while (!pending[blockedIndex])
+                {
+                    blockedIndex++;
+                }
+
+                var blockedMeld = FindMeld(game.State.Board, bases[blockedIndex]);
+                if (blockedMeld == null)
                 {
                     return false;
                 }
 
-                var missing = new List<byte>();
-                for (var cardIndex = 0; cardIndex < targets[index].Count; cardIndex++)
+                var blockedMissing = MissingCards(blockedMeld, targets[blockedIndex]);
+                var extraneous = FindExtraneousCards(blockedMeld, targetSets[blockedIndex], blockedMissing);
+                var requiredRemovals = blockedMeld.Cards.Count + blockedMissing.Count - 13;
+                for (var cardIndex = 0; extraneous.Count < requiredRemovals &&
+                     cardIndex < blockedMeld.Cards.Count; cardIndex++)
                 {
-                    var id = targets[index][cardIndex].Id;
-                    if (!Contains(meld, id))
+                    var card = blockedMeld.Cards[cardIndex];
+                    if (!targetSets[blockedIndex].Contains(card.Id) && !Contains(extraneous, card.Id))
                     {
-                        missing.Add(id);
+                        extraneous.Add(card);
                     }
                 }
 
-                if (missing.Count > 0 && !Apply(game,
-                        GameCommand.MoveCards(seat, missing.ToArray(), CardTarget.Meld(meld.Id, meld.Cards.Count)),
-                        output))
+                if (extraneous.Count == 0 || extraneous.Count < requiredRemovals ||
+                    !MoveToTemporaryMelds(game, seat, extraneous, output))
                 {
                     return false;
                 }
             }
 
             return game.State.Phase != GamePhase.Playing || FixStraightOrder(game, seat, output);
+        }
+
+        private static List<Card> MissingCards(Meld meld, IReadOnlyList<Card> target)
+        {
+            var missing = new List<Card>();
+            for (var index = 0; index < target.Count; index++)
+            {
+                if (!Contains(meld, target[index].Id))
+                {
+                    missing.Add(target[index]);
+                }
+            }
+
+            return missing;
+        }
+
+        private static bool CanAddCards(IReadOnlyList<Card> existing, IReadOnlyList<Card> added)
+        {
+            if (existing.Count + added.Count > 13)
+            {
+                return false;
+            }
+
+            var cards = new List<Card>(existing.Count + added.Count);
+            for (var index = 0; index < existing.Count; index++)
+            {
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    if (existing[index].IsDoubleOf(cards[cardIndex]))
+                    {
+                        return false;
+                    }
+                }
+
+                cards.Add(existing[index]);
+            }
+
+            for (var index = 0; index < added.Count; index++)
+            {
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    if (added[index].IsDoubleOf(cards[cardIndex]))
+                    {
+                        return false;
+                    }
+                }
+
+                cards.Add(added[index]);
+            }
+
+            return true;
+        }
+
+        private static List<Card> FindExtraneousCards(Meld meld, HashSet<byte> target, IReadOnlyList<Card> missing)
+        {
+            var extraneous = new List<Card>();
+            for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+            {
+                var card = meld.Cards[cardIndex];
+                if (target.Contains(card.Id))
+                {
+                    continue;
+                }
+
+                for (var missingIndex = 0; missingIndex < missing.Count; missingIndex++)
+                {
+                    if (card.IsDoubleOf(missing[missingIndex]))
+                    {
+                        extraneous.Add(card);
+                        break;
+                    }
+                }
+            }
+
+            return extraneous;
+        }
+
+        private static bool MoveToTemporaryMelds(MejnunGame game, int seat, IReadOnlyList<Card> cards,
+            List<GameCommand> output)
+        {
+            var groups = new List<List<Card>>();
+            for (var index = 0; index < cards.Count; index++)
+            {
+                var card = cards[index];
+                List<Card> group = null;
+                for (var groupIndex = 0; groupIndex < groups.Count; groupIndex++)
+                {
+                    var candidate = groups[groupIndex];
+                    if (candidate.Count >= 13)
+                    {
+                        continue;
+                    }
+
+                    var hasDouble = false;
+                    for (var cardIndex = 0; cardIndex < candidate.Count; cardIndex++)
+                    {
+                        hasDouble |= card.IsDoubleOf(candidate[cardIndex]);
+                    }
+
+                    if (!hasDouble)
+                    {
+                        group = candidate;
+                        break;
+                    }
+                }
+
+                if (group == null)
+                {
+                    group = new List<Card>();
+                    groups.Add(group);
+                }
+
+                group.Add(card);
+            }
+
+            for (var groupIndex = 0; groupIndex < groups.Count; groupIndex++)
+            {
+                if (!Apply(game, GameCommand.MoveCards(seat, Ids(groups[groupIndex]), CardTarget.NewMeld(0)), output))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static bool FixStraightOrder(MejnunGame game, int seat, List<GameCommand> output)
@@ -194,6 +377,19 @@ namespace Mejnun.AI
             for (var index = 0; index < meld.Cards.Count; index++)
             {
                 if (meld.Cards[index].Id == cardId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool Contains(IReadOnlyList<Card> cards, byte cardId)
+        {
+            for (var index = 0; index < cards.Count; index++)
+            {
+                if (cards[index].Id == cardId)
                 {
                     return true;
                 }

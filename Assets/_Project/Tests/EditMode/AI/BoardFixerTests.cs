@@ -52,6 +52,20 @@ namespace Mejnun.AI.Tests
         }
 
         [Test]
+        public void FixBoard_MovesDoubleConflictBeforeAddingTargetCard()
+        {
+            var game = AiTestUtil.Game(new string[0], new[]
+            {
+                new[] { "2H", "3H", "4H", "5H'", "5C" },
+                new[] { "5H", "5D", "5S", "6H" }
+            }, true);
+
+            ApplyFix(game);
+
+            AssertBoardValid(game);
+        }
+
+        [Test]
         public void Timeout_AfterFixingValidHandPlacementEndsWithoutDrawing()
         {
             var game = AiTestUtil.Game(new[] { "5H", "9C" }, new[] { new[] { "2H", "3H", "4H" } }, true,
@@ -87,6 +101,24 @@ namespace Mejnun.AI.Tests
             for (var index = 0; index < commands.Count; index++)
             {
                 Assert.That(game.Apply(commands[index]).Ok, Is.True, "Fix command " + index + " failed.");
+                AssertMeldLimits(game);
+            }
+        }
+
+        private static void AssertMeldLimits(MejnunGame game)
+        {
+            for (var meldIndex = 0; meldIndex < game.State.Board.Count; meldIndex++)
+            {
+                var cards = game.State.Board[meldIndex].Cards;
+                Assert.That(cards.Count, Is.LessThanOrEqualTo(13));
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    for (var otherIndex = 0; otherIndex < cardIndex; otherIndex++)
+                    {
+                        Assert.That(cards[cardIndex].IsDoubleOf(cards[otherIndex]), Is.False,
+                            "A fix command put a double in meld " + game.State.Board[meldIndex].Id + ".");
+                    }
+                }
             }
         }
 
