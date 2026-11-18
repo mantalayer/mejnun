@@ -253,6 +253,28 @@ namespace Mejnun.Game
             return StartMatch(seatConfigs, seed, turnSeconds, null);
         }
 
+        public bool DebugWinCurrentGame()
+        {
+            if (Game == null || Game.State.Phase != GamePhase.Playing || Screen == MatchFlowScreen.Results ||
+                resultRecorded)
+            {
+                return false;
+            }
+
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                if (seats[seat].IsBot)
+                {
+                    continue;
+                }
+
+                ShowResults(new GameResult(GameEndKind.EmptyHand, seat, seat));
+                return true;
+            }
+
+            return false;
+        }
+
         private bool StartMatch(IReadOnlyList<SeatConfig> seatConfigs, ulong? seed, int turnSeconds,
             MatchRequest request)
         {

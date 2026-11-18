@@ -18,6 +18,22 @@ namespace Mejnun.Editor
             ProgressionService.Instance.AddDebugWin();
         }
 
+        [MenuItem("Mejnun/Debug/Match/Win Current Game")]
+        public static void WinCurrentGame()
+        {
+            var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
+            if (matchFlow != null)
+            {
+                matchFlow.DebugWinCurrentGame();
+            }
+        }
+
+        [MenuItem("Mejnun/Debug/Match/Win Current Game", true)]
+        public static bool CanWinCurrentGame()
+        {
+            return EditorApplication.isPlaying && Object.FindAnyObjectByType<MatchFlow>() != null;
+        }
+
         [MenuItem("Mejnun/Debug/Profile/Unlock All")]
         public static void UnlockAll()
         {

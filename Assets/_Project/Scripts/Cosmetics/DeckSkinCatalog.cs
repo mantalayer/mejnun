@@ -62,7 +62,8 @@ namespace Mejnun.Cosmetics
                     var skin = skins[index];
                     if (skin != null && !string.IsNullOrWhiteSpace(skin.Id) && ids.Add(skin.Id))
                     {
-                        entries.Add(new DeckSkinInfo(skin.Id, skin.DisplayName, skin.Unlock, false, skin));
+                        entries.Add(new DeckSkinInfo(skin.Id, skin.DisplayName, skin.Unlock, false, skin,
+                            skin.Artist));
                     }
                 }
             }
@@ -75,7 +76,11 @@ namespace Mejnun.Cosmetics
                     if (entry != null && !string.IsNullOrWhiteSpace(entry.Id) && ids.Add(entry.Id))
                     {
                         loadedAddressableSkins.TryGetValue(entry.Id, out var loadedSkin);
-                        entries.Add(new DeckSkinInfo(entry.Id, entry.DisplayName, entry.Unlock, true, loadedSkin));
+                        var artist = string.IsNullOrWhiteSpace(entry.Artist) && loadedSkin != null
+                            ? loadedSkin.Artist
+                            : entry.Artist;
+                        entries.Add(new DeckSkinInfo(entry.Id, entry.DisplayName, entry.Unlock, true, loadedSkin,
+                            artist));
                     }
                 }
             }

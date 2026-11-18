@@ -12,6 +12,7 @@ namespace Mejnun.UI
     {
         private readonly VisualElement root;
         private readonly MatchFlow matchFlow;
+        private readonly DeckUnlockPlayer unlockPlayer;
         private readonly Label title;
         private readonly Label message;
         private readonly Label counts;
@@ -26,10 +27,11 @@ namespace Mejnun.UI
         private readonly VisualElement rematchConfirm;
         private readonly Toggle rematchDontAsk;
 
-        public ResultsScreen(VisualElement documentRoot, MatchFlow flow)
+        public ResultsScreen(VisualElement documentRoot, MatchFlow flow, DeckSkinLoader loader)
         {
             root = documentRoot.Q<VisualElement>("results-screen");
             matchFlow = flow;
+            unlockPlayer = new DeckUnlockPlayer(documentRoot, loader);
             title = root.Q<Label>("result-title");
             message = root.Q<Label>("result-message");
             counts = root.Q<Label>("result-counts");
@@ -52,6 +54,10 @@ namespace Mejnun.UI
         public void SetVisible(bool visible)
         {
             root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!visible)
+            {
+                unlockPlayer.Cancel();
+            }
         }
 
         public void Refresh()
@@ -111,6 +117,8 @@ namespace Mejnun.UI
                 {
                     AddGalleryChip(newGalleryItems, report.NewlyUnlockedItems[index], "New: ");
                 }
+
+                unlockPlayer.Play(report);
             }
 
             AddLockedGalleryItems();

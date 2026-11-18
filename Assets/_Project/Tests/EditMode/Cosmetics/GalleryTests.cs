@@ -2,10 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using Mejnun.Cosmetics;
+using Mejnun.Core;
 using Mejnun.Game;
 using Mejnun.UI.FrontEnd;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Mejnun.Cosmetics.Tests
@@ -86,6 +88,48 @@ namespace Mejnun.Cosmetics.Tests
             Assert.That(root.Query<Button>(className: "gallery-item-tile").ToList().Count, Is.EqualTo(3));
         }
 
+        [Test]
+        public void DeckTilesShowArtistOnlyWhenSkinHasOne()
+        {
+            gallery.Dispose();
+            var texture = new Texture2D(1, 1);
+            var sprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            var creditedSkin = CreateSkin("credited", "Credited Deck", sprite, "A. Creator");
+            var uncreditedSkin = CreateSkin("uncredited", "Uncredited Deck", sprite, string.Empty);
+            var deckCatalog = ScriptableObject.CreateInstance<DeckSkinCatalog>();
+            deckCatalog.Configure(new[] { creditedSkin, uncreditedSkin });
+            var feltCatalog = ScriptableObject.CreateInstance<TableFeltCatalog>();
+            feltCatalog.Configure(Array.Empty<TableFelt>());
+            var testCatalog = ScriptableObject.CreateInstance<CosmeticCatalog>();
+            testCatalog.Configure(deckCatalog, feltCatalog);
+            catalog = testCatalog;
+            progression = new ProgressionService(new ProfileStore(profilePath), catalog);
+            gallery = new GalleryScreen(root, catalog, progression, null);
+
+            try
+            {
+                gallery.Show();
+
+                var tiles = root.Query<Button>(className: "gallery-item-tile").ToList();
+                var creditedTile = tiles.Single(tile => tile.Q<Label>("gallery-item-name").text == "Credited Deck");
+                var uncreditedTile = tiles.Single(tile => tile.Q<Label>("gallery-item-name").text == "Uncredited Deck");
+                Assert.That(creditedTile.Q<Label>("gallery-item-artist").text, Is.EqualTo("by A. Creator"));
+                Assert.That(uncreditedTile.Q<Label>("gallery-item-artist"), Is.Null);
+            }
+            finally
+            {
+                gallery.Dispose();
+                gallery = null;
+                UnityEngine.Object.DestroyImmediate(testCatalog);
+                UnityEngine.Object.DestroyImmediate(feltCatalog);
+                UnityEngine.Object.DestroyImmediate(deckCatalog);
+                UnityEngine.Object.DestroyImmediate(creditedSkin);
+                UnityEngine.Object.DestroyImmediate(uncreditedSkin);
+                UnityEngine.Object.DestroyImmediate(sprite);
+                UnityEngine.Object.DestroyImmediate(texture);
+            }
+        }
+
         private DeckSkinInfo FindBuiltInUnlock(UnlockKind kind, int target)
         {
             var entries = catalog.Decks.GetEntries();
@@ -117,6 +161,14 @@ namespace Mejnun.Cosmetics.Tests
             gallery.Add(new VisualElement { name = "gallery-preview" });
             gallery.Add(new ProgressBar { name = "gallery-progress" });
             return root;
+        }
+
+        private static DeckSkin CreateSkin(string id, string displayName, Sprite sprite, string artist)
+        {
+            var skin = ScriptableObject.CreateInstance<DeckSkin>();
+            skin.Configure(id, displayName, Enumerable.Repeat(sprite, Card.CardsPerDeck).ToArray(), sprite,
+                null, false, 100f, artist);
+            return skin;
         }
 
         private static void DeleteIfExists(string path)

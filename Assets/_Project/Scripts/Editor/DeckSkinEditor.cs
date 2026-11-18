@@ -28,6 +28,7 @@ namespace Mejnun.Editor
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("id"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("displayName"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("artist"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cardBack"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("alternateBacks"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("blank"));

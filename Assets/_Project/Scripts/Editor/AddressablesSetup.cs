@@ -69,7 +69,7 @@ namespace Mejnun.Editor
             catalog.ConfigureAddressableSkins(new[]
             {
                 new AddressableDeckSkinEntry(skin.Id, skin.DisplayName, skin.Unlock,
-                    new AssetReferenceT<DeckSkin>(assetGuid))
+                    new AssetReferenceT<DeckSkin>(assetGuid), skin.Artist)
             });
 
             EditorUtility.SetDirty(catalog);

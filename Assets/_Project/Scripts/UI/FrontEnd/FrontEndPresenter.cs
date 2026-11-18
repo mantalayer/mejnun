@@ -1,5 +1,6 @@
 using Mejnun.Cosmetics;
 using Mejnun.Game;
+using Mejnun.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -13,6 +14,8 @@ namespace Mejnun.UI.FrontEnd
         [SerializeField] private DeckSkinLoader deckSkinLoader;
 
         private FrontEndFlow flow;
+        private ProgressionService progressionService;
+        private DeckUnlockPlayer deckUnlockPlayer;
         private VisualElement safeAreaRoot;
         private Rect lastSafeArea;
         private int lastWidth;
@@ -49,6 +52,9 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var root = uiDocument.rootVisualElement;
+            deckUnlockPlayer = new DeckUnlockPlayer(root, deckSkinLoader);
+            progressionService = ProgressionService.Instance;
+            progressionService.MatchRecorded += OnMatchRecorded;
             safeAreaRoot = root.Q<VisualElement>("safe-area");
             flow = new FrontEndFlow(root, cosmeticCatalog, deckSkinLoader);
             ApplySafeArea();
@@ -77,7 +83,18 @@ namespace Mejnun.UI.FrontEnd
 
         private void OnDestroy()
         {
+            if (progressionService != null)
+            {
+                progressionService.MatchRecorded -= OnMatchRecorded;
+            }
+
+            deckUnlockPlayer?.Cancel();
             flow?.Dispose();
+        }
+
+        private void OnMatchRecorded(ProgressionReport report)
+        {
+            deckUnlockPlayer?.Play(report);
         }
 
         private void ApplySafeArea()

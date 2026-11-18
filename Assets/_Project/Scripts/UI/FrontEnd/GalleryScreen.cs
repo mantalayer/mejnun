@@ -141,7 +141,7 @@ namespace Mejnun.UI.FrontEnd
         {
             var owned = evaluator.IsOwned(skin.Id, skin.Unlock);
             var progress = skin.Unlock.Evaluate(progression.Profile);
-            var tile = CreateTile(skin.Id, skin.DisplayName, owned, progress, evaluator);
+            var tile = CreateTile(skin.Id, skin.DisplayName, owned, progress, evaluator, skin.Artist);
             var preview = new VisualElement();
             preview.AddToClassList("gallery-tile-preview");
             previews.AddDeckFan(preview, skin, OnPreviewLoaded);
@@ -163,7 +163,7 @@ namespace Mejnun.UI.FrontEnd
         }
 
         private Button CreateTile(string id, string displayName, bool owned, UnlockProgress progress,
-            UnlockEvaluator evaluator)
+            UnlockEvaluator evaluator, string artist = null)
         {
             var tile = new Button();
             tile.AddToClassList("gallery-item-tile");
@@ -178,6 +178,11 @@ namespace Mejnun.UI.FrontEnd
             }
 
             tile.Add(new Label(displayName) { name = "gallery-item-name" });
+            if (!string.IsNullOrWhiteSpace(artist))
+            {
+                tile.Add(new Label("by " + artist) { name = "gallery-item-artist" });
+            }
+
             if (!owned)
             {
                 tile.Add(new Label("🔒  " + evaluator.GetRequirement(id).Describe(progress))
