@@ -204,7 +204,8 @@ namespace Mejnun.Game
 
         private void Update()
         {
-            if (!matchPaused && !applicationPaused && Game != null && Game.State.Phase == GamePhase.Playing)
+            if (!matchPaused && !applicationPaused && Game != null && Game.State.Phase == GamePhase.Playing &&
+                !IsBotSeat(Game.State.CurrentSeat))
             {
                 elapsedMatchSeconds += Time.unscaledDeltaTime;
             }
