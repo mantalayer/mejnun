@@ -116,7 +116,7 @@ namespace Mejnun.Game.Tests
         {
             var layout = BoardLayout.Compute(CreateMelds(1, 3), 1.7f, new Vector2(0.64f, 0.97f));
             var meld = layout.Melds[0];
-            var perimeterPoint = new Vector2(meld.Bounds.xMax + layout.CardSize.x * 0.4f, meld.Bounds.center.y);
+            var perimeterPoint = new Vector2(meld.Bounds.xMin - layout.CardSize.x * 0.4f, meld.Bounds.center.y);
 
             Assert.That(layout.TryHitMeldFrame(perimeterPoint, out var meldId), Is.True);
             Assert.That(meldId, Is.EqualTo(meld.MeldId));

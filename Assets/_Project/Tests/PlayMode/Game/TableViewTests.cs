@@ -78,6 +78,7 @@ namespace Mejnun.Game.Tests
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(matchFlow, Is.Not.Null);
             Assert.That(matchFlow.StartMatch(3, new[] { "Sam", "Alex", "Lee" }, 20261118), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
 
             Assert.That(matchFlow.ChooseFirstPlayer(0).Ok, Is.True);
 
@@ -93,6 +94,7 @@ namespace Mejnun.Game.Tests
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(matchFlow, Is.Not.Null);
             Assert.That(matchFlow.StartMatch(3, new[] { "Sam", "Alex", "Lee" }, 202601), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
             Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
             Assert.That(matchFlow.RevealHand(), Is.True);
 
@@ -126,6 +128,7 @@ namespace Mejnun.Game.Tests
             Assert.That(matchFlow, Is.Not.Null);
             var seats = new[] { SeatConfig.Human("Sam"), SeatConfig.Human("Alex") };
             Assert.That(matchFlow.StartMatch(seats, 20261117UL, 10), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
             Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
             Assert.That(matchFlow.RevealHand(), Is.True);
 
@@ -143,18 +146,17 @@ namespace Mejnun.Game.Tests
             for (var index = 0; index < hand.Count; index++)
             {
                 var cardView = tableView.GetCardView(hand[index].Id);
-                var skin = tableView.SkinCatalog.Resolve(state.DeckFaces[hand[index].Deck], hand[index].Deck);
+                var expectedBack = tableView.GetCardBack(state, hand[index].Deck);
                 Assert.That(cardView.IsFaceUp, Is.False);
-                Assert.That(cardView.Renderer.sprite, Is.EqualTo(skin.CardBack));
+                Assert.That(cardView.Renderer.sprite, Is.EqualTo(expectedBack));
             }
 
             for (var index = 0; index < boardCards.Length; index++)
             {
                 var cardView = tableView.GetCardView(boardCards[index].Id);
-                var skin = tableView.SkinCatalog.Resolve(state.DeckFaces[boardCards[index].Deck],
-                    boardCards[index].Deck);
+                var expectedBack = tableView.GetCardBack(state, boardCards[index].Deck);
                 Assert.That(cardView.IsFaceUp, Is.False);
-                Assert.That(cardView.Renderer.sprite, Is.EqualTo(skin.CardBack));
+                Assert.That(cardView.Renderer.sprite, Is.EqualTo(expectedBack));
             }
 
             matchFlow.SetPaused(false);
@@ -188,6 +190,7 @@ namespace Mejnun.Game.Tests
 
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(matchFlow.StartMatch(2, new[] { "Sam", "Alex" }, 20261117), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
             Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
             Assert.That(matchFlow.RevealHand(), Is.True);
             yield return new WaitForSeconds(0.25f);
@@ -219,6 +222,7 @@ namespace Mejnun.Game.Tests
 
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(matchFlow.StartMatch(2, new[] { "Sam", "Alex" }, 20261118), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
             Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
             Assert.That(matchFlow.RevealHand(), Is.True);
             yield return new WaitForSeconds(0.3f);
@@ -262,6 +266,18 @@ namespace Mejnun.Game.Tests
             }
 
             return count;
+        }
+
+        private static IEnumerator WaitForRoundInitialization(MatchFlow flow)
+        {
+            var frames = 0;
+            while (flow.IsInitializingRound && frames++ < 300)
+            {
+                yield return null;
+            }
+
+            Assert.That(flow.IsInitializingRound, Is.False);
+            Assert.That(flow.Game, Is.Not.Null);
         }
     }
 }

@@ -72,3 +72,7 @@ MonoBehaviour:
   blank: {fileID: 0}
   pixelArt: 0
   pixelsPerUnit: 100
+  unlock:
+    kind: 3
+    target: 0
+    achievementId: first_mejnun

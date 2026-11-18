@@ -10,8 +10,7 @@ namespace Mejnun.UI
 {
     public sealed class HudPresenter : MonoBehaviour
     {
-        private static readonly string[] CpuSpeedLabels = { "Glacial", "Very slow", "Slow", "Normal", "Fast", "Very fast" };
-
+        private const float HandBottomBarFitCompensationPixels = 8f;
         public enum OpponentSide
         {
             Top,
@@ -67,27 +66,11 @@ namespace Mejnun.UI
         private Toggle confirmDontAsk;
         private VisualElement pausePanel;
         private VisualElement settingsPanel;
+        private SettingsPanel settingsPanelBinder;
         private VisualElement helpPanel;
         private VisualElement bottomBar;
         private VisualElement topBar;
         private VisualElement markerLayer;
-        private Toggle hintBoardMovesToggle;
-        private Toggle hintJiggleToggle;
-        private Toggle reducedMotionToggle;
-        private Toggle hapticsToggle;
-        private Slider handArcAmountSlider;
-        private Slider handSpreadSlider;
-        private Slider handCardScaleSlider;
-        private Slider handLiftSlider;
-        private Slider opponentCardScaleSlider;
-        private Slider zoomSensitivitySlider;
-        private DropdownField cpuSpeedDropdown;
-        private Toggle showFastForwardToggle;
-        private Toggle overlapSetsToggle;
-        private Toggle organicBoardToggle;
-        private Slider boardCardSpreadSlider;
-        private Slider cardMessinessSlider;
-        private Toggle easyOpeningDealToggle;
         private Action pendingConfirmAction;
         private Action<bool> pendingConfirmSetting;
         private float nextBadgePulse;
@@ -120,6 +103,13 @@ namespace Mejnun.UI
             }
 
             CacheElements();
+            if (settingsPanel != null)
+            {
+                settingsPanelBinder = new SettingsPanel();
+                settingsPanelBinder.Initialize(settingsPanel, tableView, tableController);
+                settingsPanelBinder.Closed += CloseSettings;
+            }
+
             RegisterButtons();
         }
 
@@ -170,6 +160,15 @@ namespace Mejnun.UI
             goneDownPopupHide?.Pause();
             goneDownTagHide?.Pause();
             halasHide?.Pause();
+        }
+
+        private void OnDestroy()
+        {
+            if (settingsPanelBinder != null)
+            {
+                settingsPanelBinder.Closed -= CloseSettings;
+                settingsPanelBinder.Dispose();
+            }
         }
 
         private void Update()
@@ -230,25 +229,8 @@ namespace Mejnun.UI
             bottomBar = root.Q<VisualElement>("bottom-bar");
             topBar = root.Q<VisualElement>("top-bar");
             markerLayer = root.Q<VisualElement>("marker-layer");
-            hintBoardMovesToggle = root.Q<Toggle>("hint-board-moves-toggle");
-            hintJiggleToggle = root.Q<Toggle>("hint-jiggle-toggle");
-            reducedMotionToggle = root.Q<Toggle>("reduced-motion-toggle");
-            hapticsToggle = root.Q<Toggle>("haptics-toggle");
-            handArcAmountSlider = root.Q<Slider>("hand-arc-amount-slider");
-            handSpreadSlider = root.Q<Slider>("hand-spread-slider");
-            handCardScaleSlider = root.Q<Slider>("hand-card-scale-slider");
-            handLiftSlider = root.Q<Slider>("hand-lift-slider");
-            opponentCardScaleSlider = root.Q<Slider>("opponent-card-scale-slider");
-            zoomSensitivitySlider = root.Q<Slider>("zoom-sensitivity-slider");
             fastForwardButton = root.Q<Button>("fast-forward-button");
             markSetButton = root.Q<Button>("mark-set-button");
-            cpuSpeedDropdown = root.Q<DropdownField>("cpu-speed-dropdown");
-            showFastForwardToggle = root.Q<Toggle>("show-fast-forward-toggle");
-            overlapSetsToggle = root.Q<Toggle>("overlap-sets-toggle");
-            organicBoardToggle = root.Q<Toggle>("organic-board-toggle");
-            boardCardSpreadSlider = root.Q<Slider>("board-card-spread-slider");
-            cardMessinessSlider = root.Q<Slider>("card-messiness-slider");
-            easyOpeningDealToggle = root.Q<Toggle>("easy-opening-deal-toggle");
         }
 
         private void RegisterButtons()
@@ -273,138 +255,7 @@ namespace Mejnun.UI
             root.Q<Button>("resume-button").clicked += Resume;
             root.Q<Button>("restart-button").clicked += RequestRestart;
             root.Q<Button>("settings-button").clicked += OpenSettings;
-            root.Q<Button>("settings-close-button").clicked += CloseSettings;
             root.Q<Button>("help-close-button").clicked += ToggleHelp;
-            hintBoardMovesToggle.RegisterValueChangedCallback(changeEvent =>
-            {
-                GameSettings.HintBoardMoves = changeEvent.newValue;
-                tableController?.RefreshHintOptions();
-            });
-            hintJiggleToggle.RegisterValueChangedCallback(changeEvent => GameSettings.HintJiggle = changeEvent.newValue);
-            reducedMotionToggle.RegisterValueChangedCallback(changeEvent => GameSettings.ReducedMotion = changeEvent.newValue);
-            hapticsToggle.RegisterValueChangedCallback(changeEvent => GameSettings.HapticsEnabled = changeEvent.newValue);
-            RegisterHandSlider(handArcAmountSlider, GameSettings.HandArcAmount,
-                value => GameSettings.HandArcAmount = value);
-            RegisterHandSlider(handSpreadSlider, GameSettings.HandSpread,
-                value => GameSettings.HandSpread = value);
-            RegisterHandSlider(handCardScaleSlider, GameSettings.HandCardScale,
-                value => GameSettings.HandCardScale = value);
-            RegisterHandSlider(handLiftSlider, GameSettings.HandLift,
-                value => GameSettings.HandLift = value);
-            if (opponentCardScaleSlider != null)
-            {
-                opponentCardScaleSlider.RegisterValueChangedCallback(changeEvent =>
-                {
-                    GameSettings.OpponentCardScale = changeEvent.newValue;
-                    if (tableController != null && tableController.Game != null)
-                    {
-                        RefreshSeats(tableController.Game.State);
-                    }
-                });
-                opponentCardScaleSlider.SetValueWithoutNotify(GameSettings.OpponentCardScale);
-            }
-            if (zoomSensitivitySlider != null)
-            {
-                zoomSensitivitySlider.RegisterValueChangedCallback(changeEvent =>
-                    GameSettings.ZoomSensitivity = changeEvent.newValue);
-                zoomSensitivitySlider.SetValueWithoutNotify(GameSettings.ZoomSensitivity);
-            }
-
-            if (cpuSpeedDropdown != null)
-            {
-                cpuSpeedDropdown.RegisterValueChangedCallback(changeEvent =>
-                {
-                    var index = Array.IndexOf(CpuSpeedLabels, changeEvent.newValue);
-                    if (index >= 0) GameSettings.CpuSpeed = index;
-                });
-                cpuSpeedDropdown.SetValueWithoutNotify(CpuSpeedLabels[GameSettings.CpuSpeed]);
-            }
-
-            if (showFastForwardToggle != null)
-            {
-                showFastForwardToggle.RegisterValueChangedCallback(changeEvent =>
-                    GameSettings.ShowFastForward = changeEvent.newValue);
-                showFastForwardToggle.SetValueWithoutNotify(GameSettings.ShowFastForward);
-            }
-
-            if (overlapSetsToggle != null)
-            {
-                overlapSetsToggle.RegisterValueChangedCallback(changeEvent =>
-                {
-                    GameSettings.OverlapSets = changeEvent.newValue;
-                    if (tableController?.Game != null)
-                    {
-                        tableView?.Sync(tableController.Game.State, tableController.Game.Turn);
-                    }
-                });
-                overlapSetsToggle.SetValueWithoutNotify(GameSettings.OverlapSets);
-            }
-
-            if (organicBoardToggle != null)
-            {
-                organicBoardToggle.RegisterValueChangedCallback(changeEvent =>
-                {
-                    GameSettings.OrganicBoard = changeEvent.newValue;
-                    if (tableController?.Game != null)
-                    {
-                        tableView?.Sync(tableController.Game.State, tableController.Game.Turn);
-                    }
-                });
-                organicBoardToggle.SetValueWithoutNotify(GameSettings.OrganicBoard);
-            }
-
-            if (cardMessinessSlider != null)
-            {
-                cardMessinessSlider.RegisterValueChangedCallback(changeEvent =>
-                {
-                    GameSettings.CardMessiness = changeEvent.newValue;
-                    if (tableController?.Game != null)
-                    {
-                        tableView?.Sync(tableController.Game.State, tableController.Game.Turn);
-                    }
-                });
-                cardMessinessSlider.SetValueWithoutNotify(GameSettings.CardMessiness);
-            }
-
-            if (boardCardSpreadSlider != null)
-            {
-                boardCardSpreadSlider.RegisterValueChangedCallback(changeEvent =>
-                {
-                    GameSettings.BoardCardSpread = changeEvent.newValue;
-                    if (tableController?.Game != null)
-                    {
-                        tableView?.Sync(tableController.Game.State, tableController.Game.Turn);
-                    }
-                });
-                boardCardSpreadSlider.SetValueWithoutNotify(GameSettings.BoardCardSpread);
-            }
-
-            if (easyOpeningDealToggle != null)
-            {
-                easyOpeningDealToggle.RegisterValueChangedCallback(changeEvent =>
-                    GameSettings.EasyOpeningDeal = changeEvent.newValue);
-                easyOpeningDealToggle.SetValueWithoutNotify(GameSettings.EasyOpeningDeal);
-            }
-
-            hintBoardMovesToggle.SetValueWithoutNotify(GameSettings.HintBoardMoves);
-            hintJiggleToggle.SetValueWithoutNotify(GameSettings.HintJiggle);
-            reducedMotionToggle.SetValueWithoutNotify(GameSettings.ReducedMotion);
-            hapticsToggle.SetValueWithoutNotify(GameSettings.HapticsEnabled);
-        }
-
-        private void RegisterHandSlider(Slider slider, float value, Action<float> setValue)
-        {
-            if (slider == null)
-            {
-                return;
-            }
-
-            slider.RegisterValueChangedCallback(changeEvent =>
-            {
-                setValue(changeEvent.newValue);
-                tableView?.RefreshHandLayout();
-            });
-            slider.SetValueWithoutNotify(value);
         }
 
         private void UpdateHandBottomInset()
@@ -417,8 +268,8 @@ namespace Mejnun.UI
                 return;
             }
 
-            var fraction = Mathf.Clamp01((root.worldBound.yMax - bottomBar.worldBound.yMin) /
-                                         root.worldBound.height);
+            var fraction = Mathf.Clamp01((root.worldBound.yMax - bottomBar.worldBound.yMin -
+                                          HandBottomBarFitCompensationPixels) / root.worldBound.height);
             tableView.SetHandBottomInset(fraction);
         }
 
@@ -1204,12 +1055,26 @@ namespace Mejnun.UI
         private void OpenSettings()
         {
             SetVisible(pausePanel, false);
-            SetVisible(settingsPanel, true);
+            if (settingsPanelBinder != null)
+            {
+                settingsPanelBinder.Show();
+            }
+            else
+            {
+                SetVisible(settingsPanel, true);
+            }
         }
 
         private void CloseSettings()
         {
-            SetVisible(settingsPanel, false);
+            if (settingsPanelBinder != null)
+            {
+                settingsPanelBinder.Hide();
+            }
+            else
+            {
+                SetVisible(settingsPanel, false);
+            }
             SetVisible(pausePanel, true);
             BlurFocusedElement();
             RefreshCurrentGame();
@@ -1245,7 +1110,7 @@ namespace Mejnun.UI
                 () =>
                 {
                     Resume();
-                    matchFlow.ReturnToSetup();
+                    matchFlow.ReturnToMenu();
                 });
         }
 

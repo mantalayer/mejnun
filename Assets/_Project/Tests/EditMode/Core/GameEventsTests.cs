@@ -11,6 +11,7 @@ namespace Mejnun.Core.Tests
             var game = new MejnunGame(new GameSetup(2, 91UL));
             var dealerChosen = 0;
             var facesAssigned = 0;
+            var feltAssigned = 0;
             var cardsDealt = 0;
             var turnStarted = 0;
             var cardsMoved = 0;
@@ -25,6 +26,7 @@ namespace Mejnun.Core.Tests
 
             game.Events.DealerChosen += seat => dealerChosen++;
             game.Events.DeckFacesAssigned += (first, second) => facesAssigned++;
+            game.Events.TableFeltAssigned += feltId => feltAssigned++;
             game.Events.CardDealt += (seat, card) => cardsDealt++;
             game.Events.TurnStarted += (seat, turnNumber) => turnStarted++;
             game.Events.CardMoved += (card, from, to) => cardsMoved++;
@@ -54,6 +56,7 @@ namespace Mejnun.Core.Tests
 
             Assert.That(dealerChosen, Is.EqualTo(1));
             Assert.That(facesAssigned, Is.EqualTo(1));
+            Assert.That(feltAssigned, Is.EqualTo(1));
             Assert.That(cardsDealt, Is.EqualTo(22));
             Assert.That(turnStarted, Is.EqualTo(3));
             Assert.That(cardsMoved, Is.EqualTo(4));

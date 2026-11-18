@@ -42,5 +42,9 @@ namespace Mejnun.Audio
 
         public const string TimerTension = "Timer_Tension";
         public const string BoardComplexity = "Board_Complexity";
+        public const string VolumeMaster = "Volume_Master";
+        public const string VolumeMusic = "Volume_Music";
+        public const string VolumeSfx = "Volume_SFX";
+        public const string VolumeVoice = "Volume_Voice";
     }
 }

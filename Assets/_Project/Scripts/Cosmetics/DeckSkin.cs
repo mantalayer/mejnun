@@ -36,6 +36,7 @@ namespace Mejnun.Cosmetics
         [SerializeField] private Sprite blank;
         [SerializeField] private bool pixelArt = true;
         [SerializeField] private float pixelsPerUnit = 100f;
+        [SerializeField] private UnlockRequirement unlock = new UnlockRequirement();
 
         public string Id => id;
         public string DisplayName => displayName;
@@ -63,6 +64,7 @@ namespace Mejnun.Cosmetics
         public Sprite Blank => blank;
         public bool PixelArt => pixelArt;
         public float PixelsPerUnit => pixelsPerUnit;
+        public UnlockRequirement Unlock => unlock ?? UnlockRequirement.Free;
 
         public Sprite GetFace(Suit suit, Rank rank)
         {
@@ -166,6 +168,11 @@ namespace Mejnun.Cosmetics
             blank = blankSprite;
             pixelArt = usePixelArt;
             pixelsPerUnit = ppu;
+        }
+
+        public void ConfigureUnlock(UnlockRequirement requirement)
+        {
+            unlock = requirement ?? UnlockRequirement.Free;
         }
     }
 }

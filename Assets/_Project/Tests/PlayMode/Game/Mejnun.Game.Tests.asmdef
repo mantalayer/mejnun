@@ -7,7 +7,8 @@
     "Mejnun.Cosmetics",
     "Mejnun.Game",
     "Mejnun.Audio",
-    "Mejnun.UI"
+    "Mejnun.UI",
+    "Unity.Addressables"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

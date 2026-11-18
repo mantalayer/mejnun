@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mejnun.AI;
+using Mejnun.Cosmetics;
 using Mejnun.Core;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Mejnun.Game
 {
     public enum MatchFlowScreen
     {
-        Setup,
+        Idle,
         DealerQuestion,
         Handoff,
         Turn,
@@ -20,6 +21,8 @@ namespace Mejnun.Game
         [SerializeField] private TableController tableController;
         [SerializeField] private TableView tableView;
         [SerializeField] private DealerQuestions dealerQuestions;
+        [SerializeField] private CosmeticCatalog cosmeticCatalog;
+        [SerializeField] private DeckSkinLoader deckSkinLoader;
 
         private string[] playerNames = Array.Empty<string>();
         private SeatConfig[] seats = Array.Empty<SeatConfig>();
@@ -30,13 +33,17 @@ namespace Mejnun.Game
         private TurnTimer turnTimer;
         private MejnunGame lastSavedGame;
         private int lastSavedTurnNumber = -1;
+        private bool resultRecorded;
+        private MatchRequest activeRequest;
         private readonly CardTracker cardTracker = new CardTracker();
 
         public MejnunGame Game { get; private set; }
         public TableController Controller => tableController;
         public TableView Table => tableView;
         public GameResult LastResult { get; private set; }
-        public MatchFlowScreen Screen { get; private set; } = MatchFlowScreen.Setup;
+        public ProgressionReport LastProgression { get; private set; }
+        public bool IsInitializingRound { get; private set; }
+        public MatchFlowScreen Screen { get; private set; } = MatchFlowScreen.Idle;
         public int SeatCount => playerNames.Length;
         public string DealerQuestion { get; private set; }
         public int CurrentSeat => Game == null ? -1 : Game.State.CurrentSeat;
@@ -147,6 +154,20 @@ namespace Mejnun.Game
             }
 
             turnTimer.Configure(this, tableController, TurnSeconds);
+            if (deckSkinLoader == null)
+            {
+                deckSkinLoader = GetComponent<DeckSkinLoader>();
+            }
+
+            if (deckSkinLoader != null && tableView != null)
+            {
+                deckSkinLoader.Configure(tableView.SkinCatalog);
+            }
+
+            if (cosmeticCatalog != null)
+            {
+                ProgressionService.Initialize(cosmeticCatalog);
+            }
         }
 
         private void OnEnable()
@@ -157,6 +178,25 @@ namespace Mejnun.Game
                 tableController.GameWon += OnGameWon;
                 tableController.GameStalemate += OnGameStalemate;
             }
+        }
+
+        private void Start()
+        {
+            if (MatchLaunch.TryTake(out var request))
+            {
+                if (request.Resume)
+                {
+                    ResumeSavedGame();
+                }
+                else
+                {
+                    StartMatch(request);
+                }
+
+                return;
+            }
+
+            SetScreen(MatchFlowScreen.Idle);
         }
 
         private void OnDisable()
@@ -185,8 +225,24 @@ namespace Mejnun.Game
             return StartMatch(humans, seed);
         }
 
+        public bool StartMatch(MatchRequest request)
+        {
+            if (request == null || request.Resume || request.Seats == null)
+            {
+                return false;
+            }
+
+            return StartMatch(request.Seats, request.Seed, request.TurnSeconds, request);
+        }
+
         /// <summary>Starts a match with any mix of local humans and bots (at least one human).</summary>
         public bool StartMatch(IReadOnlyList<SeatConfig> seatConfigs, ulong? seed = null, int turnSeconds = 0)
+        {
+            return StartMatch(seatConfigs, seed, turnSeconds, null);
+        }
+
+        private bool StartMatch(IReadOnlyList<SeatConfig> seatConfigs, ulong? seed, int turnSeconds,
+            MatchRequest request)
         {
             if (seatConfigs == null || seatConfigs.Count < 2 || seatConfigs.Count > 6)
             {
@@ -226,6 +282,18 @@ namespace Mejnun.Game
                 botDriver.Configure(tableController, seats, cardTracker);
             }
 
+            var humanCount = 0;
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                if (!seats[seat].IsBot)
+                {
+                    humanCount++;
+                }
+            }
+
+            activeRequest = request ?? new MatchRequest(seats, TurnSeconds,
+                humanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo, seed: seed);
+
             return StartRound(null, seed ?? CreateSeed(seats.Length));
         }
 
@@ -244,6 +312,18 @@ namespace Mejnun.Game
                 playerNames[seat] = seats[seat].Name;
             }
 
+            var humanCount = 0;
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                if (!seats[seat].IsBot)
+                {
+                    humanCount++;
+                }
+            }
+
+            activeRequest = new MatchRequest(seats, data.TurnSeconds,
+                humanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo, resume: true, seed: data.RoundSeed);
+
             GameSettings.FastForward = false;
             Game = SnapshotSerializer.Read(data.Snapshot);
             RoundSeed = data.RoundSeed;
@@ -254,6 +334,8 @@ namespace Mejnun.Game
                 ? "Who should go first?"
                 : dealerQuestions.GetRandomQuestion(questionRandom);
             LastResult = null;
+            LastProgression = null;
+            resultRecorded = false;
             handoffSeat = -1;
             revealedSeat = -1;
             lastSavedGame = null;
@@ -264,15 +346,25 @@ namespace Mejnun.Game
                 botDriver.Configure(tableController, seats, cardTracker);
             }
 
+            ProgressionService.Instance.SetLastUsedFelt(Game.State.TableFeltId);
+
             SetPaused(false);
             if (tableView != null)
             {
                 tableView.ClearCpuPlacementViews();
                 tableView.SetViewerSeat(-1);
                 tableView.SetHandVisible(false);
+                tableView.ApplyFelt(Game.State.TableFeltId);
             }
 
-            tableController.Initialize(Game);
+            IsInitializingRound = true;
+            if (deckSkinLoader != null && deckSkinLoader.Preload(Game.State.DeckFaces,
+                    InitializeResumedGame))
+            {
+                return true;
+            }
+
+            InitializeResumedGame();
             return true;
         }
 
@@ -385,7 +477,7 @@ namespace Mejnun.Game
             }
         }
 
-        public void ReturnToSetup()
+        public void ReturnToMenu(MenuDestination destination = default)
         {
             SaveCurrentGame();
             SetPaused(false);
@@ -400,7 +492,7 @@ namespace Mejnun.Game
                 tableView.SetViewerSeat(-1);
             }
 
-            SetScreen(MatchFlowScreen.Setup);
+            SceneFlow.LoadMainMenu(destination);
         }
 
         public bool SaveCurrentGame()
@@ -445,6 +537,8 @@ namespace Mejnun.Game
                 ? "Who should go first?"
                 : dealerQuestions.GetRandomQuestion(questionRandom);
             LastResult = null;
+            LastProgression = null;
+            resultRecorded = false;
             handoffSeat = -1;
             revealedSeat = -1;
             cardTracker.Reset();
@@ -453,20 +547,95 @@ namespace Mejnun.Game
                 botDriver.Stop();
             }
 
+            var feltId = MejnunGame.AssignTableFelt(activeRequest?.FeltPool, seed);
+            ProgressionService.Instance.SetLastUsedFelt(feltId);
+
             if (tableView != null)
             {
                 tableView.ClearCpuPlacementViews();
                 tableView.SetViewerSeat(-1);
                 tableView.SetHandVisible(false);
+                tableView.ApplyFelt(feltId);
             }
 
-            var facePool = tableView == null || tableView.SkinCatalog == null
-                ? new[] { DeckFaceAssigner.ClassicFace, DeckFaceAssigner.ClassicIvoryFace }
-                : tableView.SkinCatalog.GetSkinIds();
-            Game = new MejnunGame(new GameSetup(playerNames.Length, seed, dealer, facePool: facePool));
+            var faceCandidates = GetPreloadCandidates();
+            IsInitializingRound = true;
+            if (deckSkinLoader != null && deckSkinLoader.Preload(faceCandidates,
+                    () => StartRoundWithAvailableSkins(dealer, seed)))
+            {
+                return true;
+            }
+
+            return StartRoundWithAvailableSkins(dealer, seed);
+        }
+
+        private bool StartRoundWithAvailableSkins(int? dealer, ulong seed)
+        {
+            var facePool = activeRequest != null && activeRequest.RandomFacePool != null
+                ? CopyStrings(activeRequest.RandomFacePool)
+                : tableView == null || tableView.SkinCatalog == null
+                    ? new[] { DeckFaceAssigner.ClassicFace, DeckFaceAssigner.ClassicIvoryFace }
+                    : tableView.SkinCatalog.GetAvailableSkinIds();
+            Game = new MejnunGame(new GameSetup(playerNames.Length, seed, dealer, TurnSeconds, facePool,
+                CopyStrings(activeRequest?.DeckPicks), CopyStrings(activeRequest?.FeltPool)));
+            IsInitializingRound = false;
             SetScreen(dealer.HasValue ? MatchFlowScreen.Turn : MatchFlowScreen.DealerQuestion);
             tableController.Initialize(Game);
             return true;
+        }
+
+        private string[] GetPreloadCandidates()
+        {
+            if (activeRequest != null &&
+                (activeRequest.RandomFacePool != null || activeRequest.DeckPicks != null))
+            {
+                var candidates = new List<string>();
+                AddFaceCandidates(candidates, activeRequest.DeckPicks);
+                AddFaceCandidates(candidates, activeRequest.RandomFacePool);
+                return candidates.ToArray();
+            }
+
+            return tableView == null || tableView.SkinCatalog == null
+                ? new[] { DeckFaceAssigner.ClassicFace, DeckFaceAssigner.ClassicIvoryFace }
+                : tableView.SkinCatalog.GetSkinIds();
+        }
+
+        private static void AddFaceCandidates(List<string> destination, IReadOnlyList<string> source)
+        {
+            if (source == null)
+            {
+                return;
+            }
+
+            for (var index = 0; index < source.Count; index++)
+            {
+                if (!string.IsNullOrWhiteSpace(source[index]))
+                {
+                    destination.Add(source[index]);
+                }
+            }
+        }
+
+        private void InitializeResumedGame()
+        {
+            IsInitializingRound = false;
+            tableController.Initialize(Game);
+        }
+
+        private static string[] CopyStrings(IReadOnlyList<string> values)
+        {
+            if (values == null)
+            {
+                return null;
+            }
+
+            var copy = new string[values.Count];
+            for (var index = 0; index < values.Count; index++)
+            {
+                copy[index] = values[index];
+            }
+
+            return copy;
         }
 
         private void OnSynchronized(GameState state, TurnSession turn)
@@ -583,6 +752,33 @@ namespace Mejnun.Game
             lastSavedGame = null;
             lastSavedTurnNumber = -1;
             LastResult = result;
+            if (!resultRecorded && seats.Length >= 2 && HumanCount >= 1)
+            {
+                resultRecorded = true;
+                var localWin = result.Winner.HasValue && result.Winner.Value >= 0 &&
+                               result.Winner.Value < seats.Length && !seats[result.Winner.Value].IsBot;
+                var mode = activeRequest == null
+                    ? (HumanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo)
+                    : activeRequest.Mode;
+                var beatHardBot = false;
+                if (mode == MatchMode.Solo && localWin)
+                {
+                    for (var seat = 0; seat < seats.Length; seat++)
+                    {
+                        if (seats[seat].IsBot && seats[seat].Difficulty == BotDifficulty.Hard)
+                        {
+                            beatHardBot = true;
+                            break;
+                        }
+                    }
+                }
+
+                var summary = new MatchSummary(mode, seats.Length, HumanCount, localWin,
+                    localWin && result.Kind == GameEndKind.EmptyHand,
+                    result.Kind == GameEndKind.Stalemate, beatHardBot);
+                LastProgression = ProgressionService.Instance.RecordMatch(summary);
+            }
+
             if (botDriver != null)
             {
                 botDriver.Stop();

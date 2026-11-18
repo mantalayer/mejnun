@@ -13,6 +13,7 @@ namespace Mejnun.Game
 
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private DeckSkinCatalog skinCatalog;
+        [SerializeField] private FeltView feltView;
         [SerializeField] private BoardView boardView;
         [SerializeField] private HandView handView;
         [SerializeField] private TableCamera tableCamera;
@@ -160,6 +161,14 @@ namespace Mejnun.Game
             }
         }
 
+        public void ApplyFelt(string feltId)
+        {
+            if (feltView != null)
+            {
+                feltView.Apply(feltId);
+            }
+        }
+
         public void Sync(GameState state, TurnSession turn)
         {
             if (state == null)
@@ -178,6 +187,11 @@ namespace Mejnun.Game
             EnsureHandRoot();
             CurrentState = state;
             CurrentTurn = turn;
+            if (feltView != null)
+            {
+                feltView.Apply(state.TableFeltId);
+            }
+
             RecordHumanPlacementArea(state);
             UpdateCpuPlacementArea(state);
             visibleCardIds.Clear();

@@ -10,7 +10,6 @@ namespace Mejnun.UI
         [SerializeField] private MatchFlow matchFlow;
 
         private VisualElement flowRoot;
-        private SetupScreen setupScreen;
         private DealerQuestionScreen dealerQuestionScreen;
         private HandoffScreen handoffScreen;
         private ResultsScreen resultsScreen;
@@ -29,7 +28,6 @@ namespace Mejnun.UI
 
             var root = uiDocument.rootVisualElement;
             flowRoot = root.Q<VisualElement>("flow-root");
-            setupScreen = new SetupScreen(root, matchFlow);
             dealerQuestionScreen = new DealerQuestionScreen(root, matchFlow);
             handoffScreen = new HandoffScreen(root, matchFlow);
             resultsScreen = new ResultsScreen(root, matchFlow);
@@ -59,8 +57,9 @@ namespace Mejnun.UI
                 return;
             }
 
-            flowRoot.style.display = screen == MatchFlowScreen.Turn ? DisplayStyle.None : DisplayStyle.Flex;
-            setupScreen.SetVisible(screen == MatchFlowScreen.Setup);
+            flowRoot.style.display = screen == MatchFlowScreen.Turn || screen == MatchFlowScreen.Idle
+                ? DisplayStyle.None
+                : DisplayStyle.Flex;
             dealerQuestionScreen.SetVisible(screen == MatchFlowScreen.DealerQuestion);
             handoffScreen.SetVisible(screen == MatchFlowScreen.Handoff);
             resultsScreen.SetVisible(screen == MatchFlowScreen.Results);

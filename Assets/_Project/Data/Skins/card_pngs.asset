@@ -76,3 +76,7 @@ MonoBehaviour:
   blank: {fileID: 0}
   pixelArt: 0
   pixelsPerUnit: 100
+  unlock:
+    kind: 1
+    target: 3
+    achievementId: 

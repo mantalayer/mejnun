@@ -1,0 +1,120 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Uss/common.uss" />
+    <ui:Style src="../Uss/table.uss" />
+    <ui:VisualElement name="settings-panel" class="hud-dialog settings-panel" style="display: none">
+        <ui:Label class="dialog-title" text="Settings" />
+        <ui:VisualElement class="settings-tabs">
+            <ui:Button name="settings-tab-gameplay" class="settings-tab" text="Gameplay" />
+            <ui:Button name="settings-tab-table" class="settings-tab" text="Table" />
+            <ui:Button name="settings-tab-hints" class="settings-tab" text="Hints" />
+            <ui:Button name="settings-tab-accessibility" class="settings-tab" text="Accessibility" />
+            <ui:Button name="settings-tab-audio" class="settings-tab" text="Audio" />
+            <ui:Button name="settings-tab-general" class="settings-tab" text="General" />
+        </ui:VisualElement>
+        <ui:VisualElement class="settings-pages">
+        <ui:ScrollView name="settings-page-gameplay" class="settings-scroll settings-page">
+            <ui:Label class="settings-section-title" text="Gameplay &amp; confirmations" />
+            <ui:Toggle name="confirm-revert-toggle" label="Confirm board revert" />
+            <ui:Toggle name="confirm-draw-toggle" label="Confirm drawing a card" />
+            <ui:Toggle name="confirm-fix-toggle" label="Confirm fixing the board" />
+            <ui:Toggle name="confirm-leave-toggle" label="Confirm leaving or restarting" />
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="CPU move speed" />
+                <ui:DropdownField name="cpu-speed-dropdown" choices="Glacial,Very slow,Slow,Normal,Fast,Very fast" />
+            </ui:VisualElement>
+            <ui:Toggle name="easy-opening-deal-toggle" label="Everyone can go down first turn" />
+            <ui:Toggle name="show-fast-forward-toggle" label="Show fast-forward button" />
+        </ui:ScrollView>
+
+        <ui:ScrollView name="settings-page-table" class="settings-scroll settings-page" style="display: none">
+            <ui:Label class="settings-section-title" text="Table &amp; hand" />
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Arc amount" />
+                <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Card spread" />
+                <ui:Slider name="hand-spread-slider" low-value="0.25" high-value="0.9" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Card size" />
+                <ui:Slider name="hand-card-scale-slider" low-value="0.5" high-value="1.5" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Opponent card size" />
+                <ui:Slider name="opponent-card-scale-slider" low-value="0.5" high-value="2" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Zoom sensitivity" />
+                <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Raise hand" />
+                <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5" />
+            </ui:VisualElement>
+            <ui:Toggle name="overlap-sets-toggle" label="Overlap cards in sets" />
+            <ui:Toggle name="organic-board-toggle" label="Place sets organically" />
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Board card spread" />
+                <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Card messiness" />
+                <ui:Slider name="card-messiness-slider" low-value="0" high-value="1" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+
+        <ui:ScrollView name="settings-page-hints" class="settings-scroll settings-page" style="display: none">
+            <ui:Label class="settings-section-title" text="Hints" />
+            <ui:Toggle name="hint-board-moves-toggle" label="Hint useful board cards" />
+            <ui:Toggle name="hint-jiggle-toggle" label="Jiggle hinted cards" />
+        </ui:ScrollView>
+
+        <ui:ScrollView name="settings-page-accessibility" class="settings-scroll settings-page" style="display: none">
+            <ui:Label class="settings-section-title" text="Accessibility" />
+            <ui:Toggle name="reduced-motion-toggle" label="Reduce motion" />
+            <ui:Toggle name="haptics-toggle" label="Haptics" />
+        </ui:ScrollView>
+
+        <ui:ScrollView name="settings-page-audio" class="settings-scroll settings-page" style="display: none">
+            <ui:Label class="settings-section-title" text="Audio" />
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Master volume" />
+                <ui:Slider name="volume-master-slider" low-value="0" high-value="1" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Music volume" />
+                <ui:Slider name="volume-music-slider" low-value="0" high-value="1" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Effects volume" />
+                <ui:Slider name="volume-sfx-slider" low-value="0" high-value="1" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Voice volume" />
+                <ui:Slider name="volume-voice-slider" low-value="0" high-value="1" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+
+        <ui:ScrollView name="settings-page-general" class="settings-scroll settings-page" style="display: none">
+            <ui:Label class="settings-section-title" text="Language" />
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Language" />
+                <ui:DropdownField name="language-dropdown" choices="English" />
+            </ui:VisualElement>
+
+            <ui:Label class="settings-section-title" text="Online" />
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label" text="Fill quick matches with bots" />
+                <ui:DropdownField name="quick-match-bot-fill-dropdown" choices="Off,30 seconds,60 seconds" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="account-settings-section">
+                <ui:Label class="settings-section-title" text="Account" />
+                <ui:Button name="account-placeholder-button" text="Account features coming later" enabled="false" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:Button name="settings-close-button" class="hud-button primary-button" text="Done" />
+    </ui:VisualElement>
+</ui:UXML>

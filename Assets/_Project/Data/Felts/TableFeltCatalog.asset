@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823e9f9744d41487d9bf450ee2ef359e, type: 3}
+  m_Name: TableFeltCatalog
+  m_EditorClassIdentifier: Mejnun.Cosmetics::Mejnun.Cosmetics.TableFeltCatalog
+  felts:
+  - {fileID: 11400000, guid: 2510b60eaba6e42a9a3f0d3c1ae7df03, type: 2}
+  - {fileID: 11400000, guid: 1ba4b6eb954df40a3bb6f8f882ae8de7, type: 2}
+  - {fileID: 11400000, guid: e0150deac59bd424090b3e30c893d5a4, type: 2}
+  - {fileID: 11400000, guid: 0702b9902e5044aee9d14c17a3eab436, type: 2}
+  - {fileID: 11400000, guid: f2ecbab2f2995410bab4270cd26792b3, type: 2}
+  - {fileID: 11400000, guid: 6bdbb4c83510d44e99a9383ee3d4b522, type: 2}

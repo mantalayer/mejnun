@@ -27,6 +27,7 @@ namespace Mejnun.Game.Tests
                 SeatConfig.Bot("Leyla", BotDifficulty.Hard),
                 SeatConfig.Bot("Kian", BotDifficulty.Easy)
             }, 4242UL), Is.True);
+            yield return WaitForRoundInitialization(flow);
             Assert.That(flow.Screen, Is.EqualTo(MatchFlowScreen.DealerQuestion));
             Assert.That(flow.ChooseDealer(0).Ok, Is.True);
 
@@ -100,6 +101,7 @@ namespace Mejnun.Game.Tests
                 SeatConfig.Bot("Leyla", BotDifficulty.Hard),
                 SeatConfig.Bot("Kian", BotDifficulty.Easy)
             }, 4242UL), Is.True);
+            yield return WaitForRoundInitialization(flow);
             Assert.That(flow.ChooseDealer(0).Ok, Is.True);
 
             var frames = 0;
@@ -155,6 +157,7 @@ namespace Mejnun.Game.Tests
                 SeatConfig.Bot("Leyla", BotDifficulty.Medium),
                 SeatConfig.Human("Alex")
             }, 777UL), Is.True);
+            yield return WaitForRoundInitialization(flow);
             Assert.That(flow.ChooseDealer(2).Ok, Is.True);
             Assert.That(flow.Screen, Is.EqualTo(MatchFlowScreen.Handoff));
             Assert.That(flow.RevealHand(), Is.True);
@@ -207,6 +210,18 @@ namespace Mejnun.Game.Tests
             Assert.That(flow.BotDriver, Is.Not.Null);
             flow.BotDriver.ThinkSeconds = 0f;
             flow.BotDriver.StepSeconds = 0f;
+        }
+
+        private static IEnumerator WaitForRoundInitialization(MatchFlow flow)
+        {
+            var frames = 0;
+            while (flow.IsInitializingRound && frames++ < FrameLimit)
+            {
+                yield return null;
+            }
+
+            Assert.That(flow.IsInitializingRound, Is.False);
+            Assert.That(flow.Game, Is.Not.Null);
         }
     }
 }

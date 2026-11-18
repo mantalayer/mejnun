@@ -15,7 +15,6 @@ MonoBehaviour:
   skins:
   - {fileID: 11400000, guid: 83fd2592ed45d42d398ee3c5ba7cf248, type: 2}
   - {fileID: 11400000, guid: 5d98e2b46e16a406a904af4c0acc4007, type: 2}
-  - {fileID: 11400000, guid: 40ebf3085214c4612bf97d6251f07cc8, type: 2}
   - {fileID: 11400000, guid: 60e26d68a93f14e219d9c12be01327ff, type: 2}
   - {fileID: 11400000, guid: 3cf00f4a0dbd540f99b9308a6f37084f, type: 2}
   - {fileID: 11400000, guid: 9e47cc797bb9d47fb89d0a8c3dacb618, type: 2}
@@ -29,3 +28,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b18b9669b28534403a999177e033ea9e, type: 2}
   - {fileID: 11400000, guid: 40c6f81d322fc4613a2976f95f57ae4f, type: 2}
   - {fileID: 11400000, guid: fcd2a21c6cdf143a28a4c9d7075672db, type: 2}
+  - {fileID: 11400000, guid: 69aeaabafbbc04c2c8ea69604be2e98b, type: 2}
+  - {fileID: 11400000, guid: c0ac7f89e5c2f4575867b1f28d6f28fb, type: 2}
+  - {fileID: 11400000, guid: 0eb6142c59527411aa2c394ad295bcaf, type: 2}
+  - {fileID: 11400000, guid: b5d5bac631dfa47d08f749db93f7aa92, type: 2}
+  - {fileID: 11400000, guid: bb3273467559a448e86cd22c38d4e14e, type: 2}
+  - {fileID: 11400000, guid: 9e7390070fb2d4b4885580ee9baf2e62, type: 2}
+  - {fileID: 11400000, guid: cf885b8ebfcf244d2b2b8d5a51f86f88, type: 2}
+  - {fileID: 11400000, guid: a2b18dda4905d42c5b8e4d59b299cabb, type: 2}
+  - {fileID: 11400000, guid: abe1fc64deeae4c7ebeb6de4b600c567, type: 2}
+  - {fileID: 11400000, guid: 25ec4dc8746a84492b26452cef4d50b9, type: 2}
+  addressableSkins:
+  - id: pixelPastel
+    displayName: Pixel Pastel
+    unlock:
+      kind: 1
+      target: 2
+      achievementId: 
+    asset:
+      m_AssetGUID: 40ebf3085214c4612bf97d6251f07cc8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

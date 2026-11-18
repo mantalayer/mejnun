@@ -1,0 +1,111 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Uss/common.uss" />
+    <ui:Style src="../Uss/frontend.uss" />
+    <ui:Style src="../Uss/flow.uss" />
+    <ui:Template name="settings-panel-template" src="SettingsPanel.uxml" />
+    <ui:VisualElement name="frontend-root" class="frontend-root">
+        <ui:VisualElement name="safe-area" class="frontend-safe-area">
+            <ui:VisualElement name="main-menu-screen" class="frontend-screen main-menu-screen">
+                <ui:Label class="frontend-title" text="MEJNUN" />
+                <ui:Label class="frontend-subtitle" text="A card game of sets, strategy, and a little chaos." />
+                <ui:ProgressBar name="level-progress" class="level-progress" title="Level 1" low-value="0" high-value="100" value="0" />
+                <ui:Button name="play-solo-button" class="frontend-button primary-flow-button" text="Play Solo vs AI" />
+                <ui:Button name="play-pass-and-play-button" class="frontend-button" text="Play Pass &amp; play" />
+                <ui:Button name="resume-match-button" class="frontend-button" text="Resume" style="display: none" />
+                <ui:Button name="online-button" class="frontend-button" text="Online — coming in M7" enabled="false" />
+                <ui:Button name="gallery-button" class="frontend-button" text="Gallery" />
+                <ui:Button name="settings-button" class="frontend-button" text="Settings" />
+                <ui:Button name="quit-button" class="frontend-button" text="Quit" />
+            </ui:VisualElement>
+
+            <ui:ScrollView name="setup-screen" class="frontend-screen flow-screen setup-screen" style="display: none">
+                <ui:Label class="flow-title" text="Match setup" />
+                <ui:VisualElement class="setup-content">
+                    <ui:VisualElement class="setup-fields">
+                        <ui:DropdownField name="mode-field" label="Mode" />
+                        <ui:SliderInt name="seat-count-field" label="Seats" low-value="2" high-value="6" value="3" show-input-field="true" />
+                        <ui:DropdownField name="turn-timer-field" label="Turn timer" />
+                        <ui:VisualElement name="player-name-fields" class="player-name-fields">
+                    <ui:VisualElement name="seat-row-0" class="seat-row">
+                        <ui:TextField name="player-name-0" class="seat-name" label="Seat 1" value="Player 1" />
+                        <ui:DropdownField name="seat-kind-0" class="seat-kind" />
+                        <ui:DropdownField name="seat-style-0" class="seat-style" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="seat-row-1" class="seat-row">
+                        <ui:TextField name="player-name-1" class="seat-name" label="Seat 2" value="Player 2" />
+                        <ui:DropdownField name="seat-kind-1" class="seat-kind" />
+                        <ui:DropdownField name="seat-style-1" class="seat-style" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="seat-row-2" class="seat-row">
+                        <ui:TextField name="player-name-2" class="seat-name" label="Seat 3" value="Player 3" />
+                        <ui:DropdownField name="seat-kind-2" class="seat-kind" />
+                        <ui:DropdownField name="seat-style-2" class="seat-style" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="seat-row-3" class="seat-row">
+                        <ui:TextField name="player-name-3" class="seat-name" label="Seat 4" value="Player 4" />
+                        <ui:DropdownField name="seat-kind-3" class="seat-kind" />
+                        <ui:DropdownField name="seat-style-3" class="seat-style" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="seat-row-4" class="seat-row">
+                        <ui:TextField name="player-name-4" class="seat-name" label="Seat 5" value="Player 5" />
+                        <ui:DropdownField name="seat-kind-4" class="seat-kind" />
+                        <ui:DropdownField name="seat-style-4" class="seat-style" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="seat-row-5" class="seat-row">
+                        <ui:TextField name="player-name-5" class="seat-name" label="Seat 6" value="Player 6" />
+                        <ui:DropdownField name="seat-kind-5" class="seat-kind" />
+                        <ui:DropdownField name="seat-style-5" class="seat-style" />
+                    </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Label name="setup-error" class="flow-error" text="" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="cosmetic-picker-panel">
+                        <ui:Label class="settings-section-title" text="Table cosmetics" />
+                        <ui:Label class="cosmetic-picker-copy" text="Choose two decks and a table felt. Click a preview to browse." />
+                        <ui:Button name="deck-preview-0" class="cosmetic-preview-button" />
+                        <ui:Button name="deck-preview-1" class="cosmetic-preview-button" />
+                        <ui:Button name="felt-preview" class="cosmetic-preview-button felt-preview-button" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="frontend-actions">
+                    <ui:Button name="setup-back-button" class="flow-button" text="Back" />
+                    <ui:Button name="start-match-button" class="flow-button primary-flow-button" text="Start game" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+            <ui:VisualElement name="cosmetic-popup" class="cosmetic-popup" style="display: none">
+                <ui:VisualElement name="cosmetic-popup-tail" class="cosmetic-popup-tail" />
+                <ui:VisualElement class="cosmetic-popup-panel">
+                    <ui:Label name="cosmetic-popup-title" class="flow-title" text="Choose a cosmetic" />
+                    <ui:ScrollView name="deck-selector-grid" class="cosmetic-selector-grid" mode="Vertical" horizontal-scroller-visibility="Hidden" />
+                    <ui:ScrollView name="felt-selector-grid" class="cosmetic-selector-grid" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none" />
+                    <ui:Label name="cosmetic-locked-notice" class="cosmetic-locked-notice" text="Not unlocked yet" style="display: none" />
+                    <ui:Button name="cosmetic-popup-close" class="flow-button" text="Done" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="gallery-screen" class="frontend-screen" style="display: none">
+                <ui:Label class="frontend-page-title" text="Gallery" />
+                <ui:VisualElement class="gallery-tabs">
+                    <ui:Button name="gallery-decks-tab" class="gallery-tab selected-tab" text="Decks" />
+                    <ui:Button name="gallery-felts-tab" class="gallery-tab" text="Board backgrounds" />
+                    <ui:Label name="gallery-count-label" class="gallery-count" text="0 / 0 owned" />
+                </ui:VisualElement>
+                <ui:VisualElement class="gallery-content">
+                    <ui:ScrollView name="gallery-items" class="gallery-items" />
+                    <ui:VisualElement class="gallery-details">
+                        <ui:Label name="gallery-selected-title" class="gallery-selected-title" text="Select a cosmetic" />
+                        <ui:VisualElement name="gallery-preview" class="gallery-preview" />
+                        <ui:Label name="gallery-selected-new" class="gallery-new-badge" text="New in Gallery" style="display: none" />
+                        <ui:Label name="gallery-requirement" class="frontend-copy" text="Browse decks and board backgrounds." />
+                        <ui:ProgressBar name="gallery-progress" title="Unlock progress" low-value="0" high-value="1" value="0" style="display: none" />
+                        <ui:Label name="gallery-progress-label" class="gallery-progress-label" text="" style="display: none" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Button name="gallery-back-button" class="frontend-button" text="Back" />
+            </ui:VisualElement>
+
+            <ui:Instance template="settings-panel-template" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

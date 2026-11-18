@@ -1,48 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Uss/common.uss" />
     <ui:Style src="../Uss/flow.uss" />
     <ui:VisualElement name="flow-root" class="flow-root">
-        <ui:VisualElement name="setup-screen" class="flow-screen">
-            <ui:Label class="flow-title" text="Mejnun" />
-            <ui:Label class="flow-copy" text="Play solo against bots, or pass one device around. Bots can fill any seat." />
-            <ui:DropdownField name="mode-field" label="Mode" />
-            <ui:SliderInt name="seat-count-field" label="Seats" low-value="2" high-value="6" value="3" show-input-field="true" />
-            <ui:DropdownField name="turn-timer-field" label="Turn timer" />
-            <ui:VisualElement name="player-name-fields" class="player-name-fields">
-                <ui:VisualElement name="seat-row-0" class="seat-row">
-                    <ui:TextField name="player-name-0" class="seat-name" label="Seat 1" value="Player 1" />
-                    <ui:DropdownField name="seat-kind-0" class="seat-kind" />
-                    <ui:DropdownField name="seat-style-0" class="seat-style" />
-                </ui:VisualElement>
-                <ui:VisualElement name="seat-row-1" class="seat-row">
-                    <ui:TextField name="player-name-1" class="seat-name" label="Seat 2" value="Player 2" />
-                    <ui:DropdownField name="seat-kind-1" class="seat-kind" />
-                    <ui:DropdownField name="seat-style-1" class="seat-style" />
-                </ui:VisualElement>
-                <ui:VisualElement name="seat-row-2" class="seat-row">
-                    <ui:TextField name="player-name-2" class="seat-name" label="Seat 3" value="Player 3" />
-                    <ui:DropdownField name="seat-kind-2" class="seat-kind" />
-                    <ui:DropdownField name="seat-style-2" class="seat-style" />
-                </ui:VisualElement>
-                <ui:VisualElement name="seat-row-3" class="seat-row">
-                    <ui:TextField name="player-name-3" class="seat-name" label="Seat 4" value="Player 4" />
-                    <ui:DropdownField name="seat-kind-3" class="seat-kind" />
-                    <ui:DropdownField name="seat-style-3" class="seat-style" />
-                </ui:VisualElement>
-                <ui:VisualElement name="seat-row-4" class="seat-row">
-                    <ui:TextField name="player-name-4" class="seat-name" label="Seat 5" value="Player 5" />
-                    <ui:DropdownField name="seat-kind-4" class="seat-kind" />
-                    <ui:DropdownField name="seat-style-4" class="seat-style" />
-                </ui:VisualElement>
-                <ui:VisualElement name="seat-row-5" class="seat-row">
-                    <ui:TextField name="player-name-5" class="seat-name" label="Seat 6" value="Player 6" />
-                    <ui:DropdownField name="seat-kind-5" class="seat-kind" />
-                    <ui:DropdownField name="seat-style-5" class="seat-style" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:Label name="setup-error" class="flow-error" text="" />
-            <ui:Button name="resume-match-button" class="flow-button" text="Resume game" style="display: none" />
-            <ui:Button name="start-match-button" class="flow-button primary-flow-button" text="Start game" />
-        </ui:VisualElement>
         <ui:VisualElement name="dealer-question-screen" class="flow-screen">
             <ui:Label class="flow-title" text="Who goes first?" />
             <ui:Label name="dealer-question-label" class="flow-copy" text="Who should go first?" />
@@ -55,9 +14,21 @@
         </ui:VisualElement>
         <ui:VisualElement name="results-screen" class="flow-screen">
             <ui:Label name="result-title" class="flow-title" text="Game over" />
-            <ui:Label name="mejnun-banner" class="mejnun-banner" text="MEJNUN!" style="display: none" />
-            <ui:Label name="result-message" class="flow-copy" text="" />
-            <ui:Label name="result-counts" class="flow-copy result-counts" text="" />
+            <ui:ScrollView class="results-scroll">
+                <ui:Label name="mejnun-banner" class="mejnun-banner" text="MEJNUN!" style="display: none" />
+                <ui:Label name="result-message" class="flow-copy" text="" />
+                <ui:Label name="result-counts" class="flow-copy result-counts" text="" />
+                <ui:Label name="result-xp-gained" class="result-reward-label" text="" />
+                <ui:Label name="result-level-up" class="result-level-up" text="" style="display: none" />
+                <ui:Label name="result-level-label" class="flow-copy" text="" />
+                <ui:ProgressBar name="result-level-progress" title="Level progress" low-value="0" high-value="100" value="0" />
+                <ui:Label class="settings-section-title" text="Achievements" />
+                <ui:VisualElement name="result-new-achievements" class="result-chip-list" />
+                <ui:Label class="settings-section-title" text="New in Gallery" />
+                <ui:VisualElement name="result-new-gallery-items" class="result-chip-list" />
+                <ui:Label class="settings-section-title" text="Not unlocked yet" />
+                <ui:VisualElement name="result-locked-items" class="result-chip-list" />
+            </ui:ScrollView>
             <ui:Button name="rematch-button" class="flow-button primary-flow-button" text="Rematch" />
             <ui:Button name="results-menu-button" class="flow-button" text="Menu" />
             <ui:VisualElement name="rematch-confirm" class="rematch-confirm" style="display: none">

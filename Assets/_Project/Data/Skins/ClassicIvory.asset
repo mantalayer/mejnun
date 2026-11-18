@@ -68,6 +68,11 @@ MonoBehaviour:
   - {fileID: -819195157, guid: ed33bcff14554ae09316461ca1f3f6b4, type: 3}
   - {fileID: -965391029, guid: ed33bcff14554ae09316461ca1f3f6b4, type: 3}
   cardBack: {fileID: 2067914759, guid: ed33bcff14554ae09316461ca1f3f6b4, type: 3}
+  alternateBacks: []
   blank: {fileID: -669555551, guid: ed33bcff14554ae09316461ca1f3f6b4, type: 3}
   pixelArt: 1
   pixelsPerUnit: 100
+  unlock:
+    kind: 0
+    target: 0
+    achievementId: 

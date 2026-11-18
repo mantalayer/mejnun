@@ -62,6 +62,28 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
+        public void Cosmetics_AreAssignedBeforeDealerAndDoNotDependOnDealerChoice()
+        {
+            var setup = new GameSetup(3, 4321UL, facePool: new[] { "red", "blue", "gold" },
+                feltPool: new[] { "green", "burgundy", "midnight" });
+            var first = new MejnunGame(setup);
+            var second = new MejnunGame(setup);
+            var facesBeforeDealer = (string[])first.State.DeckFaces.Clone();
+            var feltBeforeDealer = first.State.TableFeltId;
+
+            Assert.That(first.State.Phase, Is.EqualTo(GamePhase.ChoosingDealer));
+            Assert.That(facesBeforeDealer[0], Is.Not.Null);
+            Assert.That(facesBeforeDealer[1], Is.Not.Null);
+            Assert.That(first.Apply(GameCommand.ChooseDealer(0)).Ok, Is.True);
+            Assert.That(second.Apply(GameCommand.ChooseDealer(2)).Ok, Is.True);
+
+            CollectionAssert.AreEqual(facesBeforeDealer, first.State.DeckFaces);
+            CollectionAssert.AreEqual(facesBeforeDealer, second.State.DeckFaces);
+            Assert.That(first.State.TableFeltId, Is.EqualTo(feltBeforeDealer));
+            Assert.That(second.State.TableFeltId, Is.EqualTo(feltBeforeDealer));
+        }
+
+        [Test]
         public void Dealer_InvalidSeatIsRejectedWithoutChangingState()
         {
             var game = new MejnunGame(new GameSetup(3, 8UL));

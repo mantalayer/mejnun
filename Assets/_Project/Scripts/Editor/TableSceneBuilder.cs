@@ -16,6 +16,7 @@ namespace Mejnun.Editor
         private const string CardPrefabPath = "Assets/_Project/Prefabs/Card.prefab";
         private const string TableScenePath = "Assets/_Project/Scenes/Table.unity";
         private const string SkinCatalogPath = "Assets/_Project/Data/Skins/DeckSkinCatalog.asset";
+        private const string CosmeticCatalogPath = "Assets/_Project/Data/Cosmetics/CosmeticCatalog.asset";
         private const string HudAssetPath = "Assets/_Project/Scripts/UI/Uxml/Hud.uxml";
         private const string FlowScreensAssetPath = "Assets/_Project/Scripts/UI/Uxml/FlowScreens.uxml";
         private const string PanelSettingsPath = "Assets/_Project/UI/PanelSettings.asset";
@@ -48,6 +49,7 @@ namespace Mejnun.Editor
 
         public static void BuildMacOSPlayer()
         {
+            AddressablesSetup.BuildContent();
             var enabledScenes = new List<string>();
             var buildScenes = EditorBuildSettings.scenes;
             for (var index = 0; index < buildScenes.Length; index++)
@@ -122,6 +124,12 @@ namespace Mejnun.Editor
             var tableCamera = cameraObject.AddComponent<TableCamera>();
 
             var tableRoot = new GameObject("Table");
+            var feltObject = new GameObject("Felt View");
+            feltObject.transform.SetParent(tableRoot.transform, false);
+            var feltView = feltObject.AddComponent<FeltView>();
+            var tiledFeltRenderer = CreateFeltRenderer(feltObject.transform, "Tiled Felt", -102);
+            var borderFeltRenderer = CreateFeltRenderer(feltObject.transform, "Felt Border", -101);
+            var imageFeltRenderer = CreateFeltRenderer(feltObject.transform, "Felt Image", -101);
             var boardObject = new GameObject("Board");
             boardObject.transform.SetParent(tableRoot.transform, false);
             var boardView = boardObject.AddComponent<BoardView>();
@@ -131,6 +139,7 @@ namespace Mejnun.Editor
             var tableView = tableRoot.AddComponent<TableView>();
             var pointerRouter = tableRoot.AddComponent<PointerRouter>();
             var tableController = tableRoot.AddComponent<TableController>();
+            var deckSkinLoader = tableRoot.AddComponent<DeckSkinLoader>();
             var matchFlow = tableRoot.AddComponent<MatchFlow>();
             var hudObject = new GameObject("HUD");
             hudObject.SetActive(false);
@@ -147,6 +156,7 @@ namespace Mejnun.Editor
             flowDocument.visualTreeAsset = flowScreensAsset;
             var flowPresenter = flowObject.AddComponent<MatchFlowPresenter>();
             var skins = AssetDatabase.LoadAssetAtPath<DeckSkinCatalog>(SkinCatalogPath);
+            var cosmetics = AssetDatabase.LoadAssetAtPath<CosmeticCatalog>(CosmeticCatalogPath);
             if (skins == null)
             {
                 throw new System.InvalidOperationException("Build the Classic deck skins before building Table.unity.");
@@ -154,15 +164,24 @@ namespace Mejnun.Editor
 
             SetObjectReference(tableView, "cardPrefab", cardPrefab);
             SetObjectReference(tableView, "skinCatalog", skins);
+            SetObjectReference(tableView, "feltView", feltView);
+            SetObjectReference(feltView, "tableCamera", tableCamera);
+            SetObjectReference(feltView, "catalog", cosmetics == null ? null : cosmetics.Felts);
+            SetObjectReference(feltView, "tiledRenderer", tiledFeltRenderer);
+            SetObjectReference(feltView, "borderRenderer", borderFeltRenderer);
+            SetObjectReference(feltView, "imageRenderer", imageFeltRenderer);
             SetObjectReference(tableView, "boardView", boardView);
             SetObjectReference(tableView, "handView", handView);
             SetObjectReference(tableView, "tableCamera", tableCamera);
+            SetObjectReference(deckSkinLoader, "catalog", skins);
+            SetObjectReference(matchFlow, "deckSkinLoader", deckSkinLoader);
             SetObjectReference(tableCamera, "pointerRouter", pointerRouter);
             SetObjectReference(tableController, "tableView", tableView);
             SetObjectReference(tableController, "pointerRouter", pointerRouter);
             SetObjectReference(matchFlow, "tableView", tableView);
             SetObjectReference(matchFlow, "tableController", tableController);
             SetObjectReference(matchFlow, "dealerQuestions", dealerQuestions);
+            SetObjectReference(matchFlow, "cosmeticCatalog", cosmetics);
             SetObjectReference(hudPresenter, "uiDocument", uiDocument);
             SetObjectReference(hudPresenter, "tableController", tableController);
             SetObjectReference(hudPresenter, "tableView", tableView);
@@ -192,6 +211,16 @@ namespace Mejnun.Editor
 
             property.objectReferenceValue = value;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static SpriteRenderer CreateFeltRenderer(Transform parent, string name, int sortingOrder)
+        {
+            var rendererObject = new GameObject(name);
+            rendererObject.transform.SetParent(parent, false);
+            var renderer = rendererObject.AddComponent<SpriteRenderer>();
+            renderer.sortingOrder = sortingOrder;
+            renderer.enabled = false;
+            return renderer;
         }
 
         private static void SetIntValue(UnityEngine.Object target, string propertyName, int value)
@@ -240,7 +269,9 @@ namespace Mejnun.Editor
                 "Who would be first to dance at a wedding?",
                 "Who has the most chaotic phone gallery?",
                 "Who would survive longest on a desert island?",
-                "Who is most likely to accidentally start a trend?"
+                "Who is most likely to accidentally start a trend?",
+                "Who's birthday is closest to today?",
+                "Who showered most recently?"
             });
             EditorUtility.SetDirty(asset);
             return asset;

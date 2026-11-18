@@ -9,7 +9,7 @@ namespace Mejnun.Core
         private const uint Magic = 0x4D4A4E31;
         private const int MaximumSerializedMoves = 100000;
 
-        public const int Version = 1;
+        public const int Version = 2;
 
         public static byte[] Write(MejnunGame game)
         {
@@ -49,14 +49,14 @@ namespace Mejnun.Core
                 }
 
                 var version = reader.ReadInt32();
-                if (version != Version)
+                if (version < 1 || version > Version)
                 {
                     throw new InvalidDataException("Unsupported Mejnun snapshot version.");
                 }
 
-                var setup = ReadSetup(reader);
+                var setup = ReadSetup(reader, version);
                 var game = new MejnunGame(setup, false);
-                ReadState(reader, game.State, setup.SeatCount);
+                ReadState(reader, game.State, setup.SeatCount, version);
 
                 if (reader.ReadBoolean())
                 {
@@ -103,9 +103,25 @@ namespace Mejnun.Core
             {
                 writer.Write(setup.FacePool[index]);
             }
+
+            writer.Write(setup.DeckPicks != null);
+            if (setup.DeckPicks != null)
+            {
+                writer.Write(setup.DeckPicks.Count);
+                for (var index = 0; index < setup.DeckPicks.Count; index++)
+                {
+                    WriteNullableString(writer, setup.DeckPicks[index]);
+                }
+            }
+
+            writer.Write(setup.FeltPool.Count);
+            for (var index = 0; index < setup.FeltPool.Count; index++)
+            {
+                writer.Write(setup.FeltPool[index]);
+            }
         }
 
-        private static GameSetup ReadSetup(BinaryReader reader)
+        private static GameSetup ReadSetup(BinaryReader reader, int version)
         {
             var seatCount = reader.ReadInt32();
             var seed = reader.ReadUInt64();
@@ -118,9 +134,36 @@ namespace Mejnun.Core
                 faces[index] = reader.ReadString();
             }
 
+            string[] deckPicks = null;
+            var feltPool = Array.Empty<string>();
+            if (version >= 2)
+            {
+                if (reader.ReadBoolean())
+                {
+                    var pickCount = ReadCount(reader, Card.DeckCount, "deck picks");
+                    if (pickCount != Card.DeckCount)
+                    {
+                        throw new InvalidDataException("A snapshot must contain exactly two deck picks.");
+                    }
+
+                    deckPicks = new string[pickCount];
+                    for (var index = 0; index < pickCount; index++)
+                    {
+                        deckPicks[index] = ReadNullableString(reader);
+                    }
+                }
+
+                var feltCount = ReadCount(reader, 4096, "felt pool");
+                feltPool = new string[feltCount];
+                for (var index = 0; index < feltCount; index++)
+                {
+                    feltPool[index] = reader.ReadString();
+                }
+            }
+
             try
             {
-                return new GameSetup(seatCount, seed, dealer, turnSeconds, faces);
+                return new GameSetup(seatCount, seed, dealer, turnSeconds, faces, deckPicks, feltPool);
             }
             catch (ArgumentException exception)
             {
@@ -164,6 +207,13 @@ namespace Mejnun.Core
                 WriteNullableString(writer, state.DeckFaces[index]);
             }
 
+            if (string.IsNullOrWhiteSpace(state.TableFeltId))
+            {
+                throw new InvalidDataException("Game state must contain a table felt id.");
+            }
+
+            writer.Write(state.TableFeltId);
+
             writer.Write(state.Result != null);
             if (state.Result != null)
             {
@@ -173,7 +223,7 @@ namespace Mejnun.Core
             }
         }
 
-        private static void ReadState(BinaryReader reader, GameState state, int expectedSeatCount)
+        private static void ReadState(BinaryReader reader, GameState state, int expectedSeatCount, int version)
         {
             state.Phase = ReadEnum<GamePhase>(reader, "game phase");
             state.CurrentSeat = reader.ReadInt32();
@@ -220,6 +270,15 @@ namespace Mejnun.Core
             for (var index = 0; index < state.DeckFaces.Length; index++)
             {
                 state.DeckFaces[index] = ReadNullableString(reader);
+            }
+
+            if (version >= 2)
+            {
+                state.TableFeltId = reader.ReadString();
+                if (string.IsNullOrWhiteSpace(state.TableFeltId))
+                {
+                    throw new InvalidDataException("Invalid table felt id in Mejnun snapshot.");
+                }
             }
 
             if (reader.ReadBoolean())
@@ -448,6 +507,11 @@ namespace Mejnun.Core
             if (state.Phase != GamePhase.ChoosingDealer && state.CurrentSeat < 0)
             {
                 throw new InvalidDataException("A playing or finished snapshot must have a current seat.");
+            }
+
+            if (string.IsNullOrWhiteSpace(state.TableFeltId))
+            {
+                throw new InvalidDataException("Invalid table felt id in Mejnun snapshot.");
             }
 
             if (state.Phase == GamePhase.ChoosingDealer && game.Turn != null)

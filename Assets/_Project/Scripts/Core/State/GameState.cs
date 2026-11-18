@@ -15,6 +15,7 @@ namespace Mejnun.Core
             Hands = new List<List<Card>>(seatCount);
             PlayerPhases = new List<PlayerPhase>(seatCount);
             DeckFaces = new string[Card.DeckCount];
+            TableFeltId = TableFeltAssigner.GreenFelt;
 
             for (var seat = 0; seat < seatCount; seat++)
             {
@@ -35,6 +36,7 @@ namespace Mejnun.Core
         public int NextMeldId { get; internal set; }
         public Pcg32 Rng { get; internal set; }
         public string[] DeckFaces { get; internal set; }
+        public string TableFeltId { get; internal set; }
         public GameResult Result { get; internal set; }
     }
 }
