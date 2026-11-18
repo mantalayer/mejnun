@@ -9,6 +9,7 @@
                 <ui:VisualElement class="draw-pile-status">
                     <ui:Label name="draw-pile-label" class="status-label secondary-label" text="Draw pile: 0" />
                     <ui:VisualElement name="draw-pile-stack" class="draw-pile-stack" picking-mode="Ignore" />
+                    <ui:Button name="draw-pass-button" class="hud-button draw-pile-draw-button" text="Draw" />
                 </ui:VisualElement>
                 <ui:Label name="timer-label" class="status-label timer-label" text="" />
             </ui:VisualElement>
@@ -20,7 +21,6 @@
         <ui:VisualElement name="top-opponents" class="opponents-top" picking-mode="Ignore" />
         <ui:VisualElement name="bottom-bar" class="hud-bar bottom-bar">
             <ui:Button name="end-turn-button" class="hud-button primary-button" text="End turn" />
-            <ui:Button name="draw-pass-button" class="hud-button" text="Draw" />
             <ui:Button name="undo-button" class="hud-button" text="Undo" />
             <ui:Button name="redo-button" class="hud-button" text="Redo" />
             <ui:Button name="revert-button" class="hud-button" text="Revert" />
@@ -28,6 +28,7 @@
             <ui:Button name="sort-suit-button" class="hud-button" text="Sort: suit" />
             <ui:Button name="sort-rank-button" class="hud-button" text="Sort: rank" />
             <ui:Button name="fit-board-button" class="hud-button" text="Fit board" />
+            <ui:Button name="compact-board-button" class="hud-button" text="Tidy board" />
             <ui:Button name="hint-button" class="hud-button" text="Hint: off" />
             <ui:Button name="mark-set-button" class="hud-button" text="Mark" />
             <ui:Button name="fast-forward-button" class="hud-button" text="Fast forward" style="display: none" />
@@ -40,6 +41,7 @@
             <ui:Label name="halas-popup" class="halas-popup" text="Halas!" picking-mode="Ignore" />
             <ui:Label name="gone-down-popup" class="gone-down-popup" text="Gone Down" picking-mode="Ignore" />
             <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
+            <ui:Label name="invalid-move-popup" class="invalid-move-popup" picking-mode="Ignore" />
             <ui:VisualElement name="marker-layer" class="marker-layer" picking-mode="Ignore" />
         </ui:VisualElement>
         <ui:VisualElement name="confirm-dialog" class="hud-dialog" style="display: none">

@@ -11,6 +11,7 @@ namespace Mejnun.UI
             { "Glacial", "Very slow", "Slow", "Normal", "Fast", "Very fast" };
         private static readonly string[] BotFillLabels = { "Off", "30 seconds", "60 seconds" };
         private VisualElement root;
+        private Label tooltipLabel;
         private TableView tableView;
         private TableController tableController;
 
@@ -25,6 +26,7 @@ namespace Mejnun.UI
 
             Dispose();
             root = panel;
+            tooltipLabel = root.Q<Label>("settings-tooltip");
             tableView = view;
             tableController = controller;
             var accountSection = root.Q<VisualElement>("account-settings-section");
@@ -95,6 +97,7 @@ namespace Mejnun.UI
             BindCpuSpeed();
             BindLanguage();
             BindBotFill();
+            BindTooltips();
             GameSettings.Changed += OnSettingsChanged;
             RefreshValues();
         }
@@ -149,9 +152,41 @@ namespace Mejnun.UI
             slider.RegisterValueChangedCallback(changeEvent =>
             {
                 setValue(changeEvent.newValue);
+                UpdateSliderValue(name, changeEvent.newValue);
                 afterChange?.Invoke();
             });
             slider.SetValueWithoutNotify(getValue());
+            UpdateSliderValue(name, getValue());
+        }
+
+        private void BindTooltips()
+        {
+            root.Query<VisualElement>().ForEach(element =>
+            {
+                var text = element.tooltip;
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    return;
+                }
+
+                var tooltipTarget = element.parent != null && element.parent.ClassListContains("settings-row")
+                    ? element.parent
+                    : element;
+                tooltipTarget.RegisterCallback<PointerEnterEvent>(_ =>
+                {
+                    if (tooltipLabel != null)
+                    {
+                        tooltipLabel.text = text;
+                    }
+                }, TrickleDown.TrickleDown);
+                tooltipTarget.RegisterCallback<PointerLeaveEvent>(_ =>
+                {
+                    if (tooltipLabel != null)
+                    {
+                        tooltipLabel.text = string.Empty;
+                    }
+                }, TrickleDown.TrickleDown);
+            });
         }
 
         private void BindCpuSpeed()
@@ -294,6 +329,21 @@ namespace Mejnun.UI
         private void SetSlider(string name, float value)
         {
             root.Q<Slider>(name)?.SetValueWithoutNotify(value);
+            UpdateSliderValue(name, value);
+        }
+
+        private void UpdateSliderValue(string name, float value)
+        {
+            var valueLabel = root.Q<Label>(name.Replace("-slider", "-value"));
+            if (valueLabel == null)
+            {
+                return;
+            }
+
+            valueLabel.text = name.StartsWith("volume-", StringComparison.Ordinal) ||
+                              name == "card-messiness-slider"
+                ? Mathf.RoundToInt(value * 100f) + "%"
+                : value.ToString("0.##") + "×";
         }
 
         private void SetDropdown(string name, string value)

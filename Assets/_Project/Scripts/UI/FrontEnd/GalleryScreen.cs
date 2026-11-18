@@ -226,7 +226,16 @@ namespace Mejnun.UI.FrontEnd
             if (skin.HasValue)
             {
                 selectedTitle.text = skin.Value.DisplayName;
-                previews.AddDeckFan(selectedPreview, skin.Value, OnPreviewLoaded);
+                var owned = evaluator.IsOwned(selectedItemId, skin.Value.Unlock);
+                if (owned && skin.Value.Skin != null)
+                {
+                    selectedPreview.Add(CosmeticPreviews.BuildDeckGrid(skin.Value.Skin));
+                }
+                else
+                {
+                    previews.AddDeckFan(selectedPreview, skin.Value, OnPreviewLoaded);
+                }
+
                 RenderRequirement(selectedItemId, skin.Value.Unlock, evaluator);
                 return;
             }

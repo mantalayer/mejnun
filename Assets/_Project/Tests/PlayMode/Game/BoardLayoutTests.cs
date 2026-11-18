@@ -279,6 +279,35 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void CompactOrganic_ClosesGapsWithoutOverlapsOrMovingTightMelds()
+        {
+            var sparse = new Dictionary<int, Rect>
+            {
+                { 1, new Rect(0f, 0f, 1f, 1f) },
+                { 2, new Rect(4f, 0f, 1f, 1f) }
+            };
+
+            var compacted = BoardLayout.CompactOrganic(sparse, 0.5f, 0.5f);
+            var first = new Rect(compacted[1], sparse[1].size);
+            var second = new Rect(compacted[2], sparse[2].size);
+
+            Assert.That(first.Overlaps(second), Is.False);
+            Assert.That(second.xMin - first.xMax, Is.EqualTo(0.5f).Within(0.001f));
+            Assert.That(Mathf.Abs(first.x - sparse[1].x) + Mathf.Abs(second.x - sparse[2].x),
+                Is.LessThan(4f));
+
+            var tight = new Dictionary<int, Rect>
+            {
+                { 1, new Rect(0f, 0f, 1f, 1f) },
+                { 2, new Rect(1.5f, 0f, 1f, 1f) }
+            };
+            var unchanged = BoardLayout.CompactOrganic(tight, 0.5f, 0.5f);
+
+            Assert.That(unchanged[1], Is.EqualTo(tight[1].position));
+            Assert.That(unchanged[2], Is.EqualTo(tight[2].position));
+        }
+
+        [Test]
         public void CardJitter_IsZeroAtZeroMessinessDeterministicAndBounded()
         {
             var cardSize = new Vector2(0.64f, 0.97f);

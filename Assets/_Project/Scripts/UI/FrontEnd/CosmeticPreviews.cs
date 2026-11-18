@@ -69,6 +69,68 @@ namespace Mejnun.UI.FrontEnd
             return fan;
         }
 
+        public static VisualElement BuildDeckGrid(DeckSkin skin)
+        {
+            var grid = new VisualElement();
+            grid.AddToClassList("gallery-deck-grid");
+            var cards = new List<Image>(Card.CardsPerDeck);
+            for (var suitIndex = 0; suitIndex < 4; suitIndex++)
+            {
+                for (var rankIndex = 0; rankIndex < 13; rankIndex++)
+                {
+                    var image = new Image
+                    {
+                        sprite = skin.GetFace((Suit)suitIndex, (Rank)rankIndex),
+                        scaleMode = ScaleMode.ScaleToFit
+                    };
+                    image.AddToClassList("gallery-face");
+                    grid.Add(image);
+                    cards.Add(image);
+                }
+            }
+
+            grid.RegisterCallback<GeometryChangedEvent>(_ =>
+            {
+                var width = grid.contentRect.width;
+                var height = grid.contentRect.height;
+                if (width <= 0f || height <= 0f)
+                {
+                    return;
+                }
+
+                const float cardAspect = 0.72f;
+                const float gap = 2f;
+                var bestWidth = 0f;
+                var bestHeight = 0f;
+                for (var columns = 1; columns <= cards.Count; columns++)
+                {
+                    var rows = (cards.Count + columns - 1) / columns;
+                    var columnWidth = (width - gap * columns) / columns;
+                    var rowHeight = (height - gap * rows) / rows;
+                    var cardWidth = Mathf.Min(columnWidth, rowHeight * cardAspect);
+                    if (cardWidth > bestWidth)
+                    {
+                        bestWidth = cardWidth;
+                        bestHeight = cardWidth / cardAspect;
+                    }
+                }
+
+                if (bestWidth <= 0f || bestHeight <= 0f)
+                {
+                    return;
+                }
+
+                for (var index = 0; index < cards.Count; index++)
+                {
+                    cards[index].style.width = bestWidth;
+                    cards[index].style.height = bestHeight;
+                    cards[index].style.marginRight = gap;
+                    cards[index].style.marginBottom = gap;
+                }
+            });
+            return grid;
+        }
+
         public static VisualElement CreateFeltSwatch(TableFelt felt)
         {
             var preview = new VisualElement();

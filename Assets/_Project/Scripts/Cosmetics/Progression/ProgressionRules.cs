@@ -6,27 +6,19 @@ namespace Mejnun.Cosmetics
     {
         public static int XpFor(MatchSummary summary)
         {
-            var xp = 20;
-            if (!summary.CanAwardWin)
-            {
-                return xp;
-            }
-
-            if (summary.LocalWin)
-            {
-                xp += 40;
-                if (summary.MejnunWin)
-                {
-                    xp += 20;
-                }
-            }
-
-            if (summary.Stalemate)
-            {
-                xp += 10;
-            }
-
-            return xp;
+            var baseXp = summary.CanAwardWin && summary.LocalWin
+                ? 60 + (summary.MejnunWin ? 20 : 0)
+                : summary.Stalemate ? 15 : 10;
+            var difficultyMultiplier = summary.CpuDifficulty == 0 ? 1f :
+                summary.CpuDifficulty == 1 ? 1.4f : 1.8f;
+            var duration = summary.DurationSeconds;
+            var speedMultiplier = duration <= 300
+                ? 1.5f
+                : duration >= 1800
+                    ? 0.75f
+                    : 1.5f - (duration - 300) * 0.75f / 1500f;
+            return (int)Math.Round(baseXp * difficultyMultiplier * speedMultiplier,
+                MidpointRounding.AwayFromZero);
         }
 
         public static int LevelForXp(int xp)

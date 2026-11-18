@@ -125,6 +125,10 @@ namespace Mejnun.Game
             seatInputFilter = filter;
             RefreshHints();
             RefreshSelection();
+            if (game != null)
+            {
+                SynchronizeViews();
+            }
         }
 
         public void SetInputPaused(bool paused)

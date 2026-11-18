@@ -8,10 +8,33 @@ namespace Mejnun.Cosmetics.Tests
         [Test]
         public void XpForGameWinMejnunAndStalemateMatchesRules()
         {
-            Assert.That(ProgressionRules.XpFor(Solo(false, false, false)), Is.EqualTo(20));
-            Assert.That(ProgressionRules.XpFor(Solo(true, false, false)), Is.EqualTo(60));
-            Assert.That(ProgressionRules.XpFor(Solo(true, true, false)), Is.EqualTo(80));
-            Assert.That(ProgressionRules.XpFor(Solo(false, false, true)), Is.EqualTo(30));
+            Assert.That(ProgressionRules.XpFor(Solo(false, false, false)), Is.EqualTo(27));
+            Assert.That(ProgressionRules.XpFor(Solo(true, false, false)), Is.EqualTo(162));
+            Assert.That(ProgressionRules.XpFor(Solo(true, true, false)), Is.EqualTo(216));
+            Assert.That(ProgressionRules.XpFor(Solo(false, false, true)), Is.EqualTo(41));
+        }
+
+        [Test]
+        public void XpScalesWithCpuDifficultyAndGameSpeed()
+        {
+            var easyWin = Solo(true, false, false, 0, 900);
+            var hardWin = Solo(true, false, false, 2, 900);
+            var fastHardWin = Solo(true, false, false, 2, 300);
+            var slowHardWin = Solo(true, false, false, 2, 1800);
+
+            Assert.That(ProgressionRules.XpFor(hardWin), Is.GreaterThan(ProgressionRules.XpFor(easyWin)));
+            Assert.That(ProgressionRules.XpFor(fastHardWin), Is.GreaterThan(ProgressionRules.XpFor(slowHardWin)));
+            Assert.That(ProgressionRules.XpFor(fastHardWin), Is.GreaterThan(ProgressionRules.XpFor(Solo(false, false, false))));
+        }
+
+        [Test]
+        public void MissingCpuDifficultyDefaultsToHard()
+        {
+            var noCpu = new MatchSummary(MatchMode.Solo, 2, 1, true, false, false, false);
+            var explicitHard = new MatchSummary(MatchMode.Solo, 2, 1, true, false, false, false, 2, 0);
+
+            Assert.That(noCpu.CpuDifficulty, Is.EqualTo(2));
+            Assert.That(ProgressionRules.XpFor(noCpu), Is.EqualTo(ProgressionRules.XpFor(explicitHard)));
         }
 
         [Test]
@@ -19,7 +42,7 @@ namespace Mejnun.Cosmetics.Tests
         {
             var summary = new MatchSummary(MatchMode.PassAndPlay, 4, 2, true, true, true, false);
 
-            Assert.That(ProgressionRules.XpFor(summary), Is.EqualTo(20));
+            Assert.That(ProgressionRules.XpFor(summary), Is.EqualTo(41));
             var profile = new PlayerProfile();
             profile.RecordMatch(summary);
             Assert.That(profile.Stats.Played, Is.EqualTo(1));
@@ -78,9 +101,11 @@ namespace Mejnun.Cosmetics.Tests
             CollectionAssert.Contains(AchievementTracker.Evaluate(profile, fullTable), AchievementIds.FullTable);
         }
 
-        private static MatchSummary Solo(bool win, bool mejnun, bool stalemate)
+        private static MatchSummary Solo(bool win, bool mejnun, bool stalemate, int difficulty = 2,
+            int durationSeconds = 0)
         {
-            return new MatchSummary(MatchMode.Solo, 2, 1, win, mejnun, stalemate, win && mejnun);
+            return new MatchSummary(MatchMode.Solo, 2, 1, win, mejnun, stalemate, win && mejnun, difficulty,
+                durationSeconds);
         }
     }
 }

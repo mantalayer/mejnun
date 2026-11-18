@@ -94,14 +94,14 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
-        public void Down_CanMoveAnyBoardCardBetweenMelds()
+        public void Down_CanTransferCardIntoAnotherValidMeld()
         {
             var game = NewGame();
-            GameBuilder.SetBoard(game, new[] { "2H", "3H", "4H" }, new[] { "7C", "8C", "9C" });
+            GameBuilder.SetBoard(game, new[] { "2H", "3H", "4H" }, new[] { "5H", "6H", "7H" });
             GameBuilder.SetHand(game, 0, "5D");
             GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
 
-            var result = game.Apply(GameCommand.MoveCards(0, Ids("4H"), CardTarget.Meld(2, 0)));
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("4H"), CardTarget.Meld(2, 3)));
 
             Assert.That(result.Ok, Is.True);
             Assert.That(game.State.Board[0].Cards.Count, Is.EqualTo(2));

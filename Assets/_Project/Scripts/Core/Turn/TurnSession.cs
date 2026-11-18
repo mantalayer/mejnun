@@ -201,21 +201,7 @@ namespace Mejnun.Core
                     return CommandResult.Failure(meldLimitError);
                 }
 
-                var crossMeldTransfer = false;
-                if (targetMeld != null && state.PlayerPhases[Seat] == PlayerPhase.Down)
-                {
-                    for (var index = 0; index < locations.Length; index++)
-                    {
-                        if (!locations[index].IsHand && locations[index].MeldId != targetMeld.Id)
-                        {
-                            crossMeldTransfer = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (targetMeld != null && !crossMeldTransfer &&
-                    !MeldValidator.CanPlaceInto(targetMeld.Cards, resultingCards))
+                if (targetMeld != null && !MeldValidator.CanPlaceInto(targetMeld.Cards, resultingCards))
                 {
                     return CommandResult.Failure(RuleError.InvalidCardForSet);
                 }
