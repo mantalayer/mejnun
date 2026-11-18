@@ -58,7 +58,7 @@ namespace Mejnun.Core.Tests
 
             Assert.That(restored.State.Phase, Is.EqualTo(GamePhase.Finished));
             Assert.That(restored.State.Result.Kind, Is.EqualTo(GameEndKind.Stalemate));
-            Assert.That(restored.State.Result.NextDealer, Is.Null);
+            Assert.That(restored.State.Result.NextFirstPlayer, Is.Null);
             CollectionAssert.AreEqual(bytes, SnapshotSerializer.Write(restored));
         }
 

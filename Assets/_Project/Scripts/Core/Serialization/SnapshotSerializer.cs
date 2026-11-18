@@ -169,7 +169,7 @@ namespace Mejnun.Core
             {
                 writer.Write((byte)state.Result.Kind);
                 WriteNullableInt(writer, state.Result.Winner);
-                WriteNullableInt(writer, state.Result.NextDealer);
+                WriteNullableInt(writer, state.Result.NextFirstPlayer);
             }
         }
 
@@ -464,8 +464,8 @@ namespace Mejnun.Core
             {
                 if (state.Phase != GamePhase.Finished ||
                     (state.Result.Winner.HasValue && (state.Result.Winner.Value < 0 || state.Result.Winner.Value >= seatCount)) ||
-                    (state.Result.NextDealer.HasValue &&
-                     (state.Result.NextDealer.Value < 0 || state.Result.NextDealer.Value >= seatCount)))
+                    (state.Result.NextFirstPlayer.HasValue &&
+                     (state.Result.NextFirstPlayer.Value < 0 || state.Result.NextFirstPlayer.Value >= seatCount)))
                 {
                     throw new InvalidDataException("Invalid game result in Mejnun snapshot.");
                 }

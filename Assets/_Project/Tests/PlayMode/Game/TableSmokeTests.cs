@@ -33,7 +33,7 @@ namespace Mejnun.Game.Tests
 
             Assert.That(flow.Game.State.Phase, Is.EqualTo(GamePhase.Finished));
             Assert.That(flow.Game.State.Result.Kind, Is.EqualTo(GameEndKind.Stalemate));
-            Assert.That(flow.Game.State.Result.NextDealer, Is.Null);
+            Assert.That(flow.Game.State.Result.NextFirstPlayer, Is.Null);
             Assert.That(flow.Screen, Is.EqualTo(MatchFlowScreen.Results));
             Assert.That(flow.Rematch(), Is.True);
             Assert.That(flow.Game.State.Phase, Is.EqualTo(GamePhase.ChoosingDealer));
@@ -63,7 +63,7 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
-        public IEnumerator WinnerDealsTheRematch()
+        public IEnumerator WinnerGoesFirstInTheRematch()
         {
             SceneManager.LoadScene("Table", LoadSceneMode.Single);
             yield return null;
@@ -95,8 +95,10 @@ namespace Mejnun.Game.Tests
             Assert.That(flow.Controller.ExecuteBatch(batch).Ok, Is.True);
             Assert.That(flow.Game.State.Result.Kind, Is.EqualTo(GameEndKind.EmptyHand));
             Assert.That(flow.Game.State.Result.Winner, Is.EqualTo(seat));
+            Assert.That(flow.Game.State.Result.NextFirstPlayer, Is.EqualTo(seat));
             Assert.That(flow.Rematch(), Is.True);
-            Assert.That(flow.Game.Setup.Dealer, Is.EqualTo(seat));
+            Assert.That(flow.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
+            Assert.That(flow.Game.State.CurrentSeat, Is.EqualTo(seat));
             Assert.That(flow.Screen, Is.EqualTo(MatchFlowScreen.Handoff));
         }
     }

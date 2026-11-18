@@ -6,7 +6,11 @@ namespace Mejnun.AI
 {
     public static class BoardFixer
     {
-        public static IReadOnlyList<GameCommand> Plan(MejnunGame game)
+        /// <param name="allowRearrange">
+        /// When false (hints off), Fix board never searches for better plays: it only returns hand cards sitting in
+        /// invalid sets, and falls back to Revert if that doesn't leave a valid board.
+        /// </param>
+        public static IReadOnlyList<GameCommand> Plan(MejnunGame game, bool allowRearrange = true)
         {
             if (game == null)
             {
@@ -16,6 +20,12 @@ namespace Mejnun.AI
             if (game.State.Phase != GamePhase.Playing || game.Turn == null)
             {
                 return Array.Empty<GameCommand>();
+            }
+
+            if (!allowRearrange)
+            {
+                var returned = TryReturnInvalidHandCards(game);
+                return returned.Feasible ? returned.Commands : new[] { GameCommand.Revert(game.State.CurrentSeat) };
             }
 
             var local = TryPlan(game, false);
@@ -32,6 +42,53 @@ namespace Mejnun.AI
             return chosen.Feasible ? chosen.Commands : new[] { GameCommand.Revert(game.State.CurrentSeat) };
         }
 
+        private static Candidate TryReturnInvalidHandCards(MejnunGame game)
+        {
+            var scratch = SnapshotSerializer.Read(SnapshotSerializer.Write(game));
+            var seat = scratch.State.CurrentSeat;
+            var turn = scratch.Turn;
+            var startHandIds = new HashSet<byte>();
+            for (var index = 0; index < turn.StartSnapshot.Hand.Count; index++)
+            {
+                startHandIds.Add(turn.StartSnapshot.Hand[index].Id);
+            }
+
+            var returnIds = new List<byte>();
+            for (var meldIndex = 0; meldIndex < scratch.State.Board.Count; meldIndex++)
+            {
+                var cards = scratch.State.Board[meldIndex].Cards;
+                if (MeldValidator.Classify(cards).IsValid)
+                {
+                    continue;
+                }
+
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    var cardId = cards[cardIndex].Id;
+                    if (startHandIds.Contains(cardId) && !turn.IsGoDownCard(cardId))
+                    {
+                        returnIds.Add(cardId);
+                    }
+                }
+            }
+
+            var commands = new List<GameCommand>();
+            if (returnIds.Count > 0)
+            {
+                var returnCards = GameCommand.MoveCards(seat, returnIds.ToArray(), CardTarget.Hand(0));
+                if (!scratch.Apply(returnCards).Ok)
+                {
+                    return Candidate.Infeasible;
+                }
+
+                commands.Add(returnCards);
+            }
+
+            return MeldValidator.IsBoardValid(scratch.State.Board)
+                ? new Candidate(true, 0, commands)
+                : Candidate.Infeasible;
+        }
+
         private static Candidate TryPlan(MejnunGame game, bool global)
         {
             var scratch = SnapshotSerializer.Read(SnapshotSerializer.Write(game));
@@ -41,6 +98,7 @@ namespace Mejnun.AI
             var startBoardIds = new HashSet<byte>();
             var startHandIds = new HashSet<byte>();
             var placedHandCards = new List<Card>();
+            var goDownCards = new List<Card>();
             var targets = new List<IReadOnlyList<Card>>();
             var required = new List<Card>();
             var optional = new List<Card>();
@@ -70,6 +128,10 @@ namespace Mejnun.AI
                     if (startHandIds.Contains(card.Id))
                     {
                         placedHandCards.Add(card);
+                        if (turn.IsGoDownCard(card.Id))
+                        {
+                            goDownCards.Add(card);
+                        }
                     }
                 }
 
@@ -94,6 +156,11 @@ namespace Mejnun.AI
 
                             required.Add(card);
                         }
+                        else if (turn.IsGoDownCard(card.Id))
+                        {
+                            // Go-down cards can't return to the hand, so they must be re-homed on the board.
+                            required.Add(card);
+                        }
                         else if (startHandIds.Contains(card.Id))
                         {
                             optional.Add(card);
@@ -109,7 +176,14 @@ namespace Mejnun.AI
             if (global)
             {
                 required.AddRange(startBoardCards);
-                optional.AddRange(placedHandCards);
+                required.AddRange(goDownCards);
+                foreach (var card in placedHandCards)
+                {
+                    if (!turn.IsGoDownCard(card.Id))
+                    {
+                        optional.Add(card);
+                    }
+                }
             }
 
             var solution = MeldSolver.Solve(required, optional);

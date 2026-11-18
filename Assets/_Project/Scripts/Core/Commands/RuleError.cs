@@ -22,6 +22,7 @@ namespace Mejnun.Core
         UnsupportedCommand,
         DoubleInSet,
         SetTooLarge,
-        InvalidCardForSet
+        InvalidCardForSet,
+        GoDownCardToHand
     }
 }

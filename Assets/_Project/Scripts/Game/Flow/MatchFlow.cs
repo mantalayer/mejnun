@@ -111,7 +111,7 @@ namespace Mejnun.Game
                     return GetPlayerName(LastResult.Winner.Value) + " had the fewest cards when the draw pile ran out.";
                 }
 
-                return "The fewest-card score was tied. Pick a new dealer.";
+                return "The fewest-card score was tied. Pick who goes first.";
             }
         }
 
@@ -345,7 +345,11 @@ namespace Mejnun.Game
                 return false;
             }
 
-            return StartRound(LastResult.NextDealer, CreateSeed(seats.Length));
+            var firstPlayer = LastResult.NextFirstPlayer;
+            int? dealer = firstPlayer.HasValue && firstPlayer.Value >= 0 && firstPlayer.Value < seats.Length
+                ? (firstPlayer.Value - 1 + seats.Length) % seats.Length
+                : (int?)null;
+            return StartRound(dealer, CreateSeed(seats.Length));
         }
 
         public bool RestartMatch()
