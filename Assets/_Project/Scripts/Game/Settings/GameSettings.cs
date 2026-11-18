@@ -19,12 +19,14 @@ namespace Mejnun.Game
         private const string HandLiftKey = "settings.hand.lift";
         private const string OpponentCardScaleKey = "settings.opponents.cardScale";
         private const string ZoomSensitivityKey = "settings.camera.zoomSensitivity";
-        private const string CpuSpeedKey = "settings.cpu.speed";
+        private const string CpuSpeedKey = "settings.cpu.speed.v2";
+        private const string LegacyCpuSpeedKey = "settings.cpu.speed";
         private const string ShowFastForwardKey = "settings.cpu.showFastForward";
         private const string OverlapSetsKey = "settings.board.overlapSets";
         private const string OrganicBoardKey = "settings.board.organic";
         private const string CardMessinessKey = "settings.board.cardMessiness";
         private const string EasyOpeningDealKey = "settings.game.easyOpeningDeal";
+        private static readonly float[] CpuDelayMultipliers = { 6f, 4f, 3f, 2f, 1f, 0.5f };
         private static bool fastForward;
 
         public static bool ConfirmRevert
@@ -119,15 +121,15 @@ namespace Mejnun.Game
 
         public static int CpuSpeed
         {
-            get => Mathf.Clamp(PlayerPrefs.GetInt(CpuSpeedKey, 2), 0, 3);
+            get => Mathf.Clamp(PlayerPrefs.GetInt(CpuSpeedKey, 3), 0, 5);
             set
             {
-                PlayerPrefs.SetInt(CpuSpeedKey, Mathf.Clamp(value, 0, 3));
+                PlayerPrefs.SetInt(CpuSpeedKey, Mathf.Clamp(value, 0, 5));
                 PlayerPrefs.Save();
             }
         }
 
-        public static float CpuDelayMultiplier => CpuSpeed == 0 ? 2f : CpuSpeed == 1 ? 1.5f : CpuSpeed == 2 ? 1f : 0.5f;
+        public static float CpuDelayMultiplier => CpuDelayMultipliers[CpuSpeed];
 
         public static bool ShowFastForward
         {
@@ -183,6 +185,7 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(OpponentCardScaleKey);
             PlayerPrefs.DeleteKey(ZoomSensitivityKey);
             PlayerPrefs.DeleteKey(CpuSpeedKey);
+            PlayerPrefs.DeleteKey(LegacyCpuSpeedKey);
             PlayerPrefs.DeleteKey(ShowFastForwardKey);
             PlayerPrefs.DeleteKey(OverlapSetsKey);
             PlayerPrefs.DeleteKey(OrganicBoardKey);

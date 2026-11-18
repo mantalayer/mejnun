@@ -21,6 +21,7 @@ namespace Mejnun.Core
         GameFinished,
         UnsupportedCommand,
         DoubleInSet,
-        SetTooLarge
+        SetTooLarge,
+        InvalidCardForSet
     }
 }

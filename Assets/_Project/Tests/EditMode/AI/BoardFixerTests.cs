@@ -22,11 +22,11 @@ namespace Mejnun.AI.Tests
         }
 
         [Test]
-        public void FixBoard_ReturnsStrayCardAddedToValidRun()
+        public void FixBoard_ReturnsStrayCardInTemporaryMeld()
         {
             var game = AiTestUtil.Game(new[] { "5H", "9C" }, new[] { new[] { "2H", "3H", "4H" } }, true);
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("5H"), CardTarget.Meld(1, 3))).Ok, Is.True);
-            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("9C"), CardTarget.Meld(1, 4))).Ok, Is.True);
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("9C"), CardTarget.NewMeld(0))).Ok, Is.True);
 
             ApplyFix(game);
 
@@ -71,7 +71,7 @@ namespace Mejnun.AI.Tests
             var game = AiTestUtil.Game(new[] { "5H", "9C" }, new[] { new[] { "2H", "3H", "4H" } }, true,
                 "AH");
             Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("5H"), CardTarget.Meld(1, 3))).Ok, Is.True);
-            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("9C"), CardTarget.Meld(1, 4))).Ok, Is.True);
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("9C"), CardTarget.NewMeld(0))).Ok, Is.True);
 
             ApplyFix(game);
             var result = game.Apply(GameCommand.TimeoutTurn(0));

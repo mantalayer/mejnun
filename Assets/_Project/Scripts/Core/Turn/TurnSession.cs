@@ -183,6 +183,11 @@ namespace Mejnun.Core
                 {
                     return CommandResult.Failure(meldLimitError);
                 }
+
+                if (targetMeld != null && !MeldValidator.CanPlaceInto(targetMeld.Cards, resultingCards))
+                {
+                    return CommandResult.Failure(RuleError.InvalidCardForSet);
+                }
             }
 
             var affected = CaptureAffectedMelds(locations, targetMeld);
@@ -307,6 +312,12 @@ namespace Mejnun.Core
             if (meldLimitError != RuleError.None)
             {
                 return CommandResult.Failure(meldLimitError);
+            }
+
+            if ((before.IsValid || MeldValidator.Classify(otherMeld.Cards).IsValid) &&
+                !MeldValidator.Classify(mergedCards).IsValid)
+            {
+                return CommandResult.Failure(RuleError.InvalidCardForSet);
             }
 
             var originalCount = meld.Cards.Count;

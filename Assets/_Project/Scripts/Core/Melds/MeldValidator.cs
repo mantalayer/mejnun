@@ -95,6 +95,11 @@ namespace Mejnun.Core
                 : Invalid(InvalidReason.MixedRanks);
         }
 
+        public static bool CanPlaceInto(IReadOnlyList<Card> existing, IReadOnlyList<Card> resulting)
+        {
+            return !Classify(existing).IsValid || Classify(resulting).IsValid;
+        }
+
         public static bool IsBoardValid(IReadOnlyList<Meld> melds)
         {
             if (melds == null)

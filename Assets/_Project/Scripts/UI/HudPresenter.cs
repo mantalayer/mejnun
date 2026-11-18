@@ -10,7 +10,7 @@ namespace Mejnun.UI
 {
     public sealed class HudPresenter : MonoBehaviour
     {
-        private static readonly string[] CpuSpeedLabels = { "Very slow", "Slow", "Normal", "Fast" };
+        private static readonly string[] CpuSpeedLabels = { "Glacial", "Very slow", "Slow", "Normal", "Fast", "Very fast" };
 
         public enum OpponentSide
         {

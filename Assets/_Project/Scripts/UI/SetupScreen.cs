@@ -20,7 +20,6 @@ namespace Mejnun.UI
         private const string HumanKind = "Human";
         private static readonly string[] BotKinds = { "Easy bot", "Medium bot", "Hard bot" };
         private static readonly string[] BotStyles = { "Balanced", "Hold back", "Blocker" };
-        private static readonly string[] BotNames = { "Leyla", "Kian", "Nora", "Omid", "Sara", "Darius" };
 
         private readonly VisualElement root;
         private readonly MatchFlow matchFlow;
@@ -32,11 +31,13 @@ namespace Mejnun.UI
         private readonly TextField[] nameFields = new TextField[MaximumSeats];
         private readonly DropdownField[] kindFields = new DropdownField[MaximumSeats];
         private readonly DropdownField[] styleFields = new DropdownField[MaximumSeats];
+        private string[] seatBotNames;
 
         public SetupScreen(VisualElement documentRoot, MatchFlow flow)
         {
             root = documentRoot.Q<VisualElement>("setup-screen");
             matchFlow = flow;
+            seatBotNames = BotNames.PickDistinct(MaximumSeats);
             modeField = root.Q<DropdownField>("mode-field");
             seatCountField = root.Q<SliderInt>("seat-count-field");
             seatCountField.lowValue = 2;
@@ -93,6 +94,7 @@ namespace Mejnun.UI
         private void ApplyMode(string mode)
         {
             var solo = mode == SoloMode;
+            seatBotNames = BotNames.PickDistinct(MaximumSeats);
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
                 var kind = solo && seat > 0 ? BotKinds[(int)BotDifficulty.Medium] : HumanKind;
@@ -113,7 +115,7 @@ namespace Mejnun.UI
                 return;
             }
 
-            nameFields[seat].SetValueWithoutNotify(IsBot(seat) ? BotNames[seat] : "Player " + (seat + 1));
+            nameFields[seat].SetValueWithoutNotify(IsBot(seat) ? seatBotNames[seat] : "Player " + (seat + 1));
         }
 
         private void OnSeatCountChanged(ChangeEvent<int> changeEvent)
@@ -203,13 +205,13 @@ namespace Mejnun.UI
 
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
-                if (name == "Player " + (seat + 1) || name == BotNames[seat])
+                if (name == "Player " + (seat + 1))
                 {
                     return true;
                 }
             }
 
-            return false;
+            return BotNames.Contains(name);
         }
 
         private void SetError(string message)

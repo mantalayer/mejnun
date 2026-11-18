@@ -80,7 +80,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement class="settings-row">
                     <ui:Label class="setting-label" text="CPU move speed" />
-                    <ui:DropdownField name="cpu-speed-dropdown" choices="Very slow,Slow,Normal,Fast" />
+                    <ui:DropdownField name="cpu-speed-dropdown" choices="Glacial,Very slow,Slow,Normal,Fast,Very fast" />
                 </ui:VisualElement>
                 <ui:VisualElement class="settings-row">
                     <ui:Label class="setting-label" text="Raise hand" />

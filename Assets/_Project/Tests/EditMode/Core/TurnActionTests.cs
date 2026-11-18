@@ -241,6 +241,154 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
+        public void Turn_CannotAddCardsThatMakeAnExistingStraightInvalid()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "9C", "10C", "JC", "QC", "KC" });
+            GameBuilder.SetHand(game, 0, "9D", "7C", "8C", "8D");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalMeld = game.State.Board[0].Cards.ToArray();
+            var originalHand = game.State.Hands[0].ToArray();
+
+            AssertMoveErrorWithoutChanges(game, GameCommand.MoveCards(0, Ids("9D"), CardTarget.Meld(1, 5)),
+                RuleError.InvalidCardForSet, originalMeld, originalHand);
+            AssertMoveErrorWithoutChanges(game, GameCommand.MoveCards(0, Ids("7C"), CardTarget.Meld(1, 5)),
+                RuleError.InvalidCardForSet, originalMeld, originalHand);
+            AssertMoveErrorWithoutChanges(game, GameCommand.MoveCards(0, Ids("8C", "8D"), CardTarget.Meld(1, 5)),
+                RuleError.InvalidCardForSet, originalMeld, originalHand);
+        }
+
+        [Test]
+        public void Turn_CanExtendAnExistingStraightWithAContiguousRun()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "9C", "10C", "JC", "QC", "KC" });
+            GameBuilder.SetHand(game, 0, "8C");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("8C"), CardTarget.Meld(1, 5)));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(MeldValidator.Classify(game.State.Board[0].Cards).IsValid, Is.True);
+        }
+
+        [Test]
+        public void Turn_CanExtendAnExistingStraightWithMultipleContiguousCards()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "9C", "10C", "JC", "QC", "KC" });
+            GameBuilder.SetHand(game, 0, "7C", "8C");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("7C", "8C"), CardTarget.Meld(1, 5)));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(MeldValidator.Classify(game.State.Board[0].Cards).IsValid, Is.True);
+        }
+
+        [Test]
+        public void Turn_OnlyAllowsMissingRankIntoAnExistingSameKindSet()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "5H", "5D", "5C" });
+            GameBuilder.SetHand(game, 0, "5S");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("5S"), CardTarget.Meld(1, 3)));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(MeldValidator.Classify(game.State.Board[0].Cards).IsValid, Is.True);
+        }
+
+        [Test]
+        public void Turn_CannotAddCardsToACompleteSameKindSet()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "5H", "5D", "5C", "5S" });
+            GameBuilder.SetHand(game, 0, "6C");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalMeld = game.State.Board[0].Cards.ToArray();
+            var originalHand = game.State.Hands[0].ToArray();
+
+            AssertMoveErrorWithoutChanges(game, GameCommand.MoveCards(0, Ids("6C"), CardTarget.Meld(1, 4)),
+                RuleError.InvalidCardForSet, originalMeld, originalHand);
+        }
+
+        [Test]
+        public void Turn_CanAddAnUnrelatedCardToAnIncompleteMeld()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "9C", "10C" });
+            GameBuilder.SetHand(game, 0, "2D");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("2D"), CardTarget.Meld(1, 2)));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(game.State.Board[0].Cards.Count, Is.EqualTo(3));
+            Assert.That(MeldValidator.Classify(game.State.Board[0].Cards).IsValid, Is.False);
+        }
+
+        [Test]
+        public void Turn_CanMoveCardsOutOfAnExistingSetAndSplitIt()
+        {
+            var movedGame = NewGame();
+            GameBuilder.SetBoard(movedGame, new[] { "2H", "3H", "4H" });
+            GameBuilder.SetPlayerPhase(movedGame, 0, PlayerPhase.Down);
+
+            var moveResult = movedGame.Apply(GameCommand.MoveCards(0, Ids("3H"), CardTarget.NewMeld(0)));
+
+            Assert.That(moveResult.Ok, Is.True);
+            Assert.That(movedGame.State.Board.Count, Is.EqualTo(2));
+            Assert.That(movedGame.State.Board[0].Cards.Count, Is.EqualTo(2));
+            Assert.That(movedGame.State.Board[1].Cards.Count, Is.EqualTo(1));
+
+            var splitGame = NewGame();
+            GameBuilder.SetBoard(splitGame, new[] { "2H", "3H", "4H", "5H" });
+            GameBuilder.SetPlayerPhase(splitGame, 0, PlayerPhase.Down);
+
+            var splitResult = splitGame.Apply(GameCommand.SplitMeld(0, 1, 2));
+
+            Assert.That(splitResult.Ok, Is.True);
+            Assert.That(splitGame.State.Board.Count, Is.EqualTo(2));
+            Assert.That(splitGame.State.Board[0].Cards.Count, Is.EqualTo(2));
+            Assert.That(splitGame.State.Board[1].Cards.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void Turn_CannotMergeAnExistingSetIntoAnInvalidResult()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "9C", "10C", "JC" }, new[] { "2H", "3H" });
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalFirst = game.State.Board[0].Cards.ToArray();
+            var originalSecond = game.State.Board[1].Cards.ToArray();
+
+            var result = game.Apply(GameCommand.MergeMelds(0, 1, 2));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.InvalidCardForSet));
+            Assert.That(game.State.Board.Count, Is.EqualTo(2));
+            CollectionAssert.AreEqual(originalFirst, game.State.Board[0].Cards);
+            CollectionAssert.AreEqual(originalSecond, game.State.Board[1].Cards);
+            Assert.That(game.Turn.Moves, Is.Empty);
+        }
+
+        [Test]
+        public void Turn_CanMergeTwoIncompleteMelds()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "2H", "3H" }, new[] { "9C", "10C" });
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+
+            var result = game.Apply(GameCommand.MergeMelds(0, 1, 2));
+
+            Assert.That(result.Ok, Is.True);
+            Assert.That(game.State.Board.Count, Is.EqualTo(1));
+            Assert.That(game.State.Board[0].Cards.Count, Is.EqualTo(4));
+        }
+
+        [Test]
         public void Turn_CannotCreateNewMeldContainingDouble()
         {
             var game = NewGame();
@@ -359,6 +507,15 @@ namespace Mejnun.Core.Tests
             var result = game.Apply(command);
             Assert.That(result.Ok, Is.False);
             Assert.That(result.Error, Is.EqualTo(error));
+        }
+
+        private static void AssertMoveErrorWithoutChanges(MejnunGame game, GameCommand command, RuleError error,
+            Card[] originalMeld, Card[] originalHand)
+        {
+            AssertMoveError(game, command, error);
+            CollectionAssert.AreEqual(originalMeld, game.State.Board[0].Cards);
+            CollectionAssert.AreEqual(originalHand, game.State.Hands[0]);
+            Assert.That(game.Turn.Moves, Is.Empty);
         }
     }
 }
