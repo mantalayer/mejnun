@@ -117,7 +117,7 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
-        public IEnumerator PausingConcealsHandCardsAndPausesTurnTimerWithoutHidingBoardCards()
+        public IEnumerator PausingConcealsHandAndBoardCardsAndPausesTurnTimer()
         {
             SceneManager.LoadScene("Table", LoadSceneMode.Single);
             yield return null;
@@ -153,9 +153,8 @@ namespace Mejnun.Game.Tests
                 var cardView = tableView.GetCardView(boardCards[index].Id);
                 var skin = tableView.SkinCatalog.Resolve(state.DeckFaces[boardCards[index].Deck],
                     boardCards[index].Deck);
-                Assert.That(cardView.IsFaceUp, Is.True);
-                Assert.That(cardView.Renderer.sprite,
-                    Is.EqualTo(skin.GetFace(boardCards[index].Suit, boardCards[index].Rank)));
+                Assert.That(cardView.IsFaceUp, Is.False);
+                Assert.That(cardView.Renderer.sprite, Is.EqualTo(skin.CardBack));
             }
 
             matchFlow.SetPaused(false);
@@ -168,6 +167,16 @@ namespace Mejnun.Game.Tests
                 Assert.That(cardView.IsFaceUp, Is.True);
                 Assert.That(cardView.Renderer.sprite,
                     Is.EqualTo(skin.GetFace(hand[index].Suit, hand[index].Rank)));
+            }
+
+            for (var index = 0; index < boardCards.Length; index++)
+            {
+                var cardView = tableView.GetCardView(boardCards[index].Id);
+                var skin = tableView.SkinCatalog.Resolve(state.DeckFaces[boardCards[index].Deck],
+                    boardCards[index].Deck);
+                Assert.That(cardView.IsFaceUp, Is.True);
+                Assert.That(cardView.Renderer.sprite,
+                    Is.EqualTo(skin.GetFace(boardCards[index].Suit, boardCards[index].Rank)));
             }
         }
 

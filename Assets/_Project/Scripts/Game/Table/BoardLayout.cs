@@ -13,7 +13,7 @@ namespace Mejnun.Game
         }
 
         public static BoardLayoutResult Compute(IReadOnlyList<Meld> melds, float viewportAspect, Vector2 cardSize,
-            bool overlapSets)
+            bool overlapSets, float cardSpread = 1f)
         {
             if (melds == null)
             {
@@ -30,7 +30,7 @@ namespace Mejnun.Game
                 throw new ArgumentOutOfRangeException(nameof(cardSize));
             }
 
-            var cardGap = cardSize.x * (overlapSets ? -0.55f : 0.14f);
+            var cardGap = GetCardGap(cardSize.x, overlapSets, cardSpread);
             var meldGap = cardSize.x * (overlapSets ? 0.6f : 0.38f);
             var rowGap = cardSize.y * 0.28f;
             var totalWidth = 0f;
@@ -176,7 +176,8 @@ namespace Mejnun.Game
 
         public static BoardLayoutResult ComputeOrganic(IReadOnlyList<Meld> melds, Vector2 cardSize, bool overlapSets,
             IReadOnlyDictionary<int, Vector2> preferredOrigins, IReadOnlyDictionary<int, Vector2> hints,
-            Rect? placementArea, ICollection<int> constrainedMeldIds, out Dictionary<int, Vector2> origins)
+            Rect? placementArea, ICollection<int> constrainedMeldIds, out Dictionary<int, Vector2> origins,
+            float cardSpread = 1f)
         {
             if (melds == null)
             {
@@ -188,7 +189,7 @@ namespace Mejnun.Game
                 throw new ArgumentOutOfRangeException(nameof(cardSize));
             }
 
-            var cardGap = cardSize.x * (overlapSets ? -0.55f : 0.14f);
+            var cardGap = GetCardGap(cardSize.x, overlapSets, cardSpread);
             var meldGap = cardSize.x * (overlapSets ? 0.6f : 0.38f);
             var rowGap = cardSize.y * 0.28f;
             var occupied = new List<Rect>(melds.Count);
@@ -521,6 +522,13 @@ namespace Mejnun.Game
 
             actualWidth = Mathf.Max(actualWidth, cursorX);
             rowCount = row + 1;
+        }
+
+        private static float GetCardGap(float cardWidth, bool overlapSets, float spread)
+        {
+            var baseGap = overlapSets ? -0.55f : 0.14f;
+            var step = cardWidth * (1f + baseGap) * Mathf.Clamp(spread, 0.5f, 1.5f);
+            return step - cardWidth;
         }
 
         private static float GetMeldWidth(int cardCount, float cardWidth, float cardGap)

@@ -31,9 +31,28 @@ namespace Mejnun.AI.Tests
                 Assert.That(plan.FallbackReason, Is.Null, "Turn " + turns + " fell back");
                 for (var index = 0; index < plan.Commands.Count; index++)
                 {
-                    var result = game.Apply(plan.Commands[index]);
+                    var command = plan.Commands[index];
+                    var result = game.Apply(command);
                     Assert.That(result.Ok, Is.True,
-                        "Turn " + turns + " " + plan.Commands[index].Type + ": " + result.Error);
+                        "Turn " + turns + " " + command.Type + ": " + result.Error);
+                    if (command.Type == CommandType.MoveCards && command.Target.Kind == TargetKind.Meld)
+                    {
+                        var foundMeld = false;
+                        for (var meldIndex = 0; meldIndex < game.State.Board.Count; meldIndex++)
+                        {
+                            var meld = game.State.Board[meldIndex];
+                            if (meld.Id == command.Target.MeldId)
+                            {
+                                foundMeld = true;
+                                Assert.That(MeldValidator.Classify(meld.Cards).IsValid, Is.True,
+                                    "Turn " + turns + " left meld " + meld.Id + " invalid after adding cards");
+                                break;
+                            }
+                        }
+
+                        Assert.That(foundMeld, Is.True,
+                            "Turn " + turns + " added cards to missing meld " + command.Target.MeldId);
+                    }
                 }
 
                 turns++;

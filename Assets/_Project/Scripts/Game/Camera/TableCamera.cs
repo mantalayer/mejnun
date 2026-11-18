@@ -6,6 +6,8 @@ namespace Mejnun.Game
     [RequireComponent(typeof(Camera))]
     public sealed class TableCamera : MonoBehaviour
     {
+        private const float FitDuration = 0.4f;
+
         [SerializeField] private float minOrthographicSize = 1.5f;
         [SerializeField] private float maxOrthographicSize = 20f;
         [SerializeField] private float zoomSensitivity = 1f;
@@ -22,6 +24,13 @@ namespace Mejnun.Game
         private float leftInsetFraction;
         private float rightInsetFraction;
         private float bottomInsetFloor;
+        private Vector3 fitStartPosition;
+        private float fitStartSize;
+        private float fitStartTime;
+        private Vector3 fitTargetPosition;
+        private float fitTargetSize;
+        private bool fitting;
+        private bool hasFittedBounds;
 
         public Camera Camera => tableCamera;
         public float BottomInsetFraction => bottomInsetFraction;
@@ -62,6 +71,33 @@ namespace Mejnun.Game
         private void Update()
         {
             HandleMouseCamera();
+        }
+
+        private void LateUpdate()
+        {
+            if (!fitting || tableCamera == null)
+            {
+                return;
+            }
+
+            if (GameSettings.ReducedMotion)
+            {
+                ApplyFitTarget();
+                return;
+            }
+
+            var progress = Mathf.Clamp01((Time.unscaledTime - fitStartTime) / FitDuration);
+            if (progress >= 1f)
+            {
+                ApplyFitTarget();
+                return;
+            }
+
+            var remaining = 1f - progress;
+            var eased = 1f - remaining * remaining * remaining;
+            tableCamera.transform.position = Vector3.LerpUnclamped(fitStartPosition, fitTargetPosition, eased);
+            tableCamera.orthographicSize = Mathf.LerpUnclamped(fitStartSize, fitTargetSize, eased);
+            baseOrthographicSize = tableCamera.orthographicSize;
         }
 
         public void SetBoardBounds(Bounds bounds)
@@ -149,15 +185,32 @@ namespace Mejnun.Game
             var fitSize = Mathf.Clamp(Mathf.Max(verticalSize, horizontalSize) * padding,
                 minOrthographicSize, maxOrthographicSize);
             tableCamera.orthographic = true;
-            tableCamera.orthographicSize = fitSize;
             var position = tableCamera.transform.position;
             position.x = bounds.center.x + fitSize * aspect * (rightInsetFraction - leftInsetFraction);
             position.y = bounds.center.y + fitSize * (topInsetFraction - bottomInsetFraction);
-            tableCamera.transform.position = position;
-            baseOrthographicSize = fitSize;
+            var animate = Application.isPlaying && hasFittedBounds && !GameSettings.ReducedMotion;
+            var targetChanged = !fitting ||
+                                Vector3.SqrMagnitude(fitTargetPosition - position) > 0.000001f ||
+                                Mathf.Abs(fitTargetSize - fitSize) > 0.0001f;
+            if (animate && targetChanged)
+            {
+                fitStartPosition = tableCamera.transform.position;
+                fitStartSize = tableCamera.orthographicSize;
+                fitStartTime = Time.unscaledTime;
+            }
+
+            fitTargetPosition = position;
+            fitTargetSize = fitSize;
+            fitting = animate;
+            hasFittedBounds = true;
             if (resetManualAdjustment)
             {
                 manuallyAdjusted = false;
+            }
+
+            if (!fitting)
+            {
+                ApplyFitTarget();
             }
         }
 
@@ -223,9 +276,14 @@ namespace Mejnun.Game
 
         private void ZoomAtScreenPoint(float zoomFactor, Vector2 screenPosition, bool markManual)
         {
-            if (zoomFactor <= 0f)
+            if (zoomFactor <= 0f || Mathf.Approximately(zoomFactor, 1f))
             {
                 return;
+            }
+
+            if (markManual)
+            {
+                fitting = false;
             }
 
             var worldBefore = ScreenToWorld(screenPosition);
@@ -255,6 +313,11 @@ namespace Mejnun.Game
                 return;
             }
 
+            if (markManual)
+            {
+                fitting = false;
+            }
+
             var current = ScreenToWorld(pointer);
             var previous = ScreenToWorld(pointer - screenDelta);
             tableCamera.transform.position += previous - current;
@@ -262,6 +325,14 @@ namespace Mejnun.Game
             {
                 manuallyAdjusted = true;
             }
+        }
+
+        private void ApplyFitTarget()
+        {
+            tableCamera.transform.position = fitTargetPosition;
+            tableCamera.orthographicSize = fitTargetSize;
+            baseOrthographicSize = fitTargetSize;
+            fitting = false;
         }
 
         private Vector3 ScreenToWorld(Vector2 position)
