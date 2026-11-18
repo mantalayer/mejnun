@@ -1,5 +1,9 @@
 .hud-root {
-    flex-grow: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     justify-content: space-between;
     padding-left: 12px;
     padding-right: 12px;
@@ -395,8 +399,75 @@
     width: 100%;
 }
 
+.settings-panel {
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.settings-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.settings-tab {
+    min-width: 90px;
+    min-height: 36px;
+    flex-grow: 1;
+    margin: 3px;
+    color: rgb(244, 246, 239);
+    background-color: rgb(50, 79, 58);
+    border-width: 0;
+    border-radius: 5px;
+}
+
+.settings-tab.selected-tab {
+    color: rgb(22, 32, 24);
+    background-color: rgb(177, 224, 120);
+}
+
+.settings-pages {
+    flex-grow: 1;
+    min-height: 0;
+    align-items: stretch;
+}
+
+.settings-page {
+    width: 100%;
+}
+
+.settings-panel .unity-button {
+    color: rgb(244, 246, 239);
+    background-color: rgb(50, 79, 58);
+    border-width: 0;
+    border-radius: 5px;
+}
+
+.settings-panel .unity-button:hover {
+    background-color: rgb(70, 101, 75);
+}
+
+.settings-panel .unity-button:disabled {
+    color: rgba(230, 235, 228, 0.65);
+    background-color: rgb(48, 54, 49);
+}
+
+.settings-panel .settings-tab.selected-tab {
+    color: rgb(22, 32, 24);
+    background-color: rgb(177, 224, 120);
+}
+
 .settings-row {
     margin-bottom: 8px;
+}
+
+.settings-section-title {
+    color: rgb(248, 248, 240);
+    font-size: 19px;
+    -unity-font-style: bold;
+    margin-top: 12px;
+    margin-bottom: 6px;
 }
 
 .setting-label,

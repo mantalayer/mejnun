@@ -9,44 +9,78 @@ namespace Mejnun.Cosmetics
     public sealed class DeckSkinCatalog : ScriptableObject
     {
         [SerializeField] private List<DeckSkin> skins = new List<DeckSkin>();
+        [SerializeField] private List<AddressableDeckSkinEntry> addressableSkins =
+            new List<AddressableDeckSkinEntry>();
+
+        private readonly Dictionary<string, DeckSkin> loadedAddressableSkins =
+            new Dictionary<string, DeckSkin>(StringComparer.Ordinal);
 
         public IReadOnlyList<DeckSkin> Skins => skins;
+        public IReadOnlyList<AddressableDeckSkinEntry> AddressableSkins => addressableSkins;
 
         public string[] GetSkinIds()
         {
-            if (skins == null)
-            {
-                return Array.Empty<string>();
-            }
-
-            var ids = new List<string>(skins.Count);
+            var ids = new List<string>();
             var uniqueIds = new HashSet<string>(StringComparer.Ordinal);
-            for (var index = 0; index < skins.Count; index++)
+            AppendSkinIds(skins, ids, uniqueIds);
+            if (addressableSkins != null)
             {
-                var skin = skins[index];
-                if (skin == null || string.IsNullOrWhiteSpace(skin.Id) || !uniqueIds.Add(skin.Id))
+                for (var index = 0; index < addressableSkins.Count; index++)
                 {
-                    continue;
-                }
-
-                ids.Add(skin.Id);
-                var backIds = skin.BackIds;
-                for (var backIndex = 0; backIndex < backIds.Length; backIndex++)
-                {
-                    if (string.IsNullOrWhiteSpace(backIds[backIndex]) || backIds[backIndex].IndexOf(':') >= 0)
+                    var entry = addressableSkins[index];
+                    if (entry != null && !string.IsNullOrWhiteSpace(entry.Id) && uniqueIds.Add(entry.Id))
                     {
-                        continue;
-                    }
-
-                    var variantId = DeckFaceId.Compose(skin.Id, backIds[backIndex]);
-                    if (uniqueIds.Add(variantId))
-                    {
-                        ids.Add(variantId);
+                        ids.Add(entry.Id);
                     }
                 }
             }
 
             return ids.ToArray();
+        }
+
+        public string[] GetAvailableSkinIds()
+        {
+            var ids = new List<string>();
+            var uniqueIds = new HashSet<string>(StringComparer.Ordinal);
+            AppendSkinIds(skins, ids, uniqueIds);
+            foreach (var skin in loadedAddressableSkins.Values)
+            {
+                AppendSkinIds(new[] { skin }, ids, uniqueIds);
+            }
+
+            return ids.ToArray();
+        }
+
+        public IReadOnlyList<DeckSkinInfo> GetEntries()
+        {
+            var entries = new List<DeckSkinInfo>();
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            if (skins != null)
+            {
+                for (var index = 0; index < skins.Count; index++)
+                {
+                    var skin = skins[index];
+                    if (skin != null && !string.IsNullOrWhiteSpace(skin.Id) && ids.Add(skin.Id))
+                    {
+                        entries.Add(new DeckSkinInfo(skin.Id, skin.DisplayName, skin.Unlock, false, skin));
+                    }
+                }
+            }
+
+            if (addressableSkins != null)
+            {
+                for (var index = 0; index < addressableSkins.Count; index++)
+                {
+                    var entry = addressableSkins[index];
+                    if (entry != null && !string.IsNullOrWhiteSpace(entry.Id) && ids.Add(entry.Id))
+                    {
+                        loadedAddressableSkins.TryGetValue(entry.Id, out var loadedSkin);
+                        entries.Add(new DeckSkinInfo(entry.Id, entry.DisplayName, entry.Unlock, true, loadedSkin));
+                    }
+                }
+            }
+
+            return entries.AsReadOnly();
         }
 
         public DeckSkin Resolve(string faceId, int deckIndex)
@@ -93,7 +127,100 @@ namespace Mejnun.Cosmetics
             skins = configuredSkins;
         }
 
+        public void ConfigureAddressableSkins(IReadOnlyList<AddressableDeckSkinEntry> entries)
+        {
+            if (entries == null)
+            {
+                throw new ArgumentNullException(nameof(entries));
+            }
+
+            var configuredEntries = new List<AddressableDeckSkinEntry>(entries.Count);
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            for (var index = 0; index < entries.Count; index++)
+            {
+                var entry = entries[index];
+                if (entry == null || string.IsNullOrWhiteSpace(entry.Id) || entry.Asset == null ||
+                    !ids.Add(entry.Id) || FindBuiltIn(entry.Id) != null)
+                {
+                    throw new ArgumentException("Addressable skin entries must have unique, non-built-in ids and assets.",
+                        nameof(entries));
+                }
+
+                configuredEntries.Add(entry);
+            }
+
+            addressableSkins = configuredEntries;
+            loadedAddressableSkins.Clear();
+        }
+
+        public bool IsAddressableSkin(string skinId)
+        {
+            return FindAddressableEntry(skinId) != null;
+        }
+
+        public bool IsAddressableSkinLoaded(string skinId)
+        {
+            return loadedAddressableSkins.ContainsKey(skinId);
+        }
+
+        public AddressableDeckSkinEntry FindAddressableEntry(string skinId)
+        {
+            if (addressableSkins == null || string.IsNullOrWhiteSpace(skinId))
+            {
+                return null;
+            }
+
+            for (var index = 0; index < addressableSkins.Count; index++)
+            {
+                var entry = addressableSkins[index];
+                if (entry != null && string.Equals(entry.Id, skinId, StringComparison.Ordinal))
+                {
+                    return entry;
+                }
+            }
+
+            return null;
+        }
+
+        public void RegisterLoaded(DeckSkin skin)
+        {
+            if (skin == null)
+            {
+                throw new ArgumentNullException(nameof(skin));
+            }
+
+            if (FindAddressableEntry(skin.Id) == null)
+            {
+                throw new ArgumentException("Loaded skin is not registered as an addressable entry.", nameof(skin));
+            }
+
+            loadedAddressableSkins[skin.Id] = skin;
+        }
+
+        public void UnregisterLoaded(string skinId)
+        {
+            if (!string.IsNullOrWhiteSpace(skinId))
+            {
+                loadedAddressableSkins.Remove(skinId);
+            }
+        }
+
         private DeckSkin Find(string faceId)
+        {
+            if (string.IsNullOrEmpty(faceId))
+            {
+                return null;
+            }
+
+            if (loadedAddressableSkins.TryGetValue(faceId, out var loadedSkin))
+            {
+                return loadedSkin;
+            }
+
+            return FindBuiltIn(faceId);
+        }
+
+        private DeckSkin FindBuiltIn(string faceId)
         {
             if (skins == null || string.IsNullOrEmpty(faceId))
             {
@@ -110,6 +237,40 @@ namespace Mejnun.Cosmetics
             }
 
             return null;
+        }
+
+        private static void AppendSkinIds(IReadOnlyList<DeckSkin> source, List<string> ids,
+            HashSet<string> uniqueIds)
+        {
+            if (source == null)
+            {
+                return;
+            }
+
+            for (var index = 0; index < source.Count; index++)
+            {
+                var skin = source[index];
+                if (skin == null || string.IsNullOrWhiteSpace(skin.Id) || !uniqueIds.Add(skin.Id))
+                {
+                    continue;
+                }
+
+                ids.Add(skin.Id);
+                var backIds = skin.BackIds;
+                for (var backIndex = 0; backIndex < backIds.Length; backIndex++)
+                {
+                    if (string.IsNullOrWhiteSpace(backIds[backIndex]) || backIds[backIndex].IndexOf(':') >= 0)
+                    {
+                        continue;
+                    }
+
+                    var variantId = DeckFaceId.Compose(skin.Id, backIds[backIndex]);
+                    if (uniqueIds.Add(variantId))
+                    {
+                        ids.Add(variantId);
+                    }
+                }
+            }
         }
     }
 }

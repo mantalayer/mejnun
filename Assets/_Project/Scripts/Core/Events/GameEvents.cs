@@ -7,6 +7,7 @@ namespace Mejnun.Core
     {
         public event Action<int> DealerChosen;
         public event Action<string, string> DeckFacesAssigned;
+        public event Action<string> TableFeltAssigned;
         public event Action<int, Card> CardDealt;
         public event Action<int, int> TurnStarted;
         public event Action<Card, CardTarget, CardTarget> CardMoved;
@@ -30,6 +31,11 @@ namespace Mejnun.Core
         internal void RaiseDeckFacesAssigned(string deckZero, string deckOne)
         {
             DeckFacesAssigned?.Invoke(deckZero, deckOne);
+        }
+
+        internal void RaiseTableFeltAssigned(string feltId)
+        {
+            TableFeltAssigned?.Invoke(feltId);
         }
 
         internal void RaiseCardDealt(int seat, Card card)

@@ -43,6 +43,100 @@ namespace Mejnun.Core
             return new[] { SelectFace(candidates[0], rng), SelectFace(candidates[1], rng) };
         }
 
+        public static string[] AssignFromPicks(IReadOnlyList<string> picks,
+            IReadOnlyList<string> randomPool, Pcg32 rng)
+        {
+            if (picks == null)
+            {
+                throw new ArgumentNullException(nameof(picks));
+            }
+
+            if (picks.Count != Card.DeckCount)
+            {
+                throw new ArgumentException("Exactly two deck picks are required.", nameof(picks));
+            }
+
+            if (randomPool == null)
+            {
+                throw new ArgumentNullException(nameof(randomPool));
+            }
+
+            if (rng == null)
+            {
+                throw new ArgumentNullException(nameof(rng));
+            }
+
+            var assigned = new string[Card.DeckCount];
+            var usedSkinIds = new HashSet<string>(StringComparer.Ordinal);
+            for (var slot = 0; slot < assigned.Length; slot++)
+            {
+                var pick = picks[slot];
+                if (pick == null)
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(pick))
+                {
+                    throw new ArgumentException("Deck picks must be non-empty ids or null for Random.",
+                        nameof(picks));
+                }
+
+                var skinId = DeckFaceId.GetSkinId(pick);
+                if (!usedSkinIds.Add(skinId))
+                {
+                    assigned[slot] = null;
+                    continue;
+                }
+
+                assigned[slot] = pick;
+            }
+
+            var candidates = new List<FaceChoiceGroup>(randomPool.Count + 2);
+            for (var index = 0; index < randomPool.Count; index++)
+            {
+                AddDistinct(candidates, randomPool[index]);
+            }
+
+            for (var slot = 0; slot < assigned.Length; slot++)
+            {
+                if (assigned[slot] != null)
+                {
+                    continue;
+                }
+
+                var available = AvailableGroups(candidates, usedSkinIds);
+                if (available.Count == 0)
+                {
+                    var fallback = new List<FaceChoiceGroup>(2);
+                    AddDistinct(fallback, ClassicFace);
+                    AddDistinct(fallback, ClassicIvoryFace);
+                    available = AvailableGroups(fallback, usedSkinIds);
+                }
+
+                var choice = available[rng.NextInt(available.Count)];
+                assigned[slot] = SelectFace(choice, rng);
+                usedSkinIds.Add(choice.SkinId);
+            }
+
+            return assigned;
+        }
+
+        private static List<FaceChoiceGroup> AvailableGroups(List<FaceChoiceGroup> candidates,
+            HashSet<string> usedSkinIds)
+        {
+            var available = new List<FaceChoiceGroup>(candidates.Count);
+            for (var index = 0; index < candidates.Count; index++)
+            {
+                if (!usedSkinIds.Contains(candidates[index].SkinId))
+                {
+                    available.Add(candidates[index]);
+                }
+            }
+
+            return available;
+        }
+
         private static string SelectFace(FaceChoiceGroup group, Pcg32 rng)
         {
             if (group.Choices.Count == 1)

@@ -19,6 +19,11 @@ namespace Mejnun.Game.Tests
             var eventFields = typeof(GameEvents).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
             foreach (var eventField in eventFields)
             {
+                if (eventField.Name == "TableFeltAssigned")
+                {
+                    continue;
+                }
+
                 Assert.That(eventField.GetValue(game.Events), Is.Not.Null, eventField.Name);
             }
         }

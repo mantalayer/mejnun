@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Mejnun.AI;
+using Mejnun.Cosmetics;
 using Mejnun.Game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Mejnun.UI
+namespace Mejnun.UI.FrontEnd
 {
-    /// <summary>
-    /// Match setup: Solo vs AI (you plus bots) or Pass &amp; play (any mix of local humans and bots).
-    /// Every seat has a name and a controller: Human, or an Easy / Medium / Hard bot.
-    /// </summary>
     public sealed class SetupScreen
     {
-        internal const string SoloMode = "Solo vs AI";
-        internal const string PassAndPlayMode = "Pass & play";
+        public const string SoloMode = "Solo vs AI";
+        public const string PassAndPlayMode = "Pass & play";
 
         private const int MaximumSeats = 6;
         private const string HumanKind = "Human";
@@ -22,21 +19,25 @@ namespace Mejnun.UI
         private static readonly string[] BotStyles = { "Balanced", "Hold back", "Blocker" };
 
         private readonly VisualElement root;
-        private readonly MatchFlow matchFlow;
+        private readonly Action<MatchRequest> onNext;
         private readonly DropdownField modeField;
         private readonly SliderInt seatCountField;
         private readonly DropdownField turnTimerField;
         private readonly Label errorLabel;
+        private readonly Button startButton;
         private readonly VisualElement[] seatRows = new VisualElement[MaximumSeats];
         private readonly TextField[] nameFields = new TextField[MaximumSeats];
         private readonly DropdownField[] kindFields = new DropdownField[MaximumSeats];
         private readonly DropdownField[] styleFields = new DropdownField[MaximumSeats];
         private string[] seatBotNames;
+        private MatchMode mode;
+        private Func<bool> canStart;
 
-        public SetupScreen(VisualElement documentRoot, MatchFlow flow)
+        public SetupScreen(VisualElement documentRoot, Action<MatchRequest> next, Action back, MatchMode matchMode)
         {
             root = documentRoot.Q<VisualElement>("setup-screen");
-            matchFlow = flow;
+            onNext = next ?? throw new ArgumentNullException(nameof(next));
+            mode = matchMode;
             seatBotNames = BotNames.PickDistinct(MaximumSeats);
             modeField = root.Q<DropdownField>("mode-field");
             seatCountField = root.Q<SliderInt>("seat-count-field");
@@ -44,6 +45,7 @@ namespace Mejnun.UI
             seatCountField.highValue = MaximumSeats;
             turnTimerField = root.Q<DropdownField>("turn-timer-field");
             errorLabel = root.Q<Label>("setup-error");
+            startButton = root.Q<Button>("start-match-button");
 
             var kinds = new List<string> { HumanKind };
             kinds.AddRange(BotKinds);
@@ -58,46 +60,56 @@ namespace Mejnun.UI
                 styleFields[seat].choices = new List<string>(BotStyles);
                 styleFields[seat].SetValueWithoutNotify(BotStyles[0]);
                 var seatIndex = seat;
-                kindFields[seat].RegisterValueChangedCallback(changeEvent => OnKindChanged(seatIndex));
+                kindFields[seat].RegisterValueChangedCallback(_ => OnKindChanged(seatIndex));
             }
 
             modeField.choices = new List<string> { SoloMode, PassAndPlayMode };
+            modeField.SetValueWithoutNotify(mode == MatchMode.PassAndPlay ? PassAndPlayMode : SoloMode);
+            modeField.SetEnabled(false);
             turnTimerField.choices = new List<string> { "Off", "30 seconds", "60 seconds", "90 seconds", "120 seconds" };
             turnTimerField.SetValueWithoutNotify("Off");
-            modeField.RegisterValueChangedCallback(changeEvent => ApplyMode(changeEvent.newValue));
             seatCountField.RegisterValueChangedCallback(OnSeatCountChanged);
-            root.Q<Button>("start-match-button").clicked += StartMatch;
-            root.Q<Button>("resume-match-button").clicked += ResumeMatch;
+            root.Q<Button>("setup-back-button").clicked += back;
+            startButton.clicked += StartMatch;
 
-            modeField.SetValueWithoutNotify(SoloMode);
-            ApplyMode(SoloMode);
+            ApplyMode(mode);
         }
 
         public void SetVisible(bool visible)
         {
             root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
-            root.Q<Button>("resume-match-button").style.display = visible && SavedGame.HasSave
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
-        }
-
-        private void ResumeMatch()
-        {
-            if (!matchFlow.ResumeSavedGame())
+            if (visible)
             {
-                SetError("No valid saved game is available to resume.");
-                SetVisible(true);
+                RefreshCanStart();
             }
         }
 
-        /// <summary>Solo: seat 1 is you, every other seat is a Medium bot. Pass &amp; play: every seat is human.</summary>
-        private void ApplyMode(string mode)
+        public void SetCanStart(Func<bool> canStartCondition)
         {
-            var solo = mode == SoloMode;
+            canStart = canStartCondition;
+            RefreshCanStart();
+        }
+
+        public void RefreshCanStart()
+        {
+            startButton.SetEnabled(canStart == null || canStart());
+        }
+
+        public void SetMode(MatchMode matchMode)
+        {
+            mode = matchMode;
+            modeField.SetValueWithoutNotify(mode == MatchMode.PassAndPlay ? PassAndPlayMode : SoloMode);
+            ApplyMode(mode);
+        }
+
+        private void ApplyMode(MatchMode matchMode)
+        {
             seatBotNames = BotNames.PickDistinct(MaximumSeats);
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
-                var kind = solo && seat > 0 ? BotKinds[(int)BotDifficulty.Medium] : HumanKind;
+                var kind = matchMode == MatchMode.Solo && seat > 0
+                    ? BotKinds[(int)BotDifficulty.Medium]
+                    : HumanKind;
                 kindFields[seat].SetValueWithoutNotify(kind);
                 OnKindChanged(seat);
             }
@@ -109,8 +121,7 @@ namespace Mejnun.UI
         private void OnKindChanged(int seat)
         {
             styleFields[seat].SetEnabled(IsBot(seat));
-            var name = nameFields[seat].value;
-            if (!IsDefaultName(name))
+            if (!IsDefaultName(nameFields[seat].value))
             {
                 return;
             }
@@ -164,7 +175,7 @@ namespace Mejnun.UI
             }
 
             SetError(string.Empty);
-            matchFlow.StartMatch(seats, null, TimerSeconds());
+            onNext(new MatchRequest(seats, TimerSeconds(), mode));
         }
 
         private int TimerSeconds()
@@ -216,13 +227,10 @@ namespace Mejnun.UI
 
         private void SetError(string message)
         {
-            if (errorLabel == null)
+            if (errorLabel != null)
             {
-                return;
+                errorLabel.text = message;
             }
-
-            errorLabel.text = message;
-            errorLabel.style.display = string.IsNullOrEmpty(message) ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
 }

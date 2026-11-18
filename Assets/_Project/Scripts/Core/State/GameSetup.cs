@@ -7,9 +7,12 @@ namespace Mejnun.Core
     public sealed class GameSetup
     {
         private readonly ReadOnlyCollection<string> facePool;
+        private readonly ReadOnlyCollection<string> deckPicks;
+        private readonly ReadOnlyCollection<string> feltPool;
 
         public GameSetup(int seatCount, ulong seed, int? dealer = null, int turnSeconds = 0,
-            IReadOnlyList<string> facePool = null)
+            IReadOnlyList<string> facePool = null, IReadOnlyList<string> deckPicks = null,
+            IReadOnlyList<string> feltPool = null)
         {
             if (seatCount < 2 || seatCount > 6)
             {
@@ -43,11 +46,49 @@ namespace Mejnun.Core
                 }
             }
 
+            List<string> picks = null;
+            if (deckPicks != null)
+            {
+                if (deckPicks.Count != Card.DeckCount)
+                {
+                    throw new ArgumentException("Exactly two deck picks are required.", nameof(deckPicks));
+                }
+
+                picks = new List<string>(deckPicks.Count);
+                for (var index = 0; index < deckPicks.Count; index++)
+                {
+                    var pick = deckPicks[index];
+                    if (pick != null && string.IsNullOrWhiteSpace(pick))
+                    {
+                        throw new ArgumentException("Deck picks must be non-empty ids or null for Random.",
+                            nameof(deckPicks));
+                    }
+
+                    picks.Add(pick);
+                }
+            }
+
+            var felts = new List<string>();
+            if (feltPool != null)
+            {
+                for (var index = 0; index < feltPool.Count; index++)
+                {
+                    if (string.IsNullOrWhiteSpace(feltPool[index]))
+                    {
+                        throw new ArgumentException("Felt ids cannot be null or empty.", nameof(feltPool));
+                    }
+
+                    felts.Add(feltPool[index]);
+                }
+            }
+
             SeatCount = seatCount;
             Seed = seed;
             Dealer = dealer;
             TurnSeconds = turnSeconds;
             this.facePool = faces.AsReadOnly();
+            this.deckPicks = picks?.AsReadOnly();
+            this.feltPool = felts.AsReadOnly();
         }
 
         public int SeatCount { get; }
@@ -55,5 +96,7 @@ namespace Mejnun.Core
         public int? Dealer { get; }
         public int TurnSeconds { get; }
         public IReadOnlyList<string> FacePool => facePool;
+        public IReadOnlyList<string> DeckPicks => deckPicks;
+        public IReadOnlyList<string> FeltPool => feltPool;
     }
 }

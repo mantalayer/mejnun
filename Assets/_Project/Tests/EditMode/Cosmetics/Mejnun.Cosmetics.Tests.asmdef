@@ -1,0 +1,29 @@
+{
+  "name": "Mejnun.Cosmetics.Tests",
+  "rootNamespace": "Mejnun.Cosmetics.Tests",
+  "references": [
+    "Mejnun.AI",
+    "Mejnun.Cosmetics",
+    "Mejnun.Game",
+    "Mejnun.Editor",
+    "Mejnun.UI",
+    "Unity.Addressables",
+    "Unity.Addressables.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

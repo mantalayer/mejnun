@@ -17,6 +17,7 @@ namespace Mejnun.Game.Tests
 
             var flow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(flow.StartMatch(3, new[] { "Sam", "Alex", "Lee" }, 34567), Is.True);
+            yield return WaitForRoundInitialization(flow);
             Assert.That(flow.ChooseDealer(0).Ok, Is.True);
             Assert.That(flow.RevealHand(), Is.True);
             flow.Game.State.DrawPile.Clear();
@@ -50,6 +51,7 @@ namespace Mejnun.Game.Tests
             var flow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(flow.StartMatch(6,
                 new[] { "Sam", "Alex", "Lee", "Jo", "Morgan", "Riley" }, 98765), Is.True);
+            yield return WaitForRoundInitialization(flow);
             Assert.That(flow.ChooseDealer(0).Ok, Is.True);
 
             var handCount = 0;
@@ -74,6 +76,7 @@ namespace Mejnun.Game.Tests
             for (ulong seed = 1; seed < 512 && straight == null; seed++)
             {
                 Assert.That(flow.StartMatch(2, new[] { "Sam", "Alex" }, seed), Is.True);
+                yield return WaitForRoundInitialization(flow);
                 Assert.That(flow.ChooseDealer(0).Ok, Is.True);
                 seat = flow.Game.State.CurrentSeat;
                 GestureTestGameFactory.TryFindStraight(flow.Game.State.Hands[seat], 3, out straight);
@@ -100,6 +103,18 @@ namespace Mejnun.Game.Tests
             Assert.That(flow.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
             Assert.That(flow.Game.State.CurrentSeat, Is.EqualTo(seat));
             Assert.That(flow.Screen, Is.EqualTo(MatchFlowScreen.Handoff));
+        }
+
+        private static IEnumerator WaitForRoundInitialization(MatchFlow flow)
+        {
+            var frames = 0;
+            while (flow.IsInitializingRound && frames++ < 300)
+            {
+                yield return null;
+            }
+
+            Assert.That(flow.IsInitializingRound, Is.False);
+            Assert.That(flow.Game, Is.Not.Null);
         }
     }
 }

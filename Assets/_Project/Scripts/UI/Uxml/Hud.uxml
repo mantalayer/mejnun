@@ -1,5 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Uss/common.uss" />
     <ui:Style src="../Uss/table.uss" />
+    <ui:Template name="settings-panel-template" src="SettingsPanel.uxml" />
     <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
         <ui:VisualElement name="top-bar" class="hud-bar top-bar">
             <ui:VisualElement class="game-status">
@@ -54,56 +56,7 @@
             <ui:Button name="restart-button" class="hud-button" text="Restart game" />
             <ui:Button name="settings-button" class="hud-button" text="Settings" />
         </ui:VisualElement>
-        <ui:VisualElement name="settings-panel" class="hud-dialog" style="display: none">
-            <ui:Label class="dialog-title" text="Settings" />
-            <ui:ScrollView class="settings-scroll">
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Arc amount" />
-                    <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Card spread" />
-                    <ui:Slider name="hand-spread-slider" low-value="0.25" high-value="0.9" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Card size" />
-                    <ui:Slider name="hand-card-scale-slider" low-value="0.5" high-value="1.5" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Opponent card size" />
-                    <ui:Slider name="opponent-card-scale-slider" low-value="0.5" high-value="2" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Zoom sensitivity" />
-                    <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="CPU move speed" />
-                    <ui:DropdownField name="cpu-speed-dropdown" choices="Glacial,Very slow,Slow,Normal,Fast,Very fast" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Raise hand" />
-                    <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5" />
-                </ui:VisualElement>
-                <ui:Toggle name="hint-board-moves-toggle" label="Hint useful board cards" />
-                <ui:Toggle name="hint-jiggle-toggle" label="Jiggle hinted cards" />
-                <ui:Toggle name="reduced-motion-toggle" label="Reduce motion" />
-                <ui:Toggle name="haptics-toggle" label="Haptics" />
-                <ui:Toggle name="show-fast-forward-toggle" label="Show fast-forward button" />
-                <ui:Toggle name="overlap-sets-toggle" label="Overlap cards in sets" />
-                <ui:Toggle name="organic-board-toggle" label="Place sets organically" />
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Board card spread" />
-                    <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5" />
-                </ui:VisualElement>
-                <ui:VisualElement class="settings-row">
-                    <ui:Label class="setting-label" text="Card messiness" />
-                    <ui:Slider name="card-messiness-slider" low-value="0" high-value="1" />
-                </ui:VisualElement>
-                <ui:Toggle name="easy-opening-deal-toggle" label="Everyone can go down first turn" />
-            </ui:ScrollView>
-            <ui:Button name="settings-close-button" class="hud-button primary-button" text="Done" />
-        </ui:VisualElement>
+        <ui:Instance template="settings-panel-template" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" picking-mode="Ignore" />
         <ui:VisualElement name="help-panel" class="hud-dialog help-panel" style="display: none">
             <ui:Label class="dialog-title" text="PC shortcuts" />
             <ui:Label class="shortcut-copy" text="Ctrl/Cmd+Z  Undo&#10;Ctrl/Cmd+Shift+Z or Ctrl+Y  Redo&#10;Space  End turn&#10;D  Draw / pass&#10;R  Revert&#10;F  Fix board&#10;H  Hint&#10;F1  This sheet&#10;Esc or P  Pause" />

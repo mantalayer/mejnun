@@ -1,11 +1,13 @@
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Mejnun.Core;
 using Mejnun.Cosmetics;
 using Mejnun.Editor.DeckImport;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Mejnun.Editor.Tests
 {
@@ -167,6 +169,60 @@ namespace Mejnun.Editor.Tests
             var reigns = AssetDatabase.LoadAssetAtPath<DeckSkin>("Assets/_Project/Data/Skins/reigns.asset");
             Assert.That(reigns, Is.Not.Null);
             Assert.That(reigns.Blank, Is.Null);
+        }
+    }
+
+    public sealed class UiStyleSheetTests
+    {
+        private static readonly Regex CommentPattern = new Regex(@"/\*.*?\*/", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static readonly Regex DimensionPattern = new Regex(
+            @"(?<![#\w.-])[-+]?(?:\d+(?:\.\d*)?|\.\d+)([a-zA-Z]+)", RegexOptions.Compiled);
+
+        [Test]
+        public void UiStyleSheets_UseSupportedUnits()
+        {
+            var assetsPath = Application.dataPath;
+            var stylesheetDirectories = new[]
+            {
+                Path.Combine(assetsPath, "_Project"),
+                Path.Combine(assetsPath, "UI Toolkit", "UnityThemes")
+            };
+            var stylesheetPaths = stylesheetDirectories
+                .SelectMany(directory => Directory.GetFiles(directory, "*", SearchOption.AllDirectories))
+                .Where(path => path.EndsWith(".uss", System.StringComparison.OrdinalIgnoreCase)
+                    || path.EndsWith(".tss", System.StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
+            Assert.That(stylesheetPaths, Is.Not.Empty);
+
+            var unsupportedUnits = stylesheetPaths
+                .SelectMany(path => DimensionPattern.Matches(CommentPattern.Replace(File.ReadAllText(path), string.Empty))
+                    .Cast<Match>()
+                    .Where(match => !IsSupportedUnit(match.Groups[1].Value))
+                    .Select(match => $"{path}: {match.Value}"))
+                .ToArray();
+
+            Assert.That(unsupportedUnits, Is.Empty, string.Join(System.Environment.NewLine, unsupportedUnits));
+        }
+
+        [Test]
+        public void FrontEndStyleSheet_LoadsAsStyleSheetAsset()
+        {
+            var stylesheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(
+                "Assets/_Project/Scripts/UI/Uss/frontend.uss");
+
+            Assert.That(stylesheet, Is.Not.Null);
+        }
+
+        private static bool IsSupportedUnit(string unit)
+        {
+            return unit.Equals("px", System.StringComparison.OrdinalIgnoreCase)
+                || unit.Equals("deg", System.StringComparison.OrdinalIgnoreCase)
+                || unit.Equals("rad", System.StringComparison.OrdinalIgnoreCase)
+                || unit.Equals("grad", System.StringComparison.OrdinalIgnoreCase)
+                || unit.Equals("turn", System.StringComparison.OrdinalIgnoreCase)
+                || unit.Equals("s", System.StringComparison.OrdinalIgnoreCase)
+                || unit.Equals("ms", System.StringComparison.OrdinalIgnoreCase);
         }
     }
 }

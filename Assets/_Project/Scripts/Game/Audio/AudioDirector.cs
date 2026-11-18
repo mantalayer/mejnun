@@ -32,16 +32,29 @@ namespace Mejnun.Game
             {
                 flow.gameObject.AddComponent<AudioDirector>();
             }
+
+            var menuCue = FindAnyObjectByType<MenuAudioCue>();
+            if (menuCue != null && FindAnyObjectByType<AudioDirector>() == null)
+            {
+                menuCue.gameObject.AddComponent<AudioDirector>();
+            }
         }
 
         private void Awake()
         {
             audioService = new WwiseAudioService(gameObject);
             mapper = new GameAudioMapper(audioService);
+            if (FindAnyObjectByType<MenuAudioCue>() != null)
+            {
+                audioService.SetState(AudioIds.GamePhase, AudioIds.PhaseMenu);
+                SetMusic(AudioIds.MusicMenu);
+            }
         }
 
         private void OnEnable()
         {
+            GameSettings.Changed += OnSettingsChanged;
+            ApplyVolumes();
             FeedbackCues.Raised += OnFeedbackCue;
             AttachMatchFlow(FindAnyObjectByType<MatchFlow>());
             HookUiDocuments();
@@ -49,6 +62,7 @@ namespace Mejnun.Game
 
         private void OnDisable()
         {
+            GameSettings.Changed -= OnSettingsChanged;
             FeedbackCues.Raised -= OnFeedbackCue;
             DetachMatchFlow();
             UnhookUiDocuments();
@@ -88,6 +102,25 @@ namespace Mejnun.Game
         public void ReportTimeout()
         {
             mapper?.ReportTimeout();
+        }
+
+        public void ConfigureAudioService(IAudioService service)
+        {
+            audioService = service;
+            ApplyVolumes();
+        }
+
+        private void OnSettingsChanged(string key)
+        {
+            ApplyVolumes();
+        }
+
+        private void ApplyVolumes()
+        {
+            audioService?.SetRtpc(AudioIds.VolumeMaster, GameSettings.VolumeMaster * 100f);
+            audioService?.SetRtpc(AudioIds.VolumeMusic, GameSettings.VolumeMusic * 100f);
+            audioService?.SetRtpc(AudioIds.VolumeSfx, GameSettings.VolumeSfx * 100f);
+            audioService?.SetRtpc(AudioIds.VolumeVoice, GameSettings.VolumeVoice * 100f);
         }
 
         private void AttachMatchFlow(MatchFlow flow)
@@ -204,7 +237,7 @@ namespace Mejnun.Game
         {
             switch (screen)
             {
-                case MatchFlowScreen.Setup:
+                case MatchFlowScreen.Idle:
                     audioService.SetState(AudioIds.GamePhase, AudioIds.PhaseMenu);
                     SetMusic(AudioIds.MusicMenu);
                     break;

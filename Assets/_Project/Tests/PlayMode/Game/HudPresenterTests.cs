@@ -32,6 +32,7 @@ namespace Mejnun.Game.Tests
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             Assert.That(matchFlow, Is.Not.Null);
             Assert.That(matchFlow.StartMatch(3, new[] { "Sam", "Alex", "Lee" }, 202601), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
             Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
             Assert.That(matchFlow.RevealHand(), Is.True);
 
@@ -115,6 +116,7 @@ namespace Mejnun.Game.Tests
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             var seats = new[] { SeatConfig.Human("Sam"), SeatConfig.Human("Alex") };
             Assert.That(matchFlow.StartMatch(seats, 20261117UL, 10), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
             Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
             Assert.That(matchFlow.RevealHand(), Is.True);
             var startingSeat = matchFlow.Game.State.CurrentSeat;
@@ -138,6 +140,18 @@ namespace Mejnun.Game.Tests
                 Assert.That(HudPresenter.GetOpponentSide(relativeSeat, opponentCount),
                     Is.EqualTo(expected[relativeSeat - 1]));
             }
+        }
+
+        private static IEnumerator WaitForRoundInitialization(MatchFlow flow)
+        {
+            var frames = 0;
+            while (flow.IsInitializingRound && frames++ < 300)
+            {
+                yield return null;
+            }
+
+            Assert.That(flow.IsInitializingRound, Is.False);
+            Assert.That(flow.Game, Is.Not.Null);
         }
     }
 }

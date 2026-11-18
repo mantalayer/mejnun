@@ -39,6 +39,7 @@ namespace Mejnun.Game
         public float LeftInsetFraction => leftInsetFraction;
         public float RightInsetFraction => rightInsetFraction;
         public float ViewportAspect => tableCamera == null ? 1f : tableCamera.aspect;
+        public float MaxOrthographicSize => maxOrthographicSize;
         public bool ManuallyAdjusted => manuallyAdjusted;
         public float ZoomFactor => baseOrthographicSize <= 0f
             ? 1f

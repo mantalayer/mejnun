@@ -80,3 +80,7 @@ MonoBehaviour:
   blank: {fileID: 4582629008657694726, guid: 09bdc7bf4ed6141d9b7e784cc4a4f961, type: 3}
   pixelArt: 1
   pixelsPerUnit: 100
+  unlock:
+    kind: 2
+    target: 3
+    achievementId: 

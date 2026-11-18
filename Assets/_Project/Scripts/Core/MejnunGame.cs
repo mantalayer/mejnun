@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 namespace Mejnun.Core
 {
     public sealed class MejnunGame
     {
+        private const ulong CosmeticSeedSalt = 0x9E3779B97F4A7C15UL;
+        private const ulong FeltSeedSalt = 0xD1B54A32D192ED03UL;
         private readonly GameSetup setup;
 
         public MejnunGame(GameSetup setup)
@@ -16,11 +19,27 @@ namespace Mejnun.Core
             this.setup = setup ?? throw new ArgumentNullException(nameof(setup));
             State = new GameState(setup.SeatCount, new Pcg32(setup.Seed));
             Events = new GameEvents();
+            AssignCosmetics();
 
             if (startWithProvidedDealer && setup.Dealer.HasValue)
             {
                 StartGame(setup.Dealer.Value);
             }
+        }
+
+        private void AssignCosmetics()
+        {
+            var cosmeticRng = new Pcg32(setup.Seed ^ CosmeticSeedSalt);
+            State.DeckFaces = setup.DeckPicks == null
+                ? DeckFaceAssigner.Assign(setup.FacePool, cosmeticRng)
+                : DeckFaceAssigner.AssignFromPicks(setup.DeckPicks, setup.FacePool, cosmeticRng);
+            State.TableFeltId = AssignTableFelt(setup.FeltPool, setup.Seed);
+        }
+
+        /// <summary>Resolves the felt a game with this pool and seed will use, before the game exists.</summary>
+        public static string AssignTableFelt(IReadOnlyList<string> feltPool, ulong seed)
+        {
+            return TableFeltAssigner.Assign(feltPool, new Pcg32(seed ^ FeltSeedSalt));
         }
 
         public GameSetup Setup => setup;
@@ -170,7 +189,6 @@ namespace Mejnun.Core
 
             var shoe = new Shoe();
             shoe.Shuffle(State.Rng);
-            State.DeckFaces = DeckFaceAssigner.Assign(setup.FacePool, State.Rng);
             Events.RaiseDeckFacesAssigned(State.DeckFaces[0], State.DeckFaces[1]);
 
             var shoeIndex = 0;
@@ -189,6 +207,8 @@ namespace Mejnun.Core
             {
                 State.DrawPile.Add(shoe[shoeIndex]);
             }
+
+            Events.RaiseTableFeltAssigned(State.TableFeltId);
 
             State.CurrentSeat = (dealer + 1) % setup.SeatCount;
             State.TurnNumber = 1;

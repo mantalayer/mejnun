@@ -142,6 +142,43 @@ namespace Mejnun.Core.Tests
             Assert.Throws<ArgumentNullException>(() => SnapshotSerializer.Write(null));
         }
 
+        [Test]
+        public void Snapshot_ReadsVersionOneFixtureWithDefaultPicksAndFelt()
+        {
+            const string fixture = "MU5KTQEAAAACAAAATlVOam0AAAABAQAAAAAAAAACAAAAB2NsYXNzaWMNY2xhc3NpY19pdm9yeQEAAAAAAQEAAAABAAAAAAAAAAEAAABwa3Mch1OW4E+BZ/d+ewUUAgAAAAsAAAAdDVMyVBYpKmMkXQsAAABaBFYMTlBAGCBPZwIAAAAAAAAAAABSAAAAHwIzGV9bQz0uXmIJORUsQgclI2VGAA8nN1lHCk01RFUbKzEFC1waTC8UBmYDHmBINC0RPBxJODYTQVdRKCFSRWE+WCYXAQ4SZDA6SwhKIj8QOwEHY2xhc3NpYwENY2xhc3NpY19pdm9yeQABAAAAAAAAAAAAAQAAAAsAAAAdDVMyVBYpKmMkXQAAAAAAAAAA";
+            var fixtureBytes = Convert.FromBase64String(fixture);
+
+            Assert.That(BitConverter.ToInt32(fixtureBytes, sizeof(uint)), Is.EqualTo(1));
+            var game = SnapshotSerializer.Read(fixtureBytes);
+
+            Assert.That(game.Setup.Seed, Is.EqualTo(0x6D6A4E554EUL));
+            Assert.That(game.Setup.DeckPicks, Is.Null);
+            Assert.That(game.Setup.FeltPool, Is.Empty);
+            Assert.That(game.State.TableFeltId, Is.EqualTo(TableFeltAssigner.GreenFelt));
+            Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Playing));
+        }
+
+        [Test]
+        public void Snapshot_VersionTwoRoundTripsPicksFeltPoolAndFeltId()
+        {
+            var setup = new GameSetup(2, 812UL, dealer: 1,
+                facePool: new[] { "random_one", "random_two" },
+                deckPicks: new[] { "picked_one", null },
+                feltPool: new[] { "green", "burgundy" });
+            var game = new MejnunGame(setup);
+
+            var bytes = SnapshotSerializer.Write(game);
+            var restored = SnapshotSerializer.Read(bytes);
+
+            Assert.That(SnapshotSerializer.Version, Is.EqualTo(2));
+            Assert.That(game.State.DeckFaces[0], Is.EqualTo("picked_one"));
+            Assert.That(DeckFaceId.GetSkinId(game.State.DeckFaces[1]), Is.Not.EqualTo("picked_one"));
+            CollectionAssert.AreEqual(setup.DeckPicks, restored.Setup.DeckPicks);
+            CollectionAssert.AreEqual(setup.FeltPool, restored.Setup.FeltPool);
+            Assert.That(restored.State.TableFeltId, Is.EqualTo(game.State.TableFeltId));
+            CollectionAssert.AreEqual(bytes, SnapshotSerializer.Write(restored));
+        }
+
         private static MejnunGame NewGame()
         {
             return GameBuilder.Create(dealer: 1);
@@ -175,6 +212,24 @@ namespace Mejnun.Core.Tests
                 reader.ReadInt32();
                 var faceCount = reader.ReadInt32();
                 for (var index = 0; index < faceCount; index++)
+                {
+                    reader.ReadString();
+                }
+
+                if (reader.ReadBoolean())
+                {
+                    var pickCount = reader.ReadInt32();
+                    for (var index = 0; index < pickCount; index++)
+                    {
+                        if (reader.ReadBoolean())
+                        {
+                            reader.ReadString();
+                        }
+                    }
+                }
+
+                var feltCount = reader.ReadInt32();
+                for (var index = 0; index < feltCount; index++)
                 {
                     reader.ReadString();
                 }

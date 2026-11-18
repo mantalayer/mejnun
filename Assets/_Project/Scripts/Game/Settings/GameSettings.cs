@@ -26,8 +26,16 @@ namespace Mejnun.Game
         private const string BoardCardSpreadKey = "settings.board.cardSpread";
         private const string CardMessinessKey = "settings.board.cardMessiness";
         private const string EasyOpeningDealKey = "settings.game.easyOpeningDeal";
+        private const string VolumeMasterKey = "settings.audio.master";
+        private const string VolumeMusicKey = "settings.audio.music";
+        private const string VolumeSfxKey = "settings.audio.sfx";
+        private const string VolumeVoiceKey = "settings.audio.voice";
+        private const string LanguageKey = "settings.language";
+        private const string QuickMatchBotFillKey = "settings.online.botFill";
         private static readonly float[] CpuDelayMultipliers = { 6f, 4f, 3f, 2f, 1f, 0.5f };
         private static bool fastForward;
+
+        public static event System.Action<string> Changed;
 
         public static bool ConfirmRevert
         {
@@ -120,6 +128,7 @@ namespace Mejnun.Game
             {
                 PlayerPrefs.SetInt(CpuSpeedKey, Mathf.Clamp(value, 0, 5));
                 PlayerPrefs.Save();
+                Changed?.Invoke(CpuSpeedKey);
             }
         }
 
@@ -167,6 +176,52 @@ namespace Mejnun.Game
             set => fastForward = value;
         }
 
+        public static float VolumeMaster
+        {
+            get => Mathf.Clamp01(Get(VolumeMasterKey, 1f));
+            set => Set(VolumeMasterKey, Mathf.Clamp01(value));
+        }
+
+        public static float VolumeMusic
+        {
+            get => Mathf.Clamp01(Get(VolumeMusicKey, 1f));
+            set => Set(VolumeMusicKey, Mathf.Clamp01(value));
+        }
+
+        public static float VolumeSfx
+        {
+            get => Mathf.Clamp01(Get(VolumeSfxKey, 1f));
+            set => Set(VolumeSfxKey, Mathf.Clamp01(value));
+        }
+
+        public static float VolumeVoice
+        {
+            get => Mathf.Clamp01(Get(VolumeVoiceKey, 1f));
+            set => Set(VolumeVoiceKey, Mathf.Clamp01(value));
+        }
+
+        public static string Language
+        {
+            get => PlayerPrefs.GetString(LanguageKey, "en");
+            set => Set(LanguageKey, string.IsNullOrWhiteSpace(value) ? "en" : value);
+        }
+
+        public static int QuickMatchBotFill
+        {
+            get
+            {
+                var value = PlayerPrefs.GetInt(QuickMatchBotFillKey, 60);
+                return value == 0 || value == 30 ? value : 60;
+            }
+            set
+            {
+                var normalized = value == 0 || value == 30 ? value : 60;
+                PlayerPrefs.SetInt(QuickMatchBotFillKey, normalized);
+                PlayerPrefs.Save();
+                Changed?.Invoke(QuickMatchBotFillKey);
+            }
+        }
+
         public static void ResetForTests()
         {
             PlayerPrefs.DeleteKey(ConfirmRevertKey);
@@ -191,7 +246,14 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(BoardCardSpreadKey);
             PlayerPrefs.DeleteKey(CardMessinessKey);
             PlayerPrefs.DeleteKey(EasyOpeningDealKey);
+            PlayerPrefs.DeleteKey(VolumeMasterKey);
+            PlayerPrefs.DeleteKey(VolumeMusicKey);
+            PlayerPrefs.DeleteKey(VolumeSfxKey);
+            PlayerPrefs.DeleteKey(VolumeVoiceKey);
+            PlayerPrefs.DeleteKey(LanguageKey);
+            PlayerPrefs.DeleteKey(QuickMatchBotFillKey);
             FastForward = false;
+            Changed = null;
         }
 
         private static bool Get(string key, bool defaultValue)
@@ -203,6 +265,7 @@ namespace Mejnun.Game
         {
             PlayerPrefs.SetInt(key, value ? 1 : 0);
             PlayerPrefs.Save();
+            Changed?.Invoke(key);
         }
 
         private static float Get(string key, float defaultValue)
@@ -214,6 +277,14 @@ namespace Mejnun.Game
         {
             PlayerPrefs.SetFloat(key, value);
             PlayerPrefs.Save();
+            Changed?.Invoke(key);
+        }
+
+        private static void Set(string key, string value)
+        {
+            PlayerPrefs.SetString(key, value);
+            PlayerPrefs.Save();
+            Changed?.Invoke(key);
         }
     }
 }
