@@ -20,6 +20,11 @@ namespace Mejnun.Game
             return screenHeight > screenWidth && cardCount > 8 ? 2 : 1;
         }
 
+        public static int CalculateSortingOrder(int row, int column, int cardsPerRow, int rowCount)
+        {
+            return 100 + (rowCount - 1 - row) * cardsPerRow + column;
+        }
+
         public static void CalculateArcPose(float normalizedPosition, float arcAmount, out float offset, out float angle)
         {
             offset = arcAmount * (1f - normalizedPosition * normalizedPosition);
@@ -83,9 +88,9 @@ namespace Mejnun.Game
                     continue;
                 }
 
-                view.SetSortingOrder(100 + index);
                 var row = RowCount == 1 ? 0 : displayIndex / cardsPerRow;
                 var column = RowCount == 1 ? displayIndex : displayIndex % cardsPerRow;
+                view.SetSortingOrder(CalculateSortingOrder(row, column, cardsPerRow, RowCount));
                 var normalizedPosition = cardsPerRow <= 1
                     ? 0f
                     : (column - (cardsPerRow - 1) * 0.5f) / ((cardsPerRow - 1) * 0.5f);

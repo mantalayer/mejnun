@@ -9,7 +9,7 @@ namespace Mejnun.Game
         private const int MaxQueuedDealSounds = 12;
         private const float DealSoundSpacing = 0.06f;
         private const float TimerWarningSeconds = 10f;
-        private const float TimerTickSeconds = 5f;
+        private const float TimerTickSeconds = 9f;
 
         private readonly IAudioService audio;
         private GameEvents events;

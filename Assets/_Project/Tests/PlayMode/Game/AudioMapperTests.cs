@@ -180,15 +180,23 @@ namespace Mejnun.Game.Tests
 
             mapper.ReportTurnTimer(60f, 60f);
             mapper.ReportTurnTimer(10f, 60f);
-            mapper.ReportTurnTimer(5f, 60f);
-            mapper.ReportTurnTimer(5f, 60f);
+            Assert.That(audio.Posts.FindAll(eventName => eventName == AudioIds.PlayTimerTick).Count, Is.Zero);
+            for (var second = 9; second >= 1; second--)
+            {
+                mapper.ReportTurnTimer(second, 60f);
+                if (second == 5)
+                {
+                    mapper.ReportTurnTimer(second, 60f);
+                }
+            }
+
             mapper.ReportTimeout();
             mapper.ReportTimeout();
 
             Assert.That(audio.Rtpcs[0], Is.EqualTo((AudioIds.TimerTension, 0f)));
             Assert.That(audio.Rtpcs[1].Item2, Is.EqualTo(1f - 10f / 60f).Within(0.0001f));
             Assert.That(audio.Posts.FindAll(eventName => eventName == AudioIds.PlayTimerWarning).Count, Is.EqualTo(1));
-            Assert.That(audio.Posts.FindAll(eventName => eventName == AudioIds.PlayTimerTick).Count, Is.EqualTo(1));
+            Assert.That(audio.Posts.FindAll(eventName => eventName == AudioIds.PlayTimerTick).Count, Is.EqualTo(9));
             Assert.That(audio.Posts.FindAll(eventName => eventName == AudioIds.PlayTimerHalas).Count, Is.EqualTo(1));
         }
 

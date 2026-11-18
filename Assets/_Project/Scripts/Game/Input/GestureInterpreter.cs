@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Mejnun.AI;
 using Mejnun.Core;
 
 namespace Mejnun.Game
@@ -254,8 +255,7 @@ namespace Mejnun.Game
         private void InterpretDoubleTap(GestureInput input, GameState state, TurnSession turn,
             GestureResult result)
         {
-            if (input.Source.Kind == GestureHitKind.EmptyBoard ||
-                (input.Source.Kind == GestureHitKind.HandCard && state.Board.Count == 0))
+            if (input.Source.Kind == GestureHitKind.EmptyBoard)
             {
                 result.FitBoardRequested = true;
                 return;
@@ -263,6 +263,23 @@ namespace Mejnun.Game
 
             if (input.Source.Kind == GestureHitKind.HandCard)
             {
+                var ids = CopySelectedCardIds(input.Source.CardId);
+                if (ids.Length > 1)
+                {
+                    if (TryPlaceSelection(ids, state, turn, result.Batch))
+                    {
+                        result.ClearSelectionOnSuccess = true;
+                    }
+
+                    return;
+                }
+
+                if (state.Board.Count == 0)
+                {
+                    result.FitBoardRequested = true;
+                    return;
+                }
+
                 var card = Card.FromId(input.Source.CardId);
                 if (TryFindQuickPlaceTarget(card, state, turn, out var target))
                 {
@@ -280,6 +297,171 @@ namespace Mejnun.Game
                     CardTarget.Hand(state.Hands[state.CurrentSeat].Count)));
                 result.ClearSelectionOnSuccess = true;
             }
+        }
+
+        private static bool TryPlaceSelection(IReadOnlyList<byte> selectedIds, GameState state, TurnSession turn,
+            CommandBatch batch)
+        {
+            var seat = state.CurrentSeat;
+            var hand = state.Hands[seat];
+            var selectedCards = new List<Card>(selectedIds.Count);
+            for (var selectedIndex = 0; selectedIndex < selectedIds.Count; selectedIndex++)
+            {
+                var found = false;
+                for (var handIndex = 0; handIndex < hand.Count; handIndex++)
+                {
+                    if (hand[handIndex].Id == selectedIds[selectedIndex])
+                    {
+                        selectedCards.Add(hand[handIndex]);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    return false;
+                }
+            }
+
+            if (MeldValidator.Classify(selectedCards).IsValid)
+            {
+                MeldValidator.CanonicalizeStraight(selectedCards);
+                batch.Add(GameCommand.MoveCards(seat, CardIds(selectedCards), CardTarget.NewMeld(0)));
+                return true;
+            }
+
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var meld = state.Board[meldIndex];
+                if (turn.StartSnapshot.PlayerPhase == PlayerPhase.NotDown && WasOnStartBoard(turn, meld.Id))
+                {
+                    continue;
+                }
+
+                var combined = new List<Card>(meld.Cards.Count + selectedCards.Count);
+                combined.AddRange(meld.Cards);
+                combined.AddRange(selectedCards);
+                if (MeldValidator.Classify(combined).IsValid)
+                {
+                    batch.Add(GameCommand.MoveCards(seat, CardIds(selectedCards),
+                        CardTarget.Meld(meld.Id, meld.Cards.Count)));
+                    return true;
+                }
+
+                var solution = MeldSolver.Solve(combined, new Card[0]);
+                if (!solution.Feasible || solution.BudgetExceeded || solution.Melds.Count != 1)
+                {
+                    continue;
+                }
+
+                var ordered = new List<Card>(solution.Melds[0]);
+                MeldValidator.CanonicalizeStraight(ordered);
+                if (!TryGetContiguousInsertion(ordered, meld, selectedIds, out var insertionIndex,
+                        out var insertionIds))
+                {
+                    continue;
+                }
+
+                batch.Add(GameCommand.MoveCards(seat, insertionIds, CardTarget.Meld(meld.Id, insertionIndex)));
+                return true;
+            }
+
+            var partition = MeldSolver.Solve(selectedCards, new Card[0]);
+            if (!partition.Feasible || partition.BudgetExceeded || partition.Melds.Count == 0)
+            {
+                return false;
+            }
+
+            for (var meldIndex = 0; meldIndex < partition.Melds.Count; meldIndex++)
+            {
+                var cards = new List<Card>(partition.Melds[meldIndex]);
+                if (!MeldValidator.Classify(cards).IsValid)
+                {
+                    return false;
+                }
+
+                MeldValidator.CanonicalizeStraight(cards);
+                batch.Add(GameCommand.MoveCards(seat, CardIds(cards), CardTarget.NewMeld(0)));
+            }
+
+            return true;
+        }
+
+        private static bool TryGetContiguousInsertion(IReadOnlyList<Card> ordered, Meld meld,
+            IReadOnlyList<byte> selectedIds, out int insertionIndex, out byte[] insertionIds)
+        {
+            var added = new List<byte>(selectedIds.Count);
+            insertionIndex = 0;
+            var existingIndex = 0;
+            var hasAdded = false;
+            var passedAdded = false;
+            for (var index = 0; index < ordered.Count; index++)
+            {
+                var card = ordered[index];
+                if (Contains(selectedIds, card.Id))
+                {
+                    if (passedAdded)
+                    {
+                        insertionIds = null;
+                        return false;
+                    }
+
+                    if (!hasAdded)
+                    {
+                        insertionIndex = existingIndex;
+                        hasAdded = true;
+                    }
+
+                    added.Add(card.Id);
+                    continue;
+                }
+
+                if (existingIndex >= meld.Cards.Count || meld.Cards[existingIndex].Id != card.Id)
+                {
+                    insertionIds = null;
+                    return false;
+                }
+
+                existingIndex++;
+                if (hasAdded)
+                {
+                    passedAdded = true;
+                }
+            }
+
+            if (!hasAdded || existingIndex != meld.Cards.Count || added.Count != selectedIds.Count)
+            {
+                insertionIds = null;
+                return false;
+            }
+
+            insertionIds = added.ToArray();
+            return true;
+        }
+
+        private static bool Contains(IReadOnlyList<byte> ids, byte id)
+        {
+            for (var index = 0; index < ids.Count; index++)
+            {
+                if (ids[index] == id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static byte[] CardIds(IReadOnlyList<Card> cards)
+        {
+            var ids = new byte[cards.Count];
+            for (var index = 0; index < cards.Count; index++)
+            {
+                ids[index] = cards[index].Id;
+            }
+
+            return ids;
         }
 
         private void InterpretDrag(GestureInput input, GameState state, TurnSession turn, GestureResult result)

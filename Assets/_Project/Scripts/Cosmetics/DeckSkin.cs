@@ -1,9 +1,30 @@
 using System;
+using System.Collections.Generic;
 using Mejnun.Core;
 using UnityEngine;
 
 namespace Mejnun.Cosmetics
 {
+    [Serializable]
+    public sealed class DeckSkinBack
+    {
+        [SerializeField] private string id;
+        [SerializeField] private Sprite sprite;
+
+        public string Id => id;
+        public Sprite Sprite => sprite;
+
+        public DeckSkinBack()
+        {
+        }
+
+        public DeckSkinBack(string backId, Sprite backSprite)
+        {
+            id = backId;
+            sprite = backSprite;
+        }
+    }
+
     [CreateAssetMenu(menuName = "Mejnun/Deck Skin")]
     public sealed class DeckSkin : ScriptableObject
     {
@@ -11,6 +32,7 @@ namespace Mejnun.Cosmetics
         [SerializeField] private string displayName;
         [SerializeField] private Sprite[] faces = new Sprite[Card.CardsPerDeck];
         [SerializeField] private Sprite cardBack;
+        [SerializeField] private List<DeckSkinBack> alternateBacks = new List<DeckSkinBack>();
         [SerializeField] private Sprite blank;
         [SerializeField] private bool pixelArt = true;
         [SerializeField] private float pixelsPerUnit = 100f;
@@ -18,6 +40,26 @@ namespace Mejnun.Cosmetics
         public string Id => id;
         public string DisplayName => displayName;
         public Sprite CardBack => cardBack;
+        public IReadOnlyList<DeckSkinBack> AlternateBacks => alternateBacks;
+        public string[] BackIds
+        {
+            get
+            {
+                if (alternateBacks == null)
+                {
+                    return Array.Empty<string>();
+                }
+
+                var ids = new string[alternateBacks.Count];
+                for (var index = 0; index < alternateBacks.Count; index++)
+                {
+                    ids[index] = alternateBacks[index] == null ? null : alternateBacks[index].Id;
+                }
+
+                return ids;
+            }
+        }
+
         public Sprite Blank => blank;
         public bool PixelArt => pixelArt;
         public float PixelsPerUnit => pixelsPerUnit;
@@ -44,12 +86,35 @@ namespace Mejnun.Cosmetics
             return faces[suitIndex * 13 + rankIndex];
         }
 
+        public Sprite GetBack(string backId)
+        {
+            if (!string.IsNullOrEmpty(backId) && alternateBacks != null)
+            {
+                for (var index = 0; index < alternateBacks.Count; index++)
+                {
+                    var alternate = alternateBacks[index];
+                    if (alternate != null && string.Equals(alternate.Id, backId, StringComparison.Ordinal))
+                    {
+                        return alternate.Sprite == null ? cardBack : alternate.Sprite;
+                    }
+                }
+            }
+
+            return cardBack;
+        }
+
         public void Configure(string skinId, string skinDisplayName, Sprite[] faceSprites, Sprite backSprite,
             Sprite blankSprite, bool usePixelArt, float ppu)
         {
-            if (string.IsNullOrWhiteSpace(skinId))
+            Configure(skinId, skinDisplayName, faceSprites, backSprite, null, blankSprite, usePixelArt, ppu);
+        }
+
+        public void Configure(string skinId, string skinDisplayName, Sprite[] faceSprites, Sprite backSprite,
+            IReadOnlyList<DeckSkinBack> alternateBackSprites, Sprite blankSprite, bool usePixelArt, float ppu)
+        {
+            if (string.IsNullOrWhiteSpace(skinId) || skinId.IndexOf(':') >= 0)
             {
-                throw new ArgumentException("A deck skin must have an id.", nameof(skinId));
+                throw new ArgumentException("A deck skin must have an id without a colon.", nameof(skinId));
             }
 
             if (faceSprites == null || faceSprites.Length != Card.CardsPerDeck)
@@ -70,20 +135,34 @@ namespace Mejnun.Cosmetics
                 throw new ArgumentNullException(nameof(backSprite));
             }
 
-            if (blankSprite == null)
-            {
-                throw new ArgumentNullException(nameof(blankSprite));
-            }
-
             if (ppu <= 0f)
             {
                 throw new ArgumentOutOfRangeException(nameof(ppu), ppu, "Pixels per unit must be positive.");
+            }
+
+            var configuredBacks = new List<DeckSkinBack>();
+            var backIds = new HashSet<string>(StringComparer.Ordinal);
+            if (alternateBackSprites != null)
+            {
+                for (var index = 0; index < alternateBackSprites.Count; index++)
+                {
+                    var alternate = alternateBackSprites[index];
+                    if (alternate == null || string.IsNullOrWhiteSpace(alternate.Id) ||
+                        alternate.Id.IndexOf(':') >= 0 || alternate.Sprite == null || !backIds.Add(alternate.Id))
+                    {
+                        throw new ArgumentException("Alternate backs must have unique ids and valid sprites.",
+                            nameof(alternateBackSprites));
+                    }
+
+                    configuredBacks.Add(new DeckSkinBack(alternate.Id, alternate.Sprite));
+                }
             }
 
             id = skinId;
             displayName = skinDisplayName ?? skinId;
             faces = (Sprite[])faceSprites.Clone();
             cardBack = backSprite;
+            alternateBacks = configuredBacks;
             blank = blankSprite;
             pixelArt = usePixelArt;
             pixelsPerUnit = ppu;

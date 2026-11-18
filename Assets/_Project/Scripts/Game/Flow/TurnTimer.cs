@@ -76,10 +76,14 @@ namespace Mejnun.Game
             }
 
             timedOut = true;
-            var result = controller.TimeoutTurn();
-            if (result.Ok)
+            TimedOut?.Invoke();
+            if (controller.GetTimeoutUndoCount() > 0)
             {
-                TimedOut?.Invoke();
+                StartCoroutine(controller.BeginTimeoutFix());
+            }
+            else
+            {
+                controller.TimeoutTurn();
             }
         }
 

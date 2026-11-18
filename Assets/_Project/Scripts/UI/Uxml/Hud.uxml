@@ -4,7 +4,10 @@
         <ui:VisualElement name="top-bar" class="hud-bar top-bar">
             <ui:VisualElement class="game-status">
                 <ui:Label name="turn-label" class="status-label" text="Seat 1's turn" />
-                <ui:Label name="draw-pile-label" class="status-label secondary-label" text="Draw pile: 0" />
+                <ui:VisualElement class="draw-pile-status">
+                    <ui:Label name="draw-pile-label" class="status-label secondary-label" text="Draw pile: 0" />
+                    <ui:VisualElement name="draw-pile-stack" class="draw-pile-stack" picking-mode="Ignore" />
+                </ui:VisualElement>
                 <ui:Label name="timer-label" class="status-label timer-label" text="" />
             </ui:VisualElement>
         </ui:VisualElement>
@@ -24,15 +27,18 @@
             <ui:Button name="sort-rank-button" class="hud-button" text="Sort: rank" />
             <ui:Button name="fit-board-button" class="hud-button" text="Fit board" />
             <ui:Button name="hint-button" class="hud-button" text="Hint: off" />
+            <ui:Button name="mark-set-button" class="hud-button" text="Mark" />
+            <ui:Button name="fast-forward-button" class="hud-button" text="Fast forward" style="display: none" />
             <ui:Button name="help-button" class="hud-button" text="?" />
             <ui:Button name="pause-button" class="hud-button" text="Pause" />
-            <ui:Button name="menu-button" class="hud-button" text="Menu" />
+            <ui:Button name="menu-button" class="hud-button" text="Exit" />
         </ui:VisualElement>
         <ui:VisualElement name="popup-layer" class="popup-layer" picking-mode="Ignore">
             <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
             <ui:Label name="halas-popup" class="halas-popup" text="Halas!" picking-mode="Ignore" />
             <ui:Label name="gone-down-popup" class="gone-down-popup" text="Gone Down" picking-mode="Ignore" />
             <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
+            <ui:VisualElement name="marker-layer" class="marker-layer" picking-mode="Ignore" />
         </ui:VisualElement>
         <ui:VisualElement name="confirm-dialog" class="hud-dialog" style="display: none">
             <ui:Label name="confirm-message" class="dialog-message" text="Are you sure?" />
@@ -73,6 +79,10 @@
                     <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5" />
                 </ui:VisualElement>
                 <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label" text="CPU move speed" />
+                    <ui:DropdownField name="cpu-speed-dropdown" choices="Very slow,Slow,Normal,Fast" />
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
                     <ui:Label class="setting-label" text="Raise hand" />
                     <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5" />
                 </ui:VisualElement>
@@ -80,6 +90,14 @@
                 <ui:Toggle name="hint-jiggle-toggle" label="Jiggle hinted cards" />
                 <ui:Toggle name="reduced-motion-toggle" label="Reduce motion" />
                 <ui:Toggle name="haptics-toggle" label="Haptics" />
+                <ui:Toggle name="show-fast-forward-toggle" label="Show fast-forward button" />
+                <ui:Toggle name="overlap-sets-toggle" label="Overlap cards in sets" />
+                <ui:Toggle name="organic-board-toggle" label="Place sets organically" />
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label" text="Card messiness" />
+                    <ui:Slider name="card-messiness-slider" low-value="0" high-value="1" />
+                </ui:VisualElement>
+                <ui:Toggle name="easy-opening-deal-toggle" label="Everyone can go down first turn" />
             </ui:ScrollView>
             <ui:Button name="settings-close-button" class="hud-button primary-button" text="Done" />
         </ui:VisualElement>

@@ -27,6 +27,26 @@ namespace Mejnun.AI.Tests
         }
 
         [Test]
+        public void BoardMoveHintsExcludeCardsThatLeaveAnotherBoardCardStranded()
+        {
+            var game = Game(new[] { "4H" }, new[] { new[] { "5H", "6H", "7H", "8H" } }, true);
+
+            var hints = PlayableHints.FindBoardMoves(game.State);
+
+            CollectionAssert.DoesNotContain(hints, Parse("8H").Id);
+        }
+
+        [Test]
+        public void BoardMoveHintsKeepMovesThatCanResolveTheDisplacedCard()
+        {
+            var game = Game(new[] { "6S", "10H", "10D" }, new[] { new[] { "7S", "8S", "9S", "10S" } }, true);
+
+            var hints = PlayableHints.FindBoardMoves(game.State);
+
+            CollectionAssert.Contains(hints, Parse("10S").Id);
+        }
+
+        [Test]
         public void NoHintsOutsideAGameInProgress()
         {
             var game = new MejnunGame(new GameSetup(2, 3UL));

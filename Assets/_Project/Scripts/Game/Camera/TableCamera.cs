@@ -18,9 +18,18 @@ namespace Mejnun.Game
         private bool manuallyAdjusted;
         private Bounds boardBounds;
         private bool hasBoardBounds;
+        private float topInsetFraction;
+        private float leftInsetFraction;
+        private float rightInsetFraction;
+        private float bottomInsetFloor;
 
         public Camera Camera => tableCamera;
         public float BottomInsetFraction => bottomInsetFraction;
+        public float BottomInsetFloor => bottomInsetFloor;
+        public float TopInsetFraction => topInsetFraction;
+        public float LeftInsetFraction => leftInsetFraction;
+        public float RightInsetFraction => rightInsetFraction;
+        public float ViewportAspect => tableCamera == null ? 1f : tableCamera.aspect;
         public bool ManuallyAdjusted => manuallyAdjusted;
         public float ZoomFactor => baseOrthographicSize <= 0f
             ? 1f
@@ -31,6 +40,7 @@ namespace Mejnun.Game
             tableCamera = GetComponent<Camera>();
             tableCamera.orthographic = true;
             baseOrthographicSize = tableCamera.orthographicSize;
+            bottomInsetFloor = bottomInsetFraction;
         }
 
         private void OnEnable()
@@ -69,6 +79,53 @@ namespace Mejnun.Game
             }
         }
 
+        public void SetViewportInsets(float top, float bottom, float left, float right)
+        {
+            var nextTop = Mathf.Clamp(top, 0f, 0.45f);
+            var nextBottom = Mathf.Max(bottomInsetFloor, Mathf.Clamp(bottom, 0f, 0.45f));
+            var nextLeft = Mathf.Clamp(left, 0f, 0.45f);
+            var nextRight = Mathf.Clamp(right, 0f, 0.45f);
+            if (Mathf.Approximately(topInsetFraction, nextTop) &&
+                Mathf.Approximately(bottomInsetFraction, nextBottom) &&
+                Mathf.Approximately(leftInsetFraction, nextLeft) &&
+                Mathf.Approximately(rightInsetFraction, nextRight))
+            {
+                return;
+            }
+
+            topInsetFraction = nextTop;
+            bottomInsetFraction = nextBottom;
+            leftInsetFraction = nextLeft;
+            rightInsetFraction = nextRight;
+            if (hasBoardBounds)
+            {
+                AutoFit(boardBounds);
+            }
+        }
+
+        public Rect GetVisibleBoardWorldRect()
+        {
+            if (tableCamera == null)
+            {
+                tableCamera = GetComponent<Camera>();
+            }
+
+            var distance = Mathf.Abs(tableCamera.transform.position.z);
+            var bottomLeft = tableCamera.ViewportToWorldPoint(
+                new Vector3(leftInsetFraction, bottomInsetFraction, distance));
+            var bottomRight = tableCamera.ViewportToWorldPoint(
+                new Vector3(1f - rightInsetFraction, bottomInsetFraction, distance));
+            var topLeft = tableCamera.ViewportToWorldPoint(
+                new Vector3(leftInsetFraction, 1f - topInsetFraction, distance));
+            var topRight = tableCamera.ViewportToWorldPoint(
+                new Vector3(1f - rightInsetFraction, 1f - topInsetFraction, distance));
+            return Rect.MinMaxRect(
+                Mathf.Min(bottomLeft.x, bottomRight.x, topLeft.x, topRight.x),
+                Mathf.Min(bottomLeft.y, bottomRight.y, topLeft.y, topRight.y),
+                Mathf.Max(bottomLeft.x, bottomRight.x, topLeft.x, topRight.x),
+                Mathf.Max(bottomLeft.y, bottomRight.y, topLeft.y, topRight.y));
+        }
+
         public void FitBoard()
         {
             if (hasBoardBounds)
@@ -85,16 +142,17 @@ namespace Mejnun.Game
             }
 
             var aspect = Mathf.Max(tableCamera.aspect, 0.01f);
-            var availableHeight = Mathf.Max(1f - bottomInsetFraction, 0.1f);
+            var availableHeight = Mathf.Max(1f - topInsetFraction - bottomInsetFraction, 0.1f);
+            var availableWidth = Mathf.Max(1f - leftInsetFraction - rightInsetFraction, 0.1f);
             var verticalSize = Mathf.Max(bounds.size.y * 0.5f / availableHeight, 0.5f);
-            var horizontalSize = Mathf.Max(bounds.size.x * 0.5f / aspect, 0.5f);
+            var horizontalSize = Mathf.Max(bounds.size.x * 0.5f / (aspect * availableWidth), 0.5f);
             var fitSize = Mathf.Clamp(Mathf.Max(verticalSize, horizontalSize) * padding,
                 minOrthographicSize, maxOrthographicSize);
             tableCamera.orthographic = true;
             tableCamera.orthographicSize = fitSize;
             var position = tableCamera.transform.position;
-            position.x = bounds.center.x;
-            position.y = bounds.center.y - fitSize * bottomInsetFraction;
+            position.x = bounds.center.x + fitSize * aspect * (rightInsetFraction - leftInsetFraction);
+            position.y = bounds.center.y + fitSize * (topInsetFraction - bottomInsetFraction);
             tableCamera.transform.position = position;
             baseOrthographicSize = fitSize;
             if (resetManualAdjustment)

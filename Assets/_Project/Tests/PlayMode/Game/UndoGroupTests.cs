@@ -40,6 +40,38 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void MarkModeTurnsOffAfterDragUndoAndRevert()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out var straight);
+            var seat = game.State.CurrentSeat;
+            Assert.That(game.Apply(GameCommand.MoveCards(seat, straight, CardTarget.NewMeld(0))).Ok, Is.True);
+            var meld = game.State.Board[0];
+            var controllerObject = new GameObject("Table Controller Test");
+            try
+            {
+                var controller = controllerObject.AddComponent<TableController>();
+                controller.Initialize(game);
+                controller.SetMarkMode(true);
+
+                var drop = controller.ExecuteGesture(new GestureInput(GestureType.Drag,
+                    GestureHit.BoardCard(meld.Cards[1].Id, meld.Id, 1, 0), GestureHit.EmptyBoard()));
+
+                Assert.That(drop.Ok, Is.True);
+                Assert.That(controller.MarkModeActive, Is.False);
+                controller.SetMarkMode(true);
+                Assert.That(controller.UndoGesture().Ok, Is.True);
+                Assert.That(controller.MarkModeActive, Is.False);
+                controller.SetMarkMode(true);
+                Assert.That(controller.RevertTurn().Ok, Is.True);
+                Assert.That(controller.MarkModeActive, Is.False);
+            }
+            finally
+            {
+                Object.DestroyImmediate(controllerObject);
+            }
+        }
+
+        [Test]
         public void FailedSecondCommandRollsBackTheGestureAndDoesNotPushUndo()
         {
             var game = GestureTestGameFactory.CreateGameWithStraightInHand(3, out var straight);

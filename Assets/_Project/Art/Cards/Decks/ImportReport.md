@@ -1,0 +1,1298 @@
+# Unsorted Deck Import Report
+
+Imported 23 deck skins on 2026-11-17 20:14:01.
+
+## Decks
+
+- **Card Pngs** (`card_pngs`): 3 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Card Pngs`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/ace_of_clubs.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/2_of_clubs.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/3_of_clubs.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/4_of_clubs.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/5_of_clubs.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/6_of_clubs.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/7_of_clubs.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/8_of_clubs.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/9_of_clubs.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/10_of_clubs.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/jack_of_clubs.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/queen_of_clubs.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/king_of_clubs.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/ace_of_diamonds.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/2_of_diamonds.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/3_of_diamonds.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/4_of_diamonds.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/5_of_diamonds.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/6_of_diamonds.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/7_of_diamonds.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/8_of_diamonds.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/9_of_diamonds.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/10_of_diamonds.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/jack_of_diamonds.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/queen_of_diamonds.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/king_of_diamonds.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/ace_of_hearts.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/2_of_hearts.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/3_of_hearts.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/4_of_hearts.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/5_of_hearts.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/6_of_hearts.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/7_of_hearts.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/8_of_hearts.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/9_of_hearts.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/10_of_hearts.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/jack_of_hearts.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/queen_of_hearts.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/king_of_hearts.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/ace_of_spades.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/2_of_spades.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/3_of_spades.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/4_of_spades.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/5_of_spades.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/6_of_spades.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/7_of_spades.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/8_of_spades.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/9_of_spades.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/10_of_spades.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/jack_of_spades.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/queen_of_spades.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/card_pngs/card_faces/king_of_spades.png`
+  - Back IDs: `back_01`, `back_02`, `back_03`
+- **Hack Deck** (`hack_deck`): 2 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Hack Deck`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-1-256.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-2-256.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-3-256.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-4-256.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-5-256.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-6-256.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-7-256.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-8-256.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-9-256.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-10-256.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-11-256.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-12-256.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/club-13-256.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-1-256.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-2-256.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-3-256.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-4-256.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-5-256.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-6-256.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-7-256.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-8-256.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-9-256.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-10-256.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-11-256.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-12-256.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/diamond-13-256.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-1-256.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-2-256.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-3-256.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-4-256.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-5-256.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-6-256.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-7-256.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-8-256.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-9-256.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-10-256.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-11-256.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-12-256.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/heart-13-256.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-1-256.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-2-256.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-3-256.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-4-256.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-5-256.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-6-256.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-7-256.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-8-256.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-9-256.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-10-256.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-11-256.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-12-256.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/hack deck/256/spade-13-256.png`
+  - Back IDs: `back_01`, `back_02`
+- **Paper Cards1 1** (`paper_cards1_1`): 3 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Paper Cards1 1`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/AofClubs.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/2ofClubs.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/3ofClubs.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/4ofClubs.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/5ofClubs.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/6ofClubs.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/7ofClubs.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/8ofClubs.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/9ofClubs.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/10ofClubs.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/JofClubs.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/QofClubs.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Clubs/KofClubs.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/AofDmnds.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/2ofDmnds.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/3ofDmnds.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/4ofDmnds.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/5ofDmnds.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/6ofDmnds.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/7ofDmnds.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/8ofDmnds.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/9ofDmnds.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/10ofDmnds.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/JofDmnds.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/QofDmnds.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Dmnds/KofDmnds.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/AofHearts.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/2ofHearts.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/3ofHearts.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/4ofHearts.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/5ofHearts.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/6ofHearts.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/7ofHearts.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/8ofHearts.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/9ofHearts.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/10ofHearts.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/JofHearts.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/QofHearts.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Hearts/KofHearts.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/AofSpades.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/2ofSpades.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/3ofSpades.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/4ofSpades.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/5ofSpades.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/6ofSpades.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/7ofSpades.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/8ofSpades.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/9ofSpades.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/10ofSpades.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/JofSpades.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/QofSpades.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/PaperCards1.1/Spades/KofSpades.png`
+  - Back IDs: `back_01`, `back_02`, `back_03`
+- **Blueeyedrat Classic Contrast 2color 0** (`blueeyedrat_classic_contrast_2color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Contrast 2color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Contrast 2color 1** (`blueeyedrat_classic_contrast_2color_1`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Contrast 2color 1`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_2color_1.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Contrast 4color 0** (`blueeyedrat_classic_contrast_4color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Contrast 4color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Contrast 4color 1** (`blueeyedrat_classic_contrast_4color_1`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Contrast 4color 1`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_1.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Contrast 4color 2** (`blueeyedrat_classic_contrast_4color_2`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Contrast 4color 2`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_contrast_4color_2.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Dark 1color 0** (`blueeyedrat_classic_dark_1color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Dark 1color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_1color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Dark 2color 0** (`blueeyedrat_classic_dark_2color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Dark 2color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_dark_2color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Light 1color 0** (`blueeyedrat_classic_light_1color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Light 1color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_1color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Light 2color 0** (`blueeyedrat_classic_light_2color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Light 2color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Light 2color 1** (`blueeyedrat_classic_light_2color_1`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Light 2color 1`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_2color_1.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Light 4color 0** (`blueeyedrat_classic_light_4color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Light 4color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Light 4color 1** (`blueeyedrat_classic_light_4color_1`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Light 4color 1`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_1.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Light 4color 2** (`blueeyedrat_classic_light_4color_2`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Light 4color 2`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_light_4color_2.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Sepia 1color 0** (`blueeyedrat_classic_sepia_1color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Sepia 1color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_1color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Sepia 2color 0** (`blueeyedrat_classic_sepia_2color_0`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Sepia 2color 0`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_0.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Blueeyedrat Classic Sepia 2color 1** (`blueeyedrat_classic_sepia_2color_1`): 28 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Blueeyedrat Classic Sepia 2color 1`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 28)
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 29)
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 30)
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 31)
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 32)
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 33)
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 34)
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 35)
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 36)
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 37)
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 38)
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 39)
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 40)
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 42)
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 43)
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 44)
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 45)
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 46)
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 47)
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 48)
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 49)
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 50)
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 51)
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 52)
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 53)
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 54)
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 14)
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 15)
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 16)
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 17)
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 18)
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 19)
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 20)
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 21)
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 22)
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 23)
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 24)
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 25)
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 26)
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 0)
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 1)
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 2)
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 3)
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 4)
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 5)
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 6)
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 7)
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 8)
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 9)
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 10)
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 11)
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/Pixel Assets - Playing Cards - Blueeyedrat/Assets/deck_classic_sepia_2color_1.png` (sheet cell 12)
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`, `back_07`, `back_08`, `back_09`, `back_10`, `back_11`, `back_12`, `back_13`, `back_14`, `back_15`, `back_16`, `back_17`, `back_18`, `back_19`, `back_20`, `back_21`, `back_22`, `back_23`, `back_24`, `back_25`, `back_26`, `back_27`, `back_28`
+- **Reigns** (`reigns`): 1 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Reigns`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/ace_of_clubs.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/2_of_clubs.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/3_of_clubs.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/4_of_clubs.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/5_of_clubs.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/6_of_clubs.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/7_of_clubs.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/8_of_clubs.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/9_of_clubs.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/10_of_clubs.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/jack_of_clubs.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/queen_of_clubs.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/king_of_clubs.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/ace_of_diamonds.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/2_of_diamonds.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/3_of_diamonds.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/4_of_diamonds.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/5_of_diamonds.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/6_of_diamonds.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/7_of_diamonds.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/8_of_diamonds.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/9_of_diamonds.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/10_of_diamonds.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/jack_of_diamonds.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/queen_of_diamonds.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/king_of_diamonds.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/ace_of_hearts.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/2_of_hearts.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/3_of_hearts.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/4_of_hearts.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/5_of_hearts.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/6_of_hearts.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/7_of_hearts.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/8_of_hearts.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/9_of_hearts.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/10_of_hearts.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/jack_of_hearts.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/queen_of_hearts.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/king_of_hearts.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/ace_of_spades.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/2_of_spades.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/3_of_spades.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/4_of_spades.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/5_of_spades.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/6_of_spades.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/7_of_spades.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/8_of_spades.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/9_of_spades.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/10_of_spades.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/jack_of_spades.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/queen_of_spades.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/REIGNS - Playing Card Deck/king_of_spades.png`
+  - Back IDs: `back_01`
+- **Sofu Large** (`sofu_large`): 6 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Sofu Large`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_A.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_02.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_03.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_04.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_05.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_06.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_07.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_08.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_09.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_10.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_j.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_Q.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_clubs_K.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_A.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_02.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_03.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_04.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_05.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_06.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_07.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_08.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_09.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_10.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_j.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_Q.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_diamonds_K.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_A.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_02.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_03.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_04.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_05.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_06.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_07.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_08.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_09.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_10.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_j.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_Q.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_hearts_K.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_A.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_02.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_03.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_04.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_05.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_06.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_07.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_08.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_09.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_10.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_j.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_Q.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(large)/card_spades_K.png`
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`
+- **Sofu Medium** (`sofu_medium`): 6 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Sofu Medium`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_A.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_02.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_03.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_04.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_05.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_06.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_07.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_08.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_09.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_10.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_J.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_Q.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_clubs_K.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_A.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_02.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_03.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_04.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_05.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_06.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_07.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_08.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_09.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_10.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_J.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_Q.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_diamonds_K.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_A.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_02.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_03.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_04.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_05.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_06.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_07.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_08.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_09.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_10.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_J.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_Q.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_hearts_K.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_A.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_02.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_03.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_04.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_05.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_06.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_07.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_08.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_09.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_10.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_J.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_Q.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(medium)/card_spades_K.png`
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`
+- **Sofu Small** (`sofu_small`): 6 back(s), 52 faces; folder `Assets/_Project/Art/Cards/Decks/Sofu Small`.
+  - Sources: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)`
+  - Face assignments:
+    - `ace_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_A.png`
+    - `2_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_02.png`
+    - `3_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_03.png`
+    - `4_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_04.png`
+    - `5_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_05.png`
+    - `6_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_06.png`
+    - `7_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_07.png`
+    - `8_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_08.png`
+    - `9_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_09.png`
+    - `10_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_10.png`
+    - `jack_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_J.png`
+    - `queen_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_Q.png`
+    - `king_of_clubs`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_clubs_K.png`
+    - `ace_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_A.png`
+    - `2_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_02.png`
+    - `3_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_03.png`
+    - `4_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_04.png`
+    - `5_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_05.png`
+    - `6_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_06.png`
+    - `7_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_07.png`
+    - `8_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_08.png`
+    - `9_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_09.png`
+    - `10_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_10.png`
+    - `jack_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_J.png`
+    - `queen_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_Q.png`
+    - `king_of_diamonds`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_diamonds_K.png`
+    - `ace_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_A.png`
+    - `2_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_02.png`
+    - `3_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_03.png`
+    - `4_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_04.png`
+    - `5_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_05.png`
+    - `6_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_06.png`
+    - `7_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_07.png`
+    - `8_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_08.png`
+    - `9_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_09.png`
+    - `10_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_10.png`
+    - `jack_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_J.png`
+    - `queen_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_Q.png`
+    - `king_of_hearts`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_hearts_K.png`
+    - `ace_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_A.png`
+    - `2_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_02.png`
+    - `3_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_03.png`
+    - `4_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_04.png`
+    - `5_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_05.png`
+    - `6_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_06.png`
+    - `7_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_07.png`
+    - `8_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_08.png`
+    - `9_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_09.png`
+    - `10_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_10.png`
+    - `jack_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_J.png`
+    - `queen_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_Q.png`
+    - `king_of_spades`: `Assets/_Project/Art/Cards/Decks/Unsorted/sofu_playing_cards_pack/PNG/cards(small)/card_spades_K.png`
+  - Back IDs: `back_01`, `back_02`, `back_03`, `back_04`, `back_05`, `back_06`
+
+## Warnings
+
+- None.

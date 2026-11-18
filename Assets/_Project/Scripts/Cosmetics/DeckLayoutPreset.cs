@@ -6,7 +6,8 @@ namespace Mejnun.Cosmetics
     public enum DeckLayoutPreset
     {
         ZigZag,
-        RowMajor
+        RowMajor,
+        RowMajor27x2
     }
 
     public static class DeckLayoutPresetUtility
@@ -28,6 +29,13 @@ namespace Mejnun.Cosmetics
             if (preset == DeckLayoutPreset.RowMajor)
             {
                 return suitIndex * 13 + rankIndex;
+            }
+
+            if (preset == DeckLayoutPreset.RowMajor27x2)
+            {
+                return suitIndex < 2
+                    ? suitIndex * 13 + rankIndex
+                    : 27 + (suitIndex - 2) * 13 + rankIndex;
             }
 
             if (preset != DeckLayoutPreset.ZigZag)
@@ -53,6 +61,11 @@ namespace Mejnun.Cosmetics
             if (preset == DeckLayoutPreset.RowMajor)
             {
                 return 52;
+            }
+
+            if (preset == DeckLayoutPreset.RowMajor27x2)
+            {
+                return 26;
             }
 
             throw new ArgumentOutOfRangeException(nameof(preset), preset, "Unknown deck layout preset.");

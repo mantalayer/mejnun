@@ -41,7 +41,9 @@ namespace Mejnun.Game.Tests
             var document = presenter.GetComponent<UIDocument>();
             Assert.That(document, Is.Not.Null);
             var root = document.rootVisualElement;
+            var drawPileStack = root.Q<VisualElement>("draw-pile-stack");
             var endTurn = root.Q<Button>("end-turn-button");
+            var exitButton = root.Q<Button>("menu-button");
             var drawPass = root.Q<Button>("draw-pass-button");
             var undo = root.Q<Button>("undo-button");
             var fixBoard = root.Q<Button>("fix-board-button");
@@ -54,6 +56,11 @@ namespace Mejnun.Game.Tests
             var rightOpponents = root.Q<VisualElement>("right-opponents");
 
             Assert.That(endTurn, Is.Not.Null);
+            Assert.That(exitButton, Is.Not.Null);
+            Assert.That(exitButton.text, Is.EqualTo("Exit"));
+            Assert.That(drawPileStack, Is.Not.Null);
+            Assert.That(drawPileStack.childCount, Is.EqualTo(Mathf.Min(6,
+                Mathf.CeilToInt(matchFlow.Game.State.DrawPile.Count / 6f))));
             Assert.That(endTurn.enabledInHierarchy, Is.False);
             Assert.That(drawPass.text, Is.EqualTo("Draw"));
             Assert.That(undo.enabledInHierarchy, Is.False);
@@ -67,6 +74,8 @@ namespace Mejnun.Game.Tests
             Assert.That(topOpponents, Is.Not.Null);
             Assert.That(root.Q<Slider>("opponent-card-scale-slider"), Is.Not.Null);
             Assert.That(root.Q<Slider>("zoom-sensitivity-slider"), Is.Not.Null);
+            Assert.That(root.Q<Toggle>("organic-board-toggle"), Is.Not.Null);
+            Assert.That(root.Q<Slider>("card-messiness-slider"), Is.Not.Null);
             Assert.That(leftOpponents.childCount, Is.EqualTo(1));
             Assert.That(rightOpponents.childCount, Is.EqualTo(1));
             for (var seat = 0; seat < matchFlow.Game.State.Hands.Count; seat++)
@@ -85,10 +94,16 @@ namespace Mejnun.Game.Tests
                 }
             }
 
+            matchFlow.SetPaused(true);
+            Assert.That(drawPass.enabledInHierarchy, Is.False);
+            matchFlow.SetPaused(false);
+            Assert.That(drawPass.enabledInHierarchy, Is.True);
+
             matchFlow.Game.State.DrawPile.Clear();
             Assert.That(matchFlow.Controller.ApplyCommand(
                 GameCommand.DrawOrPass(matchFlow.Game.State.CurrentSeat)).Ok, Is.True);
             Assert.That(drawPass.text, Is.EqualTo("Pass"));
+            Assert.That(drawPileStack.childCount, Is.Zero);
         }
 
         [UnityTest]

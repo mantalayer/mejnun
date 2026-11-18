@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Mejnun.Core.Tests
@@ -68,12 +69,70 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
+        public void Faces_BackVariantsAreGroupedBySkinAndSelectedWithoutDuplicateSkins()
+        {
+            var pool = new[] { "red", "red:blue_back", "red:gold_back", "blue" };
+
+            var faces = DeckFaceAssigner.Assign(pool, new Pcg32(317UL));
+
+            Assert.That(DeckFaceId.GetSkinId(faces[0]), Is.Not.EqualTo(DeckFaceId.GetSkinId(faces[1])));
+            Assert.That(pool.Contains(faces[0]), Is.True);
+            Assert.That(pool.Contains(faces[1]), Is.True);
+            Assert.That(DeckFaceId.GetSkinId(faces[0]), Is.EqualTo("red").Or.EqualTo("blue"));
+            Assert.That(DeckFaceId.GetSkinId(faces[1]), Is.EqualTo("red").Or.EqualTo("blue"));
+        }
+
+        [Test]
+        public void Faces_PoolsWithoutBackVariantsKeepLegacyShuffleResults()
+        {
+            var pool = new[] { "red", "blue", "green", "gold" };
+
+            CollectionAssert.AreEqual(LegacyAssign(pool, new Pcg32(99UL)),
+                DeckFaceAssigner.Assign(pool, new Pcg32(99UL)));
+        }
+
+        [Test]
         public void Faces_AssignmentRejectsNullInputsAndNullFaceIds()
         {
             Assert.Throws<System.ArgumentNullException>(() => DeckFaceAssigner.Assign(null, new Pcg32(1UL)));
             Assert.Throws<System.ArgumentNullException>(() => DeckFaceAssigner.Assign(new string[0], null));
             Assert.Throws<System.ArgumentException>(() => DeckFaceAssigner.Assign(new string[] { null },
                 new Pcg32(1UL)));
+        }
+
+        private static string[] LegacyAssign(IReadOnlyList<string> facePool, Pcg32 rng)
+        {
+            var candidates = new List<string>();
+            for (var index = 0; index < facePool.Count; index++)
+            {
+                if (!candidates.Contains(facePool[index]))
+                {
+                    candidates.Add(facePool[index]);
+                }
+            }
+
+            if (candidates.Count < 2)
+            {
+                if (!candidates.Contains(DeckFaceAssigner.ClassicFace))
+                {
+                    candidates.Add(DeckFaceAssigner.ClassicFace);
+                }
+
+                if (!candidates.Contains(DeckFaceAssigner.ClassicIvoryFace))
+                {
+                    candidates.Add(DeckFaceAssigner.ClassicIvoryFace);
+                }
+            }
+
+            for (var index = candidates.Count - 1; index > 0; index--)
+            {
+                var otherIndex = rng.NextInt(index + 1);
+                var face = candidates[index];
+                candidates[index] = candidates[otherIndex];
+                candidates[otherIndex] = face;
+            }
+
+            return new[] { candidates[0], candidates[1] };
         }
     }
 }

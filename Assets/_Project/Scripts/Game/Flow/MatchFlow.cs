@@ -17,8 +17,6 @@ namespace Mejnun.Game
 
     public sealed class MatchFlow : MonoBehaviour
     {
-        private static readonly string[] FacePool = { "classic", "classic_ivory" };
-
         [SerializeField] private TableController tableController;
         [SerializeField] private TableView tableView;
         [SerializeField] private DealerQuestions dealerQuestions;
@@ -30,6 +28,8 @@ namespace Mejnun.Game
         private int handoffSeat = -1;
         private int revealedSeat = -1;
         private TurnTimer turnTimer;
+        private MejnunGame lastSavedGame;
+        private int lastSavedTurnNumber = -1;
         private readonly CardTracker cardTracker = new CardTracker();
 
         public MejnunGame Game { get; private set; }
@@ -45,6 +45,11 @@ namespace Mejnun.Game
         public TurnTimer TurnTimer => turnTimer;
         public int TurnSeconds { get; private set; }
         public IReadOnlyList<SeatConfig> Seats => seats;
+        public bool FastForward
+        {
+            get => GameSettings.FastForward;
+            set => GameSettings.FastForward = value;
+        }
 
         public int HumanCount
         {
@@ -133,6 +138,8 @@ namespace Mejnun.Game
                 tableController.SetSeatInputFilter(seat => !IsBotSeat(seat));
             }
 
+            tableView?.SetCpuSeatPredicate(IsBotSeat);
+
             turnTimer = GetComponent<TurnTimer>();
             if (turnTimer == null)
             {
@@ -219,7 +226,54 @@ namespace Mejnun.Game
                 botDriver.Configure(tableController, seats, cardTracker);
             }
 
-            return StartRound(null, seed ?? CreateSeed());
+            return StartRound(null, seed ?? CreateSeed(seats.Length));
+        }
+
+        public bool ResumeSavedGame()
+        {
+            if (tableController == null || !SavedGame.TryLoad(out var data))
+            {
+                return false;
+            }
+
+            seats = new SeatConfig[data.Seats.Count];
+            playerNames = new string[seats.Length];
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                seats[seat] = data.Seats[seat];
+                playerNames[seat] = seats[seat].Name;
+            }
+
+            GameSettings.FastForward = false;
+            Game = SnapshotSerializer.Read(data.Snapshot);
+            RoundSeed = data.RoundSeed;
+            TurnSeconds = data.TurnSeconds;
+            turnTimer?.SetDuration(TurnSeconds);
+            questionRandom = new System.Random(unchecked((int)(RoundSeed ^ (RoundSeed >> 32))));
+            DealerQuestion = dealerQuestions == null
+                ? "Who should go first?"
+                : dealerQuestions.GetRandomQuestion(questionRandom);
+            LastResult = null;
+            handoffSeat = -1;
+            revealedSeat = -1;
+            lastSavedGame = null;
+            lastSavedTurnNumber = -1;
+            cardTracker.Reset();
+            if (botDriver != null)
+            {
+                botDriver.Configure(tableController, seats, cardTracker);
+            }
+
+            SetPaused(false);
+            if (tableView != null)
+            {
+                tableView.ClearCpuPlacementViews();
+                tableView.SetViewerSeat(-1);
+                tableView.SetHandVisible(false);
+            }
+
+            tableController.Initialize(Game);
+            return true;
         }
 
         public bool IsBotSeat(int seat)
@@ -244,6 +298,17 @@ namespace Mejnun.Game
             return tableController.ApplyCommand(GameCommand.ChooseDealer(seat));
         }
 
+        public CommandResult ChooseFirstPlayer(int seat)
+        {
+            if (SeatCount <= 0 || seat < 0 || seat >= SeatCount)
+            {
+                return ChooseDealer(seat);
+            }
+
+            var dealerSeat = (seat - 1 + SeatCount) % SeatCount;
+            return ChooseDealer(dealerSeat);
+        }
+
         public CommandResult ChooseRandomDealer()
         {
             if (Game == null || Game.State.Phase != GamePhase.ChoosingDealer || tableController == null)
@@ -252,6 +317,11 @@ namespace Mejnun.Game
             }
 
             return tableController.ApplyCommand(GameCommand.ChooseRandomDealer());
+        }
+
+        public CommandResult ChooseRandomFirstPlayer()
+        {
+            return ChooseRandomDealer();
         }
 
         public bool RevealHand()
@@ -275,7 +345,7 @@ namespace Mejnun.Game
                 return false;
             }
 
-            return StartRound(LastResult.NextDealer, CreateSeed());
+            return StartRound(LastResult.NextDealer, CreateSeed(seats.Length));
         }
 
         public bool RestartMatch()
@@ -285,7 +355,7 @@ namespace Mejnun.Game
                 return Rematch();
             }
 
-            return Game != null && StartRound(Game.Setup.Dealer, CreateSeed());
+            return Game != null && StartRound(Game.Setup.Dealer, CreateSeed(seats.Length));
         }
 
         public void SetPaused(bool paused)
@@ -313,6 +383,7 @@ namespace Mejnun.Game
 
         public void ReturnToSetup()
         {
+            SaveCurrentGame();
             SetPaused(false);
             if (botDriver != null)
             {
@@ -326,6 +397,23 @@ namespace Mejnun.Game
             }
 
             SetScreen(MatchFlowScreen.Setup);
+        }
+
+        public bool SaveCurrentGame()
+        {
+            if (Game == null || Game.State.Phase != GamePhase.Playing)
+            {
+                return false;
+            }
+
+            if (!SavedGame.Save(this))
+            {
+                return false;
+            }
+
+            lastSavedGame = Game;
+            lastSavedTurnNumber = Game.State.TurnNumber;
+            return true;
         }
 
         public string GetPlayerName(int seat)
@@ -345,11 +433,12 @@ namespace Mejnun.Game
                 return false;
             }
 
+            GameSettings.FastForward = false;
             RoundSeed = seed;
             Debug.Log("Mejnun round seed: " + RoundSeed);
             questionRandom = new System.Random(unchecked((int)(seed ^ (seed >> 32))));
             DealerQuestion = dealerQuestions == null
-                ? "Who should deal this game?"
+                ? "Who should go first?"
                 : dealerQuestions.GetRandomQuestion(questionRandom);
             LastResult = null;
             handoffSeat = -1;
@@ -362,11 +451,15 @@ namespace Mejnun.Game
 
             if (tableView != null)
             {
+                tableView.ClearCpuPlacementViews();
                 tableView.SetViewerSeat(-1);
                 tableView.SetHandVisible(false);
             }
 
-            Game = new MejnunGame(new GameSetup(playerNames.Length, seed, dealer, facePool: FacePool));
+            var facePool = tableView == null || tableView.SkinCatalog == null
+                ? new[] { DeckFaceAssigner.ClassicFace, DeckFaceAssigner.ClassicIvoryFace }
+                : tableView.SkinCatalog.GetSkinIds();
+            Game = new MejnunGame(new GameSetup(playerNames.Length, seed, dealer, facePool: facePool));
             SetScreen(dealer.HasValue ? MatchFlowScreen.Turn : MatchFlowScreen.DealerQuestion);
             tableController.Initialize(Game);
             return true;
@@ -375,6 +468,12 @@ namespace Mejnun.Game
         private void OnSynchronized(GameState state, TurnSession turn)
         {
             cardTracker.Observe(state);
+            if (state.Phase == GamePhase.Playing &&
+                (lastSavedGame != Game || lastSavedTurnNumber != state.TurnNumber))
+            {
+                SaveCurrentGame();
+            }
+
             if (state.Phase != GamePhase.Playing || state.CurrentSeat == handoffSeat)
             {
                 return;
@@ -386,6 +485,11 @@ namespace Mejnun.Game
             {
                 ShowBotTurn();
                 return;
+            }
+
+            if (botDriver != null)
+            {
+                botDriver.FastForward = false;
             }
 
             // The handoff screen only appears when the device must pass to a different human.
@@ -456,8 +560,24 @@ namespace Mejnun.Game
             ShowResults(result);
         }
 
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused)
+            {
+                SaveCurrentGame();
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            SaveCurrentGame();
+        }
+
         private void ShowResults(GameResult result)
         {
+            SavedGame.Delete();
+            lastSavedGame = null;
+            lastSavedTurnNumber = -1;
             LastResult = result;
             if (botDriver != null)
             {
@@ -484,9 +604,12 @@ namespace Mejnun.Game
             ScreenChanged?.Invoke(screen);
         }
 
-        private static ulong CreateSeed()
+        private static ulong CreateSeed(int seatCount)
         {
-            return unchecked((ulong)DateTime.UtcNow.Ticks);
+            var seed = unchecked((ulong)DateTime.UtcNow.Ticks);
+            return GameSettings.EasyOpeningDeal
+                ? OpeningSeedFinder.Find(seed, seatCount)
+                : seed;
         }
     }
 }

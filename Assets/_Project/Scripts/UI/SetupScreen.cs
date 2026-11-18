@@ -66,6 +66,7 @@ namespace Mejnun.UI
             modeField.RegisterValueChangedCallback(changeEvent => ApplyMode(changeEvent.newValue));
             seatCountField.RegisterValueChangedCallback(OnSeatCountChanged);
             root.Q<Button>("start-match-button").clicked += StartMatch;
+            root.Q<Button>("resume-match-button").clicked += ResumeMatch;
 
             modeField.SetValueWithoutNotify(SoloMode);
             ApplyMode(SoloMode);
@@ -74,6 +75,18 @@ namespace Mejnun.UI
         public void SetVisible(bool visible)
         {
             root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            root.Q<Button>("resume-match-button").style.display = visible && SavedGame.HasSave
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+        }
+
+        private void ResumeMatch()
+        {
+            if (!matchFlow.ResumeSavedGame())
+            {
+                SetError("No valid saved game is available to resume.");
+                SetVisible(true);
+            }
         }
 
         /// <summary>Solo: seat 1 is you, every other seat is a Medium bot. Pass &amp; play: every seat is human.</summary>

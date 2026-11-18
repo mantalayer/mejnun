@@ -23,15 +23,19 @@ namespace Mejnun.Game
         private readonly HandOrder handOrder = new HandOrder();
         private readonly Dictionary<byte, Vector3> liftedHandOffsets = new Dictionary<byte, Vector3>();
         private readonly Dictionary<byte, Vector3> liftedMeldOffsets = new Dictionary<byte, Vector3>();
+        private readonly Dictionary<byte, Vector3> liftedBoardOffsets = new Dictionary<byte, Vector3>();
+        private readonly HashSet<byte> liftedBoardCardIds = new HashSet<byte>();
+        private readonly Dictionary<int, Rect> humanPlacementAreas = new Dictionary<int, Rect>();
         private readonly BoardArrangement boardArrangement = new BoardArrangement();
         private readonly List<Meld> arrangedMelds = new List<Meld>();
         private Vector3 meldLiftStartPointer;
+        private Vector2 meldLiftStartBoardPointer;
         private int liftedMeldId = -1;
         private bool poolReady;
         private bool handVisible = true;
         private bool handConcealed;
         private int viewerSeat = -1;
-        private Vector2 cardSize = new Vector2(0.64f, 0.97f);
+        private Vector2 cardSize = new Vector2(0.64f, 0.92f);
         private float pixelsPerUnit = 100f;
         [SerializeField, Min(0.1f)] private float handReferenceSize = 5f;
         private Transform handRoot;
@@ -39,6 +43,15 @@ namespace Mejnun.Game
         private bool hasHandAspect;
         private int handGapIndex = -1;
         private float handBottomInset;
+        private float boardTopInset;
+        private float boardLeftInset;
+        private float boardRightInset;
+        private GameState lastSyncedState;
+        private int lastDrawPileCount = -1;
+        private Vector2 drawPileScreenPosition;
+        private float drawPileScreenHeight;
+        private bool hasDrawPileScreenPosition;
+        private Func<int, bool> cpuSeatPredicate;
 
         public GameState CurrentState { get; private set; }
         public TurnSession CurrentTurn { get; private set; }
@@ -84,6 +97,24 @@ namespace Mejnun.Game
             return false;
         }
 
+        public bool TryGetMeldAnchor(int meldId, out Vector3 world)
+        {
+            return TryGetMeldsAnchor(new[] { meldId }, out world);
+        }
+
+        public bool TryGetCardAnchor(byte cardId, out Vector3 world)
+        {
+            world = default;
+            if (!activeCards.TryGetValue(cardId, out var view) || view.Renderer == null)
+            {
+                return false;
+            }
+
+            var bounds = view.Renderer.bounds;
+            world = new Vector3(bounds.center.x, bounds.max.y, view.transform.position.z);
+            return true;
+        }
+
         private void Awake()
         {
             PreparePool();
@@ -103,6 +134,7 @@ namespace Mejnun.Game
                 UpdateHandRoot();
             }
 
+            RecordHumanPlacementArea(CurrentState);
             if (!handVisible || CurrentState == null || handView == null || handRoot == null)
             {
                 return;
@@ -128,10 +160,29 @@ namespace Mejnun.Game
                 throw new ArgumentNullException(nameof(state));
             }
 
+            var cardsDrawingFromPile = new List<byte>();
+            var drawPileShrank = ReferenceEquals(lastSyncedState, state) && lastDrawPileCount > state.DrawPile.Count &&
+                                 hasDrawPileScreenPosition && IsFinite(drawPileScreenPosition.x) &&
+                                 IsFinite(drawPileScreenPosition.y);
+            var drawingSeat = DisplaySeat(state);
+            if (drawPileShrank && drawingSeat >= 0 && drawingSeat < state.Hands.Count)
+            {
+                var hand = state.Hands[drawingSeat];
+                for (var index = 0; index < hand.Count; index++)
+                {
+                    if (!activeCards.ContainsKey(hand[index].Id))
+                    {
+                        cardsDrawingFromPile.Add(hand[index].Id);
+                    }
+                }
+            }
+
             PreparePool();
             EnsureHandRoot();
             CurrentState = state;
             CurrentTurn = turn;
+            RecordHumanPlacementArea(state);
+            UpdateCpuPlacementArea(state);
             visibleCardIds.Clear();
 
             var activeSeat = DisplaySeat(state);
@@ -175,7 +226,7 @@ namespace Mejnun.Game
             }
 
             var aspect = GetBoardViewportAspect();
-            if (boardView != null)
+            if (boardView != null && tableCamera != null && tableCamera.Camera != null)
             {
                 var arrangement = boardArrangement.Arrange(state.Board);
                 arrangedMelds.Clear();
@@ -184,10 +235,26 @@ namespace Mejnun.Game
                     arrangedMelds.Add(arrangement[index]);
                 }
 
-                boardView.Layout(arrangedMelds, activeCards, aspect, cardSize);
+                UpdateLiftedBoardCardIds();
+                boardView.Layout(arrangedMelds, activeCards, aspect, cardSize, liftedBoardCardIds);
                 if (tableCamera != null)
                 {
                     tableCamera.SetBoardBounds(boardView.CurrentBounds);
+                }
+            }
+
+            if (cardsDrawingFromPile.Count > 0 && handRoot != null)
+            {
+                var pilePosition = HandLocalPoint(drawPileScreenPosition);
+                for (var index = 0; index < cardsDrawingFromPile.Count; index++)
+                {
+                    if (activeCards.TryGetValue(cardsDrawingFromPile[index], out var cardView) &&
+                        cardView.transform.parent == handRoot)
+                    {
+                        cardView.transform.localPosition = pilePosition;
+                        cardView.SetStartScale(GetDrawPileScale(cardView));
+                        cardView.SetNextMoveDuration(0.55f);
+                    }
                 }
             }
 
@@ -195,6 +262,9 @@ namespace Mejnun.Game
             {
                 LayoutHand(activeSeat);
             }
+
+            lastSyncedState = state;
+            lastDrawPileCount = state.DrawPile.Count;
         }
 
         public CardView GetCardView(byte cardId)
@@ -221,6 +291,8 @@ namespace Mejnun.Game
             {
                 handOrder.Synchronize(activeSeat, activeHand);
                 handOrder.CopyCards(activeSeat, hitTestHandCards);
+                var topCardIndex = -1;
+                var topSortingOrder = int.MinValue;
                 for (var index = hitTestHandCards.Count - 1; index >= 0; index--)
                 {
                     var card = hitTestHandCards[index];
@@ -230,14 +302,20 @@ namespace Mejnun.Game
                     }
 
                     if (activeCards.TryGetValue(card.Id, out var handViewCard) &&
-                        handViewCard.ContainsWorldPoint(world))
+                        handViewCard.ContainsWorldPoint(world) && handViewCard.SortingOrder > topSortingOrder)
                     {
-                        return GestureHit.HandCard(card.Id, index);
+                        topSortingOrder = handViewCard.SortingOrder;
+                        topCardIndex = index;
                     }
+                }
+
+                if (topCardIndex >= 0)
+                {
+                    return GestureHit.HandCard(hitTestHandCards[topCardIndex].Id, topCardIndex);
                 }
             }
 
-            for (var meldIndex = 0; meldIndex < CurrentState.Board.Count; meldIndex++)
+            for (var meldIndex = CurrentState.Board.Count - 1; meldIndex >= 0; meldIndex--)
             {
                 var meld = CurrentState.Board[meldIndex];
                 var meldLayout = boardView != null && boardView.CurrentLayout != null
@@ -253,10 +331,11 @@ namespace Mejnun.Game
                     }
                 }
 
-                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                for (var cardIndex = meld.Cards.Count - 1; cardIndex >= 0; cardIndex--)
                 {
                     var card = meld.Cards[cardIndex];
-                    if (!activeCards.TryGetValue(card.Id, out var boardViewCard) ||
+                    if (liftedBoardOffsets.ContainsKey(card.Id) ||
+                        !activeCards.TryGetValue(card.Id, out var boardViewCard) ||
                         !boardViewCard.Renderer.bounds.Contains(world))
                     {
                         continue;
@@ -321,6 +400,68 @@ namespace Mejnun.Game
             }
         }
 
+        public void SetDrawPileScreenPosition(Vector2 screenPosition)
+        {
+            SetDrawPileScreenRect(screenPosition, 0f);
+        }
+
+        public void SetDrawPileScreenRect(Vector2 screenPosition, float screenHeight)
+        {
+            drawPileScreenPosition = screenPosition;
+            drawPileScreenHeight = Mathf.Max(0f, screenHeight);
+            hasDrawPileScreenPosition = true;
+        }
+
+        public void ShowDropPreview(GestureHit target, bool isValid, IReadOnlyList<byte> draggedCardIds,
+            IReadOnlyCollection<byte> liftedCardIds, Vector2 screenPosition)
+        {
+            if (boardView != null)
+            {
+                boardView.ShowDropPreview(target, isValid, draggedCardIds, liftedCardIds,
+                    BoardPoint(screenPosition), GameSettings.OverlapSets, GameSettings.OrganicBoard);
+            }
+        }
+
+        public void ClearDropPreview()
+        {
+            boardView?.ClearDropPreview();
+        }
+
+        public void SetPendingNewMeldPoint(Vector2 screenPosition)
+        {
+            if (boardView != null && tableCamera != null && tableCamera.Camera != null && GameSettings.OrganicBoard)
+            {
+                boardView.SetPendingNewMeldPoint(BoardPoint(screenPosition));
+            }
+        }
+
+        public void ClearPendingNewMeldPoint()
+        {
+            boardView?.ClearPendingNewMeldPoint();
+        }
+
+        private float GetDrawPileScale(CardView cardView)
+        {
+            if (drawPileScreenHeight <= 0f || tableCamera == null || tableCamera.Camera == null ||
+                cardView == null || cardView.Renderer == null)
+            {
+                return 0.08f;
+            }
+
+            var camera = tableCamera.Camera;
+            var distance = Mathf.Abs(camera.transform.position.z);
+            var halfHeight = drawPileScreenHeight * 0.5f;
+            var top = camera.ScreenToWorldPoint(new Vector3(drawPileScreenPosition.x,
+                drawPileScreenPosition.y + halfHeight, distance));
+            var bottom = camera.ScreenToWorldPoint(new Vector3(drawPileScreenPosition.x,
+                drawPileScreenPosition.y - halfHeight, distance));
+            var sprite = cardView.Renderer.sprite;
+            var parentScale = cardView.transform.parent == null ? 1f : cardView.transform.parent.lossyScale.y;
+            var cardHeight = sprite == null ? 0f : sprite.bounds.size.y * cardView.BaseScale *
+                cardView.LayoutScale * parentScale;
+            return cardHeight <= 0f ? 0.08f : Mathf.Clamp(Mathf.Abs(top.y - bottom.y) / cardHeight, 0.01f, 1f);
+        }
+
         public void SetViewerSeat(int seat)
         {
             if (viewerSeat == seat)
@@ -333,6 +474,114 @@ namespace Mejnun.Game
             {
                 Sync(CurrentState, CurrentTurn);
             }
+        }
+
+        public void SetCpuSeatPredicate(Func<int, bool> predicate)
+        {
+            cpuSeatPredicate = predicate;
+        }
+
+        public void ClearCpuPlacementViews()
+        {
+            humanPlacementAreas.Clear();
+        }
+
+        private void RecordHumanPlacementArea(GameState state)
+        {
+            if (state == null || !handVisible || boardView == null || tableCamera == null ||
+                tableCamera.Camera == null)
+            {
+                return;
+            }
+
+            var seat = DisplaySeat(state);
+            if (seat < 0 || seat >= state.Hands.Count ||
+                (cpuSeatPredicate != null && cpuSeatPredicate(seat)))
+            {
+                return;
+            }
+
+            humanPlacementAreas[seat] = GetBoardLocalVisibleRect();
+        }
+
+        private void UpdateCpuPlacementArea(GameState state)
+        {
+            if (boardView == null)
+            {
+                return;
+            }
+
+            if (state == null || cpuSeatPredicate == null || !cpuSeatPredicate(state.CurrentSeat))
+            {
+                boardView.SetCpuPlacementArea(null);
+                return;
+            }
+
+            var area = GetSmallestHumanPlacementArea();
+            if (!area.HasValue)
+            {
+                area = GetBoardLocalVisibleRect();
+            }
+
+            var bounds = area.Value;
+            var marginX = Mathf.Min(cardSize.x * 0.2f, bounds.width * 0.25f);
+            var marginY = Mathf.Min(cardSize.y * 0.12f, bounds.height * 0.25f);
+            bounds.xMin += marginX;
+            bounds.xMax -= marginX;
+            bounds.yMin += marginY;
+            bounds.yMax -= marginY;
+            boardView.SetCpuPlacementArea(bounds);
+        }
+
+        private Rect? GetSmallestHumanPlacementArea()
+        {
+            if (humanPlacementAreas.Count == 0)
+            {
+                return null;
+            }
+
+            var hasIntersection = false;
+            var intersection = default(Rect);
+            var smallest = default(Rect);
+            var smallestArea = float.PositiveInfinity;
+            foreach (var pair in humanPlacementAreas)
+            {
+                var area = pair.Value;
+                if (!hasIntersection)
+                {
+                    intersection = area;
+                    hasIntersection = true;
+                }
+                else
+                {
+                    intersection = Rect.MinMaxRect(Mathf.Max(intersection.xMin, area.xMin),
+                        Mathf.Max(intersection.yMin, area.yMin), Mathf.Min(intersection.xMax, area.xMax),
+                        Mathf.Min(intersection.yMax, area.yMax));
+                }
+
+                var size = area.width * area.height;
+                if (size < smallestArea)
+                {
+                    smallestArea = size;
+                    smallest = area;
+                }
+            }
+
+            return intersection.width > 0f && intersection.height > 0f ? intersection : smallest;
+        }
+
+        private Rect GetBoardLocalVisibleRect()
+        {
+            var world = tableCamera.GetVisibleBoardWorldRect();
+            var bottomLeft = boardView.transform.InverseTransformPoint(new Vector3(world.xMin, world.yMin, 0f));
+            var bottomRight = boardView.transform.InverseTransformPoint(new Vector3(world.xMax, world.yMin, 0f));
+            var topLeft = boardView.transform.InverseTransformPoint(new Vector3(world.xMin, world.yMax, 0f));
+            var topRight = boardView.transform.InverseTransformPoint(new Vector3(world.xMax, world.yMax, 0f));
+            return Rect.MinMaxRect(
+                Mathf.Min(bottomLeft.x, bottomRight.x, topLeft.x, topRight.x),
+                Mathf.Min(bottomLeft.y, bottomRight.y, topLeft.y, topRight.y),
+                Mathf.Max(bottomLeft.x, bottomRight.x, topLeft.x, topRight.x),
+                Mathf.Max(bottomLeft.y, bottomRight.y, topLeft.y, topRight.y));
         }
 
         public void SetHandVisible(bool visible)
@@ -373,6 +622,37 @@ namespace Mejnun.Game
 
             handBottomInset = inset;
             RefreshHandLayout();
+        }
+
+        public void SetBoardInsets(float top, float left, float right)
+        {
+            var nextTop = Mathf.Clamp(top, 0f, 0.45f);
+            var nextLeft = Mathf.Clamp(left, 0f, 0.45f);
+            var nextRight = Mathf.Clamp(right, 0f, 0.45f);
+            var bottom = tableCamera == null ? 0f : tableCamera.BottomInsetFraction;
+            if (handVisible && handView != null && handReferenceSize > 0f &&
+                !float.IsNaN(handView.HandTopY) && !float.IsInfinity(handView.HandTopY))
+            {
+                bottom = Mathf.Clamp01((handView.HandTopY + handReferenceSize) / (handReferenceSize * 2f));
+            }
+
+            if (Mathf.Approximately(boardTopInset, nextTop) && Mathf.Approximately(boardLeftInset, nextLeft) &&
+                Mathf.Approximately(boardRightInset, nextRight) &&
+                (tableCamera == null || Mathf.Approximately(tableCamera.BottomInsetFraction,
+                    Mathf.Max(tableCamera.BottomInsetFloor, bottom))))
+            {
+                return;
+            }
+
+            boardTopInset = nextTop;
+            boardLeftInset = nextLeft;
+            boardRightInset = nextRight;
+
+            tableCamera?.SetViewportInsets(boardTopInset, bottom, boardLeftInset, boardRightInset);
+            if (CurrentState != null)
+            {
+                Sync(CurrentState, CurrentTurn);
+            }
         }
 
         public void RefreshHandLayout()
@@ -429,9 +709,9 @@ namespace Mejnun.Game
                 }
 
                 liftedHandOffsets[ids[index]] = view.transform.localPosition - pointer;
-                view.SetSortingOrder(400 + index);
+                view.SetSortingOrder(CardView.DragSortingOrder + index);
                 view.SetLayoutPose(Quaternion.identity, view.LayoutScale * 1.08f);
-                view.transform.localScale = Vector3.one * view.LayoutScale;
+                view.ApplyScale(view.LayoutScale);
             }
 
             handGapIndex = 0;
@@ -490,6 +770,72 @@ namespace Mejnun.Game
             handGapIndex = -1;
         }
 
+        public void BeginBoardLift(byte sourceId, IReadOnlyList<byte> selectedIds, Vector2 screenPosition)
+        {
+            if (CurrentState == null || tableCamera == null || tableCamera.Camera == null)
+            {
+                return;
+            }
+
+            liftedBoardOffsets.Clear();
+            var pointer = BoardLocalPoint(screenPosition);
+            var ids = new List<byte>();
+            if (selectedIds != null)
+            {
+                for (var index = 0; index < selectedIds.Count; index++)
+                {
+                    if (!ids.Contains(selectedIds[index]))
+                    {
+                        ids.Add(selectedIds[index]);
+                    }
+                }
+            }
+
+            if (!ids.Contains(sourceId))
+            {
+                ids.Add(sourceId);
+            }
+
+            for (var index = 0; index < ids.Count; index++)
+            {
+                if (!activeCards.TryGetValue(ids[index], out var view) || view.transform.parent == handRoot)
+                {
+                    continue;
+                }
+
+                liftedBoardOffsets[ids[index]] = view.transform.localPosition - pointer;
+                view.SetSortingOrder(CardView.DragSortingOrder + index);
+                view.SetLayoutPose(Quaternion.identity, 1.06f);
+                view.ApplyScale(1.06f);
+            }
+
+            UpdateLiftedBoardCardIds();
+            UpdateBoardLift(screenPosition);
+        }
+
+        public void UpdateBoardLift(Vector2 screenPosition)
+        {
+            if (liftedBoardOffsets.Count == 0)
+            {
+                return;
+            }
+
+            var pointer = BoardLocalPoint(screenPosition);
+            foreach (var pair in liftedBoardOffsets)
+            {
+                if (activeCards.TryGetValue(pair.Key, out var view))
+                {
+                    view.transform.localPosition = pointer + pair.Value;
+                }
+            }
+        }
+
+        public void EndBoardLift()
+        {
+            liftedBoardOffsets.Clear();
+            UpdateLiftedBoardCardIds();
+        }
+
         public bool ReorderMeldByScreenPosition(int meldId, Vector2 screenPosition)
         {
             if (boardView == null || boardView.CurrentLayout == null || tableCamera == null || tableCamera.Camera == null)
@@ -502,6 +848,17 @@ namespace Mejnun.Game
             var world = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, distance));
             var localPoint = boardView.transform.InverseTransformPoint(world);
             var local = new Vector2(localPoint.x, localPoint.y);
+            if (GameSettings.OrganicBoard)
+            {
+                var movedOrganically = boardView.MoveMeldByDelta(meldId, local - meldLiftStartBoardPointer);
+                if (movedOrganically && tableCamera != null)
+                {
+                    tableCamera.SetBoardBounds(boardView.CurrentBounds);
+                }
+
+                return movedOrganically;
+            }
+
             var layouts = boardView.CurrentLayout.Melds;
             var targetIndex = 0;
             var bestDistance = float.MaxValue;
@@ -546,6 +903,7 @@ namespace Mejnun.Game
             liftedMeldOffsets.Clear();
             var pointer = BoardLocalPoint(screenPosition);
             meldLiftStartPointer = pointer;
+            meldLiftStartBoardPointer = BoardPoint(screenPosition);
             liftedMeldId = meldId;
             for (var index = 0; index < meld.Cards.Count; index++)
             {
@@ -556,10 +914,12 @@ namespace Mejnun.Game
                 }
 
                 liftedMeldOffsets[cardId] = view.transform.localPosition - pointer;
-                view.SetSortingOrder(400 + index);
-                view.transform.localScale = Vector3.one * 1.06f;
+                view.SetSortingOrder(CardView.DragSortingOrder + index);
+                view.SetLayoutPose(Quaternion.identity, 1.06f);
+                view.ApplyScale(1.06f);
             }
 
+            UpdateLiftedBoardCardIds();
             UpdateMeldLift(screenPosition);
         }
 
@@ -589,12 +949,29 @@ namespace Mejnun.Game
         public void EndMeldLift()
         {
             liftedMeldOffsets.Clear();
+            UpdateLiftedBoardCardIds();
             if (boardView != null && liftedMeldId >= 0)
             {
                 boardView.SetMeldOutlineOffset(liftedMeldId, Vector3.zero);
             }
 
             liftedMeldId = -1;
+        }
+
+        private void UpdateLiftedBoardCardIds()
+        {
+            liftedBoardCardIds.Clear();
+            foreach (var pair in liftedBoardOffsets)
+            {
+                liftedBoardCardIds.Add(pair.Key);
+            }
+
+            foreach (var pair in liftedMeldOffsets)
+            {
+                liftedBoardCardIds.Add(pair.Key);
+            }
+
+            boardView?.SetLiftedCardIds(liftedBoardCardIds);
         }
 
         private void LayoutHand(int seat, float moveDuration = -1f)
@@ -623,7 +1000,9 @@ namespace Mejnun.Game
             var isSelected = activeCards.TryGetValue(card.Id, out var existingView) && existingView.IsSelected;
             var view = GetOrCreateCardView(card.Id);
             var face = skin == null ? null : skin.GetFace(card.Suit, card.Rank);
-            var back = skin == null ? null : skin.CardBack;
+            var back = skin == null
+                ? null
+                : skinCatalog.ResolveBack(state.DeckFaces[card.Deck], card.Deck);
             var ppu = skin == null ? 100f : skin.PixelsPerUnit;
             view.SetParentKeepWorld(isHandCard && handRoot != null ? handRoot : transform, isHandCard);
             view.ConfigureCamera(tableCamera, ppu);
@@ -647,8 +1026,7 @@ namespace Mejnun.Game
                 return null;
             }
 
-            var skin = skinCatalog.Resolve(state.DeckFaces[deckIndex], deckIndex);
-            return skin == null ? null : skin.CardBack;
+            return skinCatalog.ResolveBack(state.DeckFaces[deckIndex], deckIndex);
         }
 
         private DeckSkin ResolveSkin(GameState state, int deckIndex)
@@ -665,7 +1043,10 @@ namespace Mejnun.Game
                 if (sample != null)
                 {
                     pixelsPerUnit = skin.PixelsPerUnit;
-                    cardSize = new Vector2(sample.rect.width / pixelsPerUnit, sample.rect.height / pixelsPerUnit);
+                    var aspect = sample.bounds.size.y > 0f
+                        ? sample.bounds.size.x / sample.bounds.size.y
+                        : sample.rect.width / sample.rect.height;
+                    cardSize = new Vector2(0.92f * aspect, 0.92f);
                 }
             }
 
@@ -740,8 +1121,13 @@ namespace Mejnun.Game
 
         private float GetBoardViewportAspect()
         {
-            var availableHeight = tableCamera == null ? 1f : 1f - tableCamera.BottomInsetFraction;
-            return GetViewportAspect() / Mathf.Max(availableHeight, 0.1f);
+            var availableHeight = tableCamera == null
+                ? 1f
+                : 1f - tableCamera.TopInsetFraction - tableCamera.BottomInsetFraction;
+            var availableWidth = tableCamera == null
+                ? 1f
+                : 1f - tableCamera.LeftInsetFraction - tableCamera.RightInsetFraction;
+            return GetViewportAspect() * Mathf.Max(availableWidth, 0.1f) / Mathf.Max(availableHeight, 0.1f);
         }
 
         private void EnsureHandRoot()
@@ -777,6 +1163,11 @@ namespace Mejnun.Game
             return handRoot.InverseTransformPoint(world);
         }
 
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
         private Vector3 BoardLocalPoint(Vector2 screenPosition)
         {
             var camera = tableCamera.Camera;
@@ -784,6 +1175,16 @@ namespace Mejnun.Game
             var world = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, distance));
             world.z = 0f;
             return transform.InverseTransformPoint(world);
+        }
+
+        private Vector2 BoardPoint(Vector2 screenPosition)
+        {
+            var camera = tableCamera.Camera;
+            var distance = Mathf.Abs(camera.transform.position.z);
+            var world = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, distance));
+            world.z = 0f;
+            var local = boardView.transform.InverseTransformPoint(world);
+            return new Vector2(local.x, local.y);
         }
 
         private static Meld FindMeld(IReadOnlyList<Meld> melds, int meldId)

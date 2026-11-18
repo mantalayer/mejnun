@@ -20,7 +20,7 @@ namespace Mejnun.Game
 
             if (questions == null || questions.Count == 0)
             {
-                return "Who should deal this game?";
+                return "Who should go first?";
             }
 
             return questions[random.Next(questions.Count)];

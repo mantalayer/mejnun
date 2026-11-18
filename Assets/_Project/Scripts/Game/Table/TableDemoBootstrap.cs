@@ -5,8 +5,6 @@ namespace Mejnun.Game
 {
     public sealed class TableDemoBootstrap : MonoBehaviour
     {
-        private static readonly string[] FacePool = { "classic", "classic_ivory" };
-
         [SerializeField] private TableView tableView;
         [SerializeField] private TableController tableController;
         [SerializeField] private int seatCount = 3;
@@ -27,8 +25,11 @@ namespace Mejnun.Game
                 tableController = FindAnyObjectByType<TableController>();
             }
 
+            var facePool = tableView == null || tableView.SkinCatalog == null
+                ? new[] { DeckFaceAssigner.ClassicFace, DeckFaceAssigner.ClassicIvoryFace }
+                : tableView.SkinCatalog.GetSkinIds();
             Game = new MejnunGame(new GameSetup(seatCount, unchecked((ulong)seed), dealer,
-                facePool: FacePool));
+                facePool: facePool));
             if (tableController != null)
             {
                 tableController.Initialize(Game);

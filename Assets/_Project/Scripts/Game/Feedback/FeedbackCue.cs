@@ -5,6 +5,7 @@ namespace Mejnun.Game
         Pickup,
         LongPress,
         Drop,
-        Invalid
+        Invalid,
+        MarkedSetBroken
     }
 }
