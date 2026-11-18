@@ -9,6 +9,8 @@ namespace Mejnun.UI.FrontEnd
 {
     public sealed class CosmeticPreviews
     {
+        private static readonly Suit[] NewDeckSuitOrder = { Suit.Spades, Suit.Diamonds, Suit.Clubs, Suit.Hearts };
+
         private readonly DeckSkinLoader skinLoader;
         private readonly HashSet<string> requestedSkins = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> failedSkins = new HashSet<string>(StringComparer.Ordinal);
@@ -74,13 +76,13 @@ namespace Mejnun.UI.FrontEnd
             var grid = new VisualElement();
             grid.AddToClassList("gallery-deck-grid");
             var cards = new List<Image>(Card.CardsPerDeck);
-            for (var suitIndex = 0; suitIndex < 4; suitIndex++)
+            for (var suitIndex = 0; suitIndex < NewDeckSuitOrder.Length; suitIndex++)
             {
                 for (var rankIndex = 0; rankIndex < 13; rankIndex++)
                 {
                     var image = new Image
                     {
-                        sprite = skin.GetFace((Suit)suitIndex, (Rank)rankIndex),
+                        sprite = skin.GetFace(NewDeckSuitOrder[suitIndex], (Rank)rankIndex),
                         scaleMode = ScaleMode.ScaleToFit
                     };
                     image.AddToClassList("gallery-face");

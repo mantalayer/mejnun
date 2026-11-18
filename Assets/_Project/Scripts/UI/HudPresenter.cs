@@ -11,6 +11,9 @@ namespace Mejnun.UI
     public sealed class HudPresenter : MonoBehaviour
     {
         private const float HandBottomBarFitCompensationPixels = 8f;
+        private const float PhoneMaxShortSideInches = 4.5f;
+        private const int PhoneMaxShortSidePixels = 1200;
+        private const float PhoneMinAspectRatio = 1.9f;
         public enum OpponentSide
         {
             Top,
@@ -72,7 +75,12 @@ namespace Mejnun.UI
         private SettingsPanel settingsPanelBinder;
         private VisualElement helpPanel;
         private VisualElement bottomBar;
-        private VisualElement topBar;
+        private bool activeTurnPulsing;
+        private const float ActiveTurnPulsePeriod = 1.6f;
+        private const float ActiveTurnPulseMinAlpha = 0.35f;
+        private static readonly Color ActiveTurnOutlineColor = new Color(177f / 255f, 224f / 255f, 120f / 255f, 1f);
+        private VisualElement statusPanel;
+        private VisualElement turnPanel;
         private VisualElement markerLayer;
         private Action pendingConfirmAction;
         private Action<bool> pendingConfirmSetting;
@@ -207,11 +215,71 @@ namespace Mejnun.UI
             if (root != null)
             {
                 root.EnableInClassList("portrait-layout", Screen.height > Screen.width);
+                root.EnableInClassList("phone-layout",
+                    IsPhoneScreen(Application.isMobilePlatform, Screen.width, Screen.height, Screen.dpi));
                 UpdateHandBottomInset();
                 UpdateBoardInsets();
                 UpdateFastForwardButton();
                 UpdateSetMarkers();
+                UpdateActiveTurnPulse();
             }
+        }
+
+        private void UpdateActiveTurnPulse()
+        {
+            if (bottomBar == null)
+            {
+                return;
+            }
+
+            if (!bottomBar.ClassListContains("active-turn"))
+            {
+                if (activeTurnPulsing)
+                {
+                    activeTurnPulsing = false;
+                    SetBottomBarBorderColor(new StyleColor(StyleKeyword.Null));
+                }
+
+                return;
+            }
+
+            activeTurnPulsing = true;
+            var wave = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * Mathf.PI * 2f / ActiveTurnPulsePeriod);
+            var color = ActiveTurnOutlineColor;
+            color.a = Mathf.Lerp(ActiveTurnPulseMinAlpha, 1f, wave);
+            SetBottomBarBorderColor(new StyleColor(color));
+        }
+
+        private void SetBottomBarBorderColor(StyleColor color)
+        {
+            bottomBar.style.borderTopColor = color;
+            bottomBar.style.borderBottomColor = color;
+            bottomBar.style.borderLeftColor = color;
+            bottomBar.style.borderRightColor = color;
+        }
+
+        public static bool IsPhoneScreen(bool isMobilePlatform, int width, int height, float dpi)
+        {
+            var shortSide = Mathf.Min(width, height);
+            var longSide = Mathf.Max(width, height);
+            if (shortSide <= 0)
+            {
+                return false;
+            }
+
+            // Phone-shaped screens (about 19.5:9) count as phones on any platform, so Editor
+            // Game view resolutions such as 1320x2868 get the phone layout too.
+            if ((float)longSide / shortSide >= PhoneMinAspectRatio)
+            {
+                return true;
+            }
+
+            if (!isMobilePlatform)
+            {
+                return false;
+            }
+
+            return dpi > 0f ? shortSide / dpi < PhoneMaxShortSideInches : shortSide < PhoneMaxShortSidePixels;
         }
 
         private void CacheElements()
@@ -255,7 +323,8 @@ namespace Mejnun.UI
             settingsPanel = root.Q<VisualElement>("settings-panel");
             helpPanel = root.Q<VisualElement>("help-panel");
             bottomBar = root.Q<VisualElement>("bottom-bar");
-            topBar = root.Q<VisualElement>("top-bar");
+            statusPanel = root.Q<VisualElement>("status-panel");
+            turnPanel = root.Q<VisualElement>("turn-panel");
             markerLayer = root.Q<VisualElement>("marker-layer");
             fastForwardButton = root.Q<Button>("fast-forward-button");
             markSetButton = root.Q<Button>("mark-set-button");
@@ -289,16 +358,33 @@ namespace Mejnun.UI
 
         private void UpdateHandBottomInset()
         {
-            if (tableView == null || root == null || bottomBar == null ||
-                bottomBar.resolvedStyle.display == DisplayStyle.None || root.worldBound.height <= 0f ||
-                bottomBar.worldBound.height <= 0f)
+            if (tableView == null || root == null || root.worldBound.height <= 0f)
             {
                 tableView?.SetHandBottomInset(0f);
                 return;
             }
 
-            var fraction = Mathf.Clamp01((root.worldBound.yMax - bottomBar.worldBound.yMin -
-                                          HandBottomBarFitCompensationPixels) / root.worldBound.height);
+            var insetY = root.worldBound.yMax;
+            var hasBottomBar = TryGetVisibleBounds(bottomBar, out var bottomBounds);
+            if (hasBottomBar)
+            {
+                insetY = Mathf.Min(insetY, bottomBounds.yMin);
+            }
+
+            var hasStatusPanel = TryGetVisibleBounds(statusPanel, out var statusBounds);
+            if (hasStatusPanel)
+            {
+                insetY = Mathf.Min(insetY, statusBounds.yMin);
+            }
+
+            if (!hasBottomBar && !hasStatusPanel)
+            {
+                tableView.SetHandBottomInset(0f);
+                return;
+            }
+
+            var fraction = Mathf.Clamp01((root.worldBound.yMax - insetY - HandBottomBarFitCompensationPixels) /
+                                          root.worldBound.height);
             tableView.SetHandBottomInset(fraction);
         }
 
@@ -313,9 +399,9 @@ namespace Mejnun.UI
             var top = 0f;
             var left = 0f;
             var right = 0f;
-            if (TryGetVisibleBounds(topBar, out var topBounds))
+            if (TryGetVisibleBounds(turnPanel, out var turnBounds))
             {
-                top = Mathf.Max(top, (topBounds.yMax - rootBounds.yMin) / rootBounds.height);
+                top = Mathf.Max(top, (turnBounds.yMax - rootBounds.yMin) / rootBounds.height);
             }
 
             if (TryGetVisibleBounds(topOpponents, out var opponentTopBounds))
@@ -784,6 +870,9 @@ namespace Mejnun.UI
                     : GetSeatLabel(activeSeat) + "'s turn";
             }
 
+            bottomBar?.EnableInClassList("active-turn",
+                state.Phase == GamePhase.Playing && !IsBotSeat(activeSeat));
+
             if (drawPileLabel != null)
             {
                 drawPileLabel.text = "Draw pile: " + state.DrawPile.Count;
@@ -834,7 +923,7 @@ namespace Mejnun.UI
             if (hintButton != null)
             {
                 hintButton.text = tableController.HintsEnabled ? "Hint: on" : "Hint: off";
-                hintButton.SetEnabled(interactive);
+                hintButton.SetEnabled(game.State.Phase == GamePhase.Playing);
             }
 
             if (markSetButton != null)
@@ -1039,16 +1128,21 @@ namespace Mejnun.UI
 
         private void UpdateTimerLabel()
         {
-            if (timerLabel == null || matchFlow == null || matchFlow.TurnTimer == null ||
-                matchFlow.TurnTimer.DurationSeconds <= 0)
+            if (timerLabel == null)
             {
-                if (timerLabel != null) timerLabel.text = string.Empty;
                 return;
             }
 
-            timerLabel.text = matchFlow.TurnTimer.IsRunning
-                ? "Time: " + Mathf.CeilToInt(matchFlow.TurnTimer.RemainingSeconds)
-                : "";
+            if (matchFlow == null || matchFlow.TurnTimer == null || matchFlow.TurnTimer.DurationSeconds <= 0 ||
+                !matchFlow.TurnTimer.IsRunning)
+            {
+                timerLabel.text = string.Empty;
+                timerLabel.style.display = DisplayStyle.None;
+                return;
+            }
+
+            timerLabel.text = "Time: " + Mathf.CeilToInt(matchFlow.TurnTimer.RemainingSeconds);
+            timerLabel.style.display = DisplayStyle.Flex;
         }
 
         private void OnTimedOut()
@@ -1080,6 +1174,10 @@ namespace Mejnun.UI
             {
                 tableController.SetMarkMode(false);
                 tableController.SetHintsEnabled(!tableController.HintsEnabled);
+                if (hintButton != null)
+                {
+                    hintButton.text = tableController.HintsEnabled ? "Hint: on" : "Hint: off";
+                }
             }
         }
 
@@ -1348,7 +1446,7 @@ namespace Mejnun.UI
         private void RequestLeave()
         {
             if (matchFlow == null || matchFlow.Game == null) return;
-            RequestConfirmation("Exit this game? It will be saved so you can resume it later.",
+            RequestConfirmation("Return to the main menu? This game will be saved so you can resume it later.",
                 () => GameSettings.ConfirmLeave, value => GameSettings.ConfirmLeave = value,
                 () =>
                 {
