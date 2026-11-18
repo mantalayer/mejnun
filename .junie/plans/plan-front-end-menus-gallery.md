@@ -83,7 +83,7 @@ The new rules must fit the existing cosmetics rules (§3.6) and online rules (§
 - **§8 Accessibility & settings**: settings are reachable from the main menu and the pause menu; list the categories, and move the audio bus volumes out of the "later" list.
 - **§9 M6 row**: add the main menu, settings screen, deck and felt pickers, and Gallery, plus `TableFelt` and two free felts. New exit criterion: *from a cold boot a player can browse the Gallery, change settings, pick two decks and a felt, and play a game that uses them; a locked item shows its requirement and progress*.
 - **§10 Testing**: Core tests for direct picks, combined online picks and seeded felt draws (including the snapshot round-trip); PlayMode tests for menu navigation, settings persistence across menu and pause, and the Gallery's lock/progress rendering.
-- **§11**: add decisions 20–23 (main menu as boot screen, deck picker, felt draw, shared settings) and reword Q-E. Add **Q-J**: should pass-and-play let each local human make their own felt/deck picks, or keep one pick per device (default)?
+- **§11**: add decisions 22–25 (main menu as boot screen, deck picker, felt draw, shared settings; decision 23 replaces #10) and reword Q-E. Add **Q-K**: should pass-and-play let each local human make their own felt/deck picks, or keep one pick per device (default)?
 
 ### Architecture Diagram (to be included in the new §3.8)
 ```mermaid
@@ -110,7 +110,7 @@ graph LR
 
 # Delivery Steps
 
-### * Step 1: Add the front-end section: main menu and settings
+### ✓ Step 1: Add the front-end section: main menu and settings
 The plan describes a main menu boot screen and a Settings screen opened from it, shared with the pause menu.
 - Add new §3.8 *Front end (menus & gallery)* with:
   - the screen map
@@ -119,7 +119,7 @@ The plan describes a main menu boot screen and a Settings screen opened from it,
 - Describe the shared `SettingsPanel`, taken out of the `HudPresenter` settings panel and backed by `GameSettings`, and list its categories.
 - Update §3.7 (menu music/state), §7 (new screen strings, RTL) and §8 (settings reachable from both menus; audio volumes now in scope).
 
-###   Step 2: Rewrite cosmetic selection rules for deck and board-background pickers
+### ✓ Step 2: Rewrite cosmetic selection rules for deck and board-background pickers
 The plan specifies the pre-game Table step and the new rules for choosing decks and the board background, offline and online.
 - In §3.8, add the setup "Table" step: two deck slots (different faces or Random) and one felt slot; locked items link to the Gallery; last picks remembered.
 - In §3.6:
@@ -128,9 +128,9 @@ The plan specifies the pre-game Table step and the new rules for choosing decks 
   - define the `UnlockRequirement` shape
 - In §3.2, add `TableFeltId` to `GameState`/snapshot and `DeckPicks`/`FeltPool` to `GameSetup`.
 - Update §4.5 (join payload, lobby summary) and §6 (saved picks).
-- In §11.1, add decisions 20–23 (decision 21 replaces #10), reword Q-E, and add Q-J.
+- In §11.1, add decisions 22–25 (decision 23 replaces #10), reword Q-E, and add Q-K.
 
-###   Step 3: Add the Gallery and update M6, testing and status
+### ✓ Step 3: Add the Gallery and update M6, testing and status
 The plan includes the Gallery screen, and the M6 milestone, testing strategy and status line reflect all the new front-end work.
 - In §3.8, describe the Gallery's Decks and Board backgrounds tabs: previews, locked dimming, requirement text, progress bars, owned/total counts, "New" badges, and the link from the results-screen badge.
 - Extend the §9 M6 row's deliverables and add the cold-boot exit criterion.

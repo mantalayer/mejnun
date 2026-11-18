@@ -1,6 +1,6 @@
 # Mejnun — Game Design & Implementation Plan
 
-Status: draft v2 (2026-11-17), updated after the M4/M5 playtest. **M1 (rules engine), M2 (hot-seat prototype), M3 (AI), M4 (UX & UI) and M5 (Audio) are complete** (§9).
+Status: draft v2.3 (2026-11-17), updated after the M4/M5 playtest with M6 front-end, deck/felt selection and Gallery requirements. **M1 (rules engine), M2 (hot-seat prototype), M3 (AI), M4 (UX & UI) and M5 (Audio) are complete** (§9).
 Engine: Unity 6000.4.0f1 · URP 17.4 · Input System 1.19 · Wwise 2025.1.12
 Targets: iOS, Android, Windows, macOS (Steam for desktop).
 
@@ -127,11 +127,12 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 ### 3.2 Core model
 - `Card` (readonly struct: `Id`, `Suit`, `Rank`, `Deck`) and `Rank` (Ace..King). An ace's role (low/high) is decided per straight by the validator.
 - `Meld` holds an id plus an ordered `List<Card>`. `MeldValidator.Classify(meld)` returns `SameKind | StraightLow | StraightHigh | Invalid(reason)`. The reasons drive UI tooltips: "double", "too short", "mixed suits", and so on.
-- `GameState` holds seats, hands, board (melds), draw pile, current seat, dealer, phase per player, turn number, timer, RNG seed, and `DeckFaces[2]`, the face-skin id for each physical deck (§3.6). Core treats skin ids as opaque strings.
+- `GameState` holds seats, hands, board (melds), draw pile, current seat, dealer, phase per player, turn number, timer, RNG seed, `DeckFaces[2]` (the face-skin id for each physical deck) and `TableFeltId` (§3.6). Core treats cosmetic ids as opaque strings.
+- `GameSetup` carries `DeckPicks[2]` (face ids, with `null` meaning Random) and the `FeltPool` of human felt preferences used for the seeded assignment.
 - `TurnSession` holds the start-of-turn snapshot (`BoardSnapshot`: board plus hand) and a move list (`MoveCards`, `SplitMeld`, `MergeMelds`, `GoDown`). **Undo** drops the last move and replays the rest from the snapshot; **Revert** clears the list. It also provides `CanEndTurn()` and timeout resolution (§1.9). Straights are kept in canonical rank order after every move, while same-kind and invalid groups keep insertion order.
 - Commands carry the player's **intent**. There is a single entry point, `MejnunGame.Apply(in GameCommand)` → `CommandResult { Ok, Error }`. The engine validates every command, and an illegal one returns a `RuleError` without changing state (it never throws for player mistakes). It is identical locally and online, where clients send commands and the host applies them, and the command list doubles as the replay log.
-- A deterministic **PCG32** RNG (serialisable state) is seeded per game and drives the Fisher–Yates shuffle, the random dealer and the face pick, so games can be replayed for bug reports and tests. Core uses no `System.Random` or time APIs.
-- `SnapshotSerializer` writes a versioned binary snapshot (card ids as bytes) of the full state, the in-progress turn and the RNG state. The same seed plus the same commands produce identical snapshot bytes.
+- A deterministic **PCG32** RNG (serialisable state) is seeded per game and drives the Fisher–Yates shuffle, the random dealer, deck-face assignment and felt selection, so games can be replayed for bug reports and tests. Core uses no `System.Random` or time APIs.
+- `SnapshotSerializer` writes a versioned binary snapshot (card ids as bytes) of the full state, including `TableFeltId`, the in-progress turn and the RNG state. Bump the snapshot schema version and add a migration when this field is introduced. The same seed plus the same commands produce identical snapshot bytes.
 - `GameEvents` are emitted as plain C# events (CardDealt, CardMoved, MeldBecameValid, WentDown, TurnEnded, Drew, Won, …). Presentation, audio and network all subscribe to them.
 
 ### 3.3 Presentation
@@ -205,18 +206,22 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
   - `ClassicIvory/cards_ivory.png` is the **second base face** (added in v2). It's a palette swap of Classic: ivory paper, navy ink, crimson red. It uses the identical slicing (`cards_ivory_0..53`), so the same layout preset applies, and it's a placeholder until the real second-deck art replaces it in place.
 - **Two faces per game** (the "two real decks" rule):
   - Every game uses **exactly two different face skins**, one per physical deck, just like shuffling two real decks together. `DeckFaces[0]` is used for cards with `Deck == 0` and `DeckFaces[1]` for `Deck == 1`. A game never shows one face for both decks.
-  - **Pool** = the union of face skins owned by every *human* in the game. Two **free base faces** (Classic and Classic Ivory) are owned by everyone, so the pool always has at least 2.
-    - In solo, each bot also adds one random face from the full catalogue, so solo players can get a peek at locked faces too *(proposed, see Q-E)*.
-  - The two faces are picked **uniformly at random, without repetition**, with the game's seeded RNG at deal time. They're stored in `GameState` and snapshots, so all clients, reconnects and replays agree.
-  - A face the local player **doesn't own** gets a small "Not unlocked yet" badge on the results screen, linking to how to unlock it. That's the "exciting glimpse" moment.
+  - Classic and Classic Ivory are the two **free base faces**, owned by everyone.
+  - Before a game, the player picks both deck slots. Each slot accepts an unlocked face or **Random**; the two resolved slots must use different faces.
+  - In solo and pass-and-play, the choices are used directly (`Deck 0` = slot 1; `Deck 1` = slot 2). A Random slot resolves to an owned face and must not duplicate the other slot. In solo, bots may add catalogue faces to the candidates for Random slots only *(see Q-E)*.
+  - Online, each human submits both picks. Random entries resolve from that player's owned faces; the host combines the resulting picks into a pool and draws two different faces from it with the game's seeded RNG at deal time.
+  - The selected faces are stored in `GameState` and snapshots, so all clients, reconnects and replays agree. A face the local player **doesn't own** gets a small "Not unlocked yet" badge on the results screen, linking to how to unlock it.
   - A nice side effect: the two cards of a **double now look different**, which makes the board easier to read.
   - Every client must be able to render every face. Face skins are small (around 15 KB each), so all faces **ship in the build**. Addressables remote download stays an option if the catalogue grows. If a face fails to load, the client falls back to the base face for that deck index.
-  - "Equipping" a face skin therefore isn't a thing. Owning one adds it to the pools of the games you're in. (Possible later extra: a "favourites" weighting.)
-- Other cosmetic SOs: `CardBack`, `TableFelt` (sprite/material), `Avatar`, `MejnunShout` (a Wwise Switch value plus a VFX prefab).
+  - There is no separate equipped-deck state; the two picks are made for each game.
+- `TableFelt : ScriptableObject` contains an opaque `id`, `displayName`, sprite/material and an `UnlockRequirement`. Green and Burgundy are free. `TableFeltCatalog` lists the available felts.
+- Each human chooses an unlocked felt or **Random** as a preference. A Random preference resolves to an owned felt; the game draws one felt at random from the human preferences with the seeded RNG at deal time. Pass-and-play contributes one preference for the shared device. Store the result as `TableFeltId` in `GameState` and snapshots so all clients and replays agree.
+- `UnlockRequirement` contains a kind (level, wins, achievement or purchase), target, localized description, and a progress query that can report current and required progress when countable.
+- Other cosmetic SOs: `CardBack`, `Avatar`, `MejnunShout` (a Wwise Switch value plus a VFX prefab).
 - `CosmeticCatalog` lists every item. `PlayerInventory` stores owned and equipped items (local save + UGS Cloud Save).
 - Unlock sources: **play progression** (XP per game and win, levels), **achievements** (Steam / Game Center / Google Play via the platform layer, plus local ones), and **IAP** (Unity IAP, behind `IEntitlements`). Mobile ships with Remove ads (§5.3), and cosmetic packs aren't committed yet.
 - Packaging: the two base faces ship in the build. Other cosmetics can become **Addressables** groups, so they can be downloaded or patched later without an app update.
-- **Online**: each player's owned face ids plus their equipped *card back*, *avatar* and *shout* are sent at session join. The host builds the face pool (above).
+- **Online**: each player's owned face ids, two deck picks, felt preference and equipped *card back*, *avatar* and *shout* are sent at session join. The host builds the deck-pick pool (above).
   - The draw pile uses the viewing player's equipped back. Opponents' hand stacks show that opponent's back.
   - A back is never tied to a deck index, so a back never reveals which deck the next drawn card comes from.
 
@@ -224,8 +229,42 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - `AudioService` is the only code that calls `AkSoundEngine` or `AK.Wwise.Event`. Gameplay raises `GameEvents`, and an `AudioDirector` maps them to Wwise events.
 - First-pass event list: `Play_UI_Click`, `Play_Card_Pickup`, `Play_Card_Drop`, `Play_Card_Invalid`, `Play_Card_Shuffle`, `Play_Card_Deal`, `Play_Card_Draw`, `Play_Meld_Valid`, `Play_GoDown`, `Play_Turn_Start`, `Play_Timer_Tick`, `Play_Timer_Warning`, `Play_Mejnun_Shout` (Switch `Shout_Type` per cosmetic), `Play_Win_Stinger`, `Play_Lose_Stinger`, `Music_Menu`, `Music_Game`.
 - RTPC `Timer_Tension` (0–1) and RTPC `Board_Complexity` (optional, for music intensity). States `Game_Phase` (Menu / Dealing / Playing / Results).
+- The main menu, Gallery and Settings set `Game_Phase = Menu` and play `Music_Menu`.
 - Banks: `Init` and `Main` to start with. SoundBanks are **committed to git** (decided), so the game builds without Wwise Authoring installed.
 - Platform plugins: the Mac/Windows integration is committed. **iOS and Android** integration files now appear in the working tree, so it looks like they were installed through the Wwise Launcher. They still need to be reviewed and committed, and the iOS/Android SoundBank platforms added in the Wwise project, before M8.
+
+### 3.8 Front end (menus & gallery)
+- `MainMenuScreen` is the boot destination, driven by `FrontEndFlow` and a `MatchFlowScreen.MainMenu` entry point. The main menu offers:
+  - **Play** → choose **Solo vs AI** or **Pass & play**, then open the existing setup screen.
+  - **Resume**, shown only when `SavedGame.HasSave` is true.
+  - **Online**, visible but disabled until M7.
+  - **Gallery**, **Settings**, and **Quit** (desktop only).
+- Screen map and navigation:
+
+  ```mermaid
+  graph LR
+    Boot --> MainMenu
+    MainMenu --> Setup
+    MainMenu --> Gallery
+    MainMenu --> Settings
+    MainMenu --> Resume
+    Setup --> TablePicker
+    TablePicker --> Gallery
+    TablePicker --> DealerQuestion
+    DealerQuestion --> Game
+    Game --> Pause
+    Pause --> Settings
+    Game --> Results
+    Results --> Gallery
+    Results --> MainMenu
+  ```
+
+- The existing setup flow adds a **Table** step after seat and timer selection and before **Start**. It has two deck slots (each an unlocked face or **Random**, with different resolved faces) and one board-background slot (an unlocked felt or **Random**). Locked items appear greyed out with a lock and link to their Gallery entry. The last deck and felt picks are remembered.
+- `SettingsPanel` is one shared component used from the main menu and in-game pause menu, moved out of `HudPresenter` and backed by the same `GameSettings` keys. Changes save immediately. Its categories are **Gameplay & confirmations**, **Hints**, **Accessibility** (reduced motion and haptics), **Audio** (volume sliders), **Language**, **Online** (quick-match bot fill), and **Account / Restore purchases** (mobile).
+- Front-end screens support portrait and landscape layouts, adapt to aspect changes, respect device safe areas, and follow §7's RTL mirroring rules. Esc/back returns to the previous screen.
+- `TablePickerScreen` handles the setup Table step; `GalleryScreen` provides the cosmetics Gallery. Both are in `Mejnun.UI` and are driven by `FrontEndFlow`.
+- The Gallery has **Decks** and **Board backgrounds** tabs. Unlocked decks show a sample hand-fan preview and unlocked felts show a swatch. Locked items have dimmed previews, a lock, localized requirement text from `UnlockRequirement` (level, wins, achievement or purchase), and a progress bar when progress is countable.
+- Each tab shows owned/total counts. Items unlocked since the previous Gallery visit carry a **New** badge, tracked in the local seen set (§6). A results-screen **Not unlocked yet** badge opens the matching Gallery item.
 
 ---
 
@@ -236,6 +275,14 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - **Host-authoritative**: the host runs `Mejnun.Core`. Clients send command RPCs, and the host validates them, applies them and broadcasts the resulting events and state deltas.
 - **Hidden information**: each client only ever receives **its own hand** through targeted RPCs. The host process necessarily holds every hand, which is the accepted trade-off of the "UGS with player host" choice. Because Core is pure C#, moving authority to Cloud Code or a dedicated server later doesn't require touching game logic.
 - Network payloads are compact: card ids as bytes, commands as small structs, and full `GameState` snapshots for join, reconnect and migration.
+
+### 4.1.1 Live turn mirroring (everyone sees every move)
+- In multiplayer, every player at the table sees the active player's moves **as they make them**, not just the final board when they end their turn.
+- Each in-turn action is sent to the host as soon as it is made: card moves, splits, merges, go-down, and also **Undo, Redo, Revert and Fix board**. The host validates it, applies it to the live `TurnSession` and immediately broadcasts the resulting board delta and events to every client. All clients animate it with the same move animations used locally.
+- Nothing is hidden or batched until End turn. Watchers see cards go out, move around, get undone and redone, the board get reverted to the start of the turn, and Fix board send cards back. Draw/Pass shows the revert first, then the draw.
+- Hidden information still applies. A hand card only becomes visible once it is placed on the board. When it goes back to the hand (through Undo, Revert, Fix board or a drag back), it returns face-down to that player's card-back stack, and the hand counts update live.
+- Watchers' views are read-only. Only the active seat can act, and board arrangement stays a local view preference (Q-I).
+- The unit that gets mirrored is each applied move (or gesture group). In-flight drag positions are not streamed *(see Q-L)*.
 
 ### 4.2 Finding games
 - **Room codes**: Session join code, 6 characters.
@@ -265,6 +312,7 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 ### 4.5 Online rules & timer
 - Online games are **always timed**, so nobody can stall a live game. The host picks **30 / 60 / 90 / 120 s**, and the default is **90 s**. "Off" is only available offline.
 - Lobby rule toggles (host only, shown to everyone before Ready): timer preset, hints (Off by default), bot difficulty for filled seats, and the dealer-question pack.
+- The join payload includes each human's owned face ids, two deck picks (face id or Random) and felt preference (felt id or Random), plus the existing equipped card back, avatar and shout. The lobby summary shows each player's picks. At deal time, the host resolves Random picks, draws two different deck faces from the combined picks and one felt from the players' preferences with the seeded RNG, then stores `DeckFaces` and `TableFeltId` in the shared game state and snapshot.
 
 ---
 
@@ -326,7 +374,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 ---
 
 ## 6. Persistence
-- Local: settings, cosmetics, inventory, XP and stats, paused local games (`SnapshotSerializer` binary snapshots), plus a replay of the last game (seed + command list) for debugging.
+- Local: settings, cosmetics, inventory, XP and stats, last `DeckPicks` and felt preference, the Gallery's seen-item set for **New** badges, paused local games (`SnapshotSerializer` binary snapshots), plus a replay of the last game (seed + command list) for debugging.
 - Cloud: inventory and progression in UGS Cloud Save (linked accounts). Online paused games live in Cloud Code storage.
 - A save schema version and migrations are in place from day one.
 
@@ -343,9 +391,10 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
   - CJK fonts are several MB each, so the CJK/Arabic font files go in per-locale Addressable groups. Player nicknames can contain any script and fall back through the whole chain.
 - **Right-to-left** (`ar`, `fa`):
   - Enable the Advanced Text Generator (`-unity-text-generator: advanced` on the UI root).
-  - A `.rtl` class on the root mirrors the HUD and menus (row-reverse, mirrored icons such as back arrows).
+  - A `.rtl` class on the root mirrors the HUD and front-end menus and panels (row-reverse, mirrored icons such as back arrows).
   - The **cards and board stay left-to-right**, so straights read A→K the same for everyone at an online table *(see Q-D)*.
   - Numbers in UI text (timer, card counts) use locale digits (Eastern Arabic in `ar`, Persian in `fa`). Card art is unaffected.
+- **Front-end strings**: localize the main-menu actions and states, Settings categories and options, navigation labels, Gallery tabs and counts, lock/progress labels, and `UnlockRequirement` descriptions. Use Smart Strings for changing progress text such as "Win {count} more games".
 - **Dealer questions** are authored in English and auto-translated like UI strings. Each language ships with at least 20, and native speakers review the translations before release.
 
 ### 7.1 Auto-translation workflow
@@ -372,7 +421,9 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 - **Guardrails:** preserve Smart String placeholders such as `{0}` and `{count:plural:...}` and check them after pull; do not allow translation to break plural blocks. Write or verify Arabic six-form plural variants by hand. Keep right-to-left translations as plain text and check their rendering in the RTL UI.
 
 ## 8. Accessibility & settings
-- Local `PlayerPrefs` settings cover per-action confirmation opt-outs, optional board-card hints, hint jiggle, reduced motion and haptics on/off. Colour-blind-friendly suit tinting (four-colour deck option per skin), adjustable card size, left-handed hand placement, and audio buses (Master/Music/SFX/Voice) remain later accessibility work.
+- The shared `SettingsPanel` is reachable from both the main menu and the in-game pause menu. It uses the same `GameSettings` keys and saves changes immediately.
+- Settings categories: **Gameplay & confirmations**, **Hints**, **Accessibility** (reduced motion and haptics), **Audio**, **Language**, **Online** (quick-match bot fill), and **Account / Restore purchases** (mobile). Local `PlayerPrefs` settings include per-action confirmation opt-outs, optional board-card hints, hint jiggle, reduced motion and haptics on/off.
+- Audio volume sliders drive the `Volume_Master`, `Volume_Music`, `Volume_SFX` and `Volume_Voice` Wwise RTPCs; these audio controls are in scope, not later work. Colour-blind-friendly suit tinting (four-colour deck option per skin), adjustable card size and left-handed hand placement remain later accessibility work.
 
 ---
 
@@ -386,8 +437,8 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **M3** | AI ✅ | Solver, Easy/Medium/Hard bots, hint highlight, solo setup screen | Hard beats Easy in more than 80% of 500 simulated games. Turn compute under 1 s on a mid-range phone. *Met in the editor: Hard beat Easy 481/500 (96.2%), the slowest Hard turn was 61 ms, and 158 EditMode and 22 PlayMode tests pass. The on-device phone timing is still to be measured* |
 | **M4** | UX & UI ✅ | UI Toolkit menus/HUD, responsive portrait + landscape layouts, persistent settings, per-turn timers/Halas!, Redo and confirmations, PC shortcuts/cheat sheet, results/counts/MEJNUN moment, visual meld rearrangement, lifted/group hand drag, opponent card-back stacks, last-card warning, outline-and-jiggle/board-move hints, bot hold-back/blocking styles, camera-independent hand, wide-screen board packing, Fix board, timeout repair, short Gone Down tag | All playtest feedback implemented or tracked later; targeted Unity suites pass; human usability pass on a small phone and 4K PC. *Met: playtest passed (Brennan, 2026-11-17); EditMode 169/169 and PlayMode 51/51 pass. Closed* |
 | **M5** | Audio ✅ | Wwise events/banks, AudioService/Director, music states, timer tension | Every `GameEvent` with a sound mapped. *Met: playtest passed (Brennan, 2026-11-17). Closed* |
-| **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, 2nd test deck skin via Addressables | A second skin with a different sheet layout imports and plays |
-| **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync, reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4 |
+| **M6** | Cosmetics & progression | Catalog, inventory, XP/levels, achievements (local), unlock UI, main menu and shared Settings, deck/felt Table picker, Gallery, `TableFeltCatalog` with free Green and Burgundy felts, 2nd test deck skin via Addressables | From a cold boot, a player can browse the Gallery, change settings, pick two decks and a felt, and play a game that uses them; a locked item shows its requirement and progress |
+| **M7** | Online | Spike (host migration and snapshot store), auth, sessions (codes and quick match), NGO host-authoritative sync with live turn mirroring (§4.1.1), reconnect, AI takeover, save & pause, host migration, friends | Six-device soak test. Killing any client or the host recovers per §4.4. Every client sees each in-turn move, Undo, Redo, Revert and Fix board as it happens |
 | **M8** | Platforms & monetization | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads + consent, Unity IAP Remove ads + restore, mobile Build & Upload window + fastlane lanes, Game Center / Play Games | Steam beta-branch upload from the editor. One-click TestFlight and Play internal builds |
 | **M9** | Localization & polish | Install `com.unity.localization`; Google Sheets push/pull and auto-translated String Tables for all locales; the 11 languages, font chain, RTL mirroring, localized store listings, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Every String Table entry is non-empty in all locales; Smart String placeholders are checked after pull; release-candidate checklist and native-speaker review for `ar` and `fa` RTL screens |
 
@@ -403,10 +454,10 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 
 ## 10. Testing strategy
 - **Core (EditMode)**: a table-driven validator test for every set rule (aces, doubles, sizes, mixed suits); turn flows (go-down only from hand, go-down then board use in the same turn, End-turn gating, undo past go-down, revert, all four timeout outcomes, empty-pile pass, a sole-fewest win versus a tied **Stalemate**, the fewest-cards winner deals next, a new dealer prompt after a Stalemate); and deterministic seeded deal tests.
-- **Faces**: the two picked faces are always distinct, always come from the pool, are deterministic for a given seed, fall back to the base faces when the pool is too small, and both deck indexes render with their assigned skin.
+- **Cosmetics (EditMode)**: offline picks map slot 1 → `Deck 0` and slot 2 → `Deck 1`; the assigned faces remain distinct; online combined human picks choose two distinct faces deterministically; seeded felt draws select from the submitted preferences; snapshot round-trip preserves `DeckFaces` and `TableFeltId`; both deck indexes render with their assigned skin and missing assets use the per-index fallback.
 - **AI**: solver correctness on curated puzzles, a fuzz test (random states, so every solver output must be a valid board), difficulty benchmarks, and BoardFixer coverage for retaining valid placements, returning invalid hand cards, re-homing original cards, and timeout resolution.
-- **Net**: snapshot round-trip serialization, a command replay that matches the host state, and a hidden-hand leak test that asserts no client payload contains another player's cards.
-- **PlayMode**: a scripted pass-and-play smoke game, orientation and wide-screen layout snapshots, camera pan/zoom stability for the hand, Fix board/Gone Down HUD behavior, timer timeout, Redo, opponent card-back counts, and group hand reorder.
+- **Net**: snapshot round-trip serialization for `TableFeltId`, a command replay that matches the host state, a hidden-hand leak test that asserts no client payload contains another player's cards, and a live-mirroring test: after each in-turn move, Undo, Redo, Revert and Fix board, every client's board matches the host's live `TurnSession` without waiting for End turn.
+- **PlayMode**: main-menu navigation from cold boot, settings persistence across the main menu and pause menu, Gallery locked-item requirement/progress rendering, a scripted pass-and-play smoke game, orientation and wide-screen layout snapshots, camera pan/zoom stability for the hand, Fix board/Gone Down HUD behavior, timer timeout, Redo, opponent card-back counts, and group hand reorder.
 - **M4 AI/UI**: Hold Back draws in cases where a balanced bot plays; inferred board extenders are ignored after a down-player draw; board arrangement does not mutate `GameState`; group reordering preserves relative card order.
 - **Board arrangement**: repositioning a set changes only the layout order (no command, unchanged `GameState`, unchanged undo stack). New sets are appended, removed sets are dropped, and the order survives Undo, Revert and an aspect change.
 - **Pick-up and drag**: a held card follows the pointer and returns to its slot on cancel. Holding a selected card lifts every selected card. Dropping a held group into the hand reorders it as a block (relative order kept, no command, unchanged undo stack).
@@ -416,7 +467,7 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 
 ## 11. Decisions log & open questions
 
-### 11.1 Resolved in v2 (answers to the v1 questions)
+### 11.1 Resolved in v2.3 (answers to the v1 questions and later decisions)
 | # | Topic | Decision | Where |
 |---|---|---|---|
 | 1 | First player | Left of the dealer | §1.4 |
@@ -428,7 +479,7 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 | 7 | Minimum OS | iOS 15, Android 8, Windows 10, macOS 12 | §5.4 |
 | 8 | Languages | en, ar, fa, hy, es, de, it, fr, ja, zh, pt | §7 |
 | 9 | Mobile editions | One free app with a "Remove ads" IAP; Steam is paid | §5.3 |
-| 10 | Card faces | Two distinct faces per game, randomly chosen from the faces the players own | §3.6 |
+| 10 | Card faces | Two distinct faces per game, originally chosen at random from the players' owned faces; superseded by #23 | §3.6 |
 | 11 | Bots in pass-and-play | Yes, mixed freely | §2 |
 | 12 | Online timer | Always on online; host picks a preset, default 90 s | §4.5 |
 | 13 | Split | Gestures only, no tools; long-press picks up the tail of a straight | §3.4 |
@@ -440,15 +491,22 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 | 19 | Playtest: safety and PC controls | Add Redo; confirm destructive actions (Revert, Draw/Pass after placing, Fix board returning cards, leave/restart); full PC keyboard shortcuts with a cheat sheet | §1.8, §3.4, M4 |
 | 20 | Translation workflow | Translate in the editor before builds through Unity Localization's Google Sheets extension and `GOOGLETRANSLATE`; use Google Cloud Translation API v3 only as a fallback | §7.1, M9 |
 | 21 | Dealer-question localization | Auto-translate dealer questions like other strings, then have native speakers review them before release | §7, §7.1 |
+| 22 | Main menu | The main menu is the boot screen and entry point for play, resume, Gallery and Settings | §3.8 |
+| 23 | Deck picker | Players pick both decks; offline picks apply directly, while online the host draws two different faces from all human picks with the seeded RNG. This replaces #10 | §3.6, §4.5 |
+| 24 | Felt selection | Each human picks a felt preference, then one preference is selected at random with the seeded RNG and stored in game state | §3.2, §3.6, §4.5 |
+| 25 | Shared settings | The main menu and pause menu use one `SettingsPanel` backed by the same `GameSettings` keys | §3.8, §8 |
+| 26 | Live turn mirroring online | Everyone sees the active player's moves as they happen, before End turn, including Undo, Redo, Revert and Fix board; hand cards stay hidden until placed | §4.1.1, M7 |
 | Q-B | After a stalemate | A tie is a Stalemate and prompts for a new dealer; a sole player with the fewest cards wins normally and deals next | §1.10 |
 
 ### 11.2 Still open (new, smaller; the defaults in the text apply until answered)
 - **Q-A Classic mapping**: confirm the zig-zag sprite order in the importer once it exists (unchanged from v1).
 - **Q-C Language variants**: Simplified or Traditional Chinese (or both)? Brazilian or European Portuguese? One neutral Spanish, or Spain and Latin America?
 - **Q-D RTL table**: should the board and hand also mirror for Arabic/Persian players, or stay left-to-right as proposed?
-- **Q-E Faces in solo**: should bots contribute random catalogue faces to the pool (default), or should solo use only the player's own faces?
+- **Q-E Faces in solo Random slots**: when a slot is set to Random, should bots contribute random catalogue faces to its candidate pool (default), or should it resolve only from the player's owned faces? This question applies only to Random slots; explicit deck picks are used as selected.
 - **Q-F Remove ads across devices**: honour a Remove ads purchase from the other mobile store via a linked account (Cloud Save), or keep it per store (default)?
 - **Q-G Double-tap quick-place**: keep it as proposed in §3.4, or leave it out?
 - **Q-H Prices**: the Steam price and the Remove ads price tier.
 - **Q-I Board arrangement online**: should a set's position be shared with everyone at the table (it would then be sent as a small view-only message), or be a local preference per client (default)?
 - **Q-J Review depth**: should all 11 languages receive native-speaker review before release, or only `ar`/`fa`, with the rest shipping as machine translation?
+- **Q-K Pass-and-play picks**: should each local human make their own deck and felt picks, or should the shared device make one pick set (default)?
+- **Q-L Live drag ghosts online**: should watchers also see a held card following the active player's pointer before it is dropped (a throttled, view-only stream), or only each applied move (default)?

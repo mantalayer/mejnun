@@ -85,6 +85,31 @@ namespace Mejnun.AI
                         break;
                     }
 
+                    var resultingCards = new List<Card>(meld.Cards.Count + missing.Count);
+                    resultingCards.AddRange(meld.Cards);
+                    resultingCards.AddRange(missing);
+                    if (!MeldValidator.CanPlaceInto(meld.Cards, resultingCards))
+                    {
+                        var cardsOutsideTarget = new List<Card>();
+                        for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                        {
+                            var card = meld.Cards[cardIndex];
+                            if (!targetSets[index].Contains(card.Id))
+                            {
+                                cardsOutsideTarget.Add(card);
+                            }
+                        }
+
+                        if (cardsOutsideTarget.Count == 0 ||
+                            !MoveToTemporaryMelds(game, seat, cardsOutsideTarget, output))
+                        {
+                            return false;
+                        }
+
+                        progressed = true;
+                        break;
+                    }
+
                     if (!CanAddCards(meld.Cards, missing))
                     {
                         continue;

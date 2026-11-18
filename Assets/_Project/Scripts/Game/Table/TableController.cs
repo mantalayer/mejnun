@@ -1126,7 +1126,60 @@ namespace Mejnun.Game
             {
                 draggedIds = new[] { dragSource.CardId };
             }
-            tableView.ShowDropPreview(target, !preview.Denied && preview.Batch.Count > 0, draggedIds,
+            var previewValid = !preview.Denied && preview.Batch.Count > 0;
+            if (previewValid && preview.Batch.Count == 1)
+            {
+                var command = preview.Batch.Commands[0];
+                if (command.Type == CommandType.MoveCards && command.Target.Kind == TargetKind.Meld)
+                {
+                    Meld targetMeld = null;
+                    for (var index = 0; index < game.State.Board.Count; index++)
+                    {
+                        if (game.State.Board[index].Id == command.Target.MeldId)
+                        {
+                            targetMeld = game.State.Board[index];
+                            break;
+                        }
+                    }
+
+                    if (targetMeld == null)
+                    {
+                        previewValid = false;
+                    }
+                    else
+                    {
+                        var movedCardIds = command.CardIds;
+                        var resultingCards = new List<Card>(targetMeld.Cards.Count + movedCardIds.Length);
+                        for (var cardIndex = 0; cardIndex < targetMeld.Cards.Count; cardIndex++)
+                        {
+                            var card = targetMeld.Cards[cardIndex];
+                            var moved = false;
+                            for (var movedIndex = 0; movedIndex < movedCardIds.Length; movedIndex++)
+                            {
+                                if (movedCardIds[movedIndex] == card.Id)
+                                {
+                                    moved = true;
+                                    break;
+                                }
+                            }
+
+                            if (!moved)
+                            {
+                                resultingCards.Add(card);
+                            }
+                        }
+
+                        for (var index = 0; index < movedCardIds.Length; index++)
+                        {
+                            resultingCards.Add(Card.FromId(movedCardIds[index]));
+                        }
+
+                        previewValid = MeldValidator.CanPlaceInto(targetMeld.Cards, resultingCards);
+                    }
+                }
+            }
+
+            tableView.ShowDropPreview(target, previewValid, draggedIds,
                 draggedIds, position);
         }
 
