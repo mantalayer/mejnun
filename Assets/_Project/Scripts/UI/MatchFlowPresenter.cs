@@ -1,3 +1,4 @@
+using Mejnun.Cosmetics;
 using Mejnun.Game;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,7 +32,7 @@ namespace Mejnun.UI
             flowRoot = root.Q<VisualElement>("flow-root");
             dealerQuestionScreen = new DealerQuestionScreen(root, matchFlow);
             handoffScreen = new HandoffScreen(root, matchFlow);
-            resultsScreen = new ResultsScreen(root, matchFlow);
+            resultsScreen = new ResultsScreen(root, matchFlow, FindAnyObjectByType<DeckSkinLoader>());
             ShowScreen(matchFlow.Screen);
         }
 

@@ -197,6 +197,12 @@
     -unity-font-style: bold;
 }
 
+.gallery-item-artist {
+    color: rgb(191, 201, 188);
+    font-size: 11px;
+    margin-top: 2px;
+}
+
 .gallery-details {
     width: 44%;
     padding: 10px;

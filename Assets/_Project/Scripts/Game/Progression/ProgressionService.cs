@@ -35,6 +35,7 @@ namespace Mejnun.Game
         public PlayerProfile Profile { get; private set; }
         public CosmeticCatalog Catalog => cosmeticCatalog;
         public event Action Changed;
+        public event Action<ProgressionReport> MatchRecorded;
 
         public static void Initialize(CosmeticCatalog catalog)
         {
@@ -91,6 +92,7 @@ namespace Mejnun.Game
                 newAchievements, newlyUnlocked.AsReadOnly());
             SaveProfile();
             Changed?.Invoke();
+            MatchRecorded?.Invoke(report);
             return report;
         }
 

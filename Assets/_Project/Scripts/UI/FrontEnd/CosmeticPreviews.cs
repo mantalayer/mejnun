@@ -75,20 +75,18 @@ namespace Mejnun.UI.FrontEnd
         {
             var grid = new VisualElement();
             grid.AddToClassList("gallery-deck-grid");
-            var cards = new List<Image>(Card.CardsPerDeck);
-            for (var suitIndex = 0; suitIndex < NewDeckSuitOrder.Length; suitIndex++)
+            var faces = GetNewDeckFaces(skin);
+            var cards = new List<Image>(faces.Count);
+            for (var index = 0; index < faces.Count; index++)
             {
-                for (var rankIndex = 0; rankIndex < 13; rankIndex++)
+                var image = new Image
                 {
-                    var image = new Image
-                    {
-                        sprite = skin.GetFace(NewDeckSuitOrder[suitIndex], (Rank)rankIndex),
-                        scaleMode = ScaleMode.ScaleToFit
-                    };
-                    image.AddToClassList("gallery-face");
-                    grid.Add(image);
-                    cards.Add(image);
-                }
+                    sprite = faces[index],
+                    scaleMode = ScaleMode.ScaleToFit
+                };
+                image.AddToClassList("gallery-face");
+                grid.Add(image);
+                cards.Add(image);
             }
 
             grid.RegisterCallback<GeometryChangedEvent>(_ =>
@@ -131,6 +129,25 @@ namespace Mejnun.UI.FrontEnd
                 }
             });
             return grid;
+        }
+
+        public static IReadOnlyList<Sprite> GetNewDeckFaces(DeckSkin skin)
+        {
+            if (skin == null)
+            {
+                throw new ArgumentNullException(nameof(skin));
+            }
+
+            var faces = new List<Sprite>(Card.CardsPerDeck);
+            for (var suitIndex = 0; suitIndex < NewDeckSuitOrder.Length; suitIndex++)
+            {
+                for (var rankIndex = 0; rankIndex < 13; rankIndex++)
+                {
+                    faces.Add(skin.GetFace(NewDeckSuitOrder[suitIndex], (Rank)rankIndex));
+                }
+            }
+
+            return faces.AsReadOnly();
         }
 
         public static VisualElement CreateFeltSwatch(TableFelt felt)

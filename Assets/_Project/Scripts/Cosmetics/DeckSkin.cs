@@ -30,6 +30,7 @@ namespace Mejnun.Cosmetics
     {
         [SerializeField] private string id;
         [SerializeField] private string displayName;
+        [SerializeField] private string artist;
         [SerializeField] private Sprite[] faces = new Sprite[Card.CardsPerDeck];
         [SerializeField] private Sprite cardBack;
         [SerializeField] private List<DeckSkinBack> alternateBacks = new List<DeckSkinBack>();
@@ -40,6 +41,7 @@ namespace Mejnun.Cosmetics
 
         public string Id => id;
         public string DisplayName => displayName;
+        public string Artist => artist;
         public Sprite CardBack => cardBack;
         public IReadOnlyList<DeckSkinBack> AlternateBacks => alternateBacks;
         public string[] BackIds
@@ -106,13 +108,15 @@ namespace Mejnun.Cosmetics
         }
 
         public void Configure(string skinId, string skinDisplayName, Sprite[] faceSprites, Sprite backSprite,
-            Sprite blankSprite, bool usePixelArt, float ppu)
+            Sprite blankSprite, bool usePixelArt, float ppu, string skinArtist = null)
         {
-            Configure(skinId, skinDisplayName, faceSprites, backSprite, null, blankSprite, usePixelArt, ppu);
+            Configure(skinId, skinDisplayName, faceSprites, backSprite, null, blankSprite, usePixelArt, ppu,
+                skinArtist);
         }
 
         public void Configure(string skinId, string skinDisplayName, Sprite[] faceSprites, Sprite backSprite,
-            IReadOnlyList<DeckSkinBack> alternateBackSprites, Sprite blankSprite, bool usePixelArt, float ppu)
+            IReadOnlyList<DeckSkinBack> alternateBackSprites, Sprite blankSprite, bool usePixelArt, float ppu,
+            string skinArtist = null)
         {
             if (string.IsNullOrWhiteSpace(skinId) || skinId.IndexOf(':') >= 0)
             {
@@ -162,12 +166,18 @@ namespace Mejnun.Cosmetics
 
             id = skinId;
             displayName = skinDisplayName ?? skinId;
+            artist = skinArtist ?? string.Empty;
             faces = (Sprite[])faceSprites.Clone();
             cardBack = backSprite;
             alternateBacks = configuredBacks;
             blank = blankSprite;
             pixelArt = usePixelArt;
             pixelsPerUnit = ppu;
+        }
+
+        public void ConfigureArtist(string skinArtist)
+        {
+            artist = skinArtist ?? string.Empty;
         }
 
         public void ConfigureUnlock(UnlockRequirement requirement)
