@@ -18,10 +18,12 @@ namespace Mejnun.Game
         [SerializeField] private float stepSeconds = 0.45f;
 
         private TableController controller;
+        private CardTracker cardTracker;
         private IReadOnlyList<SeatConfig> seats = new SeatConfig[0];
         private Coroutine routine;
         private MejnunGame playingGame;
         private int playingTurn = -1;
+        private bool paused;
 
         public float ThinkSeconds
         {
@@ -37,11 +39,22 @@ namespace Mejnun.Game
 
         public bool IsPlaying => routine != null;
 
-        public void Configure(TableController tableController, IReadOnlyList<SeatConfig> seatConfigs)
+        public void SetPaused(bool isPaused)
+        {
+            paused = isPaused;
+            if (!paused)
+            {
+                Evaluate();
+            }
+        }
+
+        public void Configure(TableController tableController, IReadOnlyList<SeatConfig> seatConfigs,
+            CardTracker tracker = null)
         {
             Stop();
             controller = tableController;
             seats = seatConfigs ?? new SeatConfig[0];
+            cardTracker = tracker;
         }
 
         public void Stop()
@@ -59,7 +72,7 @@ namespace Mejnun.Game
         /// <summary>Starts the bot's turn if the current seat is a bot and it isn't already playing.</summary>
         public void Evaluate()
         {
-            if (routine != null || controller == null || controller.Game == null || !isActiveAndEnabled)
+            if (paused || routine != null || controller == null || controller.Game == null || !isActiveAndEnabled)
             {
                 return;
             }
@@ -80,7 +93,7 @@ namespace Mejnun.Game
             playingGame = game;
             playingTurn = state.TurnNumber;
             routine = StartCoroutine(PlayTurn(game, state.CurrentSeat, state.TurnNumber,
-                seats[state.CurrentSeat].Difficulty));
+                seats[state.CurrentSeat].Difficulty, seats[state.CurrentSeat].Style));
         }
 
         private void OnDisable()
@@ -88,12 +101,14 @@ namespace Mejnun.Game
             Stop();
         }
 
-        private IEnumerator PlayTurn(MejnunGame game, int seat, int turnNumber, BotDifficulty difficulty)
+        private IEnumerator PlayTurn(MejnunGame game, int seat, int turnNumber, BotDifficulty difficulty,
+            BotStyle style)
         {
             var snapshot = SnapshotSerializer.Write(game);
+            var knowledge = cardTracker == null ? null : cardTracker.CreateKnowledge(game.State);
             var seed = unchecked(game.Setup.Seed * 6364136223846793005UL + (ulong)turnNumber * 1442695040888963407UL +
                                  (ulong)seat);
-            var planning = Task.Run(() => BotBrain.PlanTurn(snapshot, difficulty, seed));
+            var planning = Task.Run(() => BotBrain.PlanTurn(snapshot, difficulty, seed, style, knowledge));
             var waited = 0f;
             while (!planning.IsCompleted || waited < thinkSeconds)
             {
@@ -119,6 +134,11 @@ namespace Mejnun.Game
 
             for (var index = 0; index < commands.Count; index++)
             {
+                while (paused && IsStillTurn(game, seat, turnNumber))
+                {
+                    yield return null;
+                }
+
                 if (!IsStillTurn(game, seat, turnNumber))
                 {
                     break;

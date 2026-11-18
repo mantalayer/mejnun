@@ -119,6 +119,38 @@ namespace Mejnun.AI.Tests
             }
         }
 
+        [Test]
+        public void HoldBackBotSometimesDrawsInsteadOfPlayingAValidMeld()
+        {
+            var game = Game(new[] { "3H", "4H", "5H", "KD" }, new string[0][], false);
+            var foundHoldBack = false;
+            for (var seed = 0UL; seed < 256UL; seed++)
+            {
+                var balanced = BotBrain.PlanTurn(game, BotDifficulty.Medium, seed, BotStyle.Balanced);
+                var holdBack = BotBrain.PlanTurn(game, BotDifficulty.Medium, seed, BotStyle.HoldBack);
+                if (!balanced.Draws && holdBack.Draws)
+                {
+                    foundHoldBack = true;
+                    break;
+                }
+            }
+
+            Assert.That(foundHoldBack, Is.True);
+        }
+
+        [Test]
+        public void KnownExtenderIsIgnoredAfterOpponentDrewWhileDown()
+        {
+            var known = new BotKnowledge(new[] { new byte[0], new[] { Parse("6S").Id } },
+                new[] { false, false }, new[] { 14, 2 });
+            var likelyStuck = new BotKnowledge(new[] { new byte[0], new[] { Parse("6S").Id } },
+                new[] { false, true }, new[] { 14, 2 });
+            var board = new List<IReadOnlyList<Card>> { Cards("7S", "8S", "9S") };
+
+            Assert.That(known.WouldEnableKnownExtender(board, 0), Is.True);
+            Assert.That(likelyStuck.WouldEnableKnownExtender(board, 0), Is.False);
+        }
+
         [TestCase(BotDifficulty.Easy, 2)]
         [TestCase(BotDifficulty.Medium, 4)]
         [TestCase(BotDifficulty.Hard, 6)]

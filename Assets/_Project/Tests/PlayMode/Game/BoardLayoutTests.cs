@@ -40,6 +40,14 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void Compute_UsesOneRowForAFewMeldsOnAWideScreen()
+        {
+            var layout = BoardLayout.Compute(CreateMelds(3, 3), 2.28f, new Vector2(0.64f, 0.97f));
+
+            Assert.That(layout.RowCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void TryHit_ReturnsInsertionIndexForGapAndNewGroupTarget()
         {
             var layout = BoardLayout.Compute(CreateMelds(1, 3), 1.7f, new Vector2(0.64f, 0.97f));
@@ -53,6 +61,20 @@ namespace Mejnun.Game.Tests
             Assert.That(gapHit.InsertIndex, Is.EqualTo(1));
             Assert.That(layout.TryHit(layout.NewGroupSlot.center, out var newGroupHit), Is.True);
             Assert.That(newGroupHit.IsNewGroup, Is.True);
+        }
+
+        [Test]
+        public void TryHitMeldFrame_HitsOutlineButNotCardsOrNewGroupSlot()
+        {
+            var layout = BoardLayout.Compute(CreateMelds(1, 3), 1.7f, new Vector2(0.64f, 0.97f));
+            var meld = layout.Melds[0];
+            var framePoint = new Vector2(meld.Bounds.center.x, meld.Bounds.yMax + layout.CardSize.y * 0.1f);
+
+            Assert.That(layout.TryHitMeldFrame(framePoint, out var frameMeldId), Is.True);
+            Assert.That(frameMeldId, Is.EqualTo(meld.MeldId));
+            Assert.That(layout.TryHitMeldFrame(meld.CardRects[0].center, out _), Is.False);
+            Assert.That(layout.TryHitMeldFrame(layout.NewGroupSlot.center, out _), Is.False);
+            Assert.That(layout.TryHitMeldFrame(new Vector2(100f, 100f), out _), Is.False);
         }
 
         private static List<Meld> CreateMelds(int meldCount, int cardsPerMeld)

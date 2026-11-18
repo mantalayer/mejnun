@@ -96,6 +96,36 @@ namespace Mejnun.Game.Tests
             }
         }
 
+        [Test]
+        public void RedoReappliesTheWholeUndoneGroup()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out var straight);
+            var seat = game.State.CurrentSeat;
+            var controllerObject = new GameObject("Table Controller Test");
+            try
+            {
+                var controller = controllerObject.AddComponent<TableController>();
+                controller.Initialize(game);
+                Assert.That(controller.ApplyCommand(GameCommand.MoveCards(seat, straight,
+                    CardTarget.NewMeld(0))).Ok, Is.True);
+                var boardCount = game.State.Board[0].Cards.Count;
+
+                Assert.That(controller.UndoGesture().Ok, Is.True);
+                Assert.That(controller.RedoGroupCount, Is.EqualTo(1));
+                Assert.That(game.State.Board.Count, Is.EqualTo(0));
+                Assert.That(controller.RedoGesture().Ok, Is.True);
+
+                Assert.That(game.State.Board[0].Cards.Count, Is.EqualTo(boardCount));
+                Assert.That(MeldValidator.IsBoardValid(game.State.Board), Is.True);
+                Assert.That(controller.UndoGroupCount, Is.EqualTo(1));
+                Assert.That(controller.RedoGroupCount, Is.EqualTo(0));
+            }
+            finally
+            {
+                Object.DestroyImmediate(controllerObject);
+            }
+        }
+
         private static byte[] CopyCardIds(IReadOnlyList<Card> cards)
         {
             var ids = new byte[cards.Count];

@@ -63,5 +63,57 @@ namespace Mejnun.AI
 
             return playable;
         }
+
+        public static HashSet<byte> FindBoardMoves(GameState state)
+        {
+            var movable = new HashSet<byte>();
+            if (state == null || state.Phase != GamePhase.Playing || state.CurrentSeat < 0 ||
+                state.CurrentSeat >= state.Hands.Count || state.PlayerPhases[state.CurrentSeat] != PlayerPhase.Down)
+            {
+                return movable;
+            }
+
+            var candidate = new List<Card>(14);
+            var hand = state.Hands[state.CurrentSeat];
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var cards = state.Board[meldIndex].Cards;
+                if (!MeldValidator.Classify(cards).IsValid)
+                {
+                    continue;
+                }
+
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    candidate.Clear();
+                    for (var remainingIndex = 0; remainingIndex < cards.Count; remainingIndex++)
+                    {
+                        if (remainingIndex != cardIndex)
+                        {
+                            candidate.Add(cards[remainingIndex]);
+                        }
+                    }
+
+                    if (!MeldValidator.Classify(candidate).IsValid)
+                    {
+                        continue;
+                    }
+
+                    for (var handIndex = 0; handIndex < hand.Count; handIndex++)
+                    {
+                        candidate.Add(hand[handIndex]);
+                        var canReplace = MeldValidator.Classify(candidate).IsValid;
+                        candidate.RemoveAt(candidate.Count - 1);
+                        if (canReplace)
+                        {
+                            movable.Add(cards[cardIndex].Id);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return movable;
+        }
     }
 }

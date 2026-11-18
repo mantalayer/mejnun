@@ -29,6 +29,8 @@ namespace Mejnun.Game
         private BotTurnDriver botDriver;
         private int handoffSeat = -1;
         private int revealedSeat = -1;
+        private TurnTimer turnTimer;
+        private readonly CardTracker cardTracker = new CardTracker();
 
         public MejnunGame Game { get; private set; }
         public TableController Controller => tableController;
@@ -40,6 +42,8 @@ namespace Mejnun.Game
         public int CurrentSeat => Game == null ? -1 : Game.State.CurrentSeat;
         public ulong RoundSeed { get; private set; }
         public BotTurnDriver BotDriver => botDriver;
+        public TurnTimer TurnTimer => turnTimer;
+        public int TurnSeconds { get; private set; }
         public IReadOnlyList<SeatConfig> Seats => seats;
 
         public int HumanCount
@@ -128,6 +132,14 @@ namespace Mejnun.Game
             {
                 tableController.SetSeatInputFilter(seat => !IsBotSeat(seat));
             }
+
+            turnTimer = GetComponent<TurnTimer>();
+            if (turnTimer == null)
+            {
+                turnTimer = gameObject.AddComponent<TurnTimer>();
+            }
+
+            turnTimer.Configure(this, tableController, TurnSeconds);
         }
 
         private void OnEnable()
@@ -167,7 +179,7 @@ namespace Mejnun.Game
         }
 
         /// <summary>Starts a match with any mix of local humans and bots (at least one human).</summary>
-        public bool StartMatch(IReadOnlyList<SeatConfig> seatConfigs, ulong? seed = null)
+        public bool StartMatch(IReadOnlyList<SeatConfig> seatConfigs, ulong? seed = null, int turnSeconds = 0)
         {
             if (seatConfigs == null || seatConfigs.Count < 2 || seatConfigs.Count > 6)
             {
@@ -186,6 +198,8 @@ namespace Mejnun.Game
             }
 
             seats = new SeatConfig[seatConfigs.Count];
+            TurnSeconds = Mathf.Max(0, turnSeconds);
+            turnTimer?.SetDuration(TurnSeconds);
             playerNames = new string[seatConfigs.Count];
             for (var seat = 0; seat < seats.Length; seat++)
             {
@@ -197,12 +211,12 @@ namespace Mejnun.Game
                 }
 
                 playerNames[seat] = name.Trim();
-                seats[seat] = new SeatConfig(playerNames[seat], config.IsBot, config.Difficulty);
+                seats[seat] = new SeatConfig(playerNames[seat], config.IsBot, config.Difficulty, config.Style);
             }
 
             if (botDriver != null)
             {
-                botDriver.Configure(tableController, seats);
+                botDriver.Configure(tableController, seats, cardTracker);
             }
 
             return StartRound(null, seed ?? CreateSeed());
@@ -248,7 +262,7 @@ namespace Mejnun.Game
             }
 
             revealedSeat = CurrentSeat;
-            tableView.SetViewerSeat(-1);
+            tableView.SetViewerSeat(CurrentSeat);
             tableView.SetHandVisible(true);
             SetScreen(MatchFlowScreen.Turn);
             return true;
@@ -262,6 +276,56 @@ namespace Mejnun.Game
             }
 
             return StartRound(LastResult.NextDealer, CreateSeed());
+        }
+
+        public bool RestartMatch()
+        {
+            if (LastResult != null)
+            {
+                return Rematch();
+            }
+
+            return Game != null && StartRound(Game.Setup.Dealer, CreateSeed());
+        }
+
+        public void SetPaused(bool paused)
+        {
+            if (turnTimer != null)
+            {
+                turnTimer.Paused = paused;
+            }
+
+            if (tableController != null)
+            {
+                tableController.SetInputPaused(paused);
+            }
+
+            if (botDriver != null)
+            {
+                botDriver.SetPaused(paused);
+            }
+
+            if (tableView != null)
+            {
+                tableView.SetHandConcealed(paused);
+            }
+        }
+
+        public void ReturnToSetup()
+        {
+            SetPaused(false);
+            if (botDriver != null)
+            {
+                botDriver.Stop();
+            }
+
+            if (tableView != null)
+            {
+                tableView.SetHandVisible(false);
+                tableView.SetViewerSeat(-1);
+            }
+
+            SetScreen(MatchFlowScreen.Setup);
         }
 
         public string GetPlayerName(int seat)
@@ -290,6 +354,7 @@ namespace Mejnun.Game
             LastResult = null;
             handoffSeat = -1;
             revealedSeat = -1;
+            cardTracker.Reset();
             if (botDriver != null)
             {
                 botDriver.Stop();
@@ -309,6 +374,7 @@ namespace Mejnun.Game
 
         private void OnSynchronized(GameState state, TurnSession turn)
         {
+            cardTracker.Observe(state);
             if (state.Phase != GamePhase.Playing || state.CurrentSeat == handoffSeat)
             {
                 return;
@@ -328,7 +394,7 @@ namespace Mejnun.Game
                 revealedSeat = seat;
                 if (tableView != null)
                 {
-                    tableView.SetViewerSeat(-1);
+                    tableView.SetViewerSeat(seat);
                     tableView.SetHandVisible(true);
                 }
 

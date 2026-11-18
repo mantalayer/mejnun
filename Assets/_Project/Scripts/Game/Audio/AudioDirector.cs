@@ -1,0 +1,298 @@
+using System.Collections.Generic;
+using Mejnun.Audio;
+using Mejnun.Core;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+
+namespace Mejnun.Game
+{
+    public sealed class AudioDirector : MonoBehaviour
+    {
+        private readonly HashSet<VisualElement> hookedRoots = new HashSet<VisualElement>();
+        private IAudioService audioService;
+        private GameAudioMapper mapper;
+        private MatchFlow matchFlow;
+        private TurnTimer turnTimer;
+        private bool mainBankLoaded;
+        private bool timerSampleActive;
+        private string currentMusic;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void RegisterForSceneLoads()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            var flow = FindAnyObjectByType<MatchFlow>();
+            if (flow != null && FindAnyObjectByType<AudioDirector>() == null)
+            {
+                flow.gameObject.AddComponent<AudioDirector>();
+            }
+        }
+
+        private void Awake()
+        {
+            audioService = new WwiseAudioService(gameObject);
+            mapper = new GameAudioMapper(audioService);
+        }
+
+        private void OnEnable()
+        {
+            FeedbackCues.Raised += OnFeedbackCue;
+            AttachMatchFlow(FindAnyObjectByType<MatchFlow>());
+            HookUiDocuments();
+        }
+
+        private void OnDisable()
+        {
+            FeedbackCues.Raised -= OnFeedbackCue;
+            DetachMatchFlow();
+            UnhookUiDocuments();
+            mapper?.Unbind();
+            audioService?.Post(AudioIds.StopMusic);
+            currentMusic = null;
+        }
+
+        private void Update()
+        {
+            if (!mainBankLoaded && audioService.LoadBank("Main"))
+            {
+                mainBankLoaded = true;
+            }
+
+            SyncTurnTimer();
+            if (turnTimer != null && turnTimer.IsRunning)
+            {
+                mapper.ReportTurnTimer(turnTimer.RemainingSeconds, turnTimer.DurationSeconds);
+                timerSampleActive = true;
+            }
+            else if (timerSampleActive)
+            {
+                mapper.ReportTurnTimer(0f, 0f);
+                timerSampleActive = false;
+            }
+
+            mapper.AdvanceFrame(Time.unscaledDeltaTime);
+            HookUiDocuments();
+        }
+
+        public void ReportTurnTimer(float remainingSeconds, float totalSeconds)
+        {
+            mapper?.ReportTurnTimer(remainingSeconds, totalSeconds);
+        }
+
+        public void ReportTimeout()
+        {
+            mapper?.ReportTimeout();
+        }
+
+        private void AttachMatchFlow(MatchFlow flow)
+        {
+            if (matchFlow == flow)
+            {
+                if (matchFlow != null)
+                {
+                    BindGame(matchFlow.Game);
+                    UpdateScreen(matchFlow.Screen);
+                }
+
+                return;
+            }
+
+            DetachMatchFlow();
+            matchFlow = flow;
+            if (matchFlow == null)
+            {
+                return;
+            }
+
+            SyncTurnTimer();
+            matchFlow.ScreenChanged += OnScreenChanged;
+            if (matchFlow.Controller != null)
+            {
+                matchFlow.Controller.Synchronized += OnSynchronized;
+            }
+
+            BindGame(matchFlow.Game);
+            UpdateScreen(matchFlow.Screen);
+        }
+
+        private void DetachMatchFlow()
+        {
+            if (turnTimer != null)
+            {
+                turnTimer.TimedOut -= OnTurnTimerTimedOut;
+                turnTimer = null;
+            }
+
+            if (timerSampleActive)
+            {
+                mapper?.ReportTurnTimer(0f, 0f);
+                timerSampleActive = false;
+            }
+
+            if (matchFlow != null)
+            {
+                matchFlow.ScreenChanged -= OnScreenChanged;
+                if (matchFlow.Controller != null)
+                {
+                    matchFlow.Controller.Synchronized -= OnSynchronized;
+                }
+            }
+
+            matchFlow = null;
+        }
+
+        private void SyncTurnTimer()
+        {
+            var currentTimer = matchFlow == null ? null : matchFlow.TurnTimer;
+            if (turnTimer == currentTimer)
+            {
+                return;
+            }
+
+            if (turnTimer != null)
+            {
+                turnTimer.TimedOut -= OnTurnTimerTimedOut;
+            }
+
+            turnTimer = currentTimer;
+            if (turnTimer != null)
+            {
+                turnTimer.TimedOut += OnTurnTimerTimedOut;
+            }
+        }
+
+        private void OnTurnTimerTimedOut()
+        {
+            ReportTimeout();
+        }
+
+        private void OnScreenChanged(MatchFlowScreen screen)
+        {
+            BindGame(matchFlow == null ? null : matchFlow.Game);
+            UpdateScreen(screen);
+        }
+
+        private void OnSynchronized(GameState state, TurnSession turn)
+        {
+            if (matchFlow != null)
+            {
+                BindGame(matchFlow.Game);
+            }
+
+            audioService.SetRtpc(AudioIds.BoardComplexity, Mathf.Clamp01(state.Board.Count / 6f));
+        }
+
+        private void BindGame(MejnunGame game)
+        {
+            if (game == null)
+            {
+                mapper.Unbind();
+                return;
+            }
+
+            mapper.Bind(game, seat => matchFlow == null || !matchFlow.IsBotSeat(seat),
+                matchFlow == null ? game.Setup.SeatCount : matchFlow.HumanCount);
+        }
+
+        private void UpdateScreen(MatchFlowScreen screen)
+        {
+            switch (screen)
+            {
+                case MatchFlowScreen.Setup:
+                    audioService.SetState(AudioIds.GamePhase, AudioIds.PhaseMenu);
+                    SetMusic(AudioIds.MusicMenu);
+                    break;
+                case MatchFlowScreen.DealerQuestion:
+                    audioService.SetState(AudioIds.GamePhase, AudioIds.PhaseDealing);
+                    SetMusic(AudioIds.MusicGame);
+                    break;
+                case MatchFlowScreen.Results:
+                    audioService.SetState(AudioIds.GamePhase, AudioIds.PhaseResults);
+                    SetMusic(AudioIds.MusicGame);
+                    break;
+                default:
+                    audioService.SetState(AudioIds.GamePhase, AudioIds.PhasePlaying);
+                    SetMusic(AudioIds.MusicGame);
+                    break;
+            }
+        }
+
+        private void SetMusic(string eventName)
+        {
+            if (currentMusic == eventName)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(currentMusic))
+            {
+                audioService.Post(AudioIds.StopMusic);
+            }
+
+            audioService.Post(eventName);
+            currentMusic = eventName;
+        }
+
+        private void OnFeedbackCue(FeedbackCue cue)
+        {
+            switch (cue)
+            {
+                case FeedbackCue.Pickup:
+                    audioService.Post(AudioIds.PlayCardPickup);
+                    break;
+                case FeedbackCue.LongPress:
+                    audioService.Post(AudioIds.PlayCardLongPress);
+                    break;
+                case FeedbackCue.Drop:
+                    mapper.ReportDropCue();
+                    break;
+                case FeedbackCue.Invalid:
+                    audioService.Post(AudioIds.PlayCardInvalid);
+                    break;
+            }
+        }
+
+        private void HookUiDocuments()
+        {
+            var documents = FindObjectsByType<UIDocument>();
+            for (var index = 0; index < documents.Length; index++)
+            {
+                var root = documents[index].rootVisualElement;
+                if (root != null && hookedRoots.Add(root))
+                {
+                    root.RegisterCallback<ClickEvent>(OnUiClick, TrickleDown.TrickleDown);
+                }
+            }
+        }
+
+        private void UnhookUiDocuments()
+        {
+            foreach (var root in hookedRoots)
+            {
+                root.UnregisterCallback<ClickEvent>(OnUiClick, TrickleDown.TrickleDown);
+            }
+
+            hookedRoots.Clear();
+        }
+
+        private void OnUiClick(ClickEvent evt)
+        {
+            var target = evt.target as VisualElement;
+            while (target != null && !(target is Button))
+            {
+                target = target.parent;
+            }
+
+            if (target != null)
+            {
+                audioService.Post(AudioIds.PlayUiClick);
+            }
+        }
+    }
+}

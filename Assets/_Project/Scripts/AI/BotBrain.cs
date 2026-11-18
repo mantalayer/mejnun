@@ -30,17 +30,19 @@ namespace Mejnun.AI
     /// </summary>
     public static class BotBrain
     {
-        public static BotTurnPlan PlanTurn(MejnunGame game, BotDifficulty difficulty, ulong randomSeed)
+        public static BotTurnPlan PlanTurn(MejnunGame game, BotDifficulty difficulty, ulong randomSeed,
+            BotStyle style = BotStyle.Balanced, BotKnowledge knowledge = null)
         {
             if (game == null)
             {
                 throw new ArgumentNullException(nameof(game));
             }
 
-            return PlanTurn(SnapshotSerializer.Write(game), difficulty, randomSeed);
+            return PlanTurn(SnapshotSerializer.Write(game), difficulty, randomSeed, style, knowledge);
         }
 
-        public static BotTurnPlan PlanTurn(byte[] snapshot, BotDifficulty difficulty, ulong randomSeed)
+        public static BotTurnPlan PlanTurn(byte[] snapshot, BotDifficulty difficulty, ulong randomSeed,
+            BotStyle style = BotStyle.Balanced, BotKnowledge knowledge = null)
         {
             var scratch = SnapshotSerializer.Read(snapshot);
             var state = scratch.State;
@@ -59,8 +61,22 @@ namespace Mejnun.AI
             }
 
             var handBefore = state.Hands[seat].Count;
-            var intent = BotStrategies.Plan(difficulty, BotContext.From(state, seat), new Pcg32(randomSeed));
+            var random = new Pcg32(randomSeed);
+            var strategyDifficulty = style == BotStyle.Blocker ? BotDifficulty.Hard : difficulty;
+            var intent = BotStrategies.Plan(strategyDifficulty, BotContext.From(state, seat), random);
             if (intent.IsDraw)
+            {
+                return Draw(seat, null);
+            }
+
+            if (style == BotStyle.HoldBack && random.NextInt(100) < 30)
+            {
+                return Draw(seat, null);
+            }
+
+            if (style == BotStyle.Blocker && intent.FinalBoard != null && knowledge != null &&
+                !knowledge.WouldEnableKnownExtender(ToBoardCards(state.Board), seat) &&
+                knowledge.WouldEnableKnownExtender(intent.FinalBoard, seat))
             {
                 return Draw(seat, null);
             }
@@ -96,6 +112,17 @@ namespace Mejnun.AI
         private static BotTurnPlan Draw(int seat, string reason)
         {
             return new BotTurnPlan(new List<GameCommand> { GameCommand.DrawOrPass(seat) }, 0, reason);
+        }
+
+        private static List<IReadOnlyList<Card>> ToBoardCards(IReadOnlyList<Meld> board)
+        {
+            var melds = new List<IReadOnlyList<Card>>(board.Count);
+            for (var index = 0; index < board.Count; index++)
+            {
+                melds.Add(board[index].Cards);
+            }
+
+            return melds;
         }
     }
 }

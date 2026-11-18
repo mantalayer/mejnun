@@ -47,6 +47,54 @@ namespace Mejnun.Game
             order.Insert(clampedIndex, cardId);
         }
 
+        public void ReorderGroup(int seat, IReadOnlyList<byte> cardIds, int targetIndex)
+        {
+            if (cardIds == null || cardIds.Count == 0)
+            {
+                return;
+            }
+
+            var order = GetOrCreateOrder(seat);
+            var group = new List<byte>(cardIds.Count);
+            var firstIndex = int.MaxValue;
+            var lastIndex = -1;
+            for (var index = 0; index < order.Count; index++)
+            {
+                if (Contains(cardIds, order[index]))
+                {
+                    group.Add(order[index]);
+                    firstIndex = System.Math.Min(firstIndex, index);
+                    lastIndex = index;
+                }
+            }
+
+            if (group.Count == 0)
+            {
+                return;
+            }
+
+            var originalCount = order.Count;
+            if (targetIndex >= firstIndex && targetIndex <= lastIndex + 1)
+            {
+                return;
+            }
+
+            var removedBeforeTarget = 0;
+            for (var index = 0; index < order.Count && index < targetIndex; index++)
+            {
+                if (Contains(group, order[index]))
+                {
+                    removedBeforeTarget++;
+                }
+            }
+
+            order.RemoveAll(id => group.Contains(id));
+            var insertion = targetIndex >= originalCount - 1 ? order.Count : targetIndex - removedBeforeTarget;
+            insertion = insertion < 0 ? 0 : insertion > order.Count ? order.Count : insertion;
+
+            order.InsertRange(insertion, group);
+        }
+
         public void SortBySuit(int seat, IReadOnlyList<Card> hand)
         {
             Synchronize(seat, hand);
@@ -90,6 +138,19 @@ namespace Mejnun.Game
             for (var index = 0; index < cards.Count; index++)
             {
                 if (cards[index].Id == cardId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool Contains(IReadOnlyList<byte> cardIds, byte cardId)
+        {
+            for (var index = 0; index < cardIds.Count; index++)
+            {
+                if (cardIds[index] == cardId)
                 {
                     return true;
                 }

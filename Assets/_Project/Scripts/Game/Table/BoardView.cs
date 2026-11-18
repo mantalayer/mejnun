@@ -76,6 +76,14 @@ namespace Mejnun.Game
             }
         }
 
+        public void SetMeldOutlineOffset(int meldId, Vector3 offset)
+        {
+            if (outlines.TryGetValue(meldId, out var outline))
+            {
+                outline.transform.localPosition = offset;
+            }
+        }
+
         public BoardLayoutResult Layout(IReadOnlyList<Meld> board, IReadOnlyDictionary<byte, CardView> cardViews,
             float viewportAspect, Vector2 cardSize)
         {
@@ -102,6 +110,7 @@ namespace Mejnun.Game
 
                 var outline = GetOutline(meld.Id);
                 staleMeldIds.Remove(meld.Id);
+                outline.transform.localPosition = Vector3.zero;
                 outline.SetBounds(meldLayout.Bounds, MeldValidator.Classify(meld.Cards).IsValid, cardSize);
                 for (var cardIndex = 0; cardIndex < meld.Cards.Count && cardIndex < meldLayout.CardRects.Count;
                      cardIndex++)
@@ -111,7 +120,9 @@ namespace Mejnun.Game
                     {
                         var center = meldLayout.CardRects[cardIndex].center;
                         view.SetSortingOrder(10);
-                        view.MoveTo(new Vector3(center.x, center.y, 0f));
+                        var world = transform.TransformPoint(new Vector3(center.x, center.y, 0f));
+                        var parent = view.transform.parent;
+                        view.MoveTo(parent == null ? world : parent.InverseTransformPoint(world));
                     }
                 }
             }
@@ -131,8 +142,9 @@ namespace Mejnun.Game
             }
 
             var rect = CurrentLayout.Bounds;
-            CurrentBounds = new Bounds(new Vector3(rect.center.x, rect.center.y, 0f),
-                new Vector3(rect.width, rect.height, 0f));
+            var boundsCenter = transform.TransformPoint(new Vector3(rect.center.x, rect.center.y, 0f));
+            var boundsSize = transform.TransformVector(new Vector3(rect.width, rect.height, 0f));
+            CurrentBounds = new Bounds(boundsCenter, boundsSize);
             return CurrentLayout;
         }
 
