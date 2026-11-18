@@ -174,6 +174,118 @@ namespace Mejnun.Game
             return ComputeOrganic(melds, cardSize, overlapSets, preferredOrigins, hints, null, null, out origins);
         }
 
+        public static Dictionary<int, Vector2> CompactOrganic(IReadOnlyDictionary<int, Rect> meldBounds,
+            float horizontalGap, float verticalGap)
+        {
+            var positions = new Dictionary<int, Vector2>();
+            if (meldBounds == null || meldBounds.Count == 0)
+            {
+                return positions;
+            }
+
+            horizontalGap = Mathf.Max(0f, horizontalGap);
+            verticalGap = Mathf.Max(0f, verticalGap);
+
+            var ids = new List<int>(meldBounds.Keys);
+            var rects = new Dictionary<int, Rect>(meldBounds.Count);
+            var bounds = default(Rect);
+            var hasBounds = false;
+            for (var index = 0; index < ids.Count; index++)
+            {
+                var rect = meldBounds[ids[index]];
+                rects.Add(ids[index], rect);
+                bounds = AddToBounds(bounds, rect, ref hasBounds);
+            }
+
+            var center = bounds.center;
+            for (var pass = 0; pass < 3; pass++)
+            {
+                ids.Sort((left, right) =>
+                {
+                    var leftDistance = (rects[left].center - center).sqrMagnitude;
+                    var rightDistance = (rects[right].center - center).sqrMagnitude;
+                    var comparison = leftDistance.CompareTo(rightDistance);
+                    return comparison != 0 ? comparison : left.CompareTo(right);
+                });
+
+                for (var index = 0; index < ids.Count; index++)
+                {
+                    var id = ids[index];
+                    var rect = rects[id];
+                    rect = SlideTowardCenter(rect, ids, rects, id, center, 1, horizontalGap, verticalGap);
+                    rect = SlideTowardCenter(rect, ids, rects, id, center, 0, horizontalGap, verticalGap);
+                    rects[id] = rect;
+                }
+            }
+
+            foreach (var pair in rects)
+            {
+                positions.Add(pair.Key, pair.Value.position);
+            }
+
+            return positions;
+        }
+
+        private static Rect SlideTowardCenter(Rect rect, IReadOnlyList<int> ids,
+            IReadOnlyDictionary<int, Rect> rects, int movingId, Vector2 center, int axis, float horizontalGap,
+            float verticalGap)
+        {
+            var amount = axis == 0 ? center.x - rect.center.x : center.y - rect.center.y;
+            if (Mathf.Abs(amount) <= 0.0001f)
+            {
+                return rect;
+            }
+
+            var direction = Mathf.Sign(amount);
+            var limit = Mathf.Abs(amount);
+            for (var index = 0; index < ids.Count; index++)
+            {
+                var otherId = ids[index];
+                if (otherId == movingId)
+                {
+                    continue;
+                }
+
+                var other = rects[otherId];
+                var perpendicularGap = axis == 0 ? verticalGap : horizontalGap;
+                var perpendicularMin = axis == 0 ? rect.yMin : rect.xMin;
+                var perpendicularMax = axis == 0 ? rect.yMax : rect.xMax;
+                var otherPerpendicularMin = axis == 0 ? other.yMin : other.xMin;
+                var otherPerpendicularMax = axis == 0 ? other.yMax : other.xMax;
+                if (perpendicularMax + perpendicularGap <= otherPerpendicularMin ||
+                    perpendicularMin - perpendicularGap >= otherPerpendicularMax)
+                {
+                    continue;
+                }
+
+                var min = axis == 0 ? other.xMin : other.yMin;
+                var max = axis == 0 ? other.xMax : other.yMax;
+                var movingMin = axis == 0 ? rect.xMin : rect.yMin;
+                var movingMax = axis == 0 ? rect.xMax : rect.yMax;
+                var gap = axis == 0 ? horizontalGap : verticalGap;
+                if (direction > 0f && min >= movingMax - 0.0001f)
+                {
+                    limit = Mathf.Min(limit, Mathf.Max(0f, min - movingMax - gap));
+                }
+                else if (direction < 0f && max <= movingMin + 0.0001f)
+                {
+                    limit = Mathf.Min(limit, Mathf.Max(0f, movingMin - max - gap));
+                }
+            }
+
+            var delta = direction * limit;
+            if (axis == 0)
+            {
+                rect.x += delta;
+            }
+            else
+            {
+                rect.y += delta;
+            }
+
+            return rect;
+        }
+
         public static BoardLayoutResult ComputeOrganic(IReadOnlyList<Meld> melds, Vector2 cardSize, bool overlapSets,
             IReadOnlyDictionary<int, Vector2> preferredOrigins, IReadOnlyDictionary<int, Vector2> hints,
             Rect? placementArea, ICollection<int> constrainedMeldIds, out Dictionary<int, Vector2> origins,

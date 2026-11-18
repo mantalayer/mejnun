@@ -422,6 +422,41 @@ namespace Mejnun.Game
             return true;
         }
 
+        public bool CompactOrganicBoard()
+        {
+            if (!GameSettings.OrganicBoard || CurrentLayout == null || lastBoard == null || lastCardViews == null)
+            {
+                return false;
+            }
+
+            var bounds = new Dictionary<int, Rect>(CurrentLayout.Melds.Count);
+            for (var index = 0; index < CurrentLayout.Melds.Count; index++)
+            {
+                var meld = CurrentLayout.Melds[index];
+                bounds.Add(meld.MeldId, meld.Bounds);
+            }
+
+            var compacted = BoardLayout.CompactOrganic(bounds,
+                lastCardSize.x * (GameSettings.OverlapSets ? 0.6f : 0.38f), lastCardSize.y * 0.28f);
+            var moved = false;
+            foreach (var pair in compacted)
+            {
+                if (!organicOrigins.TryGetValue(pair.Key, out var current) ||
+                    (current - pair.Value).sqrMagnitude > 0.000001f)
+                {
+                    organicOrigins[pair.Key] = pair.Value;
+                    moved = true;
+                }
+            }
+
+            if (moved)
+            {
+                Layout(lastBoard, lastCardViews, lastViewportAspect, lastCardSize, liftedCardIds);
+            }
+
+            return moved;
+        }
+
         public BoardLayoutResult Layout(IReadOnlyList<Meld> board, IReadOnlyDictionary<byte, CardView> cardViews,
             float viewportAspect, Vector2 cardSize, ICollection<byte> liftedCardIds = null)
         {

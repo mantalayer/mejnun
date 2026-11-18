@@ -429,6 +429,44 @@ namespace Mejnun.Core.Tests
         }
 
         [Test]
+        public void Turn_CannotMoveCardFromSetIntoDifferentSet()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "6H", "6D", "6S" }, new[] { "QH", "QC", "QD", "QS" });
+            GameBuilder.SetHand(game, 0, "5D");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalSixes = game.State.Board[0].Cards.ToArray();
+            var originalQueens = game.State.Board[1].Cards.ToArray();
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("6H"), CardTarget.Meld(2, 4)));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.InvalidCardForSet));
+            CollectionAssert.AreEqual(originalSixes, game.State.Board[0].Cards);
+            CollectionAssert.AreEqual(originalQueens, game.State.Board[1].Cards);
+            Assert.That(game.Turn.Moves, Is.Empty);
+        }
+
+        [Test]
+        public void Turn_CannotMoveOffSuitCardIntoExistingStraight()
+        {
+            var game = NewGame();
+            GameBuilder.SetBoard(game, new[] { "6H", "6D", "6S" }, new[] { "4C", "5C", "6C" });
+            GameBuilder.SetHand(game, 0, "5D");
+            GameBuilder.SetPlayerPhase(game, 0, PlayerPhase.Down);
+            var originalSixes = game.State.Board[0].Cards.ToArray();
+            var originalStraight = game.State.Board[1].Cards.ToArray();
+
+            var result = game.Apply(GameCommand.MoveCards(0, Ids("6S"), CardTarget.Meld(2, 3)));
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Error, Is.EqualTo(RuleError.InvalidCardForSet));
+            CollectionAssert.AreEqual(originalSixes, game.State.Board[0].Cards);
+            CollectionAssert.AreEqual(originalStraight, game.State.Board[1].Cards);
+            Assert.That(game.Turn.Moves, Is.Empty);
+        }
+
+        [Test]
         public void Turn_CannotGrowMeldBeyondThirteenCards()
         {
             var game = NewGame();

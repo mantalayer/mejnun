@@ -14,85 +14,97 @@
         <ui:VisualElement class="settings-pages">
         <ui:ScrollView name="settings-page-gameplay" class="settings-scroll settings-page">
             <ui:Label class="settings-section-title" text="Gameplay &amp; confirmations" />
-            <ui:Toggle name="confirm-revert-toggle" label="Confirm board revert" />
-            <ui:Toggle name="confirm-draw-toggle" label="Confirm drawing a card" />
-            <ui:Toggle name="confirm-fix-toggle" label="Confirm fixing the board" />
-            <ui:Toggle name="confirm-leave-toggle" label="Confirm leaving or restarting" />
+            <ui:Toggle name="confirm-revert-toggle" label="Confirm board revert" tooltip="Ask before returning all cards to your hand." />
+            <ui:Toggle name="confirm-draw-toggle" label="Confirm drawing a card" tooltip="Ask before drawing or passing when available." />
+            <ui:Toggle name="confirm-fix-toggle" label="Confirm fixing the board" tooltip="Ask before returning invalid cards to your hand." />
+            <ui:Toggle name="confirm-leave-toggle" label="Confirm leaving or restarting" tooltip="Ask before leaving or restarting a game." />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="CPU move speed" />
-                <ui:DropdownField name="cpu-speed-dropdown" choices="Glacial,Very slow,Slow,Normal,Fast,Very fast" />
+                <ui:DropdownField name="cpu-speed-dropdown" choices="Glacial,Very slow,Slow,Normal,Fast,Very fast" tooltip="Controls how quickly CPU players make their moves." />
             </ui:VisualElement>
-            <ui:Toggle name="easy-opening-deal-toggle" label="Everyone can go down first turn" />
-            <ui:Toggle name="show-fast-forward-toggle" label="Show fast-forward button" />
+            <ui:Toggle name="easy-opening-deal-toggle" label="Everyone can go down first turn" tooltip="Allows each player to go down during their first turn." />
+            <ui:Toggle name="show-fast-forward-toggle" label="Show fast-forward button" tooltip="Show a control for speeding through CPU turns." />
         </ui:ScrollView>
 
         <ui:ScrollView name="settings-page-table" class="settings-scroll settings-page" style="display: none">
             <ui:Label class="settings-section-title" text="Table &amp; hand" />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Arc amount" />
-                <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5" />
+                <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5" tooltip="Adjusts how much your hand curves." />
+                <ui:Label name="hand-arc-amount-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Card spread" />
-                <ui:Slider name="hand-spread-slider" low-value="0.25" high-value="0.9" />
+                <ui:Slider name="hand-spread-slider" low-value="0.25" high-value="0.9" tooltip="Changes the spacing between cards in your hand." />
+                <ui:Label name="hand-spread-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Card size" />
-                <ui:Slider name="hand-card-scale-slider" low-value="0.5" high-value="1.5" />
+                <ui:Slider name="hand-card-scale-slider" low-value="0.5" high-value="1.5" tooltip="Changes the size of your hand cards." />
+                <ui:Label name="hand-card-scale-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Opponent card size" />
-                <ui:Slider name="opponent-card-scale-slider" low-value="0.5" high-value="2" />
+                <ui:Slider name="opponent-card-scale-slider" low-value="0.5" high-value="2" tooltip="Changes the size of cards shown in other players' hands." />
+                <ui:Label name="opponent-card-scale-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Zoom sensitivity" />
-                <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5" />
+                <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5" tooltip="Controls how quickly the table zooms when scrolling." />
+                <ui:Label name="zoom-sensitivity-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Raise hand" />
-                <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5" />
+                <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5" tooltip="Adjusts how far cards rise when selected or hovered." />
+                <ui:Label name="hand-lift-value" class="setting-value" />
             </ui:VisualElement>
-            <ui:Toggle name="overlap-sets-toggle" label="Overlap cards in sets" />
-            <ui:Toggle name="organic-board-toggle" label="Place sets organically" />
+            <ui:Toggle name="overlap-sets-toggle" label="Overlap cards in sets" tooltip="Stacks cards within a set to save table space." />
+            <ui:Toggle name="organic-board-toggle" label="Place sets organically" tooltip="Lets sets occupy open areas of the table instead of a strict grid." />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Board card spread" />
-                <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5" />
+                <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5" tooltip="Changes the spacing between cards in board sets." />
+                <ui:Label name="board-card-spread-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Card messiness" />
-                <ui:Slider name="card-messiness-slider" low-value="0" high-value="1" />
+                <ui:Slider name="card-messiness-slider" low-value="0" high-value="1" tooltip="Adds a small natural variation to card placement." />
+                <ui:Label name="card-messiness-value" class="setting-value" />
             </ui:VisualElement>
         </ui:ScrollView>
 
         <ui:ScrollView name="settings-page-hints" class="settings-scroll settings-page" style="display: none">
             <ui:Label class="settings-section-title" text="Hints" />
-            <ui:Toggle name="hint-board-moves-toggle" label="Hint useful board cards" />
-            <ui:Toggle name="hint-jiggle-toggle" label="Jiggle hinted cards" />
+            <ui:Toggle name="hint-board-moves-toggle" label="Hint useful board cards" tooltip="Highlights board cards that may help with a legal move." />
+            <ui:Toggle name="hint-jiggle-toggle" label="Jiggle hinted cards" tooltip="Uses a short animation to draw attention to hinted cards." />
         </ui:ScrollView>
 
         <ui:ScrollView name="settings-page-accessibility" class="settings-scroll settings-page" style="display: none">
             <ui:Label class="settings-section-title" text="Accessibility" />
-            <ui:Toggle name="reduced-motion-toggle" label="Reduce motion" />
-            <ui:Toggle name="haptics-toggle" label="Haptics" />
+            <ui:Toggle name="reduced-motion-toggle" label="Reduce motion" tooltip="Reduces nonessential movement and animation." />
+            <ui:Toggle name="haptics-toggle" label="Haptics" tooltip="Enables vibration feedback on supported devices." />
         </ui:ScrollView>
 
         <ui:ScrollView name="settings-page-audio" class="settings-scroll settings-page" style="display: none">
             <ui:Label class="settings-section-title" text="Audio" />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Master volume" />
-                <ui:Slider name="volume-master-slider" low-value="0" high-value="1" />
+                <ui:Slider name="volume-master-slider" low-value="0" high-value="1" tooltip="Sets the overall game volume." />
+                <ui:Label name="volume-master-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Music volume" />
-                <ui:Slider name="volume-music-slider" low-value="0" high-value="1" />
+                <ui:Slider name="volume-music-slider" low-value="0" high-value="1" tooltip="Sets the background music volume." />
+                <ui:Label name="volume-music-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Effects volume" />
-                <ui:Slider name="volume-sfx-slider" low-value="0" high-value="1" />
+                <ui:Slider name="volume-sfx-slider" low-value="0" high-value="1" tooltip="Sets the card and interface effects volume." />
+                <ui:Label name="volume-sfx-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Voice volume" />
-                <ui:Slider name="volume-voice-slider" low-value="0" high-value="1" />
+                <ui:Slider name="volume-voice-slider" low-value="0" high-value="1" tooltip="Sets the voice volume." />
+                <ui:Label name="volume-voice-value" class="setting-value" />
             </ui:VisualElement>
         </ui:ScrollView>
 
@@ -100,21 +112,22 @@
             <ui:Label class="settings-section-title" text="Language" />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Language" />
-                <ui:DropdownField name="language-dropdown" choices="English" />
+                <ui:DropdownField name="language-dropdown" choices="English" tooltip="Selects the interface language." />
             </ui:VisualElement>
 
             <ui:Label class="settings-section-title" text="Online" />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Fill quick matches with bots" />
-                <ui:DropdownField name="quick-match-bot-fill-dropdown" choices="Off,30 seconds,60 seconds" />
+                <ui:DropdownField name="quick-match-bot-fill-dropdown" choices="Off,30 seconds,60 seconds" tooltip="Sets how long quick matches wait before adding CPU players." />
             </ui:VisualElement>
 
             <ui:VisualElement name="account-settings-section">
                 <ui:Label class="settings-section-title" text="Account" />
-                <ui:Button name="account-placeholder-button" text="Account features coming later" enabled="false" />
+                <ui:Button name="account-placeholder-button" text="Account features coming later" enabled="false" tooltip="Account features are not available yet." />
             </ui:VisualElement>
         </ui:ScrollView>
         </ui:VisualElement>
+        <ui:Label name="settings-tooltip" class="settings-tooltip" picking-mode="Ignore" />
         <ui:Button name="settings-close-button" class="hud-button primary-button" text="Done" />
     </ui:VisualElement>
 </ui:UXML>

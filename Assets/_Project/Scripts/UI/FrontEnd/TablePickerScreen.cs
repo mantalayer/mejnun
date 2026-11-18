@@ -658,10 +658,9 @@ namespace Mejnun.UI.FrontEnd
 
         private VisualElement BuildRandomDeckPreview()
         {
-            var skin = catalog?.Decks?.Resolve(DeckFaceAssigner.ClassicFace, 0);
-            return skin == null
-                ? CosmeticPreviews.BuildDeckFan(null)
-                : CosmeticPreviews.BuildDeckFan(skin);
+            var preview = new VisualElement();
+            preview.AddToClassList("random-deck-logo");
+            return preview;
         }
 
         public MatchRequest CreateMatchRequest()

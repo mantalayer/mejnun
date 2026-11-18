@@ -27,6 +27,7 @@ namespace Mejnun.UI
             }
 
             var root = uiDocument.rootVisualElement;
+            root.pickingMode = PickingMode.Ignore;
             flowRoot = root.Q<VisualElement>("flow-root");
             dealerQuestionScreen = new DealerQuestionScreen(root, matchFlow);
             handoffScreen = new HandoffScreen(root, matchFlow);

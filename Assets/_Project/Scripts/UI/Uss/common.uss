@@ -27,6 +27,14 @@
     color: rgb(248, 250, 255);
 }
 
+:root {
+    --unity-colors-dropdown-background: rgb(24, 48, 36);
+    --unity-colors-dropdown-hover: rgb(65, 112, 75);
+    --unity-colors-highlight-background: rgb(65, 112, 75);
+    --unity-colors-highlight-foreground: rgb(248, 250, 238);
+}
+
+.unity-base-popup-field,
 .unity-base-popup-field__input {
     color: rgb(248, 250, 238);
     background-color: rgb(47, 91, 62);
@@ -36,19 +44,88 @@
     border-bottom-color: rgb(96, 142, 105);
 }
 
-.unity-base-popup-field__text {
+.unity-base-popup-field:hover,
+.unity-base-popup-field:focus,
+.unity-base-popup-field:active,
+.unity-base-popup-field:hover .unity-base-popup-field__input,
+.unity-base-popup-field:focus .unity-base-popup-field__input,
+.unity-base-popup-field__input:hover,
+.unity-base-popup-field__input:enabled:hover,
+.unity-base-popup-field__input:focus,
+.unity-base-popup-field__input:active {
+    color: rgb(248, 250, 238);
+    background-color: rgb(65, 112, 75);
+    border-left-color: rgb(125, 172, 127);
+    border-right-color: rgb(125, 172, 127);
+    border-top-color: rgb(125, 172, 127);
+    border-bottom-color: rgb(125, 172, 127);
+}
+
+.unity-base-popup-field__text,
+.unity-base-dropdown__label {
     color: rgb(248, 250, 238);
 }
 
-.unity-base-dropdown__container {
+.unity-base-text-field__input {
+    color: rgb(248, 250, 238);
+    background-color: rgb(47, 91, 62);
+    border-left-color: rgb(96, 142, 105);
+    border-right-color: rgb(96, 142, 105);
+    border-top-color: rgb(96, 142, 105);
+    border-bottom-color: rgb(96, 142, 105);
+}
+
+.unity-base-text-field__input:hover,
+.unity-base-text-field__input:focus,
+.unity-base-text-field__input:active {
+    color: rgb(248, 250, 238);
+    background-color: rgb(65, 112, 75);
+}
+
+.unity-base-dropdown__container,
+.unity-base-dropdown__container-outer,
+.unity-base-dropdown__container-inner {
     background-color: rgb(24, 48, 36);
+}
+
+.unity-base-dropdown__container-outer,
+.unity-base-dropdown__container-inner {
+    min-width: 280px;
+}
+
+.unity-base-dropdown__container-outer .unity-scroll-view__horizontal-scroller {
+    display: none;
 }
 
 .unity-base-dropdown__item {
     color: rgb(248, 250, 238);
     background-color: rgb(36, 67, 47);
+    white-space: nowrap;
 }
 
-.unity-base-dropdown__item:hover {
+.unity-base-dropdown__container-outer .unity-base-dropdown__container-inner .unity-base-dropdown__item:hover,
+.unity-base-dropdown__container-outer .unity-base-dropdown__container-inner .unity-base-dropdown__item:enabled:hover,
+.unity-base-dropdown__container-outer .unity-base-dropdown__container-inner .unity-base-dropdown__item:checked,
+.unity-base-dropdown__container-outer .unity-base-dropdown__container-inner .unity-base-dropdown__item:focus {
+    color: rgb(248, 250, 238);
     background-color: rgb(65, 112, 75);
+}
+
+.unity-base-dropdown__container-outer .unity-base-dropdown__item:hover > .unity-base-dropdown__item-text,
+.unity-base-dropdown__container-outer .unity-base-dropdown__item:checked > .unity-base-dropdown__item-text,
+.unity-base-dropdown__container-outer .unity-base-dropdown__item:hover > .unity-base-dropdown__label,
+.unity-base-dropdown__container-outer .unity-base-dropdown__item:checked > .unity-base-dropdown__label {
+    color: rgb(248, 250, 238);
+}
+.unity-base-field.unity-base-popup-field:hover:enabled > .unity-base-field__input.unity-base-popup-field__input,
+.unity-base-field.unity-base-popup-field:focus:enabled > .unity-base-field__input.unity-base-popup-field__input,
+.unity-base-field.unity-base-popup-field:active:enabled > .unity-base-field__input.unity-base-popup-field__input,
+.unity-base-field.unity-base-popup-field > .unity-base-field__input.unity-base-popup-field__input:hover:enabled,
+.unity-base-field.unity-base-popup-field > .unity-base-field__input.unity-base-popup-field__input:focus,
+.unity-base-field.unity-base-popup-field > .unity-base-field__input.unity-base-popup-field__input:active {
+    background-color: rgb(30, 74, 46);
+    border-left-color: rgb(125, 172, 127);
+    border-right-color: rgb(125, 172, 127);
+    border-top-color: rgb(125, 172, 127);
+    border-bottom-color: rgb(125, 172, 127);
 }

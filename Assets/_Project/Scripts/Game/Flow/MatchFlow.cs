@@ -34,6 +34,9 @@ namespace Mejnun.Game
         private MejnunGame lastSavedGame;
         private int lastSavedTurnNumber = -1;
         private bool resultRecorded;
+        private bool matchPaused;
+        private bool applicationPaused;
+        private float elapsedMatchSeconds;
         private MatchRequest activeRequest;
         private readonly CardTracker cardTracker = new CardTracker();
 
@@ -197,6 +200,14 @@ namespace Mejnun.Game
             }
 
             SetScreen(MatchFlowScreen.Idle);
+        }
+
+        private void Update()
+        {
+            if (!matchPaused && !applicationPaused && Game != null && Game.State.Phase == GamePhase.Playing)
+            {
+                elapsedMatchSeconds += Time.unscaledDeltaTime;
+            }
         }
 
         private void OnDisable()
@@ -456,6 +467,7 @@ namespace Mejnun.Game
 
         public void SetPaused(bool paused)
         {
+            matchPaused = paused;
             if (turnTimer != null)
             {
                 turnTimer.Paused = paused;
@@ -530,6 +542,8 @@ namespace Mejnun.Game
             }
 
             GameSettings.FastForward = false;
+            elapsedMatchSeconds = 0f;
+            matchPaused = false;
             RoundSeed = seed;
             Debug.Log("Mejnun round seed: " + RoundSeed);
             questionRandom = new System.Random(unchecked((int)(seed ^ (seed >> 32))));
@@ -735,6 +749,7 @@ namespace Mejnun.Game
 
         private void OnApplicationPause(bool paused)
         {
+            applicationPaused = paused;
             if (paused)
             {
                 SaveCurrentGame();
@@ -761,6 +776,24 @@ namespace Mejnun.Game
                     ? (HumanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo)
                     : activeRequest.Mode;
                 var beatHardBot = false;
+                var hasBot = false;
+                var cpuDifficulty = 0;
+                for (var seat = 0; seat < seats.Length; seat++)
+                {
+                    if (!seats[seat].IsBot)
+                    {
+                        continue;
+                    }
+
+                    hasBot = true;
+                    cpuDifficulty = Math.Max(cpuDifficulty, (int)seats[seat].Difficulty);
+                }
+
+                if (!hasBot)
+                {
+                    cpuDifficulty = 2;
+                }
+
                 if (mode == MatchMode.Solo && localWin)
                 {
                     for (var seat = 0; seat < seats.Length; seat++)
@@ -775,7 +808,8 @@ namespace Mejnun.Game
 
                 var summary = new MatchSummary(mode, seats.Length, HumanCount, localWin,
                     localWin && result.Kind == GameEndKind.EmptyHand,
-                    result.Kind == GameEndKind.Stalemate, beatHardBot);
+                    result.Kind == GameEndKind.Stalemate, beatHardBot, cpuDifficulty,
+                    Mathf.FloorToInt(elapsedMatchSeconds));
                 LastProgression = ProgressionService.Instance.RecordMatch(summary);
             }
 

@@ -39,6 +39,7 @@ namespace Mejnun.UI
         private Button sortSuitButton;
         private Button sortRankButton;
         private Button fitBoardButton;
+        private Button compactBoardButton;
         private Button hintButton;
         private Button fastForwardButton;
         private Button markSetButton;
@@ -50,10 +51,12 @@ namespace Mejnun.UI
         private Label timerLabel;
         private Label goneDownPopup;
         private Label goneDownTag;
+        private Label invalidMovePopup;
         private IVisualElementScheduledItem turnPopupHide;
         private IVisualElementScheduledItem goneDownPopupHide;
         private IVisualElementScheduledItem goneDownTagHide;
         private IVisualElementScheduledItem halasHide;
+        private IVisualElementScheduledItem invalidMoveHide;
         private IReadOnlyList<int> revealedDownMeldIds;
         private int revealedDownSeat = -1;
         private int revealedDownTurnNumber = -1;
@@ -79,6 +82,13 @@ namespace Mejnun.UI
         private bool confirmPaused;
         private int displayedDrawPileCount = -1;
         private MejnunGame displayedDrawPileGame;
+        private MejnunGame lastInputRefreshGame;
+        private int lastInputRefreshTurn = -1;
+        private int lastInputRefreshMoves = -1;
+        private GamePhase lastInputRefreshPhase;
+        private bool lastInputRefreshEnabled;
+        private bool lastInputRefreshHandEnabled;
+        private bool hasInputRefreshSignature;
 
         private void Awake()
         {
@@ -120,6 +130,7 @@ namespace Mejnun.UI
                 tableController.Synchronized += OnSynchronized;
                 tableController.WentDown += OnWentDown;
                 tableController.DownRevealed += OnDownRevealed;
+                tableController.InvalidGesture += OnInvalidGesture;
                 tableController.MarkModeChanged += OnMarkModeChanged;
                 tableController.GameWon += OnGameResult;
                 tableController.GameStalemate += OnGameResult;
@@ -133,6 +144,11 @@ namespace Mejnun.UI
                     matchFlow.TurnTimer.TimedOut += OnTimedOut;
                 }
             }
+
+            if (tableView != null)
+            {
+                tableView.IncomingCardsChanged += OnIncomingCardsChanged;
+            }
         }
 
         private void OnDisable()
@@ -142,6 +158,7 @@ namespace Mejnun.UI
                 tableController.Synchronized -= OnSynchronized;
                 tableController.WentDown -= OnWentDown;
                 tableController.DownRevealed -= OnDownRevealed;
+                tableController.InvalidGesture -= OnInvalidGesture;
                 tableController.MarkModeChanged -= OnMarkModeChanged;
                 tableController.GameWon -= OnGameResult;
                 tableController.GameStalemate -= OnGameResult;
@@ -156,10 +173,16 @@ namespace Mejnun.UI
                 }
             }
 
+            if (tableView != null)
+            {
+                tableView.IncomingCardsChanged -= OnIncomingCardsChanged;
+            }
+
             turnPopupHide?.Pause();
             goneDownPopupHide?.Pause();
             goneDownTagHide?.Pause();
             halasHide?.Pause();
+            invalidMoveHide?.Pause();
         }
 
         private void OnDestroy()
@@ -174,10 +197,13 @@ namespace Mejnun.UI
         private void Update()
         {
             HandleKeyboardShortcuts();
+            RefreshIfInputStateChanged();
             UpdateDownRevealTag();
             UpdateTimerLabel();
             UpdateLastCardBadges();
             UpdateDrawPilePosition();
+            UpdateDrawFlightOverlay();
+            compactBoardButton?.SetEnabled(GameSettings.OrganicBoard && tableView != null);
             if (root != null)
             {
                 root.EnableInClassList("portrait-layout", Screen.height > Screen.width);
@@ -212,6 +238,7 @@ namespace Mejnun.UI
             sortSuitButton = root.Q<Button>("sort-suit-button");
             sortRankButton = root.Q<Button>("sort-rank-button");
             fitBoardButton = root.Q<Button>("fit-board-button");
+            compactBoardButton = root.Q<Button>("compact-board-button");
             hintButton = root.Q<Button>("hint-button");
             pauseButton = root.Q<Button>("pause-button");
             menuButton = root.Q<Button>("menu-button");
@@ -220,6 +247,7 @@ namespace Mejnun.UI
             halasPopup = root.Q<Label>("halas-popup");
             goneDownPopup = root.Q<Label>("gone-down-popup");
             goneDownTag = root.Q<Label>("gone-down-tag");
+            invalidMovePopup = root.Q<Label>("invalid-move-popup");
             confirmDialog = root.Q<VisualElement>("confirm-dialog");
             confirmMessage = root.Q<Label>("confirm-message");
             confirmDontAsk = root.Q<Toggle>("confirm-dont-ask");
@@ -244,6 +272,7 @@ namespace Mejnun.UI
             if (sortSuitButton != null) sortSuitButton.clicked += SortBySuit;
             if (sortRankButton != null) sortRankButton.clicked += SortByRank;
             if (fitBoardButton != null) fitBoardButton.clicked += FitBoard;
+            if (compactBoardButton != null) compactBoardButton.clicked += CompactBoard;
             if (hintButton != null) hintButton.clicked += ToggleHints;
             if (fastForwardButton != null) fastForwardButton.clicked += ToggleFastForward;
             if (markSetButton != null) markSetButton.clicked += ToggleMarkMode;
@@ -404,7 +433,7 @@ namespace Mejnun.UI
                 card.pickingMode = PickingMode.Ignore;
                 card.name = "draw-pile-card-" + index;
                 card.AddToClassList("draw-pile-card");
-                card.style.left = index * 1.5f;
+                card.style.left = (48f - 22f) * 0.5f + index * 1.5f;
                 card.style.top = (layerCount - 1 - index) * 1.5f;
                 if (backSprite != null)
                 {
@@ -413,6 +442,74 @@ namespace Mejnun.UI
                 }
 
                 drawPileStack.Add(card);
+            }
+        }
+
+        private VisualElement drawFlightLayer;
+
+        private void UpdateDrawFlightOverlay()
+        {
+            if (root == null || root.panel == null || tableView == null || tableView.ViewCamera == null)
+            {
+                return;
+            }
+
+            if (drawFlightLayer == null || drawFlightLayer.parent != root)
+            {
+                drawFlightLayer = new VisualElement();
+                drawFlightLayer.name = "draw-flight-layer";
+                drawFlightLayer.pickingMode = PickingMode.Ignore;
+                drawFlightLayer.style.position = Position.Absolute;
+                drawFlightLayer.style.left = 0f;
+                drawFlightLayer.style.top = 0f;
+                drawFlightLayer.style.right = 0f;
+                drawFlightLayer.style.bottom = 0f;
+                root.Add(drawFlightLayer);
+            }
+
+            drawFlightLayer.BringToFront();
+            var cards = tableView.DrawingCards;
+            var visibleCount = 0;
+            for (var index = 0; index < cards.Count; index++)
+            {
+                var view = cards[index];
+                if (view == null || view.Renderer == null || view.Renderer.sprite == null)
+                {
+                    continue;
+                }
+
+                var bounds = view.Renderer.bounds;
+                var camera = tableView.ViewCamera;
+                var topLeft = RuntimePanelUtils.CameraTransformWorldToPanel(root.panel,
+                    new Vector3(bounds.min.x, bounds.max.y, bounds.center.z), camera);
+                var bottomRight = RuntimePanelUtils.CameraTransformWorldToPanel(root.panel,
+                    new Vector3(bounds.max.x, bounds.min.y, bounds.center.z), camera);
+                VisualElement element;
+                if (visibleCount < drawFlightLayer.childCount)
+                {
+                    element = drawFlightLayer[visibleCount];
+                }
+                else
+                {
+                    element = new VisualElement();
+                    element.pickingMode = PickingMode.Ignore;
+                    element.name = "draw-flight-card";
+                    element.style.position = Position.Absolute;
+                    drawFlightLayer.Add(element);
+                }
+
+                element.style.backgroundImage = new StyleBackground(view.Renderer.sprite);
+                element.style.left = topLeft.x;
+                element.style.top = topLeft.y;
+                element.style.width = Mathf.Abs(bottomRight.x - topLeft.x);
+                element.style.height = Mathf.Abs(bottomRight.y - topLeft.y);
+                element.style.display = DisplayStyle.Flex;
+                visibleCount++;
+            }
+
+            for (var index = visibleCount; index < drawFlightLayer.childCount; index++)
+            {
+                drawFlightLayer[index].style.display = DisplayStyle.None;
             }
         }
 
@@ -451,15 +548,44 @@ namespace Mejnun.UI
             {
                 if (seat == viewerSeat)
                 {
+                    tableView.SetSeatScreenRect(seat, default, 0f);
                     continue;
                 }
 
                 var cards = root.Q<VisualElement>("opponent-cards-" + seat);
                 var bounds = cards == null ? default : cards.worldBound;
-                if (cards != null && bounds.width > 0f && bounds.height > 0f &&
-                    TryPanelToScreen(bounds.center, out var screenPosition))
+                if (cards == null)
                 {
-                    tableView.SetSeatScreenRect(seat, screenPosition, bounds.height * Screen.height / panelHeight);
+                    tableView.SetSeatScreenRect(seat, default, 0f);
+                    continue;
+                }
+
+                var cardCount = state.Hands[seat].Count;
+                var incomingCount = tableView.GetIncomingCardCount(seat);
+                var visibleCardCount = Mathf.Max(0, cardCount - incomingCount);
+                var lastCard = visibleCardCount > 0
+                    ? cards.Q<VisualElement>("opponent-card-" + seat + "-" + (visibleCardCount - 1))
+                    : null;
+                var anchorBounds = lastCard != null
+                    ? lastCard.worldBound
+                    : visibleCardCount == 0 && cards.parent != null
+                        ? cards.parent.worldBound
+                        : bounds;
+                var anchorHeight = anchorBounds.height;
+                if (anchorHeight <= 0f)
+                {
+                    anchorHeight = 44f * Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f);
+                }
+
+                if (anchorBounds.width > 0f && anchorHeight > 0f &&
+                    TryPanelToScreen(anchorBounds.center, out var anchorPosition))
+                {
+                    var stepSize = 30f * Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f) * 0.32f *
+                                   Screen.height / panelHeight;
+                    var vertical = cards.ClassListContains("opponent-cards-vertical");
+                    var step = vertical ? new Vector2(0f, -stepSize) : new Vector2(stepSize, 0f);
+                    var target = lastCard == null ? anchorPosition : anchorPosition + step;
+                    tableView.SetSeatScreenRect(seat, target, anchorHeight * Screen.height / panelHeight, step);
                 }
                 else
                 {
@@ -534,6 +660,7 @@ namespace Mejnun.UI
 
         private void OnMatchFlowScreenChanged(MatchFlowScreen screen)
         {
+            RefreshCurrentGame();
             if (screen == MatchFlowScreen.Turn && tableController != null && tableController.Game != null)
             {
                 TryAnnounceTurn(tableController.Game.State);
@@ -593,7 +720,7 @@ namespace Mejnun.UI
 
             var panelPosition = RuntimePanelUtils.CameraTransformWorldToPanel(root.panel, world, tableView.ViewCamera);
             goneDownTag.text = GetPlayerName(revealedDownSeat) + " · Gone Down";
-            goneDownTag.style.left = panelPosition.x - 100f;
+            goneDownTag.style.left = panelPosition.x;
             goneDownTag.style.top = panelPosition.y - 36f;
             if (!goneDownTagShown)
             {
@@ -647,6 +774,7 @@ namespace Mejnun.UI
             }
 
             var game = tableController.Game;
+            RememberInputRefreshSignature(game, state, turn);
             var activeSeat = state.CurrentSeat;
             var interactive = tableController.InputEnabled;
             if (turnLabel != null)
@@ -714,7 +842,42 @@ namespace Mejnun.UI
                 markSetButton.text = tableController.MarkModeActive ? "Marking…" : "Mark";
             }
 
+            compactBoardButton?.SetEnabled(GameSettings.OrganicBoard && tableView != null);
+
             RefreshSeats(state);
+        }
+
+        private void RefreshIfInputStateChanged()
+        {
+            if (tableController == null || tableController.Game == null)
+            {
+                return;
+            }
+
+            var game = tableController.Game;
+            var state = game.State;
+            var turn = game.Turn;
+            var moves = turn == null ? 0 : turn.Moves.Count;
+            if (hasInputRefreshSignature && lastInputRefreshGame == game &&
+                lastInputRefreshTurn == state.TurnNumber && lastInputRefreshMoves == moves &&
+                lastInputRefreshPhase == state.Phase && lastInputRefreshEnabled == tableController.InputEnabled &&
+                lastInputRefreshHandEnabled == tableController.HandInputEnabled)
+            {
+                return;
+            }
+
+            Refresh(state, turn);
+        }
+
+        private void RememberInputRefreshSignature(MejnunGame game, GameState state, TurnSession turn)
+        {
+            lastInputRefreshGame = game;
+            lastInputRefreshTurn = state.TurnNumber;
+            lastInputRefreshMoves = turn == null ? 0 : turn.Moves.Count;
+            lastInputRefreshPhase = state.Phase;
+            lastInputRefreshEnabled = tableController.InputEnabled;
+            lastInputRefreshHandEnabled = tableController.HandInputEnabled;
+            hasInputRefreshSignature = true;
         }
 
         private void RefreshSeats(GameState state)
@@ -755,6 +918,8 @@ namespace Mejnun.UI
                 }
 
                 cards.name = "opponent-cards-" + seat;
+                var incomingCount = tableView == null ? 0 : tableView.GetIncomingCardCount(seat);
+                var visibleCardCount = Mathf.Max(0, state.Hands[seat].Count - incomingCount);
                 var cardScale = Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f);
                 var cardWidth = 30f * cardScale;
                 var cardHeight = 44f * cardScale;
@@ -764,6 +929,11 @@ namespace Mejnun.UI
                     cardBack.pickingMode = PickingMode.Ignore;
                     cardBack.AddToClassList("opponent-card-back");
                     cardBack.name = "opponent-card-" + seat + "-" + cardIndex;
+                    if (cardIndex >= visibleCardCount)
+                    {
+                        cardBack.style.visibility = Visibility.Hidden;
+                    }
+
                     cardBack.style.width = cardWidth;
                     cardBack.style.height = cardHeight;
                     if (cardIndex > 0)
@@ -790,7 +960,7 @@ namespace Mejnun.UI
                     cards.Add(cardBack);
                 }
 
-                if (state.Hands[seat].Count == 1)
+                if (visibleCardCount == 1)
                 {
                     var warning = new Label("!");
                     warning.pickingMode = PickingMode.Ignore;
@@ -918,7 +1088,11 @@ namespace Mejnun.UI
             tableController?.SetMarkMode(false);
             if (tableController != null && tableController.InputEnabled)
             {
-                tableController.ApplyCommand(GameCommand.EndTurn(tableController.Game.State.CurrentSeat));
+                var result = tableController.ApplyCommand(GameCommand.EndTurn(tableController.Game.State.CurrentSeat));
+                if (!result.Ok)
+                {
+                    ShowInvalidMove(result.Error);
+                }
             }
         }
 
@@ -930,7 +1104,76 @@ namespace Mejnun.UI
                 return;
             }
 
-            tableController.ApplyCommand(GameCommand.DrawOrPass(tableController.Game.State.CurrentSeat));
+            var result = tableController.ApplyCommand(GameCommand.DrawOrPass(tableController.Game.State.CurrentSeat));
+            if (!result.Ok)
+            {
+                ShowInvalidMove(result.Error);
+            }
+        }
+
+        private void CompactBoard()
+        {
+            tableView?.CompactBoard();
+        }
+
+        private void OnInvalidGesture(RuleError error)
+        {
+            ShowInvalidMove(error);
+        }
+
+        private void OnIncomingCardsChanged()
+        {
+            RefreshCurrentGame();
+        }
+
+        private void ShowInvalidMove(RuleError error)
+        {
+            if (invalidMovePopup == null)
+            {
+                return;
+            }
+
+            invalidMovePopup.text = InvalidMoveMessage(error);
+            invalidMoveHide = ShowPopup(invalidMovePopup, invalidMoveHide, 2400);
+        }
+
+        private static string InvalidMoveMessage(RuleError error)
+        {
+            switch (error)
+            {
+                case RuleError.NotYourTurn:
+                    return "You can only move cards on your turn.";
+                case RuleError.WrongPhase:
+                    return "That move is not available right now.";
+                case RuleError.NotDownBoardAccess:
+                    return "Go down before using cards from the board.";
+                case RuleError.BoardCardToHand:
+                    return "Cards on the board cannot be returned to your hand.";
+                case RuleError.CannotEndTurn:
+                    return "You must play a valid move before ending your turn.";
+                case RuleError.GoDownInvalid:
+                case RuleError.GoDownCardToHand:
+                    return "That set does not meet the requirements to go down.";
+                case RuleError.DoubleInSet:
+                    return "A set cannot contain the same card twice.";
+                case RuleError.SetTooLarge:
+                    return "That set contains too many cards.";
+                case RuleError.InvalidCardForSet:
+                    return "That card cannot be added to this set.";
+                case RuleError.InvalidTarget:
+                    return "Choose a valid place for that card.";
+                case RuleError.DuplicateCard:
+                    return "That move includes a card more than once.";
+                case RuleError.EmptyMove:
+                    return "Select at least one card to move.";
+                case RuleError.UnknownCard:
+                case RuleError.UnknownMeld:
+                    return "That card or set is no longer available.";
+                case RuleError.GameFinished:
+                    return "This game has already ended.";
+                default:
+                    return "That move is not allowed by the game rules.";
+            }
         }
 
         private void Undo()
