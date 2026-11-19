@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,6 +27,9 @@ namespace Mejnun.Game
         private int playingTurn = -1;
         private bool paused;
         private bool held;
+        private bool deferred;
+
+        public Func<bool> TurnBlocker { get; set; }
 
         public float ThinkSeconds
         {
@@ -92,6 +96,7 @@ namespace Mejnun.Game
 
         public void Stop()
         {
+            deferred = false;
             if (routine != null)
             {
                 StopCoroutine(routine);
@@ -119,6 +124,14 @@ namespace Mejnun.Game
                 return;
             }
 
+            if (TurnBlocker != null && TurnBlocker())
+            {
+                deferred = true;
+                return;
+            }
+
+            deferred = false;
+
             if (playingGame == game && playingTurn == state.TurnNumber)
             {
                 return;
@@ -128,6 +141,17 @@ namespace Mejnun.Game
             playingTurn = state.TurnNumber;
             routine = StartCoroutine(PlayTurn(game, state.CurrentSeat, state.TurnNumber,
                 seats[state.CurrentSeat].Difficulty, seats[state.CurrentSeat].Style));
+        }
+
+        private void Update()
+        {
+            if (!deferred || paused || held || routine != null || TurnBlocker != null && TurnBlocker())
+            {
+                return;
+            }
+
+            deferred = false;
+            Evaluate();
         }
 
         private void OnDisable()

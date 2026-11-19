@@ -25,8 +25,7 @@ namespace Mejnun.UI
             }
 
             var settings = document.panelSettings;
-            if (!Application.isMobilePlatform ||
-                !HudPresenter.IsPhoneScreen(true, Screen.width, Screen.height, Screen.dpi))
+            if (!DeviceProfile.IsPhoneLayout)
             {
                 Restore(settings);
                 return;

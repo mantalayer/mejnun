@@ -78,6 +78,7 @@ namespace Mejnun.UI.FrontEnd
         public string FeltPick => feltPick;
         public bool CanStart => HasDistinctPicks();
         public bool IsPopupOpen => popupOpen;
+        public event Action<string> FeltPickChanged;
 
         public void ReloadPicks()
         {
@@ -563,6 +564,7 @@ namespace Mejnun.UI.FrontEnd
             RememberPicks();
             ClosePopup();
             Refresh();
+            FeltPickChanged?.Invoke(id);
             return true;
         }
 
@@ -585,10 +587,11 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var offsets = new[] { -8f, 8f, -6f, 6f, -3f, 3f, 0f };
-            var frame = 0;
+            var startedAt = Time.unscaledTime;
             IVisualElementScheduledItem scheduled = null;
             scheduled = target.schedule.Execute(() =>
             {
+                var frame = Mathf.FloorToInt((Time.unscaledTime - startedAt) / 0.035f);
                 if (frame >= offsets.Length || target.panel == null)
                 {
                     target.style.translate = new Translate(0f, 0f);
@@ -598,8 +601,7 @@ namespace Mejnun.UI.FrontEnd
 
                 target.style.translate = new Translate(new Length(offsets[frame], LengthUnit.Pixel),
                     new Length(0f, LengthUnit.Pixel));
-                frame++;
-            }).Every(35);
+            }).Every(0);
         }
 
         private static VisualElement FindLockedChoice(VisualElement parent, string id)

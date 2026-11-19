@@ -161,6 +161,8 @@ namespace Mejnun.Game
                 botDriver = gameObject.AddComponent<BotTurnDriver>();
             }
 
+            botDriver.TurnBlocker = () => tableView != null && tableView.IsDealing;
+
             tutorialDirector = GetComponent<TutorialDirector>();
             if (tutorialDirector == null)
             {
@@ -216,6 +218,11 @@ namespace Mejnun.Game
         {
             if (MatchLaunch.TryTake(out var request))
             {
+                if (tableView != null)
+                {
+                    tableView.DealAnimationEnabled = true;
+                }
+
                 if (request.Resume)
                 {
                     ResumeSavedGame();
@@ -595,6 +602,7 @@ namespace Mejnun.Game
                 }
 
                 tableView.ApplyFelt(Game.State.TableFeltId);
+                tableView.PrepareBoardRestore();
             }
 
             IsInitializingRound = true;
@@ -721,16 +729,9 @@ namespace Mejnun.Game
         public void ReturnToMenu(MenuDestination destination = default)
         {
             SaveCurrentGame();
-            SetPaused(false);
             if (botDriver != null)
             {
                 botDriver.Stop();
-            }
-
-            if (tableView != null)
-            {
-                tableView.SetHandVisible(false);
-                tableView.SetViewerSeat(-1);
             }
 
             SceneFlow.LoadMainMenu(destination);
@@ -828,6 +829,7 @@ namespace Mejnun.Game
 
         private bool StartRoundWithAvailableSkins(int? dealer, ulong seed)
         {
+            tableView?.ResetForNewGame();
             var facePool = activeRequest != null && activeRequest.RandomFacePool != null
                 ? CopyStrings(activeRequest.RandomFacePool)
                 : tableView == null || tableView.SkinCatalog == null
@@ -836,6 +838,7 @@ namespace Mejnun.Game
             Game = new MejnunGame(new GameSetup(playerNames.Length, seed, dealer, TurnSeconds, facePool,
                 CopyStrings(activeRequest?.DeckPicks), CopyStrings(activeRequest?.FeltPool),
                 activeRequest?.ShoeOrder));
+            tableView?.ArmDeal();
             IsInitializingRound = false;
             if (IsTutorial)
             {
@@ -889,6 +892,11 @@ namespace Mejnun.Game
             IsInitializingRound = false;
             tableController.Initialize(Game);
             ApplyOnlineViewer();
+            if (tableView != null)
+            {
+                tableView.PlayBoardDeal(0f);
+                tableView.PlayHandIntro(0.7f, 0.08f);
+            }
         }
 
         private void ApplyOnlineViewer()
@@ -1144,6 +1152,7 @@ namespace Mejnun.Game
 
             if (tableView != null)
             {
+                tableView.CollectTableToPile();
                 tableView.SetViewerSeat(-1);
                 tableView.SetHandVisible(false);
             }

@@ -183,6 +183,144 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
+        public IEnumerator BoardCardsCollectToThePileAndDealBackToTheirSavedPositions()
+        {
+            SceneManager.LoadScene("Table", LoadSceneMode.Single);
+            yield return null;
+
+            var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
+            Assert.That(matchFlow, Is.Not.Null);
+            Assert.That(matchFlow.StartMatch(2, new[] { "Sam", "Alex" }, 20261119), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
+            Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
+            Assert.That(matchFlow.RevealHand(), Is.True);
+
+            var hud = Object.FindAnyObjectByType<Mejnun.UI.HudPresenter>();
+            if (hud != null)
+            {
+                hud.enabled = false;
+            }
+
+            var tableView = Object.FindAnyObjectByType<TableView>();
+            var state = tableView.CurrentState;
+            var boardCards = new[] { state.DrawPile[0], state.DrawPile[1], state.DrawPile[2] };
+            state.DrawPile.RemoveRange(0, boardCards.Length);
+            state.Board.Add(new Meld(1, boardCards));
+            tableView.Sync(state, tableView.CurrentTurn);
+            var pileScreenPosition = new Vector2(Screen.width * 0.72f, Screen.height * 0.48f);
+            tableView.SetDrawPileScreenPosition(pileScreenPosition);
+            yield return new WaitForSecondsRealtime(0.25f);
+
+            var savedPositions = new Dictionary<byte, Vector3>();
+            for (var index = 0; index < boardCards.Length; index++)
+            {
+                var view = tableView.GetCardView(boardCards[index].Id);
+                savedPositions[boardCards[index].Id] = view.TargetLocalPosition;
+            }
+
+            Assert.That(tableView.CollectBoardToPile(), Is.EqualTo(TableView.BoardCollectSeconds));
+            yield return new WaitForSecondsRealtime(TableView.BoardCollectSeconds + 0.1f);
+
+            for (var index = 0; index < boardCards.Length; index++)
+            {
+                Assert.That(tableView.GetCardView(boardCards[index].Id), Is.Null);
+            }
+
+            tableView.Sync(state, tableView.CurrentTurn);
+            Assert.That(tableView.BoardCardCount, Is.Zero);
+            for (var index = 0; index < boardCards.Length; index++)
+            {
+                Assert.That(tableView.GetCardView(boardCards[index].Id), Is.Null);
+            }
+
+            tableView.PrepareBoardRestore();
+            tableView.Sync(state, tableView.CurrentTurn);
+            tableView.PlayBoardDeal(0f);
+            yield return new WaitForSecondsRealtime(0.45f);
+            for (var index = 0; index < boardCards.Length; index++)
+            {
+                var view = tableView.GetCardView(boardCards[index].Id);
+                Assert.That(Vector3.Distance(view.transform.localPosition, savedPositions[boardCards[index].Id]),
+                    Is.LessThan(0.01f));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator InitialDealMovesCardsFromThePileToEachSeat()
+        {
+            SceneManager.LoadScene("Table", LoadSceneMode.Single);
+            yield return null;
+
+            var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
+            Assert.That(matchFlow, Is.Not.Null);
+            Assert.That(matchFlow.StartMatch(2, new[] { "Sam", "Alex" }, 20261120), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
+
+            var tableView = Object.FindAnyObjectByType<TableView>();
+            Assert.That(tableView, Is.Not.Null);
+            var tableController = Object.FindAnyObjectByType<TableController>();
+            Assert.That(tableController, Is.Not.Null);
+            tableView.DealAnimationEnabled = true;
+            tableView.ArmDeal();
+            Assert.That(matchFlow.ChooseDealer(0).Ok, Is.True);
+            var seat = matchFlow.Game.State.CurrentSeat;
+            tableView.SetViewerSeat(seat);
+            tableView.SetHandVisible(true);
+            yield return null;
+
+            Assert.That(tableView.GetIncomingCardCount(seat), Is.GreaterThan(0));
+            Assert.That(tableView.GetIncomingCardCount(1 - seat), Is.GreaterThan(0));
+            var hand = matchFlow.Game.State.Hands[seat];
+            Assert.That(tableView.IsDealing, Is.True);
+            Assert.That(tableController.InputEnabled, Is.False);
+            Assert.That(tableController.HandInputEnabled, Is.False);
+            var visibleHandCards = 0;
+            for (var index = 0; index < hand.Count; index++)
+            {
+                var view = tableView.GetCardView(hand[index].Id);
+                if (view != null && view.gameObject.activeSelf)
+                {
+                    visibleHandCards++;
+                }
+            }
+
+            Assert.That(visibleHandCards, Is.LessThan(hand.Count));
+            var initiallyVisibleHandCards = visibleHandCards;
+            yield return new WaitForSecondsRealtime(0.35f);
+            visibleHandCards = 0;
+            for (var index = 0; index < hand.Count; index++)
+            {
+                var view = tableView.GetCardView(hand[index].Id);
+                if (view != null && view.gameObject.activeSelf)
+                {
+                    visibleHandCards++;
+                }
+            }
+
+            Assert.That(visibleHandCards, Is.GreaterThan(initiallyVisibleHandCards));
+            Assert.That(visibleHandCards, Is.LessThan(hand.Count));
+            var totalDealtCards = 0;
+            for (var handIndex = 0; handIndex < matchFlow.Game.State.Hands.Count; handIndex++)
+            {
+                totalDealtCards += matchFlow.Game.State.Hands[handIndex].Count;
+            }
+
+            yield return new WaitForSecondsRealtime(totalDealtCards * 0.1f + 1f);
+            Assert.That(tableView.IsDealing, Is.False);
+            Assert.That(tableController.InputEnabled, Is.True);
+            Assert.That(tableController.HandInputEnabled, Is.True);
+            Assert.That(tableView.GetIncomingCardCount(seat), Is.Zero);
+            Assert.That(tableView.GetIncomingCardCount(1 - seat), Is.Zero);
+            for (var index = 0; index < hand.Count; index++)
+            {
+                var view = tableView.GetCardView(hand[index].Id);
+                Assert.That(view, Is.Not.Null);
+                Assert.That(Vector3.Distance(view.transform.localPosition, view.TargetLocalPosition),
+                    Is.LessThan(0.01f));
+            }
+        }
+
+        [UnityTest]
         public IEnumerator HandCardsStayInPlaceWhenTheBoardCameraPansAndZooms()
         {
             SceneManager.LoadScene("Table", LoadSceneMode.Single);

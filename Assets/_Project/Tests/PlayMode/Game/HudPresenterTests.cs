@@ -154,6 +154,9 @@ namespace Mejnun.Game.Tests
                 if (seat == matchFlow.Game.State.CurrentSeat) continue;
                 var cards = root.Q<VisualElement>("opponent-cards-" + seat);
                 Assert.That(cards.ClassListContains("opponent-cards-vertical"), Is.True);
+                var opponentCount = root.Q<Label>("opponent-count-" + seat);
+                Assert.That(opponentCount, Is.Not.Null);
+                Assert.That(opponentCount.text, Is.EqualTo(matchFlow.Game.State.Hands[seat].Count.ToString()));
                 var backs = cards.Query<VisualElement>(className: "opponent-card-back").ToList();
                 Assert.That(backs.Count, Is.EqualTo(matchFlow.Game.State.Hands[seat].Count));
                 for (var cardIndex = 0; cardIndex < backs.Count; cardIndex++)
@@ -191,6 +194,38 @@ namespace Mejnun.Game.Tests
                 GameCommand.DrawOrPass(matchFlow.Game.State.CurrentSeat)).Ok, Is.True);
             Assert.That(drawPass.text, Is.EqualTo("Pass"));
             Assert.That(drawPileStack.childCount, Is.Zero);
+        }
+
+        [UnityTest]
+        public IEnumerator BotOpponentNameHasNoBotSuffixAndShowsRobotBadge()
+        {
+            SceneManager.LoadScene("Table", LoadSceneMode.Single);
+            yield return null;
+
+            var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
+            Assert.That(matchFlow, Is.Not.Null);
+            var botDriver = matchFlow.GetComponent<BotTurnDriver>();
+            if (botDriver != null)
+            {
+                botDriver.enabled = false;
+            }
+
+            var seats = new[]
+            {
+                SeatConfig.Human("Sam"),
+                SeatConfig.Bot("Leyla", Mejnun.AI.BotDifficulty.Medium)
+            };
+            Assert.That(matchFlow.StartMatch(seats, 20261119UL), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
+
+            var root = Object.FindAnyObjectByType<HudPresenter>().GetComponent<UIDocument>().rootVisualElement;
+            var botName = root.Query<Label>(className: "opponent-name").ToList()
+                .Find(label => label.text == "Leyla");
+            Assert.That(botName, Is.Not.Null);
+            Assert.That(botName.text, Does.Not.Contain("bot").IgnoreCase);
+            var botBadge = botName.parent.Q<Label>(className: "opponent-bot-badge");
+            Assert.That(botBadge, Is.Not.Null);
+            Assert.That(botBadge.text, Is.EqualTo("🤖"));
         }
 
         [UnityTest]
@@ -252,6 +287,9 @@ namespace Mejnun.Game.Tests
         [Test]
         public void PhoneLayoutAppliesToPhoneShapedOrSmallMobileScreens()
         {
+            Assert.That(DeviceProfile.IsPhoneScreen(true, 2532, 1170, 460f), Is.True);
+            Assert.That(DeviceProfile.IsPhoneScreen(true, 1170, 2532, 460f), Is.True);
+            Assert.That(DeviceProfile.IsPhoneScreen(true, 2732, 2048, 264f), Is.False);
             Assert.That(HudPresenter.IsPhoneScreen(true, 2532, 1170, 460f), Is.True);
             Assert.That(HudPresenter.IsPhoneScreen(true, 1170, 2532, 460f), Is.True);
             Assert.That(HudPresenter.IsPhoneScreen(true, 2732, 2048, 264f), Is.False);
@@ -261,6 +299,33 @@ namespace Mejnun.Game.Tests
             Assert.That(HudPresenter.IsPhoneScreen(false, 2560, 1600, 96f), Is.False);
             Assert.That(HudPresenter.IsPhoneScreen(true, 1920, 1080, 0f), Is.True);
             Assert.That(HudPresenter.IsPhoneScreen(true, 2560, 1600, 0f), Is.False);
+        }
+
+        [Test]
+        public void ForceMobileLayoutCanBeEnabledAndRestored()
+        {
+            var hadStoredValue = PlayerPrefs.HasKey(DeviceProfile.ForceMobileKey);
+            var storedValue = PlayerPrefs.GetInt(DeviceProfile.ForceMobileKey);
+            try
+            {
+                DeviceProfile.SetForceMobile(true);
+                Assert.That(DeviceProfile.ForceMobile, Is.True);
+                Assert.That(DeviceProfile.IsMobilePlatform, Is.True);
+                Assert.That(DeviceProfile.IsPhoneLayout, Is.True);
+            }
+            finally
+            {
+                if (hadStoredValue)
+                {
+                    PlayerPrefs.SetInt(DeviceProfile.ForceMobileKey, storedValue);
+                }
+                else
+                {
+                    PlayerPrefs.DeleteKey(DeviceProfile.ForceMobileKey);
+                }
+
+                PlayerPrefs.Save();
+            }
         }
 
         [Test]

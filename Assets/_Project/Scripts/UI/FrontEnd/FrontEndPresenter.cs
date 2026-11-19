@@ -20,6 +20,7 @@ namespace Mejnun.UI.FrontEnd
         private Rect lastSafeArea;
         private int lastWidth;
         private int lastHeight;
+        private bool destinationTransitionPending;
         private readonly SoftKeyboardBackGuard keyboardBackGuard = new SoftKeyboardBackGuard();
 
         public FrontEndFlow Flow => flow;
@@ -62,8 +63,37 @@ namespace Mejnun.UI.FrontEnd
             ApplySafeArea();
             if (SceneFlow.TryTakeDestination(out var destination))
             {
-                flow.NavigateTo(destination);
+                flow.NavigateTo(destination, false);
+                destinationTransitionPending = true;
+                root.RegisterCallback<GeometryChangedEvent>(OnInitialDestinationLayout);
+                if (root.worldBound.width > 0f && root.worldBound.height > 0f)
+                {
+                    root.schedule.Execute(EnterDestinationScreen).StartingIn(0);
+                }
             }
+        }
+
+        private void OnInitialDestinationLayout(GeometryChangedEvent evt)
+        {
+            EnterDestinationScreen();
+        }
+
+        private void EnterDestinationScreen()
+        {
+            if (!destinationTransitionPending)
+            {
+                return;
+            }
+
+            var root = uiDocument.rootVisualElement;
+            if (root.worldBound.width <= 0f || root.worldBound.height <= 0f)
+            {
+                return;
+            }
+
+            destinationTransitionPending = false;
+            root.UnregisterCallback<GeometryChangedEvent>(OnInitialDestinationLayout);
+            flow?.EnterCurrentScreen();
         }
 
         private void Update()

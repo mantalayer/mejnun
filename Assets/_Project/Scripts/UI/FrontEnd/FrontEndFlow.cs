@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Mejnun.Cosmetics;
+using Mejnun.Core;
 using Mejnun.Game;
 using Mejnun.Net.Unity;
 using Mejnun.UI;
@@ -57,6 +58,8 @@ namespace Mejnun.UI.FrontEnd
         private string pendingOnlineHostId;
         private bool onlineStartRequested;
         private bool onlineMatchLaunched;
+        private bool suppressScreenTransitions;
+        private bool tableTransitionStarted;
 
         public FrontEndFlow(VisualElement root, CosmeticCatalog catalog, DeckSkinLoader loader)
         {
@@ -74,6 +77,8 @@ namespace Mejnun.UI.FrontEnd
             tablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader);
             onlineTablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader,
                 "online-setup", "online-");
+            tablePicker.FeltPickChanged += OnFeltPickChanged;
+            onlineTablePicker.FeltPickChanged += OnFeltPickChanged;
             setup = new SetupScreen(root, OnSetupNext, Back, MatchMode.Solo);
             setup.SetCanStart(() => tablePicker.CanStart);
             gallery = new GalleryScreen(root, catalog, ProgressionService.Instance, loader);
@@ -100,26 +105,39 @@ namespace Mejnun.UI.FrontEnd
             LaunchMatch(MejnunTutorial.CreateMatchRequest());
         }
 
-        public void NavigateTo(MenuDestination destination)
+        public void NavigateTo(MenuDestination destination, bool animate = true)
         {
-            switch (destination.Kind)
+            suppressScreenTransitions = !animate;
+            try
             {
-                case MenuDestinationKind.Setup:
-                    OpenSetup(MatchMode.Solo);
-                    break;
-                case MenuDestinationKind.TablePicker:
-                    OpenSetup(MatchMode.Solo);
-                    break;
-                case MenuDestinationKind.Gallery:
-                    OpenGallery(destination.ItemId);
-                    break;
-                case MenuDestinationKind.Settings:
-                    OpenSettings();
-                    break;
-                default:
-                    ShowScreen(FrontEndScreen.MainMenu, true);
-                    break;
+                switch (destination.Kind)
+                {
+                    case MenuDestinationKind.Setup:
+                    case MenuDestinationKind.TablePicker:
+                        OpenSetup(MatchMode.Solo);
+                        break;
+                    case MenuDestinationKind.Gallery:
+                        OpenGallery(destination.ItemId);
+                        break;
+                    case MenuDestinationKind.Settings:
+                        OpenSettings();
+                        break;
+                    default:
+                        ShowScreen(FrontEndScreen.MainMenu, true);
+                        break;
+                }
             }
+            finally
+            {
+                suppressScreenTransitions = false;
+            }
+        }
+
+        public void EnterCurrentScreen()
+        {
+            var screenRoot = GetScreenRoot(CurrentScreen);
+            ScreenTransition.Cancel(screenRoot);
+            ScreenTransition.Enter(screenRoot, true);
         }
 
         public void Back()
@@ -166,6 +184,8 @@ namespace Mejnun.UI.FrontEnd
             settings.Dispose();
             onlineScreen.Requested -= HandleOnlineRequest;
             onlineScreen.ContinueRequested -= ContinueOnlineMatch;
+            tablePicker.FeltPickChanged -= OnFeltPickChanged;
+            onlineTablePicker.FeltPickChanged -= OnFeltPickChanged;
             UnsubscribeOnlineSession();
         }
 
@@ -178,7 +198,7 @@ namespace Mejnun.UI.FrontEnd
 
         private void ResumeMatch()
         {
-            SceneFlow.LoadTable(new MatchRequest(resume: true));
+            BeginTableTransition(new MatchRequest(resume: true));
         }
 
         public void OpenGallery(string itemId = null)
@@ -233,7 +253,7 @@ namespace Mejnun.UI.FrontEnd
         {
             if (pendingRequest != null)
             {
-                SceneFlow.LoadTable(pendingRequest);
+                BeginTableTransition(pendingRequest);
             }
         }
 
@@ -260,6 +280,18 @@ namespace Mejnun.UI.FrontEnd
             var hadPreviousScreen = hasCurrentScreen;
             currentScreen = screen;
             hasCurrentScreen = true;
+
+            if (suppressScreenTransitions)
+            {
+                for (var index = 0; index < Screens.Length; index++)
+                {
+                    var target = Screens[index];
+                    ScreenTransition.Cancel(GetScreenRoot(target));
+                    SetScreenVisible(target, target == screen);
+                }
+
+                return;
+            }
 
             if (!hadPreviousScreen || previousScreen == screen)
             {
@@ -303,6 +335,74 @@ namespace Mejnun.UI.FrontEnd
                     SetScreenVisible(previousScreen, false);
                 }
             });
+        }
+
+        private void BeginTableTransition(MatchRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (tableTransitionStarted)
+            {
+                return;
+            }
+
+            tableTransitionStarted = true;
+            if (tablePicker.IsPopupOpen)
+            {
+                tablePicker.ClosePopup();
+            }
+
+            if (onlineTablePicker.IsPopupOpen)
+            {
+                onlineTablePicker.ClosePopup();
+            }
+
+            var outgoingScreen = CurrentScreen;
+            ScreenTransition.Exit(GetScreenRoot(outgoingScreen), true, () =>
+            {
+                SetScreenVisible(outgoingScreen, false);
+                var feltId = ResolveRequestFeltId(request);
+                if (!string.IsNullOrWhiteSpace(feltId) &&
+                    !string.Equals(feltId, mainMenu.CurrentFeltId, StringComparison.Ordinal))
+                {
+                    mainMenu.ShowFelt(feltId, true, () => SceneFlow.LoadTable(request));
+                    return;
+                }
+
+                SceneFlow.LoadTable(request);
+            });
+        }
+
+        private static string ResolveRequestFeltId(MatchRequest request)
+        {
+            if (request.Resume)
+            {
+                if (!SavedGame.TryLoad(out var savedGame))
+                {
+                    return null;
+                }
+
+                try
+                {
+                    return SnapshotSerializer.Read(savedGame.Snapshot).State.TableFeltId;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            return request.FeltPool != null && request.FeltPool.Count > 0
+                ? request.FeltPool[0]
+                : TableFeltAssigner.GreenFelt;
+        }
+
+        private void OnFeltPickChanged(string feltId)
+        {
+            mainMenu.RefreshBackground();
         }
 
         private VisualElement GetScreenRoot(FrontEndScreen screen)
@@ -691,7 +791,7 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var request = new MatchRequest(seats, timerSeconds, MatchMode.Online);
-            SceneFlow.LoadTable(onlineTablePicker.CreateMatchRequest(request, selectedDeckPicks, selectedFeltPick));
+            BeginTableTransition(onlineTablePicker.CreateMatchRequest(request, selectedDeckPicks, selectedFeltPick));
         }
 
         private Dictionary<string, PlayerProperty> CreateOnlinePlayerProperties()

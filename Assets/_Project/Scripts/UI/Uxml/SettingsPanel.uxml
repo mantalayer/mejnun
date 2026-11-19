@@ -28,6 +28,7 @@
 
         <ui:ScrollView name="settings-page-table" class="settings-scroll settings-page" style="display: none">
             <ui:Label class="settings-section-title" text="Table &amp; hand" />
+            <ui:Toggle name="hover-highlight-toggle" label="Highlight hovered card" tooltip="Outlines and slightly raises the card under the mouse pointer." />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Arc amount" />
                 <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5" tooltip="Adjusts how much your hand curves." />

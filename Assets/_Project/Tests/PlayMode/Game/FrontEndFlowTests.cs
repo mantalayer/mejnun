@@ -172,6 +172,7 @@ namespace Mejnun.Game.Tests
         [UnityTest]
         public IEnumerator MainMenuBackgroundUsesLastUsedFelt()
         {
+            ProgressionService.Instance.SetLastPicks(new[] { "classic", "classic_ivory" }, null);
             ProgressionService.Instance.SetLastUsedFelt("burgundy");
             SceneManager.LoadScene(SceneFlow.MainMenuScene, LoadSceneMode.Single);
             yield return null;
@@ -179,6 +180,22 @@ namespace Mejnun.Game.Tests
             var presenter = Object.FindAnyObjectByType<FrontEndPresenter>();
             var background = presenter.GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("frontend-root");
             var felt = presenter.Catalog.Felts.Resolve("burgundy");
+
+            Assert.That(background.resolvedStyle.backgroundImage.sprite, Is.EqualTo(felt.Tile));
+            Assert.That(background.resolvedStyle.backgroundColor, Is.EqualTo(felt.ClearColor));
+        }
+
+        [UnityTest]
+        public IEnumerator MainMenuBackgroundPrefersPickedFeltOverLastUsedFelt()
+        {
+            ProgressionService.Instance.SetLastUsedFelt("burgundy");
+            ProgressionService.Instance.SetLastPicks(new[] { "classic", "classic_ivory" }, "blue");
+            SceneManager.LoadScene(SceneFlow.MainMenuScene, LoadSceneMode.Single);
+            yield return null;
+
+            var presenter = Object.FindAnyObjectByType<FrontEndPresenter>();
+            var background = presenter.GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("frontend-root");
+            var felt = presenter.Catalog.Felts.Resolve("blue");
 
             Assert.That(background.resolvedStyle.backgroundImage.sprite, Is.EqualTo(felt.Tile));
             Assert.That(background.resolvedStyle.backgroundColor, Is.EqualTo(felt.ClearColor));

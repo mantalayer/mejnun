@@ -298,13 +298,14 @@
 }
 
 .opponent-seat {
+    position: relative;
     flex-direction: column;
     align-items: center;
     margin-top: 6px;
     margin-bottom: 6px;
-    min-width: 80px;
-    padding-left: 8px;
-    padding-right: 8px;
+    min-width: 72px;
+    padding-left: 5px;
+    padding-right: 5px;
     padding-top: 4px;
     padding-bottom: 6px;
     border-radius: 6px;
@@ -319,8 +320,9 @@
     flex-shrink: 0;
     margin-left: 12px;
     margin-right: 12px;
-    padding-left: 16px;
-    padding-right: 16px;
+    min-width: 68px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .opponent-seat.active-seat {
@@ -332,6 +334,16 @@
     color: rgb(244, 246, 239);
     font-size: 11px;
     -unity-font-style: bold;
+}
+
+.opponent-bot-badge {
+    position: absolute;
+    right: -9px;
+    top: -9px;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    -unity-text-align: middle-center;
 }
 
 .opponent-cards {
@@ -778,7 +790,13 @@
 .phone-layout .opponent-seat {
     margin-top: 8px;
     margin-bottom: 8px;
-    min-width: 56px;
+    min-width: 50px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.phone-layout .opponents-top > .opponent-seat {
+    min-width: 54px;
     padding-left: 5px;
     padding-right: 5px;
 }
@@ -815,10 +833,12 @@
     -unity-text-align: middle-center;
     white-space: normal;
     opacity: 0;
+    transition-property: opacity;
+    transition-duration: 180ms;
 }
 
 .online-notice.popup-visible,
-.online-waiting {
+.online-waiting.waiting-visible {
     opacity: 1;
 }
 
@@ -935,7 +955,7 @@
     top: 0;
     bottom: 0;
     display: none;
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .rule-modal {

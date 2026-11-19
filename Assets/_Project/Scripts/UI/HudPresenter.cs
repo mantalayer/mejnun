@@ -12,9 +12,28 @@ namespace Mejnun.UI
     public sealed class HudPresenter : MonoBehaviour
     {
         private const float HandBottomBarFitCompensationPixels = 8f;
-        private const float PhoneMaxShortSideInches = 4.5f;
-        private const int PhoneMaxShortSidePixels = 1200;
-        private const float PhoneMinAspectRatio = 1.9f;
+        private const float TableExitDuration = 0.7f;
+        private const int OnlineWaitingFadeMilliseconds = 180;
+        private const float TableEdgeOffscreenMargin = 24f;
+
+        private enum TableEdge
+        {
+            Top,
+            Bottom,
+            Left,
+            Right
+        }
+
+        private sealed class TableEdgeOffset
+        {
+            public VisualElement Element;
+            public TableEdge Edge;
+            public Vector2 Offset;
+            public Vector2 AppliedOffset;
+            public float StartedAt;
+            public bool HasEdge;
+        }
+
         public enum OpponentSide
         {
             Top,
@@ -67,7 +86,16 @@ namespace Mejnun.UI
         private IVisualElementScheduledItem goneDownTagHide;
         private IVisualElementScheduledItem halasHide;
         private IVisualElementScheduledItem invalidMoveHide;
+        private readonly List<TableEdgeOffset> tableEdgeAnimations = new List<TableEdgeOffset>();
+        private List<TableEdgeOffset> tableExitTargets;
+        private float tableExitStartedAt;
+        private bool tableExitAnimating;
+        private Action tableExitCompleted;
         private IVisualElementScheduledItem onlineNoticeHide;
+        private IVisualElementScheduledItem onlineWaitingHide;
+        private IVisualElementScheduledItem onlineWaitingShow;
+        private bool onlineWaitingVisible;
+        private bool suppressOnlineWaiting;
         private IReadOnlyList<int> revealedDownMeldIds;
         private int revealedDownSeat = -1;
         private int revealedDownTurnNumber = -1;
@@ -157,10 +185,198 @@ namespace Mejnun.UI
         private void Start()
         {
             tutorialOverlay?.Bind(matchFlow == null ? null : matchFlow.Tutorial);
+            if (SceneFlow.TryTakeTableIntro())
+            {
+                if (root != null && root.worldBound.width > 0f && root.worldBound.height > 0f)
+                {
+                    PlayTableIntro();
+                }
+                else if (root != null)
+                {
+                    root.RegisterCallback<GeometryChangedEvent>(OnTableIntroGeometryChanged);
+                }
+            }
+        }
+
+        private void OnTableIntroGeometryChanged(GeometryChangedEvent evt)
+        {
+            root.UnregisterCallback<GeometryChangedEvent>(OnTableIntroGeometryChanged);
+            PlayTableIntro();
+        }
+
+        private void PlayTableIntro()
+        {
+            suppressOnlineWaiting = false;
+            var offsets = TableEdgeOffsets();
+            for (var index = 0; index < offsets.Count; index++)
+            {
+                SlideFromEdge(offsets[index]);
+            }
+
+        }
+
+        private List<TableEdgeOffset> TableEdgeOffsets()
+        {
+            var offsets = new List<TableEdgeOffset>();
+            if (root == null)
+            {
+                return offsets;
+            }
+
+            var bounds = root.worldBound;
+            AddNearestEdgeOffset(offsets, turnPanel, bounds);
+            AddNearestEdgeOffset(offsets, pauseButton, bounds);
+            AddBottomEdgeOffset(offsets, root.Q<VisualElement>(className: "bottom-area"));
+            AddNearestEdgeOffset(offsets, fastForwardDock, bounds);
+            AddNearestEdgeOffset(offsets, leftOpponents, bounds);
+            AddNearestEdgeOffset(offsets, rightOpponents, bounds);
+            AddNearestEdgeOffset(offsets, topOpponents, bounds);
+            AddNearestEdgeOffset(offsets, root.Q<VisualElement>(className: "tutorial-layer"), bounds);
+            return offsets;
+        }
+
+        private static void AddNearestEdgeOffset(List<TableEdgeOffset> offsets, VisualElement element, Rect bounds)
+        {
+            if (element == null || element.panel == null)
+            {
+                return;
+            }
+
+            if (!TryFindNearestEdge(element, bounds, out var edge))
+            {
+                offsets.Add(new TableEdgeOffset { Element = element, StartedAt = Time.unscaledTime });
+                return;
+            }
+
+            AddEdgeOffset(offsets, element, edge);
+        }
+
+        private static bool TryFindNearestEdge(VisualElement element, Rect bounds, out TableEdge edge)
+        {
+            edge = TableEdge.Top;
+            var elementBounds = element == null ? default : element.worldBound;
+            if (!IsFinite(bounds.xMin) || !IsFinite(bounds.yMin) || !IsFinite(bounds.width) ||
+                !IsFinite(bounds.height) || bounds.width <= 0f || bounds.height <= 0f ||
+                !IsFinite(elementBounds.xMin) || !IsFinite(elementBounds.yMin) ||
+                !IsFinite(elementBounds.width) || !IsFinite(elementBounds.height) || elementBounds.width <= 0f ||
+                elementBounds.height <= 0f)
+            {
+                return false;
+            }
+
+            var leftDistance = elementBounds.xMin - bounds.xMin;
+            var rightDistance = bounds.xMax - elementBounds.xMax;
+            var topDistance = elementBounds.yMin - bounds.yMin;
+            var bottomDistance = bounds.yMax - elementBounds.yMax;
+            var closest = Mathf.Min(leftDistance, rightDistance, topDistance, bottomDistance);
+            if (Mathf.Approximately(closest, topDistance))
+            {
+                edge = TableEdge.Top;
+            }
+            else if (Mathf.Approximately(closest, bottomDistance))
+            {
+                edge = TableEdge.Bottom;
+            }
+            else if (Mathf.Approximately(closest, leftDistance))
+            {
+                edge = TableEdge.Left;
+            }
+            else
+            {
+                edge = TableEdge.Right;
+            }
+
+            return true;
+        }
+
+        private static void AddBottomEdgeOffset(List<TableEdgeOffset> offsets, VisualElement element)
+        {
+            if (element == null || element.panel == null)
+            {
+                return;
+            }
+
+            AddEdgeOffset(offsets, element, TableEdge.Bottom);
+        }
+
+        private static void AddEdgeOffset(List<TableEdgeOffset> offsets, VisualElement element, TableEdge edge)
+        {
+            if (element == null || element.panel == null)
+            {
+                return;
+            }
+
+            TryCalculateEdgeOffset(element, edge, Vector2.zero, out var offset);
+            offsets.Add(new TableEdgeOffset { Element = element, Edge = edge, Offset = offset, HasEdge = true });
+        }
+
+        private static bool TryCalculateEdgeOffset(VisualElement element, TableEdge edge, Vector2 appliedOffset,
+            out Vector2 offset)
+        {
+            offset = default;
+            if (element == null || element.panel == null)
+            {
+                return false;
+            }
+
+            var rootBounds = element.panel.visualTree.worldBound;
+            var currentBounds = element.worldBound;
+            var elementBounds = new Rect(currentBounds.xMin - appliedOffset.x, currentBounds.yMin - appliedOffset.y,
+                currentBounds.width, currentBounds.height);
+            if (!IsFinite(rootBounds.xMin) || !IsFinite(rootBounds.yMin) || !IsFinite(rootBounds.width) ||
+                !IsFinite(rootBounds.height) || rootBounds.width <= 0f || rootBounds.height <= 0f ||
+                !IsFinite(elementBounds.xMin) || !IsFinite(elementBounds.yMin) ||
+                !IsFinite(elementBounds.width) || !IsFinite(elementBounds.height) || elementBounds.width <= 0f ||
+                elementBounds.height <= 0f)
+            {
+                return false;
+            }
+
+            switch (edge)
+            {
+                case TableEdge.Top:
+                    offset = new Vector2(0f, rootBounds.yMin - elementBounds.yMax - TableEdgeOffscreenMargin);
+                    break;
+                case TableEdge.Bottom:
+                    offset = new Vector2(0f, rootBounds.yMax - elementBounds.yMin + TableEdgeOffscreenMargin);
+                    break;
+                case TableEdge.Left:
+                    offset = new Vector2(rootBounds.xMin - elementBounds.xMax - TableEdgeOffscreenMargin, 0f);
+                    break;
+                default:
+                    offset = new Vector2(rootBounds.xMax - elementBounds.xMin + TableEdgeOffscreenMargin, 0f);
+                    break;
+            }
+
+            return IsFinite(offset.x) && IsFinite(offset.y);
+        }
+
+        private void SlideFromEdge(TableEdgeOffset animation)
+        {
+            var element = animation.Element;
+            if (element == null || element.panel == null)
+            {
+                return;
+            }
+
+            for (var index = tableEdgeAnimations.Count - 1; index >= 0; index--)
+            {
+                if (tableEdgeAnimations[index].Element == element)
+                {
+                    tableEdgeAnimations.RemoveAt(index);
+                }
+            }
+
+            element.style.translate = StyleKeyword.Null;
+            element.style.opacity = 0f;
+            animation.AppliedOffset = Vector2.zero;
+            animation.StartedAt = Time.unscaledTime;
+            tableEdgeAnimations.Add(animation);
         }
 
         private void OnEnable()
         {
+            SceneFlow.RegisterTableExit(PlayTableExit);
             root?.RegisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
             GameSettings.Changed += OnSettingsChanged;
             if (tableController != null)
@@ -188,11 +404,26 @@ namespace Mejnun.UI
             if (tableView != null)
             {
                 tableView.IncomingCardsChanged += OnIncomingCardsChanged;
+                tableView.SeatCardSlotResolver = TryResolveOpponentCardSlot;
             }
         }
 
         private void OnDisable()
         {
+            SceneFlow.UnregisterTableExit(PlayTableExit);
+            HideOnlineWaitingImmediately();
+            for (var index = 0; index < tableEdgeAnimations.Count; index++)
+            {
+                var element = tableEdgeAnimations[index].Element;
+                if (element != null)
+                {
+                    element.style.translate = StyleKeyword.Null;
+                    element.style.opacity = 1f;
+                }
+            }
+
+            tableEdgeAnimations.Clear();
+            CompleteTableExit();
             root?.UnregisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
             GameSettings.Changed -= OnSettingsChanged;
             if (tableController != null)
@@ -220,6 +451,7 @@ namespace Mejnun.UI
             if (tableView != null)
             {
                 tableView.IncomingCardsChanged -= OnIncomingCardsChanged;
+                tableView.SeatCardSlotResolver = null;
             }
 
             turnPopupHide?.Pause();
@@ -227,6 +459,138 @@ namespace Mejnun.UI
             goneDownTagHide?.Pause();
             halasHide?.Pause();
             invalidMoveHide?.Pause();
+        }
+
+        private void PlayTableExit(Action completed)
+        {
+            suppressOnlineWaiting = true;
+            var collectDelay = tableView == null ? 0f : tableView.CollectBoardToPile();
+            FadeOutOnlineWaiting();
+            for (var index = 0; index < tableEdgeAnimations.Count; index++)
+            {
+                var element = tableEdgeAnimations[index].Element;
+                if (element != null)
+                {
+                    element.style.translate = StyleKeyword.Null;
+                    element.style.opacity = 1f;
+                }
+            }
+
+            tableEdgeAnimations.Clear();
+            if (root == null || root.panel == null)
+            {
+                completed?.Invoke();
+                return;
+            }
+
+            var targets = TableEdgeOffsets();
+            if (targets.Count == 0 && collectDelay <= 0f)
+            {
+                completed?.Invoke();
+                return;
+            }
+
+            tableExitCompleted = completed;
+            tableExitTargets = targets;
+            tableExitStartedAt = Time.unscaledTime + collectDelay;
+            tableExitAnimating = true;
+        }
+
+        private void CompleteTableExit()
+        {
+            var completed = tableExitCompleted;
+            tableExitCompleted = null;
+            tableExitAnimating = false;
+            tableExitTargets = null;
+            completed?.Invoke();
+        }
+
+        private void UpdateTableEdgeAnimations()
+        {
+            for (var index = tableEdgeAnimations.Count - 1; index >= 0; index--)
+            {
+                var animation = tableEdgeAnimations[index];
+                if (animation.Element == null || animation.Element.panel == null)
+                {
+                    tableEdgeAnimations.RemoveAt(index);
+                    continue;
+                }
+
+                if (!animation.HasEdge)
+                {
+                    if (!TryFindNearestEdge(animation.Element, animation.Element.panel.visualTree.worldBound,
+                            out var edge))
+                    {
+                        animation.StartedAt = Time.unscaledTime;
+                        animation.Element.style.opacity = 0f;
+                        continue;
+                    }
+
+                    animation.Edge = edge;
+                    animation.HasEdge = true;
+                    animation.StartedAt = Time.unscaledTime;
+                }
+
+                if (!TryCalculateEdgeOffset(animation.Element, animation.Edge, animation.AppliedOffset,
+                        out var offset))
+                {
+                    animation.StartedAt = Time.unscaledTime;
+                    animation.Element.style.opacity = 0f;
+                    continue;
+                }
+
+                animation.Element.style.opacity = 1f;
+                var progress = Mathf.Clamp01((Time.unscaledTime - animation.StartedAt) / 0.7f);
+                var eased = progress * progress * (3f - 2f * progress);
+                animation.AppliedOffset = offset * (1f - eased);
+                animation.Element.style.translate = new Translate(
+                    new Length(animation.AppliedOffset.x, LengthUnit.Pixel),
+                    new Length(animation.AppliedOffset.y, LengthUnit.Pixel));
+                if (progress >= 1f)
+                {
+                    animation.Element.style.translate = StyleKeyword.Null;
+                    animation.Element.style.opacity = 1f;
+                    animation.AppliedOffset = Vector2.zero;
+                    tableEdgeAnimations.RemoveAt(index);
+                }
+            }
+        }
+
+        private void UpdateTableExitAnimation()
+        {
+            if (!tableExitAnimating || Time.unscaledTime < tableExitStartedAt)
+            {
+                return;
+            }
+
+            if (root == null || root.panel == null)
+            {
+                CompleteTableExit();
+                return;
+            }
+
+            var progress = Mathf.Clamp01((Time.unscaledTime - tableExitStartedAt) / TableExitDuration);
+            var eased = progress * progress * (3f - 2f * progress);
+            if (tableExitTargets != null)
+            {
+                for (var index = 0; index < tableExitTargets.Count; index++)
+                {
+                    var target = tableExitTargets[index];
+                    if (target.Element == null || target.Element.panel == null)
+                    {
+                        continue;
+                    }
+
+                    target.Element.style.translate = new Translate(
+                        new Length(target.Offset.x * eased, LengthUnit.Pixel),
+                        new Length(target.Offset.y * eased, LengthUnit.Pixel));
+                }
+            }
+
+            if (progress >= 1f)
+            {
+                CompleteTableExit();
+            }
         }
 
         private void OnDestroy()
@@ -242,6 +606,8 @@ namespace Mejnun.UI
 
         private void Update()
         {
+            UpdateTableEdgeAnimations();
+            UpdateTableExitAnimation();
             HandleKeyboardShortcuts();
             if (pausePanel != null && pausePanel.resolvedStyle.display == DisplayStyle.Flex)
             {
@@ -263,7 +629,7 @@ namespace Mejnun.UI
             if (root != null)
             {
                 UiScaleUtility.Apply(uiDocument);
-                var phoneLayout = IsPhoneScreen(Application.isMobilePlatform, Screen.width, Screen.height, Screen.dpi);
+                var phoneLayout = DeviceProfile.IsPhoneLayout;
                 root.EnableInClassList("portrait-layout", Screen.height > Screen.width);
                 root.EnableInClassList("phone-layout", phoneLayout);
                 ApplyPhoneSafeArea(phoneLayout);
@@ -400,9 +766,82 @@ namespace Mejnun.UI
                 return;
             }
 
+            if (suppressOnlineWaiting)
+            {
+                return;
+            }
+
             var message = matchFlow == null ? string.Empty : matchFlow.OnlineWaitingMessage;
-            onlineWaiting.text = message;
-            onlineWaiting.style.display = string.IsNullOrEmpty(message) ? DisplayStyle.None : DisplayStyle.Flex;
+            if (!string.IsNullOrEmpty(message))
+            {
+                onlineWaiting.text = message;
+                onlineWaitingHide?.Pause();
+                onlineWaitingHide = null;
+                onlineWaitingShow?.Pause();
+                onlineWaitingShow = null;
+                onlineWaiting.style.display = DisplayStyle.Flex;
+                if (!onlineWaitingVisible)
+                {
+                    onlineWaiting.RemoveFromClassList("waiting-visible");
+                    onlineWaitingVisible = true;
+                    onlineWaitingShow = onlineWaiting.schedule.Execute(() =>
+                    {
+                        if (matchFlow != null && !string.IsNullOrEmpty(matchFlow.OnlineWaitingMessage))
+                        {
+                            onlineWaiting.AddToClassList("waiting-visible");
+                        }
+
+                        onlineWaitingShow = null;
+                    }).StartingIn(0);
+                }
+                else
+                {
+                    onlineWaiting.AddToClassList("waiting-visible");
+                }
+
+                return;
+            }
+
+            FadeOutOnlineWaiting();
+        }
+
+        private void FadeOutOnlineWaiting()
+        {
+            onlineWaitingShow?.Pause();
+            onlineWaitingShow = null;
+            if (!onlineWaitingVisible)
+            {
+                return;
+            }
+
+            onlineWaitingVisible = false;
+            onlineWaiting.RemoveFromClassList("waiting-visible");
+            onlineWaitingHide?.Pause();
+            onlineWaitingHide = onlineWaiting.schedule.Execute(() =>
+            {
+                if (!onlineWaiting.ClassListContains("waiting-visible"))
+                {
+                    onlineWaiting.style.display = DisplayStyle.None;
+                }
+
+                onlineWaitingHide = null;
+            }).StartingIn(OnlineWaitingFadeMilliseconds);
+        }
+
+        private void HideOnlineWaitingImmediately()
+        {
+            onlineWaitingShow?.Pause();
+            onlineWaitingHide?.Pause();
+            onlineWaitingShow = null;
+            onlineWaitingHide = null;
+            onlineWaitingVisible = false;
+            if (onlineWaiting == null)
+            {
+                return;
+            }
+
+            onlineWaiting.RemoveFromClassList("waiting-visible");
+            onlineWaiting.style.display = DisplayStyle.None;
         }
 
         private void OnOnlineSeatsChanged()
@@ -502,26 +941,7 @@ namespace Mejnun.UI
 
         public static bool IsPhoneScreen(bool isMobilePlatform, int width, int height, float dpi)
         {
-            var shortSide = Mathf.Min(width, height);
-            var longSide = Mathf.Max(width, height);
-            if (shortSide <= 0)
-            {
-                return false;
-            }
-
-            // Phone-shaped screens (about 19.5:9) count as phones on any platform, so Editor
-            // Game view resolutions such as 1320x2868 get the phone layout too.
-            if ((float)longSide / shortSide >= PhoneMinAspectRatio)
-            {
-                return true;
-            }
-
-            if (!isMobilePlatform)
-            {
-                return false;
-            }
-
-            return dpi > 0f ? shortSide / dpi < PhoneMaxShortSideInches : shortSide < PhoneMaxShortSidePixels;
+            return DeviceProfile.IsPhoneScreen(isMobilePlatform, width, height, dpi);
         }
 
         private void CacheElements()
@@ -560,6 +980,11 @@ namespace Mejnun.UI
             invalidMovePopup = root.Q<Label>("invalid-move-popup");
             onlineNotice = root.Q<Label>("online-notice");
             onlineWaiting = root.Q<Label>("online-waiting");
+            if (onlineWaiting != null)
+            {
+                onlineWaiting.RemoveFromClassList("waiting-visible");
+                onlineWaiting.style.display = DisplayStyle.None;
+            }
             confirmDialog = root.Q<VisualElement>("confirm-dialog");
             confirmMessage = root.Q<Label>("confirm-message");
             confirmDontAsk = root.Q<Toggle>("confirm-dont-ask");
@@ -961,6 +1386,35 @@ namespace Mejnun.UI
             }
         }
 
+        private bool TryResolveOpponentCardSlot(int seat, int cardIndex, out Vector2 screenPosition,
+            out float screenHeight)
+        {
+            screenPosition = default;
+            screenHeight = 0f;
+            if (root == null || root.panel == null || cardIndex < 0)
+            {
+                return false;
+            }
+
+            var card = root.Q<VisualElement>("opponent-card-" + seat + "-" + cardIndex);
+            if (card == null || card.panel != root.panel)
+            {
+                return false;
+            }
+
+            var bounds = card.worldBound;
+            var panelHeight = root.panel.visualTree.worldBound.height;
+            if (!IsFinite(bounds.xMin) || !IsFinite(bounds.yMin) || !IsFinite(bounds.width) ||
+                !IsFinite(bounds.height) || bounds.width <= 0f || bounds.height <= 0f ||
+                !IsFinite(panelHeight) || panelHeight <= 0f || !TryPanelToScreen(bounds.center, out screenPosition))
+            {
+                return false;
+            }
+
+            screenHeight = bounds.height * Screen.height / panelHeight;
+            return IsFinite(screenHeight) && screenHeight > 0f;
+        }
+
         private bool TryPanelToScreen(Vector2 panelPosition, out Vector2 screenPosition)
         {
             screenPosition = default;
@@ -1328,14 +1782,21 @@ namespace Mejnun.UI
                 var relativeSeat = (seat - viewerSeat + state.Hands.Count) % state.Hands.Count;
                 var opponentSide = GetOpponentSide(relativeSeat, state.Hands.Count - 1,
                     root != null && root.ClassListContains("phone-layout") && Screen.height > Screen.width);
-                var name = new Label(GetPlayerName(seat) + (IsBotSeat(seat) ? " · bot" : string.Empty));
+                var name = new Label(GetPlayerName(seat));
                 name.pickingMode = PickingMode.Ignore;
                 name.AddToClassList("opponent-name");
                 opponent.Add(name);
+                if (IsBotSeat(seat))
+                {
+                    var botBadge = new Label("🤖");
+                    botBadge.pickingMode = PickingMode.Ignore;
+                    botBadge.AddToClassList("opponent-bot-badge");
+                    opponent.Add(botBadge);
+                }
                 var cards = new VisualElement();
                 cards.pickingMode = PickingMode.Ignore;
                 cards.AddToClassList("opponent-cards");
-                if (phoneLayout)
+                if (phoneLayout && opponentSide != OpponentSide.Top)
                 {
                     cards.AddToClassList("opponent-cards-phone-stack");
                 }
@@ -1366,7 +1827,7 @@ namespace Mejnun.UI
                     cardBack.style.height = cardHeight;
                     if (cardIndex > 0)
                     {
-                        if (phoneLayout)
+                        if (phoneLayout && opponentSide != OpponentSide.Top)
                         {
                             cardBack.style.marginTop = -cardHeight * 0.82f;
                         }
@@ -1392,14 +1853,11 @@ namespace Mejnun.UI
                     cards.Add(cardBack);
                 }
 
-                if (phoneLayout)
-                {
-                    var count = new Label(state.Hands[seat].Count.ToString());
-                    count.pickingMode = PickingMode.Ignore;
-                    count.name = "opponent-count-" + seat;
-                    count.AddToClassList("opponent-count");
-                    opponent.Add(count);
-                }
+                var count = new Label(state.Hands[seat].Count.ToString());
+                count.pickingMode = PickingMode.Ignore;
+                count.name = "opponent-count-" + seat;
+                count.AddToClassList("opponent-count");
+                opponent.Add(count);
 
                 if (visibleCardCount == 1)
                 {

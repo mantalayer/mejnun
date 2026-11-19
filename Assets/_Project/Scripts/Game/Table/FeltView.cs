@@ -88,18 +88,19 @@ namespace Mejnun.Game
             var cameraPosition = camera.transform.position;
             var viewportSize = new Vector2(worldWidth, worldHeight);
             var screenHeight = Mathf.Max(camera.pixelHeight, 1f);
-            var worldUnitsPerPixel = worldHeight / screenHeight;
 
             if (tiledRenderer != null && tiledRenderer.enabled && tiledRenderer.sprite != null)
             {
                 var spriteWidth = Mathf.Max(tiledRenderer.sprite.bounds.size.x, 0.0001f);
-                var scale = activeFelt.TileWorldSize / spriteWidth;
-                tiledRenderer.transform.localScale = new Vector3(scale, scale, 1f);
                 var spriteHeight = Mathf.Max(tiledRenderer.sprite.bounds.size.y, 0.0001f);
-                var tileWidth = Mathf.Max(activeFelt.TileWorldSize, 0.0001f);
-                var tileHeight = spriteHeight * scale;
-                var tileCountX = Mathf.Max(2, Mathf.CeilToInt(worldWidth / tileWidth) + 2);
-                var tileCountY = Mathf.Max(2, Mathf.CeilToInt(worldHeight / tileHeight) + 2);
+                var tileSize = TableFeltLayout.TileSize(activeFelt, worldHeight);
+                var scaleX = tileSize.x / spriteWidth;
+                var scaleY = tileSize.y / spriteHeight;
+                tiledRenderer.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+                var tileWidth = Mathf.Max(tileSize.x, 0.0001f);
+                var tileHeight = Mathf.Max(tileSize.y, 0.0001f);
+                var tileCountX = Mathf.Max(2, Mathf.CeilToInt(worldWidth / tileWidth));
+                var tileCountY = Mathf.Max(2, Mathf.CeilToInt(worldHeight / tileHeight));
                 if ((tileCountX & 1) != 0)
                 {
                     tileCountX++;
@@ -111,9 +112,15 @@ namespace Mejnun.Game
                 }
 
                 tiledRenderer.size = new Vector2(tileCountX * spriteWidth, tileCountY * spriteHeight);
+                var pivot = tiledRenderer.sprite.pivot;
+                var rect = tiledRenderer.sprite.rect;
+                var pivotX = pivot.x / Mathf.Max(rect.width, 1f);
+                var pivotY = pivot.y / Mathf.Max(rect.height, 1f);
+                var totalWidth = tileCountX * tileWidth;
+                var totalHeight = tileCountY * tileHeight;
                 tiledRenderer.transform.SetPositionAndRotation(new Vector3(
-                    Mathf.Floor(cameraPosition.x / tileWidth) * tileWidth,
-                    Mathf.Floor(cameraPosition.y / tileHeight) * tileHeight,
+                    cameraPosition.x - worldWidth * 0.5f + totalWidth * pivotX,
+                    cameraPosition.y + worldHeight * 0.5f - totalHeight * (1f - pivotY),
                     0f), Quaternion.identity);
             }
 
@@ -121,18 +128,15 @@ namespace Mejnun.Game
             if (borderRenderer != null && borderRenderer.enabled && borderRenderer.sprite != null)
             {
                 var settings = activeFelt.BorderSettings;
-                var thicknessPixels = settings == null ? 16f : settings.ThicknessPixels;
-                var referenceHeight = settings == null ? 1080f : Mathf.Max(settings.ReferenceScreenHeight, 1f);
-                var insetPixels = settings == null ? 0f : settings.InsetPixels;
                 var slice = borderRenderer.sprite.border;
                 var slicePixels = Mathf.Max(slice.x, Mathf.Max(slice.y, Mathf.Max(slice.z, slice.w)));
                 var pixelsPerUnit = Mathf.Max(borderRenderer.sprite.pixelsPerUnit, 0.0001f);
                 var sourceSliceWorld = slicePixels > 0f
                     ? slicePixels / pixelsPerUnit
                     : Mathf.Max(borderRenderer.sprite.bounds.size.x * 0.1f, 0.0001f);
-                var targetThicknessWorld = thicknessPixels * worldHeight / referenceHeight;
+                var targetThicknessWorld = TableFeltLayout.BorderThickness(settings, worldHeight);
                 var scale = targetThicknessWorld / sourceSliceWorld;
-                var insetWorld = insetPixels * worldUnitsPerPixel;
+                var insetWorld = TableFeltLayout.Inset(settings, worldHeight, screenHeight);
                 borderRenderer.transform.SetPositionAndRotation(fixedPosition, camera.transform.rotation);
                 borderRenderer.transform.localScale = new Vector3(scale, scale, 1f);
                 borderRenderer.size = new Vector2(
@@ -143,11 +147,13 @@ namespace Mejnun.Game
             if (imageRenderer != null && imageRenderer.enabled && imageRenderer.sprite != null)
             {
                 var imageSize = imageRenderer.sprite.bounds.size;
-                var maxHeight = tableCamera.MaxOrthographicSize * 2f;
-                var maxWidth = maxHeight * camera.aspect;
-                var scale = Mathf.Max((maxWidth + 2f) / Mathf.Max(imageSize.x, 0.0001f),
-                    (maxHeight + 2f) / Mathf.Max(imageSize.y, 0.0001f));
-                imageRenderer.transform.SetPositionAndRotation(new Vector3(0f, 0f, fixedPosition.z),
+                var scale = Mathf.Max(worldWidth / Mathf.Max(imageSize.x, 0.0001f),
+                    worldHeight / Mathf.Max(imageSize.y, 0.0001f));
+                var imageCenterOffset = imageRenderer.sprite.bounds.center * scale;
+                imageRenderer.transform.SetPositionAndRotation(new Vector3(
+                    cameraPosition.x - imageCenterOffset.x,
+                    cameraPosition.y - imageCenterOffset.y,
+                    fixedPosition.z),
                     Quaternion.identity);
                 imageRenderer.transform.localScale = new Vector3(scale, scale, 1f);
             }

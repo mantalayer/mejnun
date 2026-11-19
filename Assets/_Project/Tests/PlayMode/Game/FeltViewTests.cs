@@ -37,19 +37,24 @@ namespace Mejnun.Game.Tests
             Assert.That(border.enabled, Is.False);
             Assert.That(image.enabled, Is.False);
             Assert.That(tile.sortingOrder, Is.LessThan(0));
-            Assert.That(tile.transform.position.x, Is.EqualTo(2f).Within(0.001f));
-            Assert.That(tile.transform.position.y, Is.EqualTo(-2f).Within(0.001f));
+            Assert.That(tile.bounds.min.x,
+                Is.EqualTo(camera.transform.position.x - camera.orthographicSize * camera.aspect).Within(0.001f));
+            Assert.That(tile.bounds.max.y,
+                Is.EqualTo(camera.transform.position.y + camera.orthographicSize).Within(0.001f));
             Assert.That(tile.size.x * tile.transform.lossyScale.x,
                 Is.GreaterThan(2f * camera.orthographicSize * camera.aspect));
             Assert.That(tile.size.y * tile.transform.lossyScale.y,
                 Is.GreaterThan(2f * camera.orthographicSize));
 
-            var tileOrigin = tile.transform.position;
+            var originalTileScale = tile.transform.localScale.x;
             camera.transform.position = new Vector3(2.6f, -1.3f, -10f);
             camera.orthographicSize = 8f;
             feltView.RefreshLayout();
-            Assert.That(tile.transform.position.x, Is.EqualTo(tileOrigin.x).Within(0.001f));
-            Assert.That(tile.transform.position.y, Is.EqualTo(tileOrigin.y).Within(0.001f));
+            Assert.That(tile.bounds.min.x,
+                Is.EqualTo(camera.transform.position.x - camera.orthographicSize * camera.aspect).Within(0.001f));
+            Assert.That(tile.bounds.max.y,
+                Is.EqualTo(camera.transform.position.y + camera.orthographicSize).Within(0.001f));
+            Assert.That(tile.transform.localScale.x, Is.EqualTo(originalTileScale * 8f / 6f).Within(0.001f));
 
             camera.transform.position = new Vector3(-3.1f, 4.2f, -10f);
             camera.aspect = 0.8f;
@@ -72,6 +77,32 @@ namespace Mejnun.Game.Tests
             Assert.That(border.enabled, Is.False);
             Assert.That(image.enabled, Is.False);
             Assert.That(camera.backgroundColor, Is.EqualTo(feltView.ActiveFelt.ClearColor));
+
+            var texture = new Texture2D(256, 128);
+            var imageSprite = Sprite.Create(texture, new Rect(0f, 0f, 256f, 128f), new Vector2(0.5f, 0.5f),
+                100f);
+            var imageFelt = ScriptableObject.CreateInstance<TableFelt>();
+            imageFelt.Configure("test-image", "Test image", FeltRenderMode.Image, null, 1f, null, imageSprite,
+                Color.white, Color.black, null);
+            var imageCatalog = ScriptableObject.CreateInstance<TableFeltCatalog>();
+            imageCatalog.Configure(new[] { imageFelt });
+            feltView.Configure(tableCamera, imageCatalog, tile, border, image);
+            feltView.Apply("test-image");
+            feltView.RefreshLayout();
+
+            var viewportWidth = camera.orthographicSize * 2f * camera.aspect;
+            var viewportHeight = camera.orthographicSize * 2f;
+            Assert.That(tile.enabled, Is.False);
+            Assert.That(image.enabled, Is.True);
+            Assert.That(image.bounds.size.x, Is.GreaterThanOrEqualTo(viewportWidth));
+            Assert.That(image.bounds.size.y, Is.GreaterThanOrEqualTo(viewportHeight));
+            Assert.That(image.bounds.center.x, Is.EqualTo(camera.transform.position.x).Within(0.001f));
+            Assert.That(image.bounds.center.y, Is.EqualTo(camera.transform.position.y).Within(0.001f));
+
+            Object.Destroy(imageCatalog);
+            Object.Destroy(imageFelt);
+            Object.Destroy(imageSprite);
+            Object.Destroy(texture);
         }
 
         [UnityTest]
