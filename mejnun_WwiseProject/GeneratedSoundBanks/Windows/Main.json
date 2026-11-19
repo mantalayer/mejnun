@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{E035F84E-ECC6-4CC8-B3F1-029FDDA3242F}",
     "Language": "SFX",
-    "Hash": "{D5016FF2-BAFF-AF9C-A09D-FA9DA85DD0FB}",
+    "Hash": "{5EBA4CBD-20D5-B758-D503-6CD99F2147B2}",
     "ObjectPath": "\\SoundBanks\\Mejnun\\Main",
     "ShortName": "Main",
     "Path": "Main.bnk",
@@ -21,7 +21,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 2.wav",
-      "CachePath": "59/{59CB4ADD-3A8B-A68A-6290-46FF16DE28EB}.wem"
+      "CachePath": "BA/{BA4275E4-5F59-B95F-AE39-69AEF8132F94}.wem"
      },
      {
       "Id": "23233998",
@@ -29,7 +29,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 6.wav",
-      "CachePath": "51/{51C661EC-B64F-5E02-D7E0-2696A6952806}.wem"
+      "CachePath": "16/{1604F593-2621-69F9-3BBF-57039E3F7127}.wem"
      },
      {
       "Id": "37294351",
@@ -37,7 +37,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 7.wav",
-      "CachePath": "88/{88A326AD-67C7-7DA7-18AE-7622F983C442}.wem"
+      "CachePath": "79/{79226438-B55C-ADDB-0805-0A9568031F71}.wem"
      },
      {
       "Id": "88696734",
@@ -45,7 +45,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Slide Slow 3.wav",
-      "CachePath": "5B/{5B0660DB-E632-4193-14B0-5936045FC12C}.wem"
+      "CachePath": "F5/{F5FBB6C4-6AD9-E0FA-942D-E66D795ADFF9}.wem"
      },
      {
       "Id": "92620801",
@@ -53,7 +53,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Move Fast - With Whoosh 1.wav",
-      "CachePath": "AD/{AD6909C5-0B67-4A4B-5D2F-3016E18E69F6}.wem"
+      "CachePath": "06/{0635A551-3C9E-37D0-B90D-DF8469ACF466}.wem"
      },
      {
       "Id": "103497374",
@@ -61,7 +61,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Coins Reward 3.wav",
-      "CachePath": "24/{248660D5-4947-E3FD-C42D-BAB99A45906B}.wem"
+      "CachePath": "FE/{FE6941A5-0127-E57B-44CA-6AFC550D2737}.wem"
      },
      {
       "Id": "156130487",
@@ -69,7 +69,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Move Fast - With Whoosh 2.wav",
-      "CachePath": "06/{06D2EB67-BFFA-2059-C887-9DB38DAD4746}.wem"
+      "CachePath": "3C/{3CB439EA-01B7-DEEC-71BB-8B9CF3CA8821}.wem"
      },
      {
       "Id": "172930794",
@@ -77,7 +77,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Slide Slow 1.wav",
-      "CachePath": "96/{961EBC74-4276-FEEA-6FDF-99AEA74BE47E}.wem"
+      "CachePath": "0D/{0DF9F19B-5A82-60EB-061B-CB0D8F8AAF78}.wem"
      },
      {
       "Id": "234069379",
@@ -85,7 +85,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Flip Natural 3.wav",
-      "CachePath": "A6/{A6B02310-F2E4-1733-B728-62136B5D06EB}.wem"
+      "CachePath": "B2/{B2114D50-4C61-B334-5254-AF20B10C5435}.wem"
      },
      {
       "Id": "294213001",
@@ -93,7 +93,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Discard 2.wav",
-      "CachePath": "F2/{F25C3A69-0926-7723-D40D-C8689D61513B}.wem"
+      "CachePath": "5D/{5D69F800-53AF-8C06-D713-76AE28663D54}.wem"
      },
      {
       "Id": "296756676",
@@ -101,7 +101,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Change Of Turns Stinger 6.wav",
-      "CachePath": "B0/{B03834C8-18CA-158B-9711-87D399CF777A}.wem"
+      "CachePath": "BD/{BDD60EE7-5A1F-86EA-E6D3-CB16EDC25FDD}.wem"
      },
      {
       "Id": "355085813",
@@ -109,15 +109,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "UI Wood Sound 2.wav",
-      "CachePath": "A0/{A0085417-ED3A-B136-A569-FE8AC75C2089}.wem"
-     },
-     {
-      "Id": "361181537",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "Card Placement 4.wav",
-      "CachePath": "29/{29F2452F-C307-75EE-036B-64315686D75F}.wem"
+      "CachePath": "C1/{C16A67B6-C787-6C5A-4DF4-1F977EE2D907}.wem"
      },
      {
       "Id": "412578313",
@@ -125,7 +117,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Move Fast - With Whoosh 3.wav",
-      "CachePath": "42/{42CDFF86-0F36-022C-3879-0242BD39E4F9}.wem"
+      "CachePath": "F0/{F0FE4272-BD77-5664-138E-6F1EC1EFAC73}.wem"
      },
      {
       "Id": "413159305",
@@ -133,15 +125,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Slide Slow 2.wav",
-      "CachePath": "44/{44D6AF69-0346-9E40-362D-291D64D45386}.wem"
-     },
-     {
-      "Id": "427268354",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "Card Placement 1.wav",
-      "CachePath": "22/{22298FB1-F35E-641E-7571-3B89F3A2B5E1}.wem"
+      "CachePath": "05/{058704CF-DD41-A011-31F8-7DB72E43DB62}.wem"
      },
      {
       "Id": "430629700",
@@ -149,7 +133,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Cards Shuffle Short Sequence 2.wav",
-      "CachePath": "57/{57C325EA-DD12-A2A3-CC39-F8C4021D99A7}.wem"
+      "CachePath": "3E/{3ED94698-F71A-1A3A-AA17-D040195C9A15}.wem"
      },
      {
       "Id": "442495150",
@@ -157,7 +141,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 3.wav",
-      "CachePath": "D3/{D3CD5A0A-998F-9321-06AB-6E8126E39B3D}.wem"
+      "CachePath": "84/{84C2E394-FDA2-60CF-7277-E0B6375E2A78}.wem"
      },
      {
       "Id": "448146646",
@@ -165,7 +149,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 7.wav",
-      "CachePath": "57/{57A4AF09-5C88-9AA1-9BA3-22314C8F1045}.wem"
+      "CachePath": "BE/{BEAC9CBE-CE97-427A-86A1-B1ED94272AD9}.wem"
      },
      {
       "Id": "497904013",
@@ -173,7 +157,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "UI Back Action 1.wav",
-      "CachePath": "A4/{A4841263-486E-9E31-EC3A-0A20DAF48186}.wem"
+      "CachePath": "BC/{BC4DC598-B402-73A8-EAA6-B99E1960F318}.wem"
      },
      {
       "Id": "534013469",
@@ -181,7 +165,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Lift.wav",
-      "CachePath": "6E/{6E33A15C-B003-EA0C-3E0D-50E5E409CED9}.wem"
+      "CachePath": "FA/{FA24E620-032D-8864-6BC1-03A8E3165B0E}.wem"
      },
      {
       "Id": "578029637",
@@ -189,7 +173,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "UI Wood Sound 4.wav",
-      "CachePath": "45/{4564BE7A-6588-F641-6F7F-38B2D7517193}.wem"
+      "CachePath": "5D/{5DAD7D19-9675-C5F1-01D5-A956FDC62D7F}.wem"
      },
      {
       "Id": "581828867",
@@ -197,15 +181,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 2.wav",
-      "CachePath": "F4/{F4B41F17-2C49-8201-0E1E-9E6F239444C0}.wem"
-     },
-     {
-      "Id": "588660385",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "Card Placement 2.wav",
-      "CachePath": "37/{3743C38C-090B-D09C-04B3-347B5653C33C}.wem"
+      "CachePath": "A3/{A382CEA9-F125-8F95-2ADE-4F081EA07077}.wem"
      },
      {
       "Id": "591768834",
@@ -213,7 +189,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 5.wav",
-      "CachePath": "90/{90C6EDB0-94C6-9FF6-9AB1-1144D81A1DFB}.wem"
+      "CachePath": "54/{54DC7DAF-2064-5818-7BC0-DA2903BDAED7}.wem"
      },
      {
       "Id": "594895720",
@@ -221,7 +197,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Flip Natural 5.wav",
-      "CachePath": "48/{48AB2C47-6E64-67CE-CF68-496E0B25C82D}.wem"
+      "CachePath": "DC/{DCEDCEBF-EBB9-C2AD-922C-5FBCDCFB487D}.wem"
      },
      {
       "Id": "666531232",
@@ -229,7 +205,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Slide Slow 4.wav",
-      "CachePath": "CA/{CAAABB57-E68E-4540-8C40-476EDC9F12F1}.wem"
+      "CachePath": "04/{0448BDF7-8E19-32DB-6B87-F4164C19FF8D}.wem"
      },
      {
       "Id": "684871593",
@@ -237,7 +213,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Flip Natural 2.wav",
-      "CachePath": "40/{403A0260-EAA5-7543-3B6C-DA77E5B8A1B2}.wem"
+      "CachePath": "1D/{1D7B45AC-E3A4-584B-14BE-402BC3B04BF4}.wem"
      },
      {
       "Id": "687731691",
@@ -245,7 +221,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 5.wav",
-      "CachePath": "09/{090782AC-B0A3-2846-06FA-ED1CAE798885}.wem"
+      "CachePath": "23/{238FFC71-60EF-F611-3BE2-A2750426DA74}.wem"
      },
      {
       "Id": "688466017",
@@ -253,7 +229,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "UI Wood Sound 5.wav",
-      "CachePath": "FC/{FCBF71D1-67A7-16F4-121B-1D1081387524}.wem"
+      "CachePath": "BD/{BD91F958-954B-FD6E-A612-8C716386A19D}.wem"
      },
      {
       "Id": "690129464",
@@ -261,7 +237,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Change Of Turns Stinger 3.wav",
-      "CachePath": "9F/{9F885BF5-591B-B426-6A40-170141F0AB0D}.wem"
+      "CachePath": "C8/{C84C0C0D-9D23-162D-AA2D-2C5EC7BE8589}.wem"
      },
      {
       "Id": "700172627",
@@ -269,7 +245,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 4.wav",
-      "CachePath": "2D/{2DBCF5C9-8EA6-5F00-0C86-1956CC3241EA}.wem"
+      "CachePath": "84/{84865747-57A8-9E3B-F5F5-08038D52AE03}.wem"
      },
      {
       "Id": "702930951",
@@ -277,7 +253,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 8.wav",
-      "CachePath": "AC/{ACB6087C-CC9B-33ED-A9AB-19D47729F39B}.wem"
+      "CachePath": "07/{07D9A055-F65A-3D7A-D48C-6EAE9CD6CAC5}.wem"
      },
      {
       "Id": "727902420",
@@ -285,7 +261,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Coin Fall 1.wav",
-      "CachePath": "5D/{5DC12118-7B3B-F374-393B-E321F24E8EB1}.wem"
+      "CachePath": "D9/{D9C7BBC4-AF9E-39DE-0CB2-8430C7B8D220}.wem"
      },
      {
       "Id": "752208865",
@@ -293,7 +269,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 4.wav",
-      "CachePath": "92/{92722368-3466-FE58-739B-9BF74189EEEA}.wem"
+      "CachePath": "2B/{2B60DCF8-5B53-089E-7CED-D27127DFC81F}.wem"
      },
      {
       "Id": "790269741",
@@ -301,7 +277,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Flip Natural 1.wav",
-      "CachePath": "0B/{0B6F8B3F-61E5-799E-F482-ACFA1A6B7350}.wem"
+      "CachePath": "DA/{DA15197C-6C10-ACF6-6D2B-A6772596388E}.wem"
      },
      {
       "Id": "797890009",
@@ -309,7 +285,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Cards Shuffle Short Sequence 1.wav",
-      "CachePath": "BE/{BE318EF3-81E1-0FB4-5C19-17025107038A}.wem"
+      "CachePath": "B4/{B45945A3-C29B-185C-E381-BC55FE59C2F9}.wem"
      },
      {
       "Id": "813608714",
@@ -317,7 +293,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Flip Natural 4.wav",
-      "CachePath": "07/{07C9BE96-FC02-D251-56AC-1335B7DBED4A}.wem"
+      "CachePath": "9D/{9D865B51-86D2-51F1-9D7E-F9CA40768400}.wem"
      },
      {
       "Id": "826325183",
@@ -325,15 +301,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "UI Wood Sound 3.wav",
-      "CachePath": "98/{98E679A2-2A22-B2BD-1BB5-79D7AC99F77D}.wem"
-     },
-     {
-      "Id": "875333067",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "Card Placement 3.wav",
-      "CachePath": "9E/{9EDE61CB-D469-0143-77B9-70903BEE5CB9}.wem"
+      "CachePath": "F5/{F5732ECB-222E-9F67-0CBA-C41160B277D1}.wem"
      },
      {
       "Id": "942971863",
@@ -341,7 +309,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Dice Roll Single 1.wav",
-      "CachePath": "4B/{4B851968-E148-D8B9-5C1C-CAE1DAC4313D}.wem"
+      "CachePath": "CF/{CFA3F0CF-4931-81AF-4011-E143A40DD6B1}.wem"
      },
      {
       "Id": "959331636",
@@ -349,7 +317,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Cards Shuffle Short Sequence 2.wav",
-      "CachePath": "92/{9269673F-FAF4-8464-6389-75DCDA1BF8D5}.wem"
+      "CachePath": "4C/{4C2C157E-47AF-8B2C-E2B8-479F79027AD1}.wem"
      },
      {
       "Id": "977712186",
@@ -357,7 +325,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Cards Deal Sound 4.wav",
-      "CachePath": "E9/{E9E0EF9B-ABCB-F397-5AE6-D6657FF2B696}.wem"
+      "CachePath": "FA/{FAA23B7F-2C21-9474-BE82-7CD07512160E}.wem"
      },
      {
       "Id": "989643402",
@@ -365,7 +333,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Cards Deal Sound 3.wav",
-      "CachePath": "EE/{EE501F7C-8B74-B654-B245-B4785209DF01}.wem"
+      "CachePath": "C9/{C945FCC8-91EF-9328-9EF4-3CBAE6FEA162}.wem"
      },
      {
       "Id": "1003591847",
@@ -373,7 +341,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 3.wav",
-      "CachePath": "AB/{ABE987C7-B312-ADBB-1C14-D808274C810B}.wem"
+      "CachePath": "B0/{B0B5AE4B-2AA7-5ADF-3B7E-8C6EBFC9C689}.wem"
      },
      {
       "Id": "1064900614",
@@ -381,7 +349,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 1.wav",
-      "CachePath": "5F/{5F9E0B08-5EF3-EB05-6560-B7255A748638}.wem"
+      "CachePath": "49/{499F5854-EDA1-D3B7-2938-63B70DA19E4F}.wem"
      },
      {
       "Id": "1070372830",
@@ -389,7 +357,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "Card Drop 6.wav",
-      "CachePath": "95/{95209058-3C47-877C-15F8-54507F3DD574}.wem"
+      "CachePath": "B0/{B0CE0003-59FD-AAD1-C266-DC5634A2117F}.wem"
      }
     ],
     "Events": [
@@ -470,19 +438,16 @@
       "GUID": "{23084022-ECD3-4386-AD41-960136C97D53}",
       "DurationType": "OneShot",
       "DurationMin": "0.19712017",
-      "DurationMax": "0.33172336",
+      "DurationMax": "0.23557822",
       "MediaRefs": [
        {
-        "Id": "361181537"
+        "Id": "92620801"
        },
        {
-        "Id": "427268354"
+        "Id": "156130487"
        },
        {
-        "Id": "588660385"
-       },
-       {
-        "Id": "875333067"
+        "Id": "412578313"
        }
       ]
      },
@@ -862,6 +827,6 @@
     ]
    }
   ],
-  "FileHash": "{040E620C-CD90-7D7C-8E1F-AEA0B60E7DC2}"
+  "FileHash": "{5D1ADD3F-45F8-26D2-FBB9-58058545A044}"
  }
 }

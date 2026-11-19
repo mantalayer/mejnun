@@ -43,7 +43,31 @@
             <ui:Label name="invalid-move-popup" class="invalid-move-popup" picking-mode="Ignore" />
             <ui:VisualElement name="marker-layer" class="marker-layer" picking-mode="Ignore" />
         </ui:VisualElement>
-        <ui:VisualElement name="confirm-dialog" class="hud-dialog" style="display: none">
+        <ui:VisualElement name="tutorial-layer" class="tutorial-layer" picking-mode="Ignore" style="display: none">
+            <ui:Label name="ghost-hand" class="ghost-hand" text="☝" picking-mode="Ignore" />
+            <ui:VisualElement name="coach-popup" class="coach-popup">
+                <ui:Label name="coach-title" class="coach-title" text="" />
+                <ui:Label name="coach-body" class="coach-body" text="" />
+                <ui:Label name="coach-nudge" class="coach-nudge" text="Try the highlighted cards" />
+                <ui:VisualElement class="coach-actions">
+                    <ui:Button name="coach-skip-button" class="hud-button coach-skip-button" text="Skip tutorial" />
+                    <ui:Button name="coach-next-button" class="hud-button primary-button" text="Next" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="rule-modal-scrim" class="rule-modal-scrim">
+                <ui:VisualElement name="rule-modal" class="hud-dialog rule-modal">
+                    <ui:Label name="rule-title" class="dialog-title" text="" />
+                    <ui:VisualElement name="rule-diagram" class="rule-diagram" />
+                    <ui:Label name="rule-body" class="dialog-message rule-body" text="" />
+                    <ui:Label name="rule-page" class="rule-page" text="" />
+                    <ui:VisualElement class="dialog-actions">
+                        <ui:Button name="rule-back-button" class="hud-button" text="Back" />
+                        <ui:Button name="rule-ok-button" class="hud-button primary-button" text="Got it" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="confirm-dialog" class="hud-dialog confirm-dialog" style="display: none">
             <ui:Label name="confirm-message" class="dialog-message" text="Are you sure?" />
             <ui:Toggle name="confirm-dont-ask" class="dialog-toggle" label="Don't ask again" />
             <ui:VisualElement class="dialog-actions">
@@ -57,6 +81,7 @@
             <ui:Button name="restart-button" class="hud-button" text="Restart game" />
             <ui:Button name="settings-button" class="hud-button" text="Settings" />
             <ui:Button name="hint-button" class="hud-button" text="Hint: off" />
+            <ui:Button name="skip-tutorial-button" class="hud-button" text="Skip tutorial" style="display: none" />
             <ui:Button name="help-button" class="hud-button" text="? Help" />
             <ui:Button name="menu-button" class="hud-button" text="Main menu" />
         </ui:VisualElement>

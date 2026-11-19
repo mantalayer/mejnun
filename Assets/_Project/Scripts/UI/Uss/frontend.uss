@@ -67,6 +67,46 @@
     width: 100%;
 }
 
+.tutorial-prompt {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.tutorial-prompt-card {
+    width: 92%;
+    max-width: 440px;
+    align-items: stretch;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(18, 46, 37, 0.98);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(245, 220, 145);
+    border-right-color: rgb(245, 220, 145);
+    border-top-color: rgb(245, 220, 145);
+    border-bottom-color: rgb(245, 220, 145);
+}
+
+.tutorial-prompt-title {
+    color: rgb(245, 220, 145);
+    font-size: 28px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: 6px;
+}
+
+.tutorial-prompt-copy {
+    -unity-text-align: middle-center;
+}
+
 .frontend-title {
     color: rgb(245, 220, 145);
     font-size: 46px;

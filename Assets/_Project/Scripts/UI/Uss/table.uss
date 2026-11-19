@@ -479,6 +479,22 @@
     padding: 16px 20px;
 }
 
+/* Confirmation prompts (skip tutorial, leave, draw…): centred and sized to fit their content. */
+.confirm-dialog {
+    left: 50%;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    width: 440px;
+    max-width: 90%;
+    translate: -50% -50%;
+    padding: 16px 20px;
+}
+
+.confirm-dialog .dialog-message {
+    -unity-text-align: middle-center;
+}
+
 .pause-panel .dialog-title {
     -unity-text-align: middle-center;
 }
@@ -649,4 +665,218 @@
     padding-right: 2px;
     font-size: 12px;
     white-space: normal;
+}
+
+/* Tutorial: coach popup, rule modal, ghost hand and HUD button focus. */
+
+.tutorial-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.coach-popup {
+    position: absolute;
+    left: 50%;
+    top: 96px;
+    width: 420px;
+    max-width: 86%;
+    translate: -50% 0;
+    background-color: rgba(8, 18, 14, 0.94);
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: rgb(239, 195, 92);
+    padding: 12px 16px;
+    opacity: 0;
+    scale: 0.94 0.94;
+    transition-property: opacity, scale, translate, left, top;
+    transition-duration: 180ms;
+}
+
+.coach-popup.coach-visible {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.coach-popup.coach-anchored {
+    translate: -50% -100%;
+}
+
+.coach-title {
+    color: rgb(239, 195, 92);
+    font-size: 19px;
+    -unity-font-style: bold;
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.coach-body {
+    color: rgb(248, 248, 240);
+    font-size: 16px;
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.coach-nudge {
+    display: none;
+    color: rgb(255, 196, 170);
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-bottom: 6px;
+}
+
+.coach-popup.coach-nudging .coach-nudge {
+    display: flex;
+}
+
+.coach-popup.coach-nudging {
+    border-color: rgb(230, 96, 72);
+}
+
+.coach-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.coach-skip-button {
+    min-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(230, 235, 228, 0.7);
+}
+
+.rule-modal-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.rule-modal {
+    left: 50%;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    width: 560px;
+    max-width: 90%;
+    translate: -50% -50%;
+    border-width: 2px;
+    border-color: rgb(239, 195, 92);
+}
+
+.rule-body {
+    -unity-text-align: middle-center;
+}
+
+.rule-page {
+    color: rgba(230, 235, 228, 0.6);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.rule-diagram {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.diagram-group {
+    align-items: center;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+}
+
+.diagram-cards {
+    flex-direction: row;
+    border-width: 2px;
+    border-radius: 6px;
+    padding: 4px;
+    border-color: rgb(46, 235, 71);
+}
+
+.diagram-group.diagram-invalid .diagram-cards {
+    border-color: rgb(242, 41, 33);
+}
+
+.diagram-card {
+    width: 38px;
+    height: 54px;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: rgb(250, 248, 240);
+    border-radius: 4px;
+    color: rgb(24, 24, 24);
+    font-size: 15px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.diagram-card.diagram-red {
+    color: rgb(196, 30, 30);
+}
+
+.diagram-card.diagram-second-deck {
+    background-color: rgb(226, 236, 250);
+}
+
+.diagram-caption {
+    color: rgba(230, 235, 228, 0.8);
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+.ghost-hand {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 44px;
+    color: rgb(250, 248, 240);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(8, 18, 14);
+    translate: -30% -10%;
+    opacity: 0;
+}
+
+/* Button taps: flipped so the finger points down, with the fingertip (now near the bottom) on the anchor point. */
+.ghost-hand.ghost-hand-down {
+    scale: 1 -1;
+    translate: -30% -90%;
+}
+
+.hud-button.tutorial-focus {
+    border-width: 3px;
+    border-color: rgb(239, 195, 92);
+    background-color: rgb(239, 195, 92);
+    color: rgb(22, 32, 24);
+    -unity-font-style: bold;
+}
+
+.phone-layout .coach-popup {
+    width: auto;
+    left: 4%;
+    right: 4%;
+    max-width: none;
+    translate: 0 0;
+    top: 84px;
+}
+
+.phone-layout .coach-popup.coach-anchored {
+    translate: 0 -100%;
+}
+
+.portrait-layout .rule-modal,
+.phone-layout .rule-modal {
+    width: 92%;
+}
+
+.phone-layout .diagram-card {
+    width: 30px;
+    height: 44px;
+    font-size: 13px;
 }

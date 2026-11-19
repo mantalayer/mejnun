@@ -49,6 +49,8 @@ namespace Mejnun.UI
         private Button pauseButton;
         private Button menuButton;
         private Button helpButton;
+        private Button skipTutorialButton;
+        private TutorialOverlay tutorialOverlay;
         private Label turnPopup;
         private Label halasPopup;
         private Label timerLabel;
@@ -129,6 +131,13 @@ namespace Mejnun.UI
             }
 
             RegisterButtons();
+            tutorialOverlay = new TutorialOverlay(root, tableView, tableController, RequestSkipTutorial,
+                RefreshCurrentGame);
+        }
+
+        private void Start()
+        {
+            tutorialOverlay?.Bind(matchFlow == null ? null : matchFlow.Tutorial);
         }
 
         private void OnEnable()
@@ -195,6 +204,7 @@ namespace Mejnun.UI
 
         private void OnDestroy()
         {
+            tutorialOverlay?.Unbind();
             if (settingsPanelBinder != null)
             {
                 settingsPanelBinder.Closed -= CloseSettings;
@@ -212,6 +222,7 @@ namespace Mejnun.UI
             UpdateDrawPilePosition();
             UpdateDrawFlightOverlay();
             compactBoardButton?.SetEnabled(GameSettings.OrganicBoard && tableView != null);
+            tutorialOverlay?.Tick();
             if (root != null)
             {
                 root.EnableInClassList("portrait-layout", Screen.height > Screen.width);
@@ -328,6 +339,7 @@ namespace Mejnun.UI
             markerLayer = root.Q<VisualElement>("marker-layer");
             fastForwardButton = root.Q<Button>("fast-forward-button");
             markSetButton = root.Q<Button>("mark-set-button");
+            skipTutorialButton = root.Q<Button>("skip-tutorial-button");
         }
 
         private void RegisterButtons()
@@ -348,6 +360,7 @@ namespace Mejnun.UI
             if (pauseButton != null) pauseButton.clicked += TogglePause;
             if (menuButton != null) menuButton.clicked += RequestLeave;
             if (helpButton != null) helpButton.clicked += ToggleHelp;
+            if (skipTutorialButton != null) skipTutorialButton.clicked += RequestSkipTutorial;
             root.Q<Button>("confirm-cancel-button").clicked += CancelConfirmation;
             root.Q<Button>("confirm-accept-button").clicked += AcceptConfirmation;
             root.Q<Button>("resume-button").clicked += Resume;
@@ -773,7 +786,7 @@ namespace Mejnun.UI
             hasAnnouncedTurn = true;
             if (turnPopup != null)
             {
-                turnPopup.text = GetPlayerName(state.CurrentSeat) + "'s Turn";
+                turnPopup.text = Possessive(GetPlayerName(state.CurrentSeat)) + " Turn";
                 turnPopupHide = ShowPopup(turnPopup, turnPopupHide);
             }
         }
@@ -867,7 +880,7 @@ namespace Mejnun.UI
             {
                 turnLabel.text = IsBotSeat(activeSeat)
                     ? GetSeatLabel(activeSeat) + " is thinking…"
-                    : GetSeatLabel(activeSeat) + "'s turn";
+                    : Possessive(GetSeatLabel(activeSeat)) + " turn";
             }
 
             bottomBar?.EnableInClassList("active-turn",
@@ -932,8 +945,53 @@ namespace Mejnun.UI
             }
 
             compactBoardButton?.SetEnabled(GameSettings.OrganicBoard && tableView != null);
+            ApplyTutorialButtons();
 
             RefreshSeats(state);
+        }
+
+        // During the tutorial only the button the current step points at stays usable, and it gets a gold glow.
+        private void ApplyTutorialButtons()
+        {
+            var tutorial = matchFlow == null ? null : matchFlow.Tutorial;
+            var step = tutorial != null && tutorial.IsRunning ? tutorial.CurrentStep : null;
+            ApplyTutorialButton(endTurnButton, TutorialButton.EndTurn, step);
+            ApplyTutorialButton(drawPassButton, TutorialButton.Draw, step);
+            ApplyTutorialButton(undoButton, TutorialButton.Undo, step);
+            ApplyTutorialButton(redoButton, TutorialButton.Redo, step);
+            if (step != null)
+            {
+                revertButton?.SetEnabled(false);
+                fixBoardButton?.SetEnabled(false);
+            }
+
+            markSetButton?.SetEnabled(step == null);
+            if (hintButton != null && matchFlow != null && matchFlow.IsTutorial)
+            {
+                hintButton.SetEnabled(false);
+            }
+        }
+
+        private static void ApplyTutorialButton(Button button, TutorialButton kind, TutorialStep step)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            if (step == null)
+            {
+                button.RemoveFromClassList("tutorial-focus");
+                return;
+            }
+
+            var focused = step.Target.Kind == TutorialTargetKind.Button && step.Target.Button == kind;
+            if (!focused)
+            {
+                button.SetEnabled(false);
+            }
+
+            button.EnableInClassList("tutorial-focus", focused && button.enabledSelf);
         }
 
         private void RefreshIfInputStateChanged()
@@ -1163,6 +1221,12 @@ namespace Mejnun.UI
             return matchFlow != null && matchFlow.SeatCount > 0 ? matchFlow.GetPlayerName(seat) : "Seat " + (seat + 1);
         }
 
+        /// <summary>"You" becomes "Your" (tutorial player); any other name gets "'s".</summary>
+        private static string Possessive(string name)
+        {
+            return name == "You" ? "Your" : name + "'s";
+        }
+
         private string GetSeatLabel(int seat)
         {
             return matchFlow != null && matchFlow.SeatCount > 0 ? matchFlow.GetSeatLabel(seat) : "Seat " + (seat + 1);
@@ -1170,6 +1234,11 @@ namespace Mejnun.UI
 
         private void ToggleHints()
         {
+            if (matchFlow != null && matchFlow.IsTutorial)
+            {
+                return;
+            }
+
             if (tableController != null)
             {
                 tableController.SetMarkMode(false);
@@ -1269,6 +1338,8 @@ namespace Mejnun.UI
                     return "That card or set is no longer available.";
                 case RuleError.GameFinished:
                     return "This game has already ended.";
+                case RuleError.TutorialBlocked:
+                    return "Try the highlighted cards.";
                 default:
                     return "That move is not allowed by the game rules.";
             }
@@ -1329,7 +1400,11 @@ namespace Mejnun.UI
             pendingConfirmAction = action;
             pendingConfirmSetting = setEnabled;
             if (confirmMessage != null) confirmMessage.text = message;
-            if (confirmDontAsk != null) confirmDontAsk.SetValueWithoutNotify(false);
+            if (confirmDontAsk != null)
+            {
+                confirmDontAsk.SetValueWithoutNotify(false);
+                confirmDontAsk.style.display = setEnabled == null ? DisplayStyle.None : DisplayStyle.Flex;
+            }
             SetVisible(confirmDialog, true);
             confirmPaused = true;
             ApplyPause();
@@ -1376,6 +1451,24 @@ namespace Mejnun.UI
             ApplyPause();
             SetVisible(pausePanel, true);
             SetVisible(settingsPanel, false);
+            SetVisible(skipTutorialButton, matchFlow != null && matchFlow.Tutorial != null &&
+                                           matchFlow.Tutorial.IsRunning);
+        }
+
+        private void RequestSkipTutorial()
+        {
+            if (matchFlow == null || matchFlow.Tutorial == null || !matchFlow.Tutorial.IsRunning)
+            {
+                return;
+            }
+
+            if (pausePanel != null && pausePanel.resolvedStyle.display == DisplayStyle.Flex)
+            {
+                Resume();
+            }
+
+            RequestConfirmation("Skip the tutorial? You can replay it any time from How to play.", () => true, null,
+                () => matchFlow.SkipTutorial());
         }
 
         private void Resume()

@@ -23,6 +23,7 @@ namespace Mejnun.Core
         DoubleInSet,
         SetTooLarge,
         InvalidCardForSet,
-        GoDownCardToHand
+        GoDownCardToHand,
+        TutorialBlocked
     }
 }

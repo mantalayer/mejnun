@@ -32,7 +32,8 @@ namespace Mejnun.UI.FrontEnd
                 throw new ArgumentNullException(nameof(root));
             }
 
-            mainMenu = new MainMenuScreen(root, catalog, OpenSetup, ResumeMatch, () => OpenGallery(), OpenSettings);
+            mainMenu = new MainMenuScreen(root, catalog, OpenSetup, ResumeMatch, () => OpenGallery(), OpenSettings,
+                StartTutorial);
             tablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader);
             setup = new SetupScreen(root, OnSetupNext, Back, MatchMode.Solo);
             setup.SetCanStart(() => tablePicker.CanStart);
@@ -48,6 +49,14 @@ namespace Mejnun.UI.FrontEnd
 
         public FrontEndScreen CurrentScreen => backStack.Peek();
         public TablePickerScreen Picker => tablePicker;
+        public MainMenuScreen MainMenu => mainMenu;
+        public MatchRequest PendingRequest => pendingRequest;
+
+        /// <summary>Loads the scripted tutorial match (You vs Layla, stacked deck, untimed).</summary>
+        public void StartTutorial()
+        {
+            LaunchMatch(MejnunTutorial.CreateMatchRequest());
+        }
 
         public void NavigateTo(MenuDestination destination)
         {

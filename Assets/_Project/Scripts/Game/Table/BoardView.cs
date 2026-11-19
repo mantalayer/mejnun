@@ -19,6 +19,9 @@ namespace Mejnun.Game
         private readonly List<byte> previewShiftedCardIds = new List<byte>();
         private readonly HashSet<byte> liftedCardIds = new HashSet<byte>();
         private MeldOutline previewOutline;
+        private MeldOutline emptyTargetOutline;
+        private int tutorialTargetMeldId = -1;
+        private bool tutorialEmptyTarget;
         private IReadOnlyList<Meld> lastBoard;
         private IReadOnlyDictionary<byte, CardView> lastCardViews;
         private float lastViewportAspect;
@@ -33,6 +36,28 @@ namespace Mejnun.Game
 
         public BoardLayoutResult CurrentLayout { get; private set; }
         public Bounds CurrentBounds { get; private set; }
+        public int TutorialTargetMeldId => tutorialTargetMeldId;
+        public bool TutorialEmptyTargetShown => emptyTargetOutline != null && emptyTargetOutline.IsTargetGlowing;
+
+        /// <summary>Glows the tutorial's drop target: a set (by id, -1 for none) or the empty-table slot.</summary>
+        public void SetTutorialTarget(int meldId, bool emptyTarget)
+        {
+            if (tutorialTargetMeldId == meldId && tutorialEmptyTarget == emptyTarget)
+            {
+                return;
+            }
+
+            tutorialTargetMeldId = meldId;
+            tutorialEmptyTarget = emptyTarget;
+            if (lastBoard != null && lastCardViews != null)
+            {
+                Layout(lastBoard, lastCardViews, lastViewportAspect, lastCardSize, liftedCardIds);
+            }
+            else if (!emptyTarget && emptyTargetOutline != null)
+            {
+                emptyTargetOutline.Hide();
+            }
+        }
 
         public void SetCpuPlacementArea(Rect? area)
         {
@@ -550,13 +575,15 @@ namespace Mejnun.Game
                 staleMeldIds.Remove(meld.Id);
                 outline.transform.localPosition = Vector3.zero;
                 var isValid = MeldValidator.Classify(meld.Cards).IsValid;
-                if (overlapSets && isValid)
+                var isTarget = meld.Id == tutorialTargetMeldId;
+                if (overlapSets && isValid && !isTarget)
                 {
                     outline.Hide();
                 }
                 else
                 {
                     outline.SetBounds(meldLayout.Bounds, isValid, cardSize);
+                    outline.SetTargetGlow(isTarget);
                 }
                 for (var cardIndex = 0; cardIndex < meld.Cards.Count && cardIndex < meldLayout.CardRects.Count;
                      cardIndex++)
@@ -590,12 +617,33 @@ namespace Mejnun.Game
                 outlinePool.Push(outline);
             }
 
+            UpdateEmptyTargetOutline(cardSize);
             var rect = CurrentLayout.Bounds;
             var boundsCenter = transform.TransformPoint(new Vector3(rect.center.x, rect.center.y, 0f));
             var boundsSize = transform.TransformVector(new Vector3(rect.width, rect.height, 0f));
             CurrentBounds = new Bounds(boundsCenter, boundsSize);
             UpdatePreviousMeldCardIds(board);
             return CurrentLayout;
+        }
+
+        private void UpdateEmptyTargetOutline(Vector2 cardSize)
+        {
+            if (!tutorialEmptyTarget || CurrentLayout == null)
+            {
+                emptyTargetOutline?.Hide();
+                return;
+            }
+
+            if (emptyTargetOutline == null)
+            {
+                var outlineObject = new GameObject("Tutorial Empty Target");
+                outlineObject.transform.SetParent(transform, false);
+                outlineObject.AddComponent<LineRenderer>();
+                emptyTargetOutline = outlineObject.AddComponent<MeldOutline>();
+            }
+
+            emptyTargetOutline.SetBounds(CurrentLayout.NewGroupSlot, true, cardSize);
+            emptyTargetOutline.SetTargetGlow(true);
         }
 
         private HashSet<int> FindMeldsWithNewCards(IReadOnlyList<Meld> board)

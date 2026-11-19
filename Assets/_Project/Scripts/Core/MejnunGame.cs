@@ -187,8 +187,11 @@ namespace Mejnun.Core
             State.Phase = GamePhase.Playing;
             Events.RaiseDealerChosen(dealer);
 
-            var shoe = new Shoe();
-            shoe.Shuffle(State.Rng);
+            var shoe = new Shoe(setup.ShoeOrder);
+            if (setup.ShoeOrder == null)
+            {
+                shoe.Shuffle(State.Rng);
+            }
             Events.RaiseDeckFacesAssigned(State.DeckFaces[0], State.DeckFaces[1]);
 
             var shoeIndex = 0;

@@ -26,6 +26,9 @@ namespace Mejnun.Game
         private bool selected;
         private bool hinted;
         private bool lastCardWarning;
+        private bool tutorialFocus;
+        private bool dimmed;
+        private SpriteRenderer focusGlow;
         private SpriteRenderer hintGlow;
         private SpriteRenderer hintGlowBloom;
         private SpriteRenderer shadowRenderer;
@@ -40,6 +43,8 @@ namespace Mejnun.Game
         public bool IsFaceUp => faceUp;
         public bool IsSelected => selected;
         public bool IsHinted => hinted;
+        public bool IsTutorialFocused => tutorialFocus;
+        public bool IsDimmed => dimmed;
         public bool IsMoving => moving;
         public Sprite CurrentFaceSprite => faceSprite;
         public SpriteRenderer Renderer => spriteRenderer;
@@ -106,6 +111,40 @@ namespace Mejnun.Game
             RefreshHintOutline();
         }
 
+        /// <summary>The tutorial's "move this card" highlight: a pulsing gold outline, separate from hints.</summary>
+        public void SetTutorialFocus(bool focused)
+        {
+            if (tutorialFocus == focused)
+            {
+                return;
+            }
+
+            tutorialFocus = focused;
+            if (focused && focusGlow == null && spriteRenderer != null)
+            {
+                focusGlow = CreateHintSprite("Tutorial Focus Glow", 1.1f);
+            }
+
+            if (focusGlow != null)
+            {
+                focusGlow.enabled = focused;
+                focusGlow.sprite = spriteRenderer.sprite;
+                UpdateFocusGlow(Time.unscaledTime);
+            }
+        }
+
+        /// <summary>Darkens cards the tutorial is not pointing at.</summary>
+        public void SetDimmed(bool isDimmed)
+        {
+            if (dimmed == isDimmed)
+            {
+                return;
+            }
+
+            dimmed = isDimmed;
+            ApplyTint();
+        }
+
         public void SetLastCardWarning(bool show)
         {
             lastCardWarning = show;
@@ -155,6 +194,11 @@ namespace Mejnun.Game
             if (hintGlow != null)
             {
                 hintGlow.sortingOrder = rendererOrder + 1;
+            }
+
+            if (focusGlow != null)
+            {
+                focusGlow.sortingOrder = rendererOrder + 1;
             }
 
             if (hintGlowBloom != null)
@@ -245,6 +289,7 @@ namespace Mejnun.Game
 
             transform.localRotation = layoutRotation * animationRotation;
             UpdateHintGlow(time);
+            UpdateFocusGlow(time);
 
             if (moving)
             {
@@ -347,6 +392,10 @@ namespace Mejnun.Game
             {
                 spriteRenderer.color = new Color(1f, 0.82f, 0.36f, 1f);
             }
+            else if (dimmed)
+            {
+                spriteRenderer.color = new Color(0.5f, 0.5f, 0.55f, 1f);
+            }
             else
             {
                 spriteRenderer.color = Color.white;
@@ -416,6 +465,23 @@ namespace Mejnun.Game
             {
                 hintGlowBloom.sprite = spriteRenderer.sprite;
             }
+
+            if (focusGlow != null)
+            {
+                focusGlow.sprite = spriteRenderer.sprite;
+            }
+        }
+
+        private void UpdateFocusGlow(float time)
+        {
+            if (!tutorialFocus || focusGlow == null)
+            {
+                return;
+            }
+
+            var pulse = GameSettings.ReducedMotion ? 0.5f : (Mathf.Sin(time * 5f) + 1f) * 0.5f;
+            focusGlow.color = new Color(1f, 0.84f, 0.2f, 0.45f + pulse * 0.35f);
+            focusGlow.transform.localScale = Vector3.one * (1.08f + pulse * 0.04f);
         }
 
         private void UpdateHintGlow(float time)

@@ -32,6 +32,7 @@ namespace Mejnun.Game
         private const string VolumeVoiceKey = "settings.audio.voice";
         private const string LanguageKey = "settings.language";
         private const string QuickMatchBotFillKey = "settings.online.botFill";
+        private const string TutorialCompletedKey = "settings.tutorial.completed";
         private static readonly float[] CpuDelayMultipliers = { 6f, 4f, 3f, 2f, 1f, 0.5f };
         private static bool fastForward;
 
@@ -71,6 +72,13 @@ namespace Mejnun.Game
         {
             get => Get(HintJiggleKey, true);
             set => Set(HintJiggleKey, value);
+        }
+
+        /// <summary>Set once the tutorial has been played (finished or skipped); stops the first-Play tutorial prompt.</summary>
+        public static bool TutorialCompleted
+        {
+            get => Get(TutorialCompletedKey, false);
+            set => Set(TutorialCompletedKey, value);
         }
 
         public static bool ReducedMotion

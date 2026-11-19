@@ -10,10 +10,12 @@ namespace Mejnun.Game
         private readonly string[] deckPicks;
         private readonly string[] randomFacePool;
         private readonly string[] feltPool;
+        private readonly byte[] shoeOrder;
 
         public MatchRequest(IReadOnlyList<SeatConfig> seats = null, int turnSeconds = 0,
             MatchMode mode = MatchMode.Solo, bool resume = false, IReadOnlyList<string> deckPicks = null,
-            IReadOnlyList<string> randomFacePool = null, IReadOnlyList<string> feltPool = null, ulong? seed = null)
+            IReadOnlyList<string> randomFacePool = null, IReadOnlyList<string> feltPool = null, ulong? seed = null,
+            IReadOnlyList<byte> shoeOrder = null, int? dealer = null)
         {
             if (turnSeconds < 0)
             {
@@ -29,6 +31,8 @@ namespace Mejnun.Game
             this.deckPicks = Copy(deckPicks);
             this.randomFacePool = Copy(randomFacePool);
             this.feltPool = Copy(feltPool);
+            this.shoeOrder = Copy(shoeOrder);
+            Dealer = dealer;
             TurnSeconds = turnSeconds;
             Mode = mode;
             Resume = resume;
@@ -43,6 +47,14 @@ namespace Mejnun.Game
         public IReadOnlyList<string> RandomFacePool => randomFacePool;
         public IReadOnlyList<string> FeltPool => feltPool;
         public ulong? Seed { get; }
+
+        /// <summary>An exact 104-card deal order (the tutorial); null shuffles from the seed.</summary>
+        public IReadOnlyList<byte> ShoeOrder => shoeOrder;
+
+        /// <summary>A fixed dealer, which skips the "who goes first" question; null asks.</summary>
+        public int? Dealer { get; }
+
+        public bool IsTutorial => Mode == MatchMode.Tutorial;
 
         private static T[] Copy<T>(IReadOnlyList<T> values)
         {

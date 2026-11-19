@@ -17,6 +17,12 @@ namespace Mejnun.Game
         private readonly Stack<List<GameCommand>> redoGroups = new Stack<List<GameCommand>>();
         private readonly GestureInterpreter gestureInterpreter = new GestureInterpreter();
         private HashSet<byte> hintedCardIds = new HashSet<byte>();
+        private readonly HashSet<byte> tutorialFocusIds = new HashSet<byte>();
+        private readonly HashSet<byte> tutorialTargetIds = new HashSet<byte>();
+        private ICommandGate commandGate;
+        private bool tutorialFocusActive;
+        private int tutorialTargetMeldId = -1;
+        private bool tutorialEmptyTarget;
         private Func<int, bool> seatInputFilter;
         private bool hintsEnabled;
         private MejnunGame game;
@@ -45,6 +51,11 @@ namespace Mejnun.Game
         public IReadOnlyList<MarkedCard> MarkedCards => setMarkers.CardMarks;
         public bool MarkModeActive => markModeActive;
         public bool IsAutoFixing => autoFixing;
+        public ICommandGate CommandGate => commandGate;
+        public bool TutorialFocusActive => tutorialFocusActive;
+        public IReadOnlyCollection<byte> TutorialFocusCardIds => tutorialFocusIds;
+        public int TutorialTargetMeldId => tutorialTargetMeldId;
+        public bool TutorialEmptyTarget => tutorialEmptyTarget;
 
         /// <summary>True when the local player may act: a game is in progress and the current seat accepts input.</summary>
         public bool InputEnabled => game != null && game.State.Phase == GamePhase.Playing &&
@@ -129,6 +140,40 @@ namespace Mejnun.Game
             {
                 SynchronizeViews();
             }
+        }
+
+        /// <summary>Filters every command before it reaches the engine (the tutorial uses this). Null allows all.</summary>
+        public void SetCommandGate(ICommandGate gate)
+        {
+            commandGate = gate;
+        }
+
+        /// <summary>
+        /// Pulses the given cards, glows the target set or empty-table slot, and dims every other card.
+        /// Passing no cards and no target clears the focus.
+        /// </summary>
+        public void SetTutorialFocus(IReadOnlyCollection<byte> cardIds, int? targetMeldId, bool emptyTarget)
+        {
+            tutorialFocusIds.Clear();
+            if (cardIds != null)
+            {
+                tutorialFocusIds.UnionWith(cardIds);
+            }
+
+            tutorialTargetMeldId = targetMeldId ?? -1;
+            tutorialEmptyTarget = emptyTarget;
+            tutorialFocusActive = tutorialFocusIds.Count > 0 || tutorialTargetMeldId >= 0 || emptyTarget;
+            if (tableView != null)
+            {
+                tableView.SetTutorialTarget(tutorialTargetMeldId, tutorialEmptyTarget);
+            }
+
+            RefreshSelection();
+        }
+
+        public void ClearTutorialFocus()
+        {
+            SetTutorialFocus(null, null, false);
         }
 
         public void SetInputPaused(bool paused)
@@ -303,6 +348,11 @@ namespace Mejnun.Game
 
         public CommandResult ExecuteBatch(CommandBatch batch)
         {
+            return ExecuteBatch(batch, CommandOrigin.Gesture);
+        }
+
+        private CommandResult ExecuteBatch(CommandBatch batch, CommandOrigin origin)
+        {
             if (game == null)
             {
                 return CommandResult.Failure(RuleError.WrongPhase);
@@ -311,6 +361,14 @@ namespace Mejnun.Game
             if (batch == null)
             {
                 return CommandResult.Failure(RuleError.EmptyMove);
+            }
+
+            for (var index = 0; index < batch.Count; index++)
+            {
+                if (!GateAllows(batch.Commands[index], origin))
+                {
+                    return Blocked();
+                }
             }
 
             var result = ApplyBatch(batch);
@@ -325,9 +383,19 @@ namespace Mejnun.Game
 
         public CommandResult ApplyCommand(GameCommand command)
         {
+            return ApplyCommand(command, CommandOrigin.Command);
+        }
+
+        private CommandResult ApplyCommand(GameCommand command, CommandOrigin origin)
+        {
             if (game == null)
             {
                 return CommandResult.Failure(RuleError.WrongPhase);
+            }
+
+            if (!GateAllows(command, origin))
+            {
+                return Blocked();
             }
 
             var result = game.Apply(command);
@@ -366,6 +434,11 @@ namespace Mejnun.Game
             if (game == null || undoGroups.Count == 0)
             {
                 return CommandResult.Failure(RuleError.NothingToUndo);
+            }
+
+            if (!GateAllows(GameCommand.Undo(game.State.CurrentSeat), CommandOrigin.Undo))
+            {
+                return Blocked();
             }
 
             var commandCount = undoGroups.Pop();
@@ -411,6 +484,15 @@ namespace Mejnun.Game
             if (game == null || redoGroups.Count == 0)
             {
                 return CommandResult.Failure(RuleError.NothingToUndo);
+            }
+
+            var pending = redoGroups.Peek();
+            for (var index = 0; index < pending.Count; index++)
+            {
+                if (!GateAllows(pending[index], CommandOrigin.Redo))
+                {
+                    return Blocked();
+                }
             }
 
             var commands = redoGroups.Pop();
@@ -467,7 +549,7 @@ namespace Mejnun.Game
 
             if (commands.Count == 1 && commands[0].Type == CommandType.Revert)
             {
-                return ApplyCommand(commands[0]);
+                return ApplyCommand(commands[0], CommandOrigin.FixBoard);
             }
 
             var batch = new CommandBatch();
@@ -476,7 +558,7 @@ namespace Mejnun.Game
                 batch.Add(commands[index]);
             }
 
-            return ExecuteBatch(batch);
+            return ExecuteBatch(batch, CommandOrigin.FixBoard);
         }
 
         public bool FixBoardWouldReturnCards()
@@ -647,6 +729,18 @@ namespace Mejnun.Game
             return false;
         }
 
+        private bool GateAllows(in GameCommand command, CommandOrigin origin)
+        {
+            return commandGate == null || commandGate.Allows(command, origin, game.State);
+        }
+
+        private CommandResult Blocked()
+        {
+            NotifyInvalid(RuleError.TutorialBlocked);
+            SynchronizeViews();
+            return CommandResult.Failure(RuleError.TutorialBlocked);
+        }
+
         private CommandResult ApplyBatch(CommandBatch batch)
         {
             var appliedCount = 0;
@@ -719,10 +813,31 @@ namespace Mejnun.Game
                 return;
             }
 
+            tutorialTargetIds.Clear();
+            if (tutorialFocusActive && tutorialTargetMeldId >= 0 && game != null)
+            {
+                for (var meldIndex = 0; meldIndex < game.State.Board.Count; meldIndex++)
+                {
+                    var meld = game.State.Board[meldIndex];
+                    if (meld.Id != tutorialTargetMeldId)
+                    {
+                        continue;
+                    }
+
+                    for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                    {
+                        tutorialTargetIds.Add(meld.Cards[cardIndex].Id);
+                    }
+                }
+            }
+
             foreach (var pair in tableView.ActiveCards)
             {
                 pair.Value.SetSelected(gestureInterpreter.IsSelected(pair.Key));
                 pair.Value.SetHinted(hintedCardIds.Contains(pair.Key));
+                var focused = tutorialFocusActive && tutorialFocusIds.Contains(pair.Key);
+                pair.Value.SetTutorialFocus(focused);
+                pair.Value.SetDimmed(tutorialFocusActive && !focused && !tutorialTargetIds.Contains(pair.Key));
             }
         }
 
