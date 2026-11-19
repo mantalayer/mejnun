@@ -48,6 +48,7 @@ namespace Mejnun.Game.Tests
         {
             SceneManager.LoadScene(SceneFlow.MainMenuScene, LoadSceneMode.Single);
             yield return null;
+            yield return null;
 
             var presenter = Object.FindAnyObjectByType<FrontEndPresenter>();
             Assert.That(presenter, Is.Not.Null);
@@ -60,10 +61,10 @@ namespace Mejnun.Game.Tests
             Assert.That(root.panel, Is.Not.Null);
             var mainMenu = root.Q<VisualElement>(className: "main-menu-screen");
             Assert.That(mainMenu, Is.Not.Null);
-            Assert.That(mainMenu.resolvedStyle.maxWidth, Is.EqualTo(520f));
+            Assert.That(Mathf.RoundToInt(mainMenu.resolvedStyle.maxWidth.value), Is.EqualTo(520));
             var resumeButton = root.Q<Button>("resume-match-button");
             Assert.That(resumeButton.style.display == DisplayStyle.Flex, Is.EqualTo(SavedGame.HasSave));
-            Assert.That(root.Q<Button>("online-button").enabledSelf, Is.False);
+            Assert.That(root.Q<Button>("online-button").enabledSelf, Is.True);
             Assert.That(root.Q<VisualElement>("setup-screen").style.display.value,
                 Is.EqualTo(DisplayStyle.None));
 

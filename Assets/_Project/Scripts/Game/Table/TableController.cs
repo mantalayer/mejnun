@@ -20,6 +20,9 @@ namespace Mejnun.Game
         private readonly HashSet<byte> tutorialFocusIds = new HashSet<byte>();
         private readonly HashSet<byte> tutorialTargetIds = new HashSet<byte>();
         private ICommandGate commandGate;
+        private ICommandRelay commandRelay;
+        private int lastSynchronizedTurn = -1;
+        private int lastSynchronizedSeat = -1;
         private bool tutorialFocusActive;
         private int tutorialTargetMeldId = -1;
         private bool tutorialEmptyTarget;
@@ -60,11 +63,15 @@ namespace Mejnun.Game
         /// <summary>True when the local player may act: a game is in progress and the current seat accepts input.</summary>
         public bool InputEnabled => game != null && game.State.Phase == GamePhase.Playing &&
                                     !inputPaused && !autoFixing &&
-                                    (seatInputFilter == null || seatInputFilter(game.State.CurrentSeat));
+                                    (seatInputFilter == null || seatInputFilter(game.State.CurrentSeat)) &&
+                                    (commandRelay == null || !commandRelay.IsRemoteAuthority ||
+                                     commandRelay.CanControlSeat(game.State.CurrentSeat));
 
         public bool HandInputEnabled => game != null && game.State.Phase == GamePhase.Playing && !inputPaused &&
                                         !autoFixing && HandSeat >= 0 && HandSeat < game.State.Hands.Count &&
-                                        (seatInputFilter == null || seatInputFilter(HandSeat));
+                                        (seatInputFilter == null || seatInputFilter(HandSeat)) &&
+                                        (commandRelay == null || !commandRelay.IsRemoteAuthority ||
+                                         commandRelay.CanControlSeat(HandSeat));
 
         public event Action<GameState, TurnSession> Synchronized;
         public event Action<int> WentDown;
@@ -146,6 +153,40 @@ namespace Mejnun.Game
         public void SetCommandGate(ICommandGate gate)
         {
             commandGate = gate;
+        }
+
+        public void SetCommandRelay(ICommandRelay relay)
+        {
+            commandRelay = relay;
+            if (game != null)
+            {
+                SynchronizeViews();
+            }
+        }
+
+        public void Resync(MejnunGame replacement)
+        {
+            if (replacement == null)
+            {
+                throw new ArgumentNullException(nameof(replacement));
+            }
+
+            if (lastSynchronizedTurn != replacement.State.TurnNumber ||
+                lastSynchronizedSeat != replacement.State.CurrentSeat)
+            {
+                undoGroups.Clear();
+                redoGroups.Clear();
+            }
+
+            if (game != replacement)
+            {
+                UnsubscribeFromGame();
+                game = replacement;
+                SubscribeToGame();
+            }
+
+            gestureInterpreter.ClearSelection();
+            SynchronizeViews();
         }
 
         /// <summary>
@@ -398,12 +439,47 @@ namespace Mejnun.Game
                 return Blocked();
             }
 
+            var isRelayed = commandRelay != null && commandRelay.IsRemoteAuthority;
+            if (isRelayed && command.Type != CommandType.ChooseRandomDealer &&
+                !commandRelay.CanControlSeat(command.Seat))
+            {
+                return CommandResult.Failure(RuleError.NotYourTurn);
+            }
+
+            if (isRelayed && (!commandRelay.ApplyCommandsLocally || IsRemoteOnly(command)))
+            {
+                if (!commandRelay.Submit(new[] { command }))
+                {
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
+                if (!commandRelay.ApplyCommandsLocally)
+                {
+                    TrackCommand(command);
+                    SynchronizeViews();
+                }
+
+                return CommandResult.Success();
+            }
+
             var result = game.Apply(command);
             if (!result.Ok)
             {
                 return result;
             }
 
+            if (isRelayed && !commandRelay.Submit(new[] { command }))
+            {
+                return CommandResult.Failure(RuleError.WrongPhase);
+            }
+
+            TrackCommand(command);
+            SynchronizeViews();
+            return result;
+        }
+
+        private void TrackCommand(GameCommand command)
+        {
             if (command.Type == CommandType.Revert)
             {
                 undoGroups.Clear();
@@ -423,9 +499,12 @@ namespace Mejnun.Game
                 redoGroups.Clear();
                 undoGroups.Push(1);
             }
+        }
 
-            SynchronizeViews();
-            return result;
+        private static bool IsRemoteOnly(GameCommand command)
+        {
+            return command.Type == CommandType.DrawOrPass || command.Type == CommandType.TimeoutTurn ||
+                   command.Type == CommandType.EndTurn;
         }
 
         public CommandResult UndoGesture()
@@ -456,6 +535,26 @@ namespace Mejnun.Game
                 redoCommands.Add(moves[index].Command);
             }
 
+            var undoCommands = new GameCommand[commandCount];
+            for (var index = 0; index < undoCommands.Length; index++)
+            {
+                undoCommands[index] = GameCommand.Undo(game.State.CurrentSeat);
+            }
+
+            if (commandRelay != null && commandRelay.IsRemoteAuthority && !commandRelay.ApplyCommandsLocally)
+            {
+                if (!commandRelay.Submit(undoCommands))
+                {
+                    undoGroups.Push(commandCount);
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
+                gestureInterpreter.ClearSelection();
+                redoGroups.Push(redoCommands);
+                SynchronizeViews();
+                return CommandResult.Success();
+            }
+
             var undoneCount = 0;
             for (; undoneCount < commandCount; undoneCount++)
             {
@@ -470,6 +569,11 @@ namespace Mejnun.Game
                     SynchronizeViews();
                     return result;
                 }
+            }
+
+            if (commandRelay != null && commandRelay.IsRemoteAuthority && !commandRelay.Submit(undoCommands))
+            {
+                return CommandResult.Failure(RuleError.WrongPhase);
             }
 
             gestureInterpreter.ClearSelection();
@@ -496,6 +600,20 @@ namespace Mejnun.Game
             }
 
             var commands = redoGroups.Pop();
+            if (commandRelay != null && commandRelay.IsRemoteAuthority && !commandRelay.ApplyCommandsLocally)
+            {
+                if (!commandRelay.Submit(commands))
+                {
+                    redoGroups.Push(commands);
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
+                undoGroups.Push(commands.Count);
+                gestureInterpreter.ClearSelection();
+                SynchronizeViews();
+                return CommandResult.Success();
+            }
+
             var applied = 0;
             for (; applied < commands.Count; applied++)
             {
@@ -514,6 +632,11 @@ namespace Mejnun.Game
                 redoGroups.Clear();
                 SynchronizeViews();
                 return result;
+            }
+
+            if (commandRelay != null && commandRelay.IsRemoteAuthority && !commandRelay.Submit(commands))
+            {
+                return CommandResult.Failure(RuleError.WrongPhase);
             }
 
             undoGroups.Push(commands.Count);
@@ -593,6 +716,11 @@ namespace Mejnun.Game
                 return CommandResult.Failure(RuleError.WrongPhase);
             }
 
+            if (commandRelay != null && commandRelay.IsRemoteAuthority)
+            {
+                return ApplyCommand(GameCommand.TimeoutTurn(game.State.CurrentSeat));
+            }
+
             var undoCount = GetTimeoutUndoCount();
             for (var index = 0; index < undoCount; index++)
             {
@@ -636,6 +764,12 @@ namespace Mejnun.Game
         {
             if (game == null)
             {
+                yield break;
+            }
+
+            if (commandRelay != null && commandRelay.IsRemoteAuthority)
+            {
+                TimeoutTurn();
                 yield break;
             }
 
@@ -743,6 +877,22 @@ namespace Mejnun.Game
 
         private CommandResult ApplyBatch(CommandBatch batch)
         {
+            if (commandRelay != null && commandRelay.IsRemoteAuthority && !commandRelay.ApplyCommandsLocally)
+            {
+                if (!commandRelay.Submit(batch.Commands))
+                {
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
+                if (batch.Count > 0)
+                {
+                    redoGroups.Clear();
+                    undoGroups.Push(batch.Count);
+                }
+
+                return CommandResult.Success();
+            }
+
             var appliedCount = 0;
             for (var index = 0; index < batch.Count; index++)
             {
@@ -758,6 +908,13 @@ namespace Mejnun.Game
 
             if (appliedCount > 0)
             {
+                if (commandRelay != null && commandRelay.IsRemoteAuthority &&
+                    !commandRelay.Submit(batch.Commands))
+                {
+                    RollBack(appliedCount);
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
                 redoGroups.Clear();
                 undoGroups.Push(appliedCount);
             }
@@ -785,6 +942,8 @@ namespace Mejnun.Game
                 return;
             }
 
+            lastSynchronizedTurn = game.State.TurnNumber;
+            lastSynchronizedSeat = game.State.CurrentSeat;
             setMarkers.Update(game.State.Board);
 
             if (tableView != null)

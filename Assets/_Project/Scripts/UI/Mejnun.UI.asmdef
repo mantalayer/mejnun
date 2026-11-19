@@ -6,6 +6,8 @@
     "Mejnun.Core",
     "Mejnun.AI",
     "Mejnun.Cosmetics",
+    "Mejnun.Net.Unity",
+    "Unity.Services.Multiplayer",
     "Unity.InputSystem"
   ],
   "includePlatforms": [],

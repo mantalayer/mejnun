@@ -179,6 +179,59 @@ namespace Mejnun.Core.Tests
             CollectionAssert.AreEqual(bytes, SnapshotSerializer.Write(restored));
         }
 
+        [Test]
+        public void Snapshot_WriteForSeatRedactsHiddenCardsAndRandomState()
+        {
+            var game = NewGame();
+            var viewerSeat = game.State.CurrentSeat;
+            GameBuilder.SetHand(game, viewerSeat, "2H", "3H", "4H");
+            Assert.That(game.Apply(GameCommand.MoveCards(viewerSeat, Ids("2H", "3H", "4H"),
+                CardTarget.NewMeld(0))).Ok, Is.True);
+            var snapshot = SnapshotSerializer.WriteForSeat(game, game.State.CurrentSeat);
+            var redacted = SnapshotSerializer.Read(snapshot);
+
+            Assert.That(redacted.Setup.Seed, Is.Zero);
+            Assert.That(redacted.State.Rng.State, Is.Zero);
+            Assert.That(redacted.State.Rng.Increment, Is.EqualTo(1UL));
+            Assert.That(redacted.Turn.Moves.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Snapshot_WriteForSeatIsIndependentOfHiddenCardPermutation()
+        {
+            var game = NewGame();
+            var viewerSeat = game.State.CurrentSeat;
+            var hiddenSeat = (viewerSeat + 1) % game.Setup.SeatCount;
+            var firstSnapshot = SnapshotSerializer.WriteForSeat(game, viewerSeat);
+            var hiddenHand = game.State.Hands[hiddenSeat];
+            var firstCard = hiddenHand[0];
+            hiddenHand[0] = hiddenHand[1];
+            hiddenHand[1] = firstCard;
+            var firstDrawCard = game.State.DrawPile[0];
+            game.State.DrawPile[0] = game.State.DrawPile[1];
+            game.State.DrawPile[1] = firstDrawCard;
+
+            var secondSnapshot = SnapshotSerializer.WriteForSeat(game, viewerSeat);
+
+            CollectionAssert.AreEqual(firstSnapshot, secondSnapshot);
+        }
+
+        [Test]
+        public void Snapshot_WriteForWatcherCollapsesTurnHistory()
+        {
+            var game = NewGame();
+            var activeSeat = game.State.CurrentSeat;
+            GameBuilder.SetHand(game, activeSeat, "2H", "3H", "4H");
+            Assert.That(game.Apply(GameCommand.MoveCards(activeSeat,
+                Ids("2H", "3H", "4H"), CardTarget.NewMeld(0))).Ok, Is.True);
+            var watcherSeat = (game.State.CurrentSeat + 1) % game.Setup.SeatCount;
+
+            var redacted = SnapshotSerializer.Read(SnapshotSerializer.WriteForSeat(game, watcherSeat));
+
+            Assert.That(redacted.Turn.Seat, Is.EqualTo(game.State.CurrentSeat));
+            Assert.That(redacted.Turn.Moves, Is.Empty);
+        }
+
         private static MejnunGame NewGame()
         {
             return GameBuilder.Create(dealer: 1);

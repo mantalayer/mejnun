@@ -38,6 +38,8 @@ namespace Mejnun.Game
         private bool resultRecorded;
         private bool matchPaused;
         private bool applicationPaused;
+        private bool remoteAuthority;
+        private int onlineLocalSeat = -1;
         private float elapsedMatchSeconds;
         private MatchRequest activeRequest;
         private readonly CardTracker cardTracker = new CardTracker();
@@ -62,6 +64,7 @@ namespace Mejnun.Game
         public TurnTimer TurnTimer => turnTimer;
         public int TurnSeconds { get; private set; }
         public IReadOnlyList<SeatConfig> Seats => seats;
+        public MatchRequest ActiveRequest => activeRequest;
         public bool FastForward
         {
             get => GameSettings.FastForward;
@@ -209,6 +212,11 @@ namespace Mejnun.Game
                 {
                     ResumeSavedGame();
                 }
+                else if (request.Mode == MatchMode.Online)
+                {
+                    activeRequest = request;
+                    SetScreen(MatchFlowScreen.Idle);
+                }
                 else
                 {
                     StartMatch(request);
@@ -222,7 +230,8 @@ namespace Mejnun.Game
 
         private void Update()
         {
-            if (!matchPaused && !applicationPaused && Game != null && Game.State.Phase == GamePhase.Playing &&
+            if (Mode != MatchMode.Online && !matchPaused && !applicationPaused && Game != null &&
+                Game.State.Phase == GamePhase.Playing &&
                 !IsBotSeat(Game.State.CurrentSeat))
             {
                 elapsedMatchSeconds += Time.unscaledDeltaTime;
@@ -268,6 +277,71 @@ namespace Mejnun.Game
             }
 
             return StartMatch(request.Seats, request.Seed, request.IsTutorial ? 0 : request.TurnSeconds, request);
+        }
+
+        public void SetOnlineAuthority(bool enabled, int localSeat)
+        {
+            remoteAuthority = enabled;
+            onlineLocalSeat = localSeat;
+            if (turnTimer != null)
+            {
+                turnTimer.enabled = !enabled;
+            }
+
+            if (tableController != null)
+            {
+                tableController.SetSeatInputFilter(enabled
+                    ? seat => seat == onlineLocalSeat
+                    : seat => !IsBotSeat(seat));
+            }
+
+            if (tableView != null && enabled && localSeat >= 0)
+            {
+                tableView.SetViewerSeat(localSeat);
+                tableView.SetHandVisible(true);
+            }
+        }
+
+        public void SetOnlineSeatStatus(int seat, string name, bool isBot)
+        {
+            if (!remoteAuthority || seat < 0 || seat >= seats.Length)
+            {
+                return;
+            }
+
+            var displayName = string.IsNullOrWhiteSpace(name) ? "Player " + (seat + 1) : name;
+            playerNames[seat] = displayName;
+            seats[seat] = isBot
+                ? SeatConfig.Bot(displayName, BotDifficulty.Medium)
+                : SeatConfig.Human(displayName);
+            tableView?.SetCpuSeatPredicate(IsBotSeat);
+        }
+
+        public void ApplyOnlineGame(MejnunGame authoritativeGame)
+        {
+            if (!remoteAuthority || authoritativeGame == null)
+            {
+                return;
+            }
+
+            Game = authoritativeGame;
+            tableController?.Resync(authoritativeGame);
+            if (authoritativeGame.State.Phase == GamePhase.Finished && authoritativeGame.State.Result != null &&
+                Screen != MatchFlowScreen.Results)
+            {
+                ShowResults(authoritativeGame.State.Result);
+            }
+        }
+
+        public void SetOnlinePaused(bool paused)
+        {
+            if (!remoteAuthority)
+            {
+                return;
+            }
+
+            matchPaused = paused;
+            tableController?.SetInputPaused(paused);
         }
 
         /// <summary>Leaves the tutorial: it counts as completed, nothing is saved, and the menu is shown.</summary>
@@ -566,7 +640,7 @@ namespace Mejnun.Game
 
         public bool SaveCurrentGame()
         {
-            if (Game == null || Game.State.Phase != GamePhase.Playing || IsTutorial)
+            if (Game == null || Game.State.Phase != GamePhase.Playing || IsTutorial || Mode == MatchMode.Online)
             {
                 return false;
             }
@@ -726,6 +800,24 @@ namespace Mejnun.Game
         private void OnSynchronized(GameState state, TurnSession turn)
         {
             cardTracker.Observe(state);
+            if (Mode == MatchMode.Online)
+            {
+                if (state.Phase == GamePhase.Finished && state.Result != null && Screen != MatchFlowScreen.Results)
+                {
+                    ShowResults(state.Result);
+                }
+                else if (state.Phase == GamePhase.ChoosingDealer)
+                {
+                    SetScreen(MatchFlowScreen.DealerQuestion);
+                }
+                else if (state.Phase == GamePhase.Playing && Screen != MatchFlowScreen.Results)
+                {
+                    SetScreen(MatchFlowScreen.Turn);
+                }
+
+                return;
+            }
+
             if (state.Phase == GamePhase.Playing &&
                 (lastSavedGame != Game || lastSavedTurnNumber != state.TurnNumber))
             {
@@ -845,7 +937,7 @@ namespace Mejnun.Game
         private void OnApplicationPause(bool paused)
         {
             applicationPaused = paused;
-            if (paused)
+            if (paused && Mode != MatchMode.Online)
             {
                 SaveCurrentGame();
             }
@@ -853,7 +945,10 @@ namespace Mejnun.Game
 
         private void OnApplicationQuit()
         {
-            SaveCurrentGame();
+            if (Mode != MatchMode.Online)
+            {
+                SaveCurrentGame();
+            }
         }
 
         private void ShowResults(GameResult result)

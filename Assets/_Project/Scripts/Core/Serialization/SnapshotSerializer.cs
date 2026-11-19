@@ -18,19 +18,107 @@ namespace Mejnun.Core
                 throw new ArgumentNullException(nameof(game));
             }
 
+            return WriteSnapshot(game, false);
+        }
+
+        public static byte[] WriteForSeat(MejnunGame game, int viewerSeat)
+        {
+            if (game == null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
+
+            if (viewerSeat < 0 || viewerSeat >= game.Setup.SeatCount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(viewerSeat));
+            }
+
+            var redacted = Read(Write(game));
+            RedactHiddenCards(redacted, viewerSeat);
+            redacted.State.Rng = Pcg32.FromState(0UL, 1UL);
+
+            if (redacted.Turn != null && redacted.Turn.Seat != viewerSeat)
+            {
+                redacted.RestoreTurnSession(new BoardSnapshot(redacted.State, redacted.State.CurrentSeat),
+                    new List<Move>());
+            }
+
+            return WriteSnapshot(redacted, true);
+        }
+
+        private static byte[] WriteSnapshot(MejnunGame game, bool redactSeed)
+        {
             using (var stream = new MemoryStream())
             {
                 using (var writer = new BinaryWriter(stream, System.Text.Encoding.UTF8, true))
                 {
                     writer.Write(Magic);
                     writer.Write(Version);
-                    WriteSetup(writer, game.Setup);
+                    WriteSetup(writer, game.Setup, redactSeed);
                     WriteState(writer, game.State);
                     WriteTurn(writer, game.Turn);
                 }
 
                 return stream.ToArray();
             }
+        }
+
+        private static void RedactHiddenCards(MejnunGame game, int viewerSeat)
+        {
+            var state = game.State;
+            var visible = new bool[Card.CardCount];
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var cards = state.Board[meldIndex].Cards;
+                for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
+                {
+                    visible[cards[cardIndex].Id] = true;
+                }
+            }
+
+            for (var cardIndex = 0; cardIndex < state.Hands[viewerSeat].Count; cardIndex++)
+            {
+                visible[state.Hands[viewerSeat][cardIndex].Id] = true;
+            }
+
+            var canonicalIds = new List<byte>();
+            for (byte cardId = 0; cardId < Card.CardCount; cardId++)
+            {
+                if (!visible[cardId])
+                {
+                    canonicalIds.Add(cardId);
+                }
+            }
+
+            var nextCard = 0;
+            for (var seat = 0; seat < state.Hands.Count; seat++)
+            {
+                if (seat == viewerSeat)
+                {
+                    continue;
+                }
+
+                var hand = state.Hands[seat];
+                for (var cardIndex = 0; cardIndex < hand.Count; cardIndex++)
+                {
+                    hand[cardIndex] = Card.FromId(GetCanonicalCard(canonicalIds, nextCard++));
+                }
+            }
+
+            for (var cardIndex = 0; cardIndex < state.DrawPile.Count; cardIndex++)
+            {
+                state.DrawPile[cardIndex] = Card.FromId(GetCanonicalCard(canonicalIds, nextCard++));
+            }
+        }
+
+        private static int GetCanonicalCard(IReadOnlyList<byte> canonicalIds, int index)
+        {
+            if (index >= canonicalIds.Count)
+            {
+                throw new InvalidDataException("Game contains more hidden cards than the deck.");
+            }
+
+            return canonicalIds[index];
         }
 
         public static MejnunGame Read(byte[] snapshot)
@@ -92,10 +180,10 @@ namespace Mejnun.Core
             }
         }
 
-        private static void WriteSetup(BinaryWriter writer, GameSetup setup)
+        private static void WriteSetup(BinaryWriter writer, GameSetup setup, bool redactSeed)
         {
             writer.Write(setup.SeatCount);
-            writer.Write(setup.Seed);
+            writer.Write(redactSeed ? 0UL : setup.Seed);
             WriteNullableInt(writer, setup.Dealer);
             writer.Write(setup.TurnSeconds);
             writer.Write(setup.FacePool.Count);

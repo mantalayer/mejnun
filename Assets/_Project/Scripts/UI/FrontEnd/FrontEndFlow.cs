@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Game;
+using Mejnun.Net.Unity;
 using Mejnun.UI;
+using Unity.Services.Multiplayer;
 using UnityEngine.UIElements;
 
 namespace Mejnun.UI.FrontEnd
@@ -12,7 +14,8 @@ namespace Mejnun.UI.FrontEnd
         MainMenu,
         Setup,
         Gallery,
-        Settings
+        Settings,
+        Online
     }
 
     public sealed class FrontEndFlow : IDisposable
@@ -23,7 +26,11 @@ namespace Mejnun.UI.FrontEnd
         private readonly TablePickerScreen tablePicker;
         private readonly GalleryScreen gallery;
         private readonly SettingsPanel settings;
+        private readonly OnlineScreen onlineScreen;
+        private readonly UgsOnlineService onlineService = new UgsOnlineService();
         private MatchRequest pendingRequest;
+        private ISession pendingOnlineSession;
+        private string pendingOnlineName;
 
         public FrontEndFlow(VisualElement root, CosmeticCatalog catalog, DeckSkinLoader loader)
         {
@@ -33,7 +40,7 @@ namespace Mejnun.UI.FrontEnd
             }
 
             mainMenu = new MainMenuScreen(root, catalog, OpenSetup, ResumeMatch, () => OpenGallery(), OpenSettings,
-                StartTutorial);
+                StartTutorial, OpenOnline);
             tablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader);
             setup = new SetupScreen(root, OnSetupNext, Back, MatchMode.Solo);
             setup.SetCanStart(() => tablePicker.CanStart);
@@ -42,6 +49,9 @@ namespace Mejnun.UI.FrontEnd
             settings.Initialize(root.Q<VisualElement>("settings-panel"));
             settings.Closed += Back;
             root.Q<Button>("gallery-back-button").clicked += Back;
+            onlineScreen = new OnlineScreen(root, Back);
+            onlineScreen.Requested += HandleOnlineRequest;
+            onlineScreen.ContinueRequested += ContinueOnlineMatch;
 
             backStack.Push(FrontEndScreen.MainMenu);
             ShowScreen(FrontEndScreen.MainMenu);
@@ -82,6 +92,10 @@ namespace Mejnun.UI.FrontEnd
 
         public void Back()
         {
+            if (CurrentScreen == FrontEndScreen.Online && pendingOnlineSession != null)
+            {
+                LeavePendingOnlineSession();
+            }
             if (tablePicker.IsPopupOpen)
             {
                 tablePicker.ClosePopup();
@@ -108,6 +122,8 @@ namespace Mejnun.UI.FrontEnd
             gallery.Dispose();
             settings.Closed -= Back;
             settings.Dispose();
+            onlineScreen.Requested -= HandleOnlineRequest;
+            onlineScreen.ContinueRequested -= ContinueOnlineMatch;
         }
 
         public void OpenSetup(MatchMode mode)
@@ -135,6 +151,12 @@ namespace Mejnun.UI.FrontEnd
         public void OpenSettings()
         {
             Push(FrontEndScreen.Settings);
+        }
+
+        public void OpenOnline()
+        {
+            onlineScreen.SetStatus(string.Empty);
+            Push(FrontEndScreen.Online);
         }
 
         private void OnSetupNext(MatchRequest request)
@@ -190,6 +212,7 @@ namespace Mejnun.UI.FrontEnd
             mainMenu.SetVisible(screen == FrontEndScreen.MainMenu);
             setup.SetVisible(screen == FrontEndScreen.Setup);
             gallery.SetVisible(screen == FrontEndScreen.Gallery);
+            onlineScreen.SetVisible(screen == FrontEndScreen.Online);
             if (screen == FrontEndScreen.Settings)
             {
                 settings.Show();
@@ -197,6 +220,89 @@ namespace Mejnun.UI.FrontEnd
             else
             {
                 settings.Hide();
+            }
+        }
+
+        private async void HandleOnlineRequest(OnlineAction action, string nickname, string sessionCode)
+        {
+            onlineScreen.SetBusy(true);
+            try
+            {
+                await onlineService.InitializeAsync(nickname);
+                var displayName = string.IsNullOrWhiteSpace(nickname)
+                    ? onlineService.PlayerName
+                    : nickname.Trim();
+                ISession session;
+                switch (action)
+                {
+                    case OnlineAction.Create:
+                        session = await onlineService.CreateSessionAsync(onlineScreen.SeatCount);
+                        pendingOnlineSession = session;
+                        pendingOnlineName = displayName;
+                        onlineScreen.SetStatus("Share this code with your opponent.");
+                        onlineScreen.ShowSessionCode(session.Code);
+                        return;
+                    case OnlineAction.JoinByCode:
+                        session = await onlineService.JoinByCodeAsync(sessionCode);
+                        break;
+                    case OnlineAction.QuickMatch:
+                        session = await onlineService.QuickMatchAsync(onlineScreen.SeatCount);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(action));
+                }
+
+                LaunchOnlineMatch(session, displayName);
+            }
+            catch (Exception exception)
+            {
+                onlineScreen.SetStatus(exception.Message);
+            }
+            finally
+            {
+                onlineScreen.SetBusy(false);
+            }
+        }
+
+        private void ContinueOnlineMatch()
+        {
+            if (pendingOnlineSession == null)
+            {
+                onlineScreen.SetStatus("Create a session before continuing.");
+                return;
+            }
+
+            var session = pendingOnlineSession;
+            pendingOnlineSession = null;
+            LaunchOnlineMatch(session, pendingOnlineName);
+            pendingOnlineName = null;
+        }
+
+        private void LaunchOnlineMatch(ISession session, string displayName)
+        {
+            OnlineLaunch.Set(onlineService, session, onlineService.IsHost, displayName);
+            var seatCount = Math.Max(2, Math.Min(6, session.MaxPlayers));
+            var seats = new SeatConfig[seatCount];
+            seats[0] = SeatConfig.Human(displayName);
+            for (var seat = 1; seat < seatCount; seat++)
+            {
+                seats[seat] = SeatConfig.Human("Player " + (seat + 1));
+            }
+
+            SceneFlow.LoadTable(new MatchRequest(seats, 30, MatchMode.Online));
+        }
+
+        private async void LeavePendingOnlineSession()
+        {
+            pendingOnlineSession = null;
+            pendingOnlineName = null;
+            try
+            {
+                await onlineService.LeaveAsync();
+            }
+            catch (Exception exception)
+            {
+                onlineScreen.SetStatus(exception.Message);
             }
         }
 
