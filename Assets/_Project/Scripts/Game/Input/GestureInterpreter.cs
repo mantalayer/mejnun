@@ -20,7 +20,8 @@ namespace Mejnun.Game
         MeldGrip,
         MeldGap,
         HandArea,
-        EmptyBoard
+        EmptyBoard,
+        HandSlot
     }
 
     public readonly struct GestureHit
@@ -67,6 +68,11 @@ namespace Mejnun.Game
             return new GestureHit(GestureHitKind.HandArea, 0, 0, handIndex, handIndex);
         }
 
+        public static GestureHit HandSlot(int slotIndex)
+        {
+            return new GestureHit(GestureHitKind.HandSlot, 0, 0, slotIndex, slotIndex);
+        }
+
         public static GestureHit EmptyBoard()
         {
             return new GestureHit(GestureHitKind.EmptyBoard, 0, 0, 0, 0);
@@ -103,6 +109,7 @@ namespace Mejnun.Game
         public byte ReorderedCardId { get; internal set; }
         public IReadOnlyList<byte> ReorderedCardIds { get; internal set; }
         public int ReorderTargetIndex { get; internal set; }
+        public bool ReorderTargetIsSlot { get; internal set; }
     }
 
     public sealed class GestureInterpreter
@@ -148,7 +155,8 @@ namespace Mejnun.Game
 
             if ((input.Type != GestureType.Drag && input.Type != GestureType.LongPressDrag) ||
                 input.Source.Kind != GestureHitKind.HandCard ||
-                (input.Target.Kind != GestureHitKind.HandCard && input.Target.Kind != GestureHitKind.HandArea))
+                (input.Target.Kind != GestureHitKind.HandCard && input.Target.Kind != GestureHitKind.HandArea &&
+                 input.Target.Kind != GestureHitKind.HandSlot))
             {
                 return result;
             }
@@ -156,9 +164,12 @@ namespace Mejnun.Game
             result.HandOrderChanged = true;
             result.ReorderedCardId = input.Source.CardId;
             result.ReorderedCardIds = CopySelectedCardIds(input.Source.CardId);
-            result.ReorderTargetIndex = input.Target.Kind == GestureHitKind.HandArea
-                ? handCount - 1
-                : input.Target.Index;
+            result.ReorderTargetIsSlot = input.Target.Kind == GestureHitKind.HandSlot;
+            result.ReorderTargetIndex = result.ReorderTargetIsSlot
+                ? input.Target.Index
+                : input.Target.Kind == GestureHitKind.HandArea
+                    ? handCount - 1
+                    : input.Target.Index;
             return result;
         }
 
@@ -467,14 +478,18 @@ namespace Mejnun.Game
         private void InterpretDrag(GestureInput input, GameState state, TurnSession turn, GestureResult result)
         {
             if (input.Source.Kind == GestureHitKind.HandCard &&
-                (input.Target.Kind == GestureHitKind.HandCard || input.Target.Kind == GestureHitKind.HandArea))
+                (input.Target.Kind == GestureHitKind.HandCard || input.Target.Kind == GestureHitKind.HandArea ||
+                 input.Target.Kind == GestureHitKind.HandSlot))
             {
                 result.HandOrderChanged = true;
                 result.ReorderedCardId = input.Source.CardId;
                 result.ReorderedCardIds = CopySelectedCardIds(input.Source.CardId);
-                result.ReorderTargetIndex = input.Target.Kind == GestureHitKind.HandArea
-                    ? state.Hands[state.CurrentSeat].Count - 1
-                    : input.Target.Index;
+                result.ReorderTargetIsSlot = input.Target.Kind == GestureHitKind.HandSlot;
+                result.ReorderTargetIndex = result.ReorderTargetIsSlot
+                    ? input.Target.Index
+                    : input.Target.Kind == GestureHitKind.HandArea
+                        ? state.Hands[state.CurrentSeat].Count - 1
+                        : input.Target.Index;
                 return;
             }
 

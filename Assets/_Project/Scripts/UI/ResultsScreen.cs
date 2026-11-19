@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Mejnun.Cosmetics;
@@ -13,6 +14,7 @@ namespace Mejnun.UI
         private readonly VisualElement root;
         private readonly MatchFlow matchFlow;
         private readonly DeckUnlockPlayer unlockPlayer;
+        private ProgressionReport pendingUnlockReport;
         private readonly Label title;
         private readonly Label message;
         private readonly Label counts;
@@ -50,7 +52,7 @@ namespace Mejnun.UI
             rematchButton.clicked += RequestRematch;
             root.Q<Button>("rematch-cancel-button").clicked += () => SetRematchConfirmation(false);
             root.Q<Button>("rematch-accept-button").clicked += ConfirmRematch;
-            root.Q<Button>("results-menu-button").clicked += () => matchFlow.ReturnToMenu();
+            root.Q<Button>("results-menu-button").clicked += () => LeaveResults(() => matchFlow.ReturnToMenu());
         }
 
         public void SetVisible(bool visible)
@@ -103,6 +105,7 @@ namespace Mejnun.UI
         private void RefreshProgression()
         {
             var report = matchFlow.LastProgression;
+            pendingUnlockReport = report;
             xpGained.text = report == null ? string.Empty : "+" + report.XpGained + " XP";
             levelUp.style.display = report != null && report.LevelAfter > report.LevelBefore
                 ? DisplayStyle.Flex
@@ -134,7 +137,6 @@ namespace Mejnun.UI
                     AddGalleryChip(newGalleryItems, report.NewlyUnlockedItems[index], "New: ");
                 }
 
-                unlockPlayer.Play(report);
             }
 
             AddLockedGalleryItems();
@@ -181,7 +183,7 @@ namespace Mejnun.UI
         {
             var button = new Button { text = prefix + DisplayName(itemId) };
             button.AddToClassList("result-chip");
-            button.clicked += () => matchFlow.ReturnToMenu(MenuDestination.Gallery(itemId));
+            button.clicked += () => LeaveResults(() => matchFlow.ReturnToMenu(MenuDestination.Gallery(itemId)));
             container.Add(button);
         }
 
@@ -210,12 +212,25 @@ namespace Mejnun.UI
             rematchConfirm.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
+        private void LeaveResults(Action action)
+        {
+            var report = pendingUnlockReport;
+            pendingUnlockReport = null;
+            if (report == null)
+            {
+                action?.Invoke();
+                return;
+            }
+
+            unlockPlayer.Play(report, action);
+        }
+
         private void RequestRematch()
         {
             if (matchFlow.IsTutorial)
             {
                 // "Play for real": the tutorial never rematches; it hands over to the normal Solo setup.
-                matchFlow.ReturnToMenu(MenuDestination.Setup);
+                LeaveResults(() => matchFlow.ReturnToMenu(MenuDestination.Setup));
                 return;
             }
 
@@ -237,7 +252,7 @@ namespace Mejnun.UI
             }
 
             SetRematchConfirmation(false);
-            matchFlow.Rematch();
+            LeaveResults(() => matchFlow.Rematch());
         }
     }
 }

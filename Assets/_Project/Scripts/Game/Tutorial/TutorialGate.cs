@@ -44,8 +44,23 @@ namespace Mejnun.Game
             switch (command.Type)
             {
                 case CommandType.MoveCards:
-                    return Has(step, TutorialAction.MoveCards) && SameCards(command.CardIds, step.FocusCards) &&
-                           TargetMatches(command.Target, step.Target, state);
+                {
+                    if (!Has(step, TutorialAction.MoveCards))
+                    {
+                        return false;
+                    }
+
+                    var partialMeld = step.Target.Kind == TutorialTargetKind.EmptyBoard
+                        ? FindPartialMeld(state, step.FocusCards)
+                        : null;
+                    if (partialMeld == null && SameCards(command.CardIds, step.FocusCards) &&
+                        TargetMatches(command.Target, step.Target, state))
+                    {
+                        return true;
+                    }
+
+                    return PartialCardsMatch(command, step, state, partialMeld);
+                }
                 case CommandType.SplitMeld:
                     return Has(step, TutorialAction.Split) && SplitMatches(command, step, state);
                 case CommandType.GoDown:
@@ -94,6 +109,93 @@ namespace Mejnun.Game
             }
 
             return true;
+        }
+
+        private bool PartialCardsMatch(in GameCommand command, TutorialStep step, GameState state, Meld partialMeld)
+        {
+            if (step.Target.Kind != TutorialTargetKind.EmptyBoard || command.CardIds.Length == 0 ||
+                command.CardIds.Length >= step.FocusCards.Count)
+            {
+                return false;
+            }
+
+            var selected = new HashSet<byte>();
+            for (var index = 0; index < command.CardIds.Length; index++)
+            {
+                var id = command.CardIds[index];
+                if (!selected.Add(id) || !ContainsFocusCard(step.FocusCards, id) ||
+                    !IsInHand(state, playerSeat, id))
+                {
+                    return false;
+                }
+            }
+
+            return partialMeld == null
+                ? command.Target.Kind == TargetKind.NewMeld
+                : command.Target.Kind == TargetKind.Meld && command.Target.MeldId == partialMeld.Id;
+        }
+
+        private static Meld FindPartialMeld(GameState state, IReadOnlyList<Card> focus)
+        {
+            Meld partialMeld = null;
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var meld = state.Board[meldIndex];
+                if (meld.Cards.Count == 0 || meld.Cards.Count >= focus.Count)
+                {
+                    continue;
+                }
+
+                var containsFocusOnly = true;
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    if (!ContainsFocusCard(focus, meld.Cards[cardIndex].Id))
+                    {
+                        containsFocusOnly = false;
+                        break;
+                    }
+                }
+
+                if (!containsFocusOnly)
+                {
+                    continue;
+                }
+
+                if (partialMeld != null)
+                {
+                    return null;
+                }
+
+                partialMeld = meld;
+            }
+
+            return partialMeld;
+        }
+
+        private static bool ContainsFocusCard(IReadOnlyList<Card> focus, byte id)
+        {
+            for (var index = 0; index < focus.Count; index++)
+            {
+                if (focus[index].Id == id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsInHand(GameState state, int seat, byte id)
+        {
+            for (var index = 0; index < state.Hands[seat].Count; index++)
+            {
+                if (state.Hands[seat][index].Id == id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static bool TargetMatches(CardTarget target, TutorialTarget expected, GameState state)

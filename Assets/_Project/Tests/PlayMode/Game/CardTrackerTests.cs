@@ -82,6 +82,57 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void HandOrderMovesCardToSlotBeforeLastCard()
+        {
+            var order = CreateHandOrder();
+
+            order.MoveGroupToSlot(0, new byte[] { 11 }, 3);
+
+            CollectionAssert.AreEqual(new byte[] { 10, 12, 13, 11, 14 }, order.GetCardIds(0));
+        }
+
+        [Test]
+        public void HandOrderMovesCardToFrontSlot()
+        {
+            var order = CreateHandOrder();
+
+            order.MoveGroupToSlot(0, new byte[] { 12 }, 0);
+
+            CollectionAssert.AreEqual(new byte[] { 12, 10, 11, 13, 14 }, order.GetCardIds(0));
+        }
+
+        [Test]
+        public void HandOrderMovesSelectedGroupToSlotAndKeepsItsRelativeOrder()
+        {
+            var order = CreateHandOrder();
+
+            order.MoveGroupToSlot(0, new byte[] { 11, 12 }, 3);
+
+            CollectionAssert.AreEqual(new byte[] { 10, 13, 14, 11, 12 }, order.GetCardIds(0));
+        }
+
+        [Test]
+        public void HandOrderMovingGroupToItsCurrentSlotIsANoOp()
+        {
+            var order = CreateHandOrder();
+
+            order.MoveGroupToSlot(0, new byte[] { 11, 12 }, 1);
+
+            CollectionAssert.AreEqual(new byte[] { 10, 11, 12, 13, 14 }, order.GetCardIds(0));
+        }
+
+        [TestCase(-3, new byte[] { 12, 10, 11, 13, 14 })]
+        [TestCase(8, new byte[] { 10, 11, 13, 14, 12 })]
+        public void HandOrderClampsSlotToRemainingHandBounds(int slot, byte[] expected)
+        {
+            var order = CreateHandOrder();
+
+            order.MoveGroupToSlot(0, new byte[] { 12 }, slot);
+
+            CollectionAssert.AreEqual(expected, order.GetCardIds(0));
+        }
+
+        [Test]
         public void PortraitHandUsesTwoRowsWhenItHasManyCards()
         {
             Assert.That(HandView.CalculateRowCount(720, 1280, 14), Is.EqualTo(2));
@@ -128,6 +179,16 @@ namespace Mejnun.Game.Tests
             game.State.Board.Add(new Meld(1,
                 new List<Card> { Card.FromId(2), Card.FromId(3), Card.FromId(4), Card.FromId(5) }));
             return game.State;
+        }
+
+        private static HandOrder CreateHandOrder()
+        {
+            var order = new HandOrder();
+            order.Synchronize(0, new List<Card>
+            {
+                Card.FromId(10), Card.FromId(11), Card.FromId(12), Card.FromId(13), Card.FromId(14)
+            });
+            return order;
         }
     }
 }

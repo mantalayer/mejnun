@@ -137,6 +137,7 @@ namespace Mejnun.Game
         public TutorialUiKind Ui { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
+        public string PartialBody { get; set; }
         public TutorialDiagram Diagram { get; set; }
         public TutorialTarget Target { get; set; }
         public TutorialAction Allowed { get; set; }

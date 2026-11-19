@@ -13,7 +13,7 @@ namespace Mejnun.Game
         public const float BoardCollectSeconds = 0.4f;
         private const float BoardCardFlightDuration = 0.28f;
         private const float InitialDealDuration = 0.3f;
-        private const float InitialDealStagger = 0.1f;
+        private const float InitialDealStagger = 0.05f;
         private const float InitialDealWaitSeconds = 2f;
         private const float BoardCardStagger = 0.003f;
         private const float BoardCardStaggerLimit = 0.12f;
@@ -2132,7 +2132,7 @@ namespace Mejnun.Game
 
         public void UpdateHandLift(Vector2 screenPosition)
         {
-            if (handRoot == null || liftedHandOffsets.Count == 0)
+            if (handRoot == null || handView == null || liftedHandOffsets.Count == 0)
             {
                 return;
             }
@@ -2147,13 +2147,32 @@ namespace Mejnun.Game
             }
 
             var hit = HitTest(screenPosition);
-            if (hit.Kind == GestureHitKind.HandCard)
+            var localPointer = HandLocalPoint(screenPosition);
+            if (localPointer.y <= handView.HandTopY || hit.Kind == GestureHitKind.HandCard ||
+                hit.Kind == GestureHitKind.HandArea)
             {
-                handGapIndex = CountNonLiftedBefore(hit.Index);
-            }
-            else if (hit.Kind == GestureHitKind.HandArea)
-            {
-                handGapIndex = Mathf.Max(0, hit.TargetIndex - liftedHandOffsets.Count);
+                var averagePosition = Vector3.zero;
+                var liftedCount = 0;
+                foreach (var pair in liftedHandOffsets)
+                {
+                    if (activeCards.TryGetValue(pair.Key, out var view))
+                    {
+                        averagePosition += view.transform.localPosition;
+                        liftedCount++;
+                    }
+                }
+
+                if (liftedCount > 0)
+                {
+                    averagePosition /= liftedCount;
+                    var slot = handView.GetSlotIndex(averagePosition);
+                    var groupOffset = (liftedCount - 1) * 0.5f;
+                    var seat = DisplaySeat(CurrentState);
+                    var nonLiftedCount = seat >= 0 && seat < CurrentState.Hands.Count
+                        ? Mathf.Max(0, CurrentState.Hands[seat].Count - liftedCount)
+                        : 0;
+                    handGapIndex = Mathf.Clamp(Mathf.RoundToInt(slot - groupOffset), 0, nonLiftedCount);
+                }
             }
             else
             {
@@ -2161,6 +2180,18 @@ namespace Mejnun.Game
             }
 
             LayoutHand(DisplaySeat(CurrentState));
+        }
+
+        public bool TryGetHandDropTarget(out GestureHit target)
+        {
+            if (liftedHandOffsets.Count > 0 && handGapIndex >= 0)
+            {
+                target = GestureHit.HandSlot(handGapIndex);
+                return true;
+            }
+
+            target = GestureHit.None;
+            return false;
         }
 
         public void EndHandLift()
@@ -2639,22 +2670,6 @@ namespace Mejnun.Game
             }
 
             return null;
-        }
-
-        private int CountNonLiftedBefore(int cardIndex)
-        {
-            var seat = DisplaySeat(CurrentState);
-            var ids = handOrder.GetCardIds(seat);
-            var count = 0;
-            for (var index = 0; index < ids.Count && index < cardIndex; index++)
-            {
-                if (!liftedHandOffsets.ContainsKey(ids[index]))
-                {
-                    count++;
-                }
-            }
-
-            return count;
         }
 
         private static BoardMeldLayout FindMeldLayout(BoardLayoutResult layout, int meldId)
