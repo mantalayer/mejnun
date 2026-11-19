@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Mejnun.Game
 {
-    internal static class UiPointerBlocker
+    public static class UiPointerBlocker
     {
         public static bool IsOverUi(Vector2 screenPosition)
         {
@@ -19,7 +19,7 @@ namespace Mejnun.Game
                     continue;
                 }
 
-                var panelPosition = RuntimePanelUtils.ScreenToPanel(panel, screenPosition);
+                var panelPosition = RuntimePanelUtils.ScreenToPanel(panel, ToPanelScreen(screenPosition));
                 var pickedElement = panel.Pick(panelPosition);
                 if (pickedElement != null && pickedElement != root && pickedElement != panel.visualTree)
                 {
@@ -28,6 +28,12 @@ namespace Mejnun.Game
             }
 
             return false;
+        }
+
+        // Input System positions start at the bottom-left; RuntimePanelUtils.ScreenToPanel expects a top-left origin.
+        public static Vector2 ToPanelScreen(Vector2 screenPosition)
+        {
+            return new Vector2(screenPosition.x, Screen.height - screenPosition.y);
         }
     }
 }

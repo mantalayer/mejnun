@@ -19,11 +19,13 @@ namespace Mejnun.Game
 
         private TableController controller;
         private CardTracker cardTracker;
+        private IScriptedTurnSource scriptedTurns;
         private IReadOnlyList<SeatConfig> seats = new SeatConfig[0];
         private Coroutine routine;
         private MejnunGame playingGame;
         private int playingTurn = -1;
         private bool paused;
+        private bool held;
 
         public float ThinkSeconds
         {
@@ -38,6 +40,25 @@ namespace Mejnun.Game
         }
 
         public bool IsPlaying => routine != null;
+
+        /// <summary>While held, a bot never starts a new turn (a turn already in progress finishes).</summary>
+        public bool Held
+        {
+            get => held;
+            set
+            {
+                if (held == value)
+                {
+                    return;
+                }
+
+                held = value;
+                if (!held)
+                {
+                    Evaluate();
+                }
+            }
+        }
 
         public bool FastForward
         {
@@ -63,6 +84,12 @@ namespace Mejnun.Game
             cardTracker = tracker;
         }
 
+        /// <summary>Authored turns that replace planning when they have commands for a turn; null to plan normally.</summary>
+        public void SetScriptedTurns(IScriptedTurnSource source)
+        {
+            scriptedTurns = source;
+        }
+
         public void Stop()
         {
             if (routine != null)
@@ -78,7 +105,8 @@ namespace Mejnun.Game
         /// <summary>Starts the bot's turn if the current seat is a bot and it isn't already playing.</summary>
         public void Evaluate()
         {
-            if (paused || routine != null || controller == null || controller.Game == null || !isActiveAndEnabled)
+            if (paused || held || routine != null || controller == null || controller.Game == null ||
+                !isActiveAndEnabled)
             {
                 return;
             }
@@ -110,13 +138,24 @@ namespace Mejnun.Game
         private IEnumerator PlayTurn(MejnunGame game, int seat, int turnNumber, BotDifficulty difficulty,
             BotStyle style)
         {
-            var snapshot = SnapshotSerializer.Write(game);
-            var knowledge = cardTracker == null ? null : cardTracker.CreateKnowledge(game.State);
-            var seed = unchecked(game.Setup.Seed * 6364136223846793005UL + (ulong)turnNumber * 1442695040888963407UL +
-                                 (ulong)seat);
-            var planning = Task.Run(() => BotBrain.PlanTurn(snapshot, difficulty, seed, style, knowledge));
+            IReadOnlyList<GameCommand> scripted = null;
+            if (scriptedTurns != null && !scriptedTurns.TryGetCommands(game, seat, turnNumber, out scripted))
+            {
+                scripted = null;
+            }
+
+            Task<BotTurnPlan> planning = null;
+            if (scripted == null)
+            {
+                var snapshot = SnapshotSerializer.Write(game);
+                var knowledge = cardTracker == null ? null : cardTracker.CreateKnowledge(game.State);
+                var seed = unchecked(game.Setup.Seed * 6364136223846793005UL +
+                                     (ulong)turnNumber * 1442695040888963407UL + (ulong)seat);
+                planning = Task.Run(() => BotBrain.PlanTurn(snapshot, difficulty, seed, style, knowledge));
+            }
+
             var waited = 0f;
-            while (!planning.IsCompleted || paused ||
+            while ((planning != null && !planning.IsCompleted) || paused ||
                    (!FastForward && waited < thinkSeconds * GameSettings.CpuDelayMultiplier))
             {
                 if (!paused && !FastForward)
@@ -128,7 +167,11 @@ namespace Mejnun.Game
             }
 
             IReadOnlyList<GameCommand> commands;
-            if (planning.IsFaulted || planning.Result == null)
+            if (scripted != null)
+            {
+                commands = scripted;
+            }
+            else if (planning.IsFaulted || planning.Result == null)
             {
                 Debug.LogError("Bot planning failed: " + planning.Exception, this);
                 commands = new[] { GameCommand.DrawOrPass(seat) };

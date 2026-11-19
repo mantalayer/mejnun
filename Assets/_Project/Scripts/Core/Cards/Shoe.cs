@@ -9,12 +9,30 @@ namespace Mejnun.Core
         private readonly Card[] cards;
         private readonly ReadOnlyCollection<Card> readOnlyCards;
 
-        public Shoe()
+        public Shoe() : this(null)
+        {
+        }
+
+        public Shoe(IReadOnlyList<byte> cardOrder)
         {
             cards = new Card[Card.CardCount];
-            for (var id = 0; id < cards.Length; id++)
+            if (cardOrder != null && cardOrder.Count != Card.CardCount)
             {
-                cards[id] = Card.FromId(id);
+                throw new ArgumentException("Exactly 104 card ids are required.", nameof(cardOrder));
+            }
+
+            var seen = new bool[Card.CardCount];
+            for (var index = 0; index < cards.Length; index++)
+            {
+                var cardId = cardOrder == null ? index : cardOrder[index];
+                if (cardId >= Card.CardCount || seen[cardId])
+                {
+                    throw new ArgumentException("Card order must contain each card id from 0 to 103 exactly once.",
+                        nameof(cardOrder));
+                }
+
+                seen[cardId] = true;
+                cards[index] = Card.FromId(cardId);
             }
 
             readOnlyCards = Array.AsReadOnly(cards);

@@ -28,6 +28,8 @@ namespace Mejnun.Game
         private SeatConfig[] seats = Array.Empty<SeatConfig>();
         private System.Random questionRandom = new System.Random();
         private BotTurnDriver botDriver;
+        private TutorialDirector tutorialDirector;
+        private GameResult pendingTutorialResult;
         private int handoffSeat = -1;
         private int revealedSeat = -1;
         private TurnTimer turnTimer;
@@ -52,6 +54,11 @@ namespace Mejnun.Game
         public int CurrentSeat => Game == null ? -1 : Game.State.CurrentSeat;
         public ulong RoundSeed { get; private set; }
         public BotTurnDriver BotDriver => botDriver;
+        public TutorialDirector Tutorial => tutorialDirector;
+        public bool IsTutorial => activeRequest != null && activeRequest.IsTutorial;
+        public MatchMode Mode => activeRequest == null
+            ? (HumanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo)
+            : activeRequest.Mode;
         public TurnTimer TurnTimer => turnTimer;
         public int TurnSeconds { get; private set; }
         public IReadOnlyList<SeatConfig> Seats => seats;
@@ -143,6 +150,12 @@ namespace Mejnun.Game
                 botDriver = gameObject.AddComponent<BotTurnDriver>();
             }
 
+            tutorialDirector = GetComponent<TutorialDirector>();
+            if (tutorialDirector == null)
+            {
+                tutorialDirector = gameObject.AddComponent<TutorialDirector>();
+            }
+
             if (tableController != null)
             {
                 tableController.SetSeatInputFilter(seat => !IsBotSeat(seat));
@@ -180,6 +193,11 @@ namespace Mejnun.Game
                 tableController.Synchronized += OnSynchronized;
                 tableController.GameWon += OnGameWon;
                 tableController.GameStalemate += OnGameStalemate;
+            }
+
+            if (tutorialDirector != null)
+            {
+                tutorialDirector.Finished += OnTutorialFinished;
             }
         }
 
@@ -219,6 +237,11 @@ namespace Mejnun.Game
                 tableController.GameWon -= OnGameWon;
                 tableController.GameStalemate -= OnGameStalemate;
             }
+
+            if (tutorialDirector != null)
+            {
+                tutorialDirector.Finished -= OnTutorialFinished;
+            }
         }
 
         public bool StartMatch(int seatCount, IReadOnlyList<string> names, ulong? seed = null)
@@ -244,7 +267,18 @@ namespace Mejnun.Game
                 return false;
             }
 
-            return StartMatch(request.Seats, request.Seed, request.TurnSeconds, request);
+            return StartMatch(request.Seats, request.Seed, request.IsTutorial ? 0 : request.TurnSeconds, request);
+        }
+
+        /// <summary>Leaves the tutorial: it counts as completed, nothing is saved, and the menu is shown.</summary>
+        public void SkipTutorial()
+        {
+            if (tutorialDirector != null)
+            {
+                tutorialDirector.Skip();
+            }
+
+            ReturnToMenu();
         }
 
         /// <summary>Starts a match with any mix of local humans and bots (at least one human).</summary>
@@ -328,7 +362,7 @@ namespace Mejnun.Game
             activeRequest = request ?? new MatchRequest(seats, TurnSeconds,
                 humanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo, seed: seed);
 
-            return StartRound(null, seed ?? CreateSeed(seats.Length));
+            return StartRound(request?.Dealer, seed ?? CreateSeed(seats.Length));
         }
 
         public bool ResumeSavedGame()
@@ -532,7 +566,7 @@ namespace Mejnun.Game
 
         public bool SaveCurrentGame()
         {
-            if (Game == null || Game.State.Phase != GamePhase.Playing)
+            if (Game == null || Game.State.Phase != GamePhase.Playing || IsTutorial)
             {
                 return false;
             }
@@ -576,12 +610,18 @@ namespace Mejnun.Game
             LastResult = null;
             LastProgression = null;
             resultRecorded = false;
+            pendingTutorialResult = null;
             handoffSeat = -1;
             revealedSeat = -1;
             cardTracker.Reset();
             if (botDriver != null)
             {
                 botDriver.Stop();
+            }
+
+            if (tutorialDirector != null)
+            {
+                tutorialDirector.Stop();
             }
 
             var feltId = MejnunGame.AssignTableFelt(activeRequest?.FeltPool, seed);
@@ -614,8 +654,16 @@ namespace Mejnun.Game
                     ? new[] { DeckFaceAssigner.ClassicFace, DeckFaceAssigner.ClassicIvoryFace }
                     : tableView.SkinCatalog.GetAvailableSkinIds();
             Game = new MejnunGame(new GameSetup(playerNames.Length, seed, dealer, TurnSeconds, facePool,
-                CopyStrings(activeRequest?.DeckPicks), CopyStrings(activeRequest?.FeltPool)));
+                CopyStrings(activeRequest?.DeckPicks), CopyStrings(activeRequest?.FeltPool),
+                activeRequest?.ShoeOrder));
             IsInitializingRound = false;
+            if (IsTutorial)
+            {
+                tableController.SetHintsEnabled(false);
+                // Started before the table syncs so the scripted CPU is held behind the opening modals.
+                tutorialDirector.Begin(MejnunTutorial.Create(), tableController, botDriver);
+            }
+
             SetScreen(dealer.HasValue ? MatchFlowScreen.Turn : MatchFlowScreen.DealerQuestion);
             tableController.Initialize(Game);
             return true;
@@ -762,6 +810,30 @@ namespace Mejnun.Game
 
         private void OnGameWon(GameResult result)
         {
+            if (IsTutorial && tutorialDirector != null && tutorialDirector.IsRunning)
+            {
+                // The tutorial shows its closing "Good to know" pages before the results screen.
+                pendingTutorialResult = result;
+                if (botDriver != null)
+                {
+                    botDriver.Stop();
+                }
+
+                return;
+            }
+
+            ShowResults(result);
+        }
+
+        private void OnTutorialFinished()
+        {
+            if (pendingTutorialResult == null)
+            {
+                return;
+            }
+
+            var result = pendingTutorialResult;
+            pendingTutorialResult = null;
             ShowResults(result);
         }
 
@@ -786,10 +858,20 @@ namespace Mejnun.Game
 
         private void ShowResults(GameResult result)
         {
-            SavedGame.Delete();
+            if (!IsTutorial)
+            {
+                // The tutorial never saves, so it must not discard a real game the player left to resume.
+                SavedGame.Delete();
+            }
+
             lastSavedGame = null;
             lastSavedTurnNumber = -1;
             LastResult = result;
+            if (IsTutorial)
+            {
+                resultRecorded = true;
+            }
+
             if (!resultRecorded && seats.Length >= 2 && HumanCount >= 1)
             {
                 resultRecorded = true;

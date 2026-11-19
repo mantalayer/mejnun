@@ -1,0 +1,25 @@
+{
+  "name": "Mejnun.Game.EditMode.Tests",
+  "rootNamespace": "Mejnun.Game.EditMode.Tests",
+  "references": [
+    "Mejnun.Core",
+    "Mejnun.AI",
+    "Mejnun.Game"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

@@ -1,0 +1,85 @@
+Event	ID	Name			Wwise Object Path	Notes
+	98812124	Play_Timer_Warning			\Mejnun\Play_Timer_Warning	
+	770096812	Play_Undo			\Mejnun\Play_Undo	
+	927528689	Play_Turn_End			\Mejnun\Play_Turn_End	
+	1072299391	Music_Game			\Mejnun\Music_Game	
+	1150067407	Play_Board_Revert			\Mejnun\Play_Board_Revert	
+	1457389367	Play_Timer_Halas			\Mejnun\Play_Timer_Halas	
+	1598298728	Music_Menu			\Mejnun\Music_Menu	
+	1749424733	Play_UI_Click			\Mejnun\Play_UI_Click	
+	1858408314	Play_Dealer_Chosen			\Mejnun\Play_Dealer_Chosen	
+	1885680669	Play_Pass			\Mejnun\Play_Pass	
+	2113182384	Play_GoDown			\Mejnun\Play_GoDown	
+	2198168116	Play_Meld_Invalid			\Mejnun\Play_Meld_Invalid	
+	2530612017	Play_Card_Deal			\Mejnun\Play_Card_Deal	
+	2749464947	Play_Card_Pickup			\Mejnun\Play_Card_Pickup	
+	2796935317	Play_Card_Draw			\Mejnun\Play_Card_Draw	
+	2825832111	Play_Mejnun_Shout			\Mejnun\Play_Mejnun_Shout	
+	2830490744	Play_Card_Drop			\Mejnun\Play_Card_Drop	
+	2837384057	Stop_Music			\Mejnun\Stop_Music	
+	3179716423	Play_Meld_Valid			\Mejnun\Play_Meld_Valid	
+	3588254728	Play_Turn_Start_Bot			\Mejnun\Play_Turn_Start_Bot	
+	3606041870	Play_Lose_Stinger			\Mejnun\Play_Lose_Stinger	
+	3780346990	Play_Turn_Start_Player			\Mejnun\Play_Turn_Start_Player	
+	3818448697	Play_Stalemate_Stinger			\Mejnun\Play_Stalemate_Stinger	
+	3991713996	Play_Card_Invalid			\Mejnun\Play_Card_Invalid	
+	4014770395	Play_Win_Stinger			\Mejnun\Play_Win_Stinger	
+	4091023330	Play_Card_LongPress			\Mejnun\Play_Card_LongPress	
+	4093125639	Play_Timer_Tick			\Mejnun\Play_Timer_Tick	
+	4220340206	Play_Card_Shuffle			\Mejnun\Play_Card_Shuffle	
+
+Switch Group	ID	Name			Wwise Object Path	Notes
+	3140450991	Shout_Type			\Mejnun\Shout_Type	
+
+Switch	ID	Name	Switch Group			Notes
+	782826392	Default	Shout_Type			
+
+Modulator Time	ID	Name			Wwise Object Path	Notes
+	600540092	Modulator Time (Custom)				
+	892037803	Modulator Time (Custom)				
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	10540137	Card Drop 2	.cache\BA\{BA4275E4-5F59-B95F-AE39-69AEF8132F94}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 2		5801
+	23233998	Dice Roll Single 6	.cache\16\{1604F593-2621-69F9-3BBF-57039E3F7127}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 6		8299
+	37294351	Card Drop 7	.cache\79\{79226438-B55C-ADDB-0805-0A9568031F71}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 7		3510
+	88696734	Card Slide Slow 3	.cache\F5\{F5FBB6C4-6AD9-E0FA-942D-E66D795ADFF9}.wem		\Containers\Mejnun\SFX\Turn_Start_Bot\Card Slide Slow 3		5469
+	92620801	Card Move Fast - With Whoosh 1	.cache\06\{0635A551-3C9E-37D0-B90D-DF8469ACF466}.wem		\Containers\Mejnun\SFX\Board_Revert\New Blend Container\New Random Container\Card Move Fast - With Whoosh 1		3916
+	103497374	Coins Reward 3	.cache\FE\{FE6941A5-0127-E57B-44CA-6AFC550D2737}.wem		\Containers\Mejnun\SFX\Meld_Valid\Coins Reward 3		13227
+	156130487	Card Move Fast - With Whoosh 2	.cache\3C\{3CB439EA-01B7-DEEC-71BB-8B9CF3CA8821}.wem		\Containers\Mejnun\SFX\Undo\Card Move Fast - With Whoosh 2		3776
+	172930794	Card Slide Slow 1	.cache\0D\{0DF9F19B-5A82-60EB-061B-CB0D8F8AAF78}.wem		\Containers\Mejnun\SFX\Turn_Start_Bot\Card Slide Slow 1		5182
+	234069379	Card Flip Natural 3	.cache\B2\{B2114D50-4C61-B334-5254-AF20B10C5435}.wem		\Containers\Mejnun\SFX\Card_Deal\Card Flip Natural 3		6993
+	294213001	Card Discard 2	.cache\5D\{5D69F800-53AF-8C06-D713-76AE28663D54}.wem		\Containers\Mejnun\SFX\Card_Invalid\New Blend Container\Card Discard 2		5083
+	296756676	Change Of Turns Stinger 6	.cache\BD\{BDD60EE7-5A1F-86EA-E6D3-CB16EDC25FDD}.wem		\Containers\Mejnun\SFX\Dealer_Chosen\Change Of Turns Stinger 6		51875
+	355085813	UI Wood Sound 2	.cache\C1\{C16A67B6-C787-6C5A-4DF4-1F977EE2D907}.wem		\Containers\Mejnun\SFX\Card_Invalid\New Blend Container\New Sequence Container\UI Wood Sound 2		2861
+	412578313	Card Move Fast - With Whoosh 3	.cache\F0\{F0FE4272-BD77-5664-138E-6F1EC1EFAC73}.wem		\Containers\Mejnun\SFX\Board_Revert\New Blend Container\New Random Container\Card Move Fast - With Whoosh 3		3106
+	413159305	Card Slide Slow 2	.cache\05\{058704CF-DD41-A011-31F8-7DB72E43DB62}.wem		\Containers\Mejnun\SFX\Turn_Start_Bot\Card Slide Slow 2		5220
+	430629700	Cards Shuffle Short Sequence 2	.cache\3E\{3ED94698-F71A-1A3A-AA17-D040195C9A15}.wem		\Containers\Mejnun\SFX\Card_Invalid\New Blend Container\Cards Shuffle Short Sequence 2		10541
+	442495150	Dice Roll Single 3	.cache\84\{84C2E394-FDA2-60CF-7277-E0B6375E2A78}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 3		9568
+	448146646	Dice Roll Single 7	.cache\BE\{BEAC9CBE-CE97-427A-86A1-B1ED94272AD9}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 7		9699
+	497904013	UI Back Action 1	.cache\BC\{BC4DC598-B402-73A8-EAA6-B99E1960F318}.wem		\Containers\Mejnun\SFX\Timer_Halas\UI Back Action 1		17549
+	534013469	Card Lift	.cache\FA\{FA24E620-032D-8864-6BC1-03A8E3165B0E}.wem		\Containers\Mejnun\SFX\Card_Pickup\Card Lift		4855
+	578029637	UI Wood Sound 4	.cache\5D\{5DAD7D19-9675-C5F1-01D5-A956FDC62D7F}.wem		\Containers\Mejnun\UI\UI_Click\UI Wood Sound 4		3687
+	581828867	Dice Roll Single 2	.cache\A3\{A382CEA9-F125-8F95-2ADE-4F081EA07077}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 2		11544
+	591768834	Dice Roll Single 5	.cache\54\{54DC7DAF-2064-5818-7BC0-DA2903BDAED7}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 5		8971
+	594895720	Card Flip Natural 5	.cache\DC\{DCEDCEBF-EBB9-C2AD-922C-5FBCDCFB487D}.wem		\Containers\Mejnun\SFX\Card_Deal\Card Flip Natural 5		8419
+	666531232	Card Slide Slow 4	.cache\04\{0448BDF7-8E19-32DB-6B87-F4164C19FF8D}.wem		\Containers\Mejnun\SFX\Turn_Start_Bot\Card Slide Slow 4		5391
+	684871593	Card Flip Natural 2	.cache\1D\{1D7B45AC-E3A4-584B-14BE-402BC3B04BF4}.wem		\Containers\Mejnun\SFX\Card_Deal\Card Flip Natural 2		8705
+	687731691	Card Drop 5	.cache\23\{238FFC71-60EF-F611-3BE2-A2750426DA74}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 5		5443
+	688466017	UI Wood Sound 5	.cache\BD\{BD91F958-954B-FD6E-A612-8C716386A19D}.wem		\Containers\Mejnun\SFX\Timer_Warning\UI Wood Sound 5		4226
+	690129464	Change Of Turns Stinger 3	.cache\C8\{C84C0C0D-9D23-162D-AA2D-2C5EC7BE8589}.wem		\Containers\Mejnun\SFX\Turn_Start_Player\Change Of Turns Stinger 3		49968
+	700172627	Card Drop 4	.cache\84\{84865747-57A8-9E3B-F5F5-08038D52AE03}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 4		4786
+	702930951	Dice Roll Single 8	.cache\07\{07D9A055-F65A-3D7A-D48C-6EAE9CD6CAC5}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 8		9258
+	727902420	Coin Fall 1	.cache\D9\{D9C7BBC4-AF9E-39DE-0CB2-8430C7B8D220}.wem		\Containers\Mejnun\SFX\GoDown\New Blend Container\Coin Fall 1		8997
+	752208865	Dice Roll Single 4	.cache\2B\{2B60DCF8-5B53-089E-7CED-D27127DFC81F}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 4		10682
+	790269741	Card Flip Natural 1	.cache\DA\{DA15197C-6C10-ACF6-6D2B-A6772596388E}.wem		\Containers\Mejnun\SFX\Card_Deal\Card Flip Natural 1		7426
+	797890009	Cards Shuffle Short Sequence 1	.cache\B4\{B45945A3-C29B-185C-E381-BC55FE59C2F9}.wem		\Containers\Mejnun\SFX\Board_Revert\New Blend Container\Cards Shuffle Short Sequence 1		14476
+	813608714	Card Flip Natural 4	.cache\9D\{9D865B51-86D2-51F1-9D7E-F9CA40768400}.wem		\Containers\Mejnun\SFX\Card_Deal\Card Flip Natural 4		6902
+	826325183	UI Wood Sound 3	.cache\F5\{F5732ECB-222E-9F67-0CBA-C41160B277D1}.wem		\Containers\Mejnun\SFX\Timer_Tick\UI Wood Sound 3		2507
+	942971863	Dice Roll Single 1	.cache\CF\{CFA3F0CF-4931-81AF-4011-E143A40DD6B1}.wem		\Containers\Mejnun\SFX\Meld_Invalid\Dice Roll Single 1		8580
+	959331636	Cards Shuffle Short Sequence 2	.cache\4C\{4C2C157E-47AF-8B2C-E2B8-479F79027AD1}.wem		\Containers\Mejnun\SFX\Board_Revert\New Blend Container\Cards Shuffle Short Sequence 2		11786
+	977712186	Cards Deal Sound 4	.cache\FA\{FAA23B7F-2C21-9474-BE82-7CD07512160E}.wem		\Containers\Mejnun\SFX\Card_Shuffle\Cards Deal Sound 4		16549
+	989643402	Cards Deal Sound 3	.cache\C9\{C945FCC8-91EF-9328-9EF4-3CBAE6FEA162}.wem		\Containers\Mejnun\SFX\GoDown\New Blend Container\Cards Deal Sound 3		8251
+	1003591847	Card Drop 3	.cache\B0\{B0B5AE4B-2AA7-5ADF-3B7E-8C6EBFC9C689}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 3		3256
+	1064900614	Card Drop 1	.cache\49\{499F5854-EDA1-D3B7-2938-63B70DA19E4F}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 1		5714
+	1070372830	Card Drop 6	.cache\B0\{B0CE0003-59FD-AAD1-C266-DC5634A2117F}.wem		\Containers\Mejnun\SFX\Card_Drop\Card Drop 6		3777
+

@@ -796,7 +796,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="Card Placement 1" ID="{E6794CFB-7634-49BD-94A8-585551AD10AA}" ShortID="354906182">
+								<Sound Name="Card Move Fast - With Whoosh 1" ID="{70A37FA7-6FE0-4C1D-AC91-D27996D0188A}" ShortID="430650333">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{7AC571A7-2126-4507-B749-5DD3985DABBF}"/>
@@ -806,19 +806,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Card Placement 1" ID="{BC5A77FE-D12D-4CC8-BDB3-C56E85584D8E}">
+										<AudioFileSource Name="Card Move Fast - With Whoosh 1" ID="{7B9B9A46-DEBD-44F8-9CBB-27ECC722520A}">
 											<Language>SFX</Language>
-											<AudioFile>Card Placement 1.wav</AudioFile>
+											<AudioFile>Card Move Fast - With Whoosh 1.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="427268354"/>
+												<MediaID ID="92620801"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Card Placement 1" ID="{BC5A77FE-D12D-4CC8-BDB3-C56E85584D8E}" Platform="Linked"/>
+										<ActiveSource Name="Card Move Fast - With Whoosh 1" ID="{7B9B9A46-DEBD-44F8-9CBB-27ECC722520A}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Card Placement 2" ID="{BA9D4A25-3F90-4CF2-A87B-D2DCCA1F5F4C}" ShortID="921916831">
+								<Sound Name="Card Move Fast - With Whoosh 2" ID="{778D55A3-6643-49F7-A8FD-CA96CDDDF495}" ShortID="486299640">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{7AC571A7-2126-4507-B749-5DD3985DABBF}"/>
@@ -828,19 +828,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Card Placement 2" ID="{A1077221-7C0E-4D89-8376-7273CCACA864}">
+										<AudioFileSource Name="Card Move Fast - With Whoosh 2" ID="{328A7736-CB6E-4EE2-93C9-BFB435D7BFCC}">
 											<Language>SFX</Language>
-											<AudioFile>Card Placement 2.wav</AudioFile>
+											<AudioFile>Card Move Fast - With Whoosh 2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="588660385"/>
+												<MediaID ID="156130487"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Card Placement 2" ID="{A1077221-7C0E-4D89-8376-7273CCACA864}" Platform="Linked"/>
+										<ActiveSource Name="Card Move Fast - With Whoosh 2" ID="{328A7736-CB6E-4EE2-93C9-BFB435D7BFCC}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="Card Placement 3" ID="{C5E6FD5F-6573-4A76-A670-03266400C9E9}" ShortID="347869933">
+								<Sound Name="Card Move Fast - With Whoosh 3" ID="{7FA68006-4A5F-4D89-8575-CFACCB8F6F0E}" ShortID="906776162">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{7AC571A7-2126-4507-B749-5DD3985DABBF}"/>
@@ -850,38 +850,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Card Placement 3" ID="{F8738BE7-02E2-41AF-AB7E-446ED9DD737F}">
+										<AudioFileSource Name="Card Move Fast - With Whoosh 3" ID="{13AA875F-4B2D-4834-A924-A53E35246095}">
 											<Language>SFX</Language>
-											<AudioFile>Card Placement 3.wav</AudioFile>
+											<AudioFile>Card Move Fast - With Whoosh 3.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="875333067"/>
+												<MediaID ID="412578313"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="Card Placement 3" ID="{F8738BE7-02E2-41AF-AB7E-446ED9DD737F}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="Card Placement 4" ID="{CD75EBB4-12C9-4085-AED3-DC6AD426B90C}" ShortID="71126999">
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{7AC571A7-2126-4507-B749-5DD3985DABBF}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4FE23530-826A-4991-97A8-7C957514BDB4}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="Card Placement 4" ID="{678DD295-AA7C-4F0E-90A0-48BBB1BC68AB}">
-											<Language>SFX</Language>
-											<AudioFile>Card Placement 4.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="361181537"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="Card Placement 4" ID="{678DD295-AA7C-4F0E-90A0-48BBB1BC68AB}" Platform="Linked"/>
+										<ActiveSource Name="Card Move Fast - With Whoosh 3" ID="{13AA875F-4B2D-4834-A924-A53E35246095}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>

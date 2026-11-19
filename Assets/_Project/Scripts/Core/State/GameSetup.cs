@@ -9,10 +9,11 @@ namespace Mejnun.Core
         private readonly ReadOnlyCollection<string> facePool;
         private readonly ReadOnlyCollection<string> deckPicks;
         private readonly ReadOnlyCollection<string> feltPool;
+        private readonly ReadOnlyCollection<byte> shoeOrder;
 
         public GameSetup(int seatCount, ulong seed, int? dealer = null, int turnSeconds = 0,
             IReadOnlyList<string> facePool = null, IReadOnlyList<string> deckPicks = null,
-            IReadOnlyList<string> feltPool = null)
+            IReadOnlyList<string> feltPool = null, IReadOnlyList<byte> shoeOrder = null)
         {
             if (seatCount < 2 || seatCount > 6)
             {
@@ -82,6 +83,30 @@ namespace Mejnun.Core
                 }
             }
 
+            List<byte> orderedCards = null;
+            if (shoeOrder != null)
+            {
+                if (shoeOrder.Count != Card.CardCount)
+                {
+                    throw new ArgumentException("Exactly 104 card ids are required.", nameof(shoeOrder));
+                }
+
+                var seen = new bool[Card.CardCount];
+                orderedCards = new List<byte>(shoeOrder.Count);
+                for (var index = 0; index < shoeOrder.Count; index++)
+                {
+                    var cardId = shoeOrder[index];
+                    if (cardId >= Card.CardCount || seen[cardId])
+                    {
+                        throw new ArgumentException("Shoe order must contain each card id from 0 to 103 exactly once.",
+                            nameof(shoeOrder));
+                    }
+
+                    seen[cardId] = true;
+                    orderedCards.Add(cardId);
+                }
+            }
+
             SeatCount = seatCount;
             Seed = seed;
             Dealer = dealer;
@@ -89,6 +114,7 @@ namespace Mejnun.Core
             this.facePool = faces.AsReadOnly();
             this.deckPicks = picks?.AsReadOnly();
             this.feltPool = felts.AsReadOnly();
+            this.shoeOrder = orderedCards?.AsReadOnly();
         }
 
         public int SeatCount { get; }
@@ -98,5 +124,6 @@ namespace Mejnun.Core
         public IReadOnlyList<string> FacePool => facePool;
         public IReadOnlyList<string> DeckPicks => deckPicks;
         public IReadOnlyList<string> FeltPool => feltPool;
+        public IReadOnlyList<byte> ShoeOrder => shoeOrder;
     }
 }

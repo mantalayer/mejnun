@@ -1,0 +1,27 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	3211383847	Game_Phase			\Mejnun\Game_Phase	
+
+State	ID	Name	State Group			Notes
+	748895195	None	Game_Phase			
+	959498469	Dealing	Game_Phase			
+	1852808225	Playing	Game_Phase			
+	2607556080	Menu	Game_Phase			
+	3780578133	Results	Game_Phase			
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	3673881719	Volume_SFX			\Mejnun\Volume_SFX	
+	3676256460	Volume_Voice			\Mejnun\Volume_Voice	
+	3695994288	Volume_Master			\Mejnun\Volume_Master	
+	3891337659	Volume_Music			\Mejnun\Volume_Music	
+
+Audio Bus	ID	Name			Wwise Object Path	Notes
+	393239870	SFX			\Default Work Unit\Main Audio Bus\SFX	
+	1551306167	UI			\Default Work Unit\Main Audio Bus\UI	
+	2246998526	Main Audio Bus			\Default Work Unit\Main Audio Bus	
+	3170124113	Voice			\Default Work Unit\Main Audio Bus\Voice	
+	3991942870	Music			\Default Work Unit\Main Audio Bus\Music	
+
+Audio Devices	ID	Name	Type				Notes
+	2317455096	No_Output	No Output			
+	3859886410	System	System			
+

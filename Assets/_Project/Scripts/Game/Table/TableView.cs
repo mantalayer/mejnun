@@ -125,6 +125,61 @@ namespace Mejnun.Game
             return true;
         }
 
+        /// <summary>World centre of the empty-table slot where a new set would go.</summary>
+        public bool TryGetNewGroupAnchor(out Vector3 world)
+        {
+            world = default;
+            if (boardView == null || boardView.CurrentLayout == null)
+            {
+                return false;
+            }
+
+            var slot = boardView.CurrentLayout.NewGroupSlot;
+            world = boardView.transform.TransformPoint(new Vector3(slot.center.x, slot.center.y, 0f));
+            return true;
+        }
+
+        public void SetTutorialTarget(int meldId, bool emptyTarget)
+        {
+            if (boardView != null)
+            {
+                boardView.SetTutorialTarget(meldId, emptyTarget);
+            }
+        }
+
+        /// <summary>Screen position (pixels, origin bottom-left) of a world point, for anchoring UI to the table.</summary>
+        public bool TryGetScreenPoint(Vector3 world, out Vector2 screen)
+        {
+            screen = default;
+            var viewCamera = ViewCamera;
+            if (viewCamera == null)
+            {
+                return false;
+            }
+
+            var point = viewCamera.WorldToScreenPoint(world);
+            if (point.z < 0f)
+            {
+                return false;
+            }
+
+            screen = new Vector2(point.x, point.y);
+            return true;
+        }
+
+        /// <summary>Screen anchor above a card (hand or board), or above the set with the given id.</summary>
+        public bool TryGetCardScreenAnchor(byte cardId, out Vector2 screen)
+        {
+            screen = default;
+            return TryGetCardAnchor(cardId, out var world) && TryGetScreenPoint(world, out screen);
+        }
+
+        public bool TryGetMeldScreenAnchor(int meldId, out Vector2 screen)
+        {
+            screen = default;
+            return TryGetMeldAnchor(meldId, out var world) && TryGetScreenPoint(world, out screen);
+        }
+
         private void Awake()
         {
             PreparePool();

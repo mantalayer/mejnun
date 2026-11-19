@@ -263,7 +263,7 @@ EditMode tests cover the engine change and the full tutorial script, without Uni
 
 # Delivery Steps
 
-###   Step 1: Add stacked-deck support to the rules engine
+### ✓ Step 1: Add stacked-deck support to the rules engine
 The engine can deal an exact, authored 104-card order while normal seeded games stay byte-identical.
 
 - Add optional `ShoeOrder` to `Core/State/GameSetup.cs` (validated: 104 unique ids in 0..103).
@@ -271,7 +271,7 @@ The engine can deal an exact, authored 104-card order while normal seeded games 
 - Add `RuleError.TutorialBlocked` and `MatchMode.Tutorial`.
 - Add `StackedDeckTests` (exact deal, draw order, unchanged seeded bytes, snapshot round-trip).
 
-###   Step 2: Author the tutorial script, deck builder and scripted CPU
+### ✓ Step 2: Author the tutorial script, deck builder and scripted CPU
 A pure-data tutorial (hands, draws, CPU turns, steps) replays headlessly from deal to MEJNUN!.
 
 - Create `Game/Tutorial/TutorialDeck.cs` (interleave hands from `dealer+1`, filler, draws at the shoe end).
@@ -279,7 +279,7 @@ A pure-data tutorial (hands, draws, CPU turns, steps) replays headlessly from de
 - Hook `IScriptedTurnSource` into `BotTurnDriver.PlayTurn` ahead of `BotBrain`.
 - Add `TutorialScriptTests` that replays every intent and asserts each step predicate and the final win.
 
-###   Step 3: Build the tutorial director, input gate and card focus highlight
+### ✓ Step 3: Build the tutorial director, input gate and card focus highlight
 In the Table scene the tutorial match runs step by step, highlights the cards to move, and blocks off-script commands.
 
 - Extend `MatchRequest` and `MatchFlow` to pass `ShoeOrder` and dealer `0`; in tutorial mode skip saves, progression and the timer, and force hints off.
@@ -287,7 +287,7 @@ In the Table scene the tutorial match runs step by step, highlights the cards to
 - Add the tutorial focus outline/pulse and the dimmed state to `CardView`, a target glow to `MeldOutline`, and anchor-position helpers to `TableView`.
 - Implement `TutorialDirector` and `TutorialGate`: advance on `Synchronized` predicates or on an expected rejection; raise `StepStarted`, `Nudge` and `Finished`; persist `TutorialCompleted`.
 
-###   Step 4: Add tutorial popups, modals and HUD button focus
+### ✓ Step 4: Add tutorial popups, modals and HUD button focus
 Players see coach popups, rule modals with card diagrams, a ghost-hand hint, and only the allowed HUD button active.
 
 - Add `tutorial-layer` (`coach-popup`, `rule-modal`, `ghost-hand`) to `UI/Uxml/Hud.uxml` and styles to `table.uss` (portrait/landscape, safe areas).
@@ -295,7 +295,7 @@ Players see coach popups, rule modals with card diagrams, a ghost-hand hint, and
 - Add Skip tutorial to the pause menu with confirmation; respect reduced motion.
 - Show the paged "Good to know" modal at the end, and the Play for real button in `ResultsScreen` for tutorial mode.
 
-###   Step 5: Wire tutorial entry points in the front end and verify the full flow
+### ✓ Step 5: Wire tutorial entry points in the front end and verify the full flow
 The tutorial is reachable from the main menu and the first Play, and the whole flow is covered by PlayMode tests.
 
 - Add a How to play button to `FrontEnd.uxml` and `MainMenuScreen`, and the one-time first-Play prompt driven by `TutorialCompleted`.

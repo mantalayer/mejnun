@@ -5,7 +5,8 @@ namespace Mejnun.Cosmetics
     public enum MatchMode
     {
         Solo,
-        PassAndPlay
+        PassAndPlay,
+        Tutorial
     }
 
     public readonly struct MatchSummary

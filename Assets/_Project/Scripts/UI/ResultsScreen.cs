@@ -26,6 +26,7 @@ namespace Mejnun.UI
         private readonly VisualElement lockedItems;
         private readonly VisualElement rematchConfirm;
         private readonly Toggle rematchDontAsk;
+        private readonly Button rematchButton;
 
         public ResultsScreen(VisualElement documentRoot, MatchFlow flow, DeckSkinLoader loader)
         {
@@ -45,7 +46,8 @@ namespace Mejnun.UI
             lockedItems = root.Q<VisualElement>("result-locked-items");
             rematchConfirm = root.Q<VisualElement>("rematch-confirm");
             rematchDontAsk = root.Q<Toggle>("rematch-dont-ask");
-            root.Q<Button>("rematch-button").clicked += RequestRematch;
+            rematchButton = root.Q<Button>("rematch-button");
+            rematchButton.clicked += RequestRematch;
             root.Q<Button>("rematch-cancel-button").clicked += () => SetRematchConfirmation(false);
             root.Q<Button>("rematch-accept-button").clicked += ConfirmRematch;
             root.Q<Button>("results-menu-button").clicked += () => matchFlow.ReturnToMenu();
@@ -80,7 +82,21 @@ namespace Mejnun.UI
             }
 
             counts.text = result.ToString();
+            var tutorial = matchFlow.IsTutorial;
+            rematchButton.text = tutorial ? "Play for real" : "Rematch";
+            if (tutorial)
+            {
+                message.text = "You finished the tutorial. You're ready for a real game!";
+            }
+
+            levelLabel.style.display = tutorial ? DisplayStyle.None : DisplayStyle.Flex;
+            levelProgress.style.display = tutorial ? DisplayStyle.None : DisplayStyle.Flex;
             RefreshProgression();
+            if (tutorial)
+            {
+                lockedItems.Clear();
+            }
+
             SetRematchConfirmation(false);
         }
 
@@ -196,6 +212,13 @@ namespace Mejnun.UI
 
         private void RequestRematch()
         {
+            if (matchFlow.IsTutorial)
+            {
+                // "Play for real": the tutorial never rematches; it hands over to the normal Solo setup.
+                matchFlow.ReturnToMenu(MenuDestination.Setup);
+                return;
+            }
+
             if (GameSettings.ConfirmLeave)
             {
                 SetRematchConfirmation(true);
