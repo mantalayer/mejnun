@@ -26,18 +26,21 @@ namespace Mejnun.Game
         private int lastTickSecond = int.MaxValue;
         private bool warningPosted;
         private bool timeoutPosted;
+        private bool turnSoundsFromState;
 
         public GameAudioMapper(IAudioService audio)
         {
             this.audio = audio ?? throw new ArgumentNullException(nameof(audio));
         }
 
-        public void Bind(MejnunGame game, Func<int, bool> humanSeatPredicate = null, int numberOfHumans = 0)
+        public void Bind(MejnunGame game, Func<int, bool> humanSeatPredicate = null, int numberOfHumans = 0,
+            bool useStateDrivenTurnSounds = false)
         {
             var nextEvents = game?.Events;
             if (events == nextEvents)
             {
                 isHumanSeat = humanSeatPredicate ?? isHumanSeat;
+                turnSoundsFromState = useStateDrivenTurnSounds;
                 if (numberOfHumans > 0)
                 {
                     humanCount = numberOfHumans;
@@ -55,6 +58,7 @@ namespace Mejnun.Game
             events = nextEvents;
             isHumanSeat = humanSeatPredicate ?? (_ => true);
             humanCount = numberOfHumans > 0 ? numberOfHumans : game.Setup.SeatCount;
+            turnSoundsFromState = useStateDrivenTurnSounds;
 
             events.DealerChosen += OnDealerChosen;
             events.DeckFacesAssigned += OnDeckFacesAssigned;
@@ -101,6 +105,7 @@ namespace Mejnun.Game
             }
 
             events = null;
+            turnSoundsFromState = false;
             queuedDealSounds = 0;
             cardMovedPending = false;
             meldValidPending = false;
@@ -200,6 +205,11 @@ namespace Mejnun.Game
             audio.Post(AudioIds.PlayTimerHalas);
         }
 
+        public void ReportTurnStarted(int seat)
+        {
+            audio.Post(isHumanSeat(seat) ? AudioIds.PlayTurnStartPlayer : AudioIds.PlayTurnStartBot);
+        }
+
         public void ReportDropCue()
         {
             cardMovedPending = false;
@@ -226,7 +236,10 @@ namespace Mejnun.Game
 
         private void OnTurnStarted(int seat, int turnNumber)
         {
-            audio.Post(isHumanSeat(seat) ? AudioIds.PlayTurnStartPlayer : AudioIds.PlayTurnStartBot);
+            if (!turnSoundsFromState)
+            {
+                ReportTurnStarted(seat);
+            }
         }
 
         private void OnCardMoved(Card card, CardTarget from, CardTarget to)

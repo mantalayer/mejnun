@@ -47,7 +47,7 @@ namespace Mejnun.Game.Tests
                 Assert.That(GameSettings.UiScale, Is.EqualTo(0.8f));
 
                 GameSettings.UiScale = 3f;
-                Assert.That(GameSettings.UiScale, Is.EqualTo(2f));
+                Assert.That(GameSettings.UiScale, Is.EqualTo(3f));
             }
             finally
             {

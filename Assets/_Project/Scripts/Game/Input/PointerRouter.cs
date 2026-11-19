@@ -10,6 +10,7 @@ namespace Mejnun.Game
     public sealed class GestureSettings
     {
         [Min(1f)] public float DragThresholdPixels = 10f;
+        [Min(1f)] public float PinchThresholdPixels = 24f;
         [Min(0.1f)] public float LongPressSeconds = 0.35f;
         [Min(0.1f)] public float DoubleTapSeconds = 0.3f;
         [Min(1f)] public float DoubleTapDistancePixels = 40f;
@@ -57,6 +58,7 @@ namespace Mejnun.Game
         private bool pointerIsTouch;
         private int touchId;
         private int ignoredTouchId = -1;
+        private bool ignoreTouchesUntilAllLifted;
         private bool dragging;
         private bool longPressStarted;
         private Vector2 pointerStart;
@@ -66,6 +68,10 @@ namespace Mejnun.Game
         private Vector2 pendingTapPosition;
         private float pendingTapAt;
         private bool trackingPinch;
+        private int firstPinchTouchId;
+        private int secondPinchTouchId;
+        private bool pinchZooming;
+        private float pinchStartDistance;
         private Vector2 previousPinchCenter;
         private float previousPinchDistance;
 
@@ -112,6 +118,19 @@ namespace Mejnun.Game
         private bool ProcessTouchInput()
         {
             var touches = EnhancedTouch.activeTouches;
+            if (ignoreTouchesUntilAllLifted && touches.Count < 2)
+            {
+                if (touches.Count == 0)
+                {
+                    ignoreTouchesUntilAllLifted = false;
+                    ignoredTouchId = -1;
+                    trackingPinch = false;
+                    return false;
+                }
+
+                return true;
+            }
+
             if (ignoredTouchId >= 0)
             {
                 for (var index = 0; index < touches.Count; index++)
@@ -137,6 +156,7 @@ namespace Mejnun.Game
 
             if (touches.Count >= 2)
             {
+                ignoreTouchesUntilAllLifted = true;
                 if (pointerDown)
                 {
                     CancelPointer();
@@ -158,10 +178,30 @@ namespace Mejnun.Game
                 var second = touches[1].screenPosition;
                 var center = (first + second) * 0.5f;
                 var distance = Vector2.Distance(first, second);
-                if (trackingPinch && previousPinchDistance > 0f && distance > 0f)
+                var firstTouchId = touches[0].touchId;
+                var secondTouchId = touches[1].touchId;
+                var touchIdsChanged = !trackingPinch || firstPinchTouchId != firstTouchId ||
+                                      secondPinchTouchId != secondTouchId;
+                if (touchIdsChanged)
                 {
-                    Emit(PointerGestureKind.Pinch, center, center - previousPinchCenter, false,
-                        distance / previousPinchDistance);
+                    firstPinchTouchId = firstTouchId;
+                    secondPinchTouchId = secondTouchId;
+                    pinchStartDistance = distance;
+                    pinchZooming = false;
+                }
+                else
+                {
+                    var scale = 1f;
+                    if (!pinchZooming && Mathf.Abs(distance - pinchStartDistance) >= settings.PinchThresholdPixels)
+                    {
+                        pinchZooming = true;
+                    }
+                    else if (pinchZooming && previousPinchDistance > 0f && distance > 0f)
+                    {
+                        scale = distance / previousPinchDistance;
+                    }
+
+                    Emit(PointerGestureKind.Pinch, center, center - previousPinchCenter, false, scale);
                 }
 
                 previousPinchCenter = center;

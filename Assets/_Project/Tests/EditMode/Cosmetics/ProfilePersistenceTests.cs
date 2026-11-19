@@ -98,9 +98,9 @@ namespace Mejnun.Cosmetics.Tests
                 new MatchSummary(MatchMode.Solo, 3, 1, true, true, false, true));
             var restored = new ProfileStore(profilePath).Load();
 
-            Assert.That(report.XpGained, Is.EqualTo(80));
+            Assert.That(report.XpGained, Is.EqualTo(216));
             Assert.That(report.LevelBefore, Is.EqualTo(1));
-            Assert.That(report.LevelAfter, Is.EqualTo(1));
+            Assert.That(report.LevelAfter, Is.EqualTo(2));
             CollectionAssert.AreEquivalent(new[]
             {
                 AchievementIds.FirstGame,
@@ -108,7 +108,7 @@ namespace Mejnun.Cosmetics.Tests
                 AchievementIds.FirstMejnun,
                 AchievementIds.BeatHardBot
             }, report.NewAchievements);
-            Assert.That(restored.Xp, Is.EqualTo(80));
+            Assert.That(restored.Xp, Is.EqualTo(216));
             Assert.That(restored.Stats.Wins, Is.EqualTo(1));
         }
 

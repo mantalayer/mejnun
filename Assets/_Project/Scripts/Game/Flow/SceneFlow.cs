@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.SceneManagement;
 
 namespace Mejnun.Game
 {
@@ -22,15 +21,25 @@ namespace Mejnun.Game
                 throw new ArgumentNullException(nameof(request));
             }
 
+            if (SceneFader.IsTransitioning)
+            {
+                return;
+            }
+
             MatchLaunch.Set(request);
-            SceneManager.LoadScene(TableScene);
+            SceneFader.LoadScene(TableScene);
         }
 
         public static void LoadMainMenu(MenuDestination destination = default)
         {
+            if (SceneFader.IsTransitioning)
+            {
+                return;
+            }
+
             pendingDestination = destination;
             hasPendingDestination = true;
-            SceneManager.LoadScene(MainMenuScene);
+            SceneFader.LoadScene(MainMenuScene);
         }
 
         public static bool TryTakeDestination(out MenuDestination destination)

@@ -38,7 +38,7 @@ namespace Mejnun.UI
                 OriginalResolutions.Add(settings, originalResolution);
             }
 
-            var scale = Mathf.Clamp(GameSettings.UiScale, 0.8f, 2f);
+            var scale = Mathf.Clamp(GameSettings.UiScale, 0.8f, 3f);
             var scaledResolution = new Vector2Int(
                 Mathf.Max(1, Mathf.RoundToInt(originalResolution.x / scale)),
                 Mathf.Max(1, Mathf.RoundToInt(originalResolution.y / scale)));

@@ -80,12 +80,12 @@ namespace Mejnun.Cosmetics.Tests
         [Test]
         public void TabsShowSeparateOwnedCountsAndFeltDeepLinks()
         {
-            gallery.Show("midnight");
+            gallery.Show("blue");
 
-            Assert.That(gallery.SelectedItemId, Is.EqualTo("midnight"));
+            Assert.That(gallery.SelectedItemId, Is.EqualTo("blue"));
             Assert.That(root.Q<Label>("gallery-count-label").text, Does.Contain("board backgrounds owned"));
-            Assert.That(root.Q<Label>("gallery-selected-title").text, Is.EqualTo("Midnight"));
-            Assert.That(root.Query<Button>(className: "gallery-item-tile").ToList().Count, Is.EqualTo(3));
+            Assert.That(root.Q<Label>("gallery-selected-title").text, Is.EqualTo("Blue"));
+            Assert.That(root.Query<Button>(className: "gallery-item-tile").ToList().Count, Is.EqualTo(6));
         }
 
         [Test]
@@ -126,6 +126,55 @@ namespace Mejnun.Cosmetics.Tests
                 UnityEngine.Object.DestroyImmediate(creditedSkin);
                 UnityEngine.Object.DestroyImmediate(uncreditedSkin);
                 UnityEngine.Object.DestroyImmediate(sprite);
+                UnityEngine.Object.DestroyImmediate(texture);
+            }
+        }
+
+        [Test]
+        public void OwnedDeckPreviewShowsMainBackButNotAlternateBacks()
+        {
+            gallery.Dispose();
+            var texture = new Texture2D(1, 1);
+            var faceSprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            var mainBackSprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            var alternateBackSprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            var skin = ScriptableObject.CreateInstance<DeckSkin>();
+            skin.Configure("main-back-preview", "Main Back Preview",
+                Enumerable.Repeat(faceSprite, Card.CardsPerDeck).ToArray(), mainBackSprite,
+                new[] { new DeckSkinBack("alternate", alternateBackSprite) }, null, false, 100f);
+            skin.ConfigureUnlock(new UnlockRequirement(UnlockKind.Free));
+            var deckCatalog = ScriptableObject.CreateInstance<DeckSkinCatalog>();
+            deckCatalog.Configure(new[] { skin });
+            var feltCatalog = ScriptableObject.CreateInstance<TableFeltCatalog>();
+            feltCatalog.Configure(Array.Empty<TableFelt>());
+            var testCatalog = ScriptableObject.CreateInstance<CosmeticCatalog>();
+            testCatalog.Configure(deckCatalog, feltCatalog);
+            catalog = testCatalog;
+            progression = new ProgressionService(new ProfileStore(profilePath), catalog);
+            gallery = new GalleryScreen(root, catalog, progression, null);
+
+            try
+            {
+                gallery.Show("main-back-preview");
+
+                var preview = root.Q<VisualElement>("gallery-preview");
+                var backImages = preview.Query<Image>(className: "gallery-card-back").ToList();
+                Assert.That(backImages, Has.Length.EqualTo(1));
+                Assert.That(backImages[0].sprite, Is.SameAs(mainBackSprite));
+                Assert.That(preview.Query<Image>().ToList().Any(image => image.sprite == alternateBackSprite),
+                    Is.False);
+            }
+            finally
+            {
+                gallery.Dispose();
+                gallery = null;
+                UnityEngine.Object.DestroyImmediate(testCatalog);
+                UnityEngine.Object.DestroyImmediate(feltCatalog);
+                UnityEngine.Object.DestroyImmediate(deckCatalog);
+                UnityEngine.Object.DestroyImmediate(skin);
+                UnityEngine.Object.DestroyImmediate(alternateBackSprite);
+                UnityEngine.Object.DestroyImmediate(mainBackSprite);
+                UnityEngine.Object.DestroyImmediate(faceSprite);
                 UnityEngine.Object.DestroyImmediate(texture);
             }
         }

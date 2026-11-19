@@ -96,6 +96,17 @@ namespace Mejnun.Cosmetics.Tests
         }
 
         [Test]
+        public void CosmeticsTokenRoundTripsRandomDeckAndFeltSelections()
+        {
+            var token = TablePickerScreen.EncodeCosmeticsToken(new[] { "classic", null }, "burgundy");
+
+            Assert.That(TablePickerScreen.TryDecodeCosmeticsToken(token, out var deckPicks, out var feltPick), Is.True);
+            CollectionAssert.AreEqual(new[] { "classic", null }, deckPicks);
+            Assert.That(feltPick, Is.EqualTo("burgundy"));
+            Assert.That(TablePickerScreen.TryDecodeCosmeticsToken("invalid", out _, out _), Is.False);
+        }
+
+        [Test]
         public void PassAndPlayDoesNotAddBotFaceCandidates()
         {
             picker.SetSetupRequest(new MatchRequest(new[] { SeatConfig.Human("Sam"), SeatConfig.Human("Lee") },

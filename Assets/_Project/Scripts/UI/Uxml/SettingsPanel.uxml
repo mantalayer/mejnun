@@ -58,8 +58,8 @@
                 <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5" tooltip="Adjusts how far cards rise when selected or hovered." />
                 <ui:Label name="hand-lift-value" class="setting-value" />
             </ui:VisualElement>
-            <ui:Toggle name="overlap-sets-toggle" label="Overlap cards in sets" tooltip="Stacks cards within a set to save table space." />
-            <ui:Toggle name="organic-board-toggle" label="Place sets organically" tooltip="Lets sets occupy open areas of the table instead of a strict grid." />
+            <ui:Toggle name="overlap-sets-toggle" label="Draw boxes around sets" tooltip="Outlines each set on the table." />
+            <ui:Toggle name="organic-board-toggle" label="Align sets to grid" tooltip="Places sets in a tidy grid instead of organically across the table." />
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label" text="Board card spread" />
                 <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5" tooltip="Changes the spacing between cards in board sets." />
@@ -84,7 +84,7 @@
             <ui:Toggle name="haptics-toggle" label="Haptics" tooltip="Enables vibration feedback on supported devices." />
             <ui:VisualElement name="ui-scale-row" class="settings-row">
                 <ui:Label class="setting-label" text="UI size" />
-                <ui:Slider name="ui-scale-slider" low-value="0.8" high-value="2" tooltip="Scales interface text and controls on phones." />
+                <ui:Slider name="ui-scale-slider" low-value="0.8" high-value="3" tooltip="Scales interface text and controls on mobile devices." />
                 <ui:Label name="ui-scale-value" class="setting-value" />
             </ui:VisualElement>
         </ui:ScrollView>

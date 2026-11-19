@@ -71,10 +71,10 @@ namespace Mejnun.UI
                 value => GameSettings.ReducedMotion = value);
             BindToggle("haptics-toggle", () => GameSettings.HapticsEnabled,
                 value => GameSettings.HapticsEnabled = value);
-            BindToggle("overlap-sets-toggle", () => GameSettings.OverlapSets,
-                value => GameSettings.OverlapSets = value, RefreshTable);
-            BindToggle("organic-board-toggle", () => GameSettings.OrganicBoard,
-                value => GameSettings.OrganicBoard = value, RefreshTable);
+            BindToggle("overlap-sets-toggle", () => !GameSettings.OverlapSets,
+                value => GameSettings.OverlapSets = !value, RefreshTable);
+            BindToggle("organic-board-toggle", () => !GameSettings.OrganicBoard,
+                value => GameSettings.OrganicBoard = !value, RefreshTable);
             BindSlider("ui-scale-slider", () => GameSettings.UiScale,
                 value => GameSettings.UiScale = value);
 
@@ -303,8 +303,8 @@ namespace Mejnun.UI
             SetToggle("hint-jiggle-toggle", GameSettings.HintJiggle);
             SetToggle("reduced-motion-toggle", GameSettings.ReducedMotion);
             SetToggle("haptics-toggle", GameSettings.HapticsEnabled);
-            SetToggle("overlap-sets-toggle", GameSettings.OverlapSets);
-            SetToggle("organic-board-toggle", GameSettings.OrganicBoard);
+            SetToggle("overlap-sets-toggle", !GameSettings.OverlapSets);
+            SetToggle("organic-board-toggle", !GameSettings.OrganicBoard);
             SetSlider("ui-scale-slider", GameSettings.UiScale);
             SetSlider("hand-arc-amount-slider", GameSettings.HandArcAmount);
             SetSlider("hand-spread-slider", GameSettings.HandSpread);

@@ -171,6 +171,11 @@ namespace Mejnun.UI
 
         private void OnPointerDown(PointerDownEvent evt)
         {
+            Advance();
+        }
+
+        public void Advance()
+        {
             if (!isPlaying)
             {
                 return;

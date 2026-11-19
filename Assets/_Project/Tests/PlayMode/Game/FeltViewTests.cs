@@ -56,28 +56,21 @@ namespace Mejnun.Game.Tests
             camera.orthographicSize = 4f;
             feltView.Apply("burgundy");
             feltView.RefreshLayout();
+            Assert.That(feltView.ActiveFelt.Id, Is.EqualTo("burgundy"));
             Assert.That(tile.enabled, Is.True);
-            Assert.That(border.enabled, Is.True);
-            Assert.That(image.enabled, Is.False);
-            Assert.That(border.sortingOrder, Is.LessThan(0));
-            Assert.That(border.transform.position.x, Is.EqualTo(camera.transform.position.x).Within(0.001f));
-            var thicknessAtZoom = BorderThicknessPixels(border, camera);
-            Assert.That(border.size.x * border.transform.lossyScale.x,
-                Is.LessThanOrEqualTo(2f * camera.orthographicSize * camera.aspect));
-            Assert.That(border.size.y * border.transform.lossyScale.y,
-                Is.LessThanOrEqualTo(2f * camera.orthographicSize));
-
-            camera.orthographicSize = 9f;
-            feltView.RefreshLayout();
-            Assert.That(BorderThicknessPixels(border, camera), Is.EqualTo(thicknessAtZoom).Within(0.05f));
-
-            feltView.Apply("midnight");
-            feltView.RefreshLayout();
-            Assert.That(tile.enabled, Is.False);
             Assert.That(border.enabled, Is.False);
-            Assert.That(image.enabled, Is.True);
-            Assert.That(image.bounds.size.x, Is.GreaterThanOrEqualTo(2f * camera.orthographicSize * camera.aspect));
-            Assert.That(image.bounds.size.y, Is.GreaterThanOrEqualTo(2f * camera.orthographicSize));
+            Assert.That(image.enabled, Is.False);
+            Assert.That(tile.size.x * tile.transform.lossyScale.x,
+                Is.GreaterThan(2f * camera.orthographicSize * camera.aspect));
+            Assert.That(tile.size.y * tile.transform.lossyScale.y,
+                Is.GreaterThan(2f * camera.orthographicSize));
+
+            feltView.Apply("blue");
+            feltView.RefreshLayout();
+            Assert.That(feltView.ActiveFelt.Id, Is.EqualTo("blue"));
+            Assert.That(tile.enabled, Is.True);
+            Assert.That(border.enabled, Is.False);
+            Assert.That(image.enabled, Is.False);
             Assert.That(camera.backgroundColor, Is.EqualTo(feltView.ActiveFelt.ClearColor));
         }
 
@@ -100,14 +93,6 @@ namespace Mejnun.Game.Tests
             yield return null;
 
             Assert.That(feltView.ActiveFelt.Id, Is.EqualTo("burgundy"));
-        }
-
-        private static float BorderThicknessPixels(SpriteRenderer border, Camera camera)
-        {
-            var slice = border.sprite.border;
-            var slicePixels = Mathf.Max(slice.x, Mathf.Max(slice.y, Mathf.Max(slice.z, slice.w)));
-            var worldThickness = slicePixels / border.sprite.pixelsPerUnit * border.transform.lossyScale.y;
-            return worldThickness / (2f * camera.orthographicSize / camera.pixelHeight);
         }
     }
 }

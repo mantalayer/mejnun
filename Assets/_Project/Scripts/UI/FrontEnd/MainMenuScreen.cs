@@ -23,10 +23,11 @@ namespace Mejnun.UI.FrontEnd
         private readonly ProgressionService progression;
         private readonly Button resumeButton;
         private readonly ProgressBar levelProgress;
+        private readonly MenuCardCursor cardCursor;
 
         public MainMenuScreen(VisualElement documentRoot, CosmeticCatalog catalog, Action<MatchMode> playAction,
             Action resumeAction, Action openGallery, Action openSettings, Action startTutorial = null,
-            Action openOnline = null)
+            Action openOnline = null, DeckSkinLoader loader = null)
         {
             root = documentRoot.Q<VisualElement>("main-menu-screen");
             frontendRoot = documentRoot.Q<VisualElement>("frontend-root");
@@ -61,10 +62,14 @@ namespace Mejnun.UI.FrontEnd
             root.Q<Button>("settings-button").clicked += () => settings?.Invoke();
             var quitButton = root.Q<Button>("quit-button");
             quitButton.style.display = Application.isMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
-            quitButton.clicked += Application.Quit;
+            quitButton.clicked += QuitGame;
+            AddVersionLabel();
             progression.Changed += Refresh;
             Refresh();
+            cardCursor = new MenuCardCursor(root, tutorialPrompt, cosmeticCatalog, progression, loader);
         }
+
+        public VisualElement Root => root;
 
         public bool IsTutorialPromptVisible => tutorialPrompt != null &&
                                                tutorialPrompt.style.display == DisplayStyle.Flex;
@@ -108,6 +113,15 @@ namespace Mejnun.UI.FrontEnd
             }
         }
 
+        private static void QuitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         public void SetVisible(bool visible)
         {
             root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
@@ -119,11 +133,31 @@ namespace Mejnun.UI.FrontEnd
             {
                 Refresh();
             }
+
+            cardCursor.SetVisible(visible);
+        }
+
+        private void AddVersionLabel()
+        {
+            if (root.Q<Label>("version-label") != null)
+            {
+                return;
+            }
+
+            var label = new Label("v" + Application.version) { name = "version-label" };
+            label.pickingMode = PickingMode.Ignore;
+            label.style.position = Position.Absolute;
+            label.style.left = 12;
+            label.style.top = 8;
+            label.style.fontSize = 14;
+            label.style.color = new Color(1f, 1f, 1f, 0.35f);
+            root.Add(label);
         }
 
         public void Dispose()
         {
             progression.Changed -= Refresh;
+            cardCursor.Dispose();
         }
 
         private void Refresh()

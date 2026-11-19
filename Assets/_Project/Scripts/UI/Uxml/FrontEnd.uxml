@@ -26,16 +26,28 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="online-screen" class="frontend-screen online-screen" style="display: none;">
+            <ui:ScrollView name="online-screen" class="frontend-screen flow-screen online-screen" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none;">
                 <ui:Label text="Play online" class="flow-title"/>
                 <ui:Label text="Sign in anonymously and join with a session code, or find a quick match." class="frontend-copy online-description"/>
-                <ui:VisualElement name="online-setup">
-                    <ui:TextField name="online-nickname-field" label="Nickname" value="Player" class="online-field"/>
-                    <ui:IntegerField name="online-seat-count-field" label="Players" value="2" class="online-field"/>
-                    <ui:Button name="online-create-button" text="Create session" class="frontend-button primary-flow-button"/>
-                    <ui:TextField name="online-code-field" label="Session code" class="online-field"/>
-                    <ui:Button name="online-join-button" text="Join by code" class="frontend-button"/>
-                    <ui:Button name="online-quick-match-button" text="Quick match" class="frontend-button"/>
+                <ui:VisualElement name="online-setup" class="setup-content">
+                    <ui:VisualElement class="setup-fields">
+                        <ui:TextField name="online-nickname-field" label="Nickname" value="Player" class="online-field"/>
+                        <ui:SliderInt name="online-seat-count-field" label="Players" low-value="2" high-value="6" value="2" show-input-field="true" class="online-field"/>
+                        <ui:DropdownField name="online-turn-timer-field" label="Turn timer" class="online-field"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="cosmetic-picker-panel">
+                        <ui:Label text="Table cosmetics" class="settings-section-title"/>
+                        <ui:Label text="Choose two decks and a table felt. A player’s choices will be selected for the match." class="cosmetic-picker-copy"/>
+                        <ui:Button name="online-deck-preview-0" class="cosmetic-preview-button"/>
+                        <ui:Button name="online-deck-preview-1" class="cosmetic-preview-button"/>
+                        <ui:Button name="online-felt-preview" class="cosmetic-preview-button felt-preview-button"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="setup-fields online-session-fields">
+                        <ui:Button name="online-create-button" text="Create session" class="frontend-button primary-flow-button"/>
+                        <ui:TextField name="online-code-field" label="Session code" class="online-field"/>
+                        <ui:Button name="online-join-button" text="Join by code" class="frontend-button"/>
+                        <ui:Button name="online-quick-match-button" text="Quick match" class="frontend-button"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:Label name="online-session-code" text="" class="online-session-code" style="display: none;"/>
                 <ui:Label name="online-lobby-players" text="" class="online-lobby-players" style="display: none;"/>
@@ -44,7 +56,7 @@
                     <ui:Button name="online-back-button" text="Back" class="flow-button"/>
                     <ui:Button name="online-continue-button" text="Continue" class="flow-button primary-flow-button"/>
                 </ui:VisualElement>
-            </ui:VisualElement>
+            </ui:ScrollView>
             <ui:ScrollView name="setup-screen" class="frontend-screen flow-screen setup-screen" style="display: none;">
                 <ui:Label text="Match setup" class="flow-title"/>
                 <ui:VisualElement class="setup-content">

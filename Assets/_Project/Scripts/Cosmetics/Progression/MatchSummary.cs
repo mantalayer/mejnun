@@ -64,6 +64,6 @@ namespace Mejnun.Cosmetics
         public bool BeatHardBot { get; }
         public int CpuDifficulty { get; }
         public int DurationSeconds { get; }
-        public bool CanAwardWin => Mode == MatchMode.Solo || HumanCount < 2;
+        public bool CanAwardWin => Mode == MatchMode.Solo || Mode == MatchMode.Online || HumanCount < 2;
     }
 }

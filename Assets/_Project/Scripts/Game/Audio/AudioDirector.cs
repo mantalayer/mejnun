@@ -16,7 +16,11 @@ namespace Mejnun.Game
         private TurnTimer turnTimer;
         private bool mainBankLoaded;
         private bool timerSampleActive;
+        private bool onlineTurnSoundKnown;
+        private int lastOnlineSoundSeat = -1;
+        private int lastOnlineSoundTurn = -1;
         private bool audioInitializationWarningLogged;
+        private bool volumesAppliedAfterInitialization;
         private float audioInitializationStartedAt;
         private float nextBankLoadAttemptTime;
         private string currentMusic;
@@ -65,6 +69,7 @@ namespace Mejnun.Game
 
         private void OnEnable()
         {
+            volumesAppliedAfterInitialization = false;
             GameSettings.Changed += OnSettingsChanged;
             ApplyVolumes();
             FeedbackCues.Raised += OnFeedbackCue;
@@ -86,6 +91,12 @@ namespace Mejnun.Game
         private void Update()
         {
             var engineInitialized = audioService != null && audioService.IsInitialized;
+            if (engineInitialized && !volumesAppliedAfterInitialization)
+            {
+                ApplyVolumes();
+                volumesAppliedAfterInitialization = true;
+            }
+
             if (!engineInitialized && !audioInitializationWarningLogged &&
                 Time.unscaledTime - audioInitializationStartedAt >= AudioInitializationWarningDelaySeconds)
             {
@@ -99,6 +110,7 @@ namespace Mejnun.Game
                 if (result == "AK_Success" || result == "AK_BankAlreadyLoaded")
                 {
                     mainBankLoaded = true;
+                    ApplyVolumes();
                     Debug.Log("Wwise Main sound bank loaded.", this);
                 }
                 else
@@ -210,6 +222,7 @@ namespace Mejnun.Game
             }
 
             matchFlow = null;
+            onlineTurnSoundKnown = false;
         }
 
         private void SyncTurnTimer()
@@ -250,6 +263,22 @@ namespace Mejnun.Game
                 BindGame(matchFlow.Game);
             }
 
+            if (matchFlow != null && matchFlow.IsOnline && state != null && state.Phase == GamePhase.Playing)
+            {
+                if (!onlineTurnSoundKnown || lastOnlineSoundSeat != state.CurrentSeat ||
+                    lastOnlineSoundTurn != state.TurnNumber)
+                {
+                    mapper.ReportTurnStarted(state.CurrentSeat);
+                    lastOnlineSoundSeat = state.CurrentSeat;
+                    lastOnlineSoundTurn = state.TurnNumber;
+                    onlineTurnSoundKnown = true;
+                }
+            }
+            else
+            {
+                onlineTurnSoundKnown = false;
+            }
+
             audioService.SetRtpc(AudioIds.BoardComplexity, Mathf.Clamp01(state.Board.Count / 6f));
         }
 
@@ -261,8 +290,11 @@ namespace Mejnun.Game
                 return;
             }
 
-            mapper.Bind(game, seat => matchFlow == null || !matchFlow.IsBotSeat(seat),
-                matchFlow == null ? game.Setup.SeatCount : matchFlow.HumanCount);
+            var online = matchFlow != null && matchFlow.IsOnline;
+            mapper.Bind(game, seat => online
+                    ? matchFlow.IsLocalSeat(seat)
+                    : matchFlow == null || !matchFlow.IsBotSeat(seat),
+                online ? 1 : matchFlow == null ? game.Setup.SeatCount : matchFlow.HumanCount, online);
         }
 
         private void UpdateScreen(MatchFlowScreen screen)

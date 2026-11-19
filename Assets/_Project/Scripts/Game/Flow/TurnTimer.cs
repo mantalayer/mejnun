@@ -12,6 +12,7 @@ namespace Mejnun.Game
         private int timedSeat = -1;
         private int timedTurn = -1;
         private bool timedOut;
+        private bool displayOnly;
 
         public int DurationSeconds { get; private set; }
         public float RemainingSeconds { get; private set; }
@@ -30,6 +31,17 @@ namespace Mejnun.Game
         public void SetDuration(int seconds)
         {
             DurationSeconds = Mathf.Max(0, seconds);
+            ResetTurn();
+        }
+
+        public void SetDisplayOnly(bool enabled)
+        {
+            if (displayOnly == enabled)
+            {
+                return;
+            }
+
+            displayOnly = enabled;
             ResetTurn();
         }
 
@@ -55,7 +67,8 @@ namespace Mejnun.Game
                 return;
             }
 
-            if (timedGame != game || timedSeat != state.CurrentSeat || timedTurn != state.TurnNumber)
+            if ((!displayOnly && timedGame != game) || timedSeat != state.CurrentSeat ||
+                timedTurn != state.TurnNumber)
             {
                 timedGame = game;
                 timedSeat = state.CurrentSeat;
@@ -77,6 +90,11 @@ namespace Mejnun.Game
 
             timedOut = true;
             TimedOut?.Invoke();
+            if (displayOnly)
+            {
+                return;
+            }
+
             if (controller.GetTimeoutUndoCount() > 0)
             {
                 StartCoroutine(controller.BeginTimeoutFix());

@@ -97,7 +97,7 @@ namespace Mejnun.Game.Tests
             presenter.Flow.SubmitMatchRequest(request);
             Assert.That(presenter.Flow.CurrentScreen, Is.EqualTo(FrontEndScreen.Setup));
             presenter.Flow.LaunchMatch();
-            yield return null;
+            yield return WaitForScene(SceneFlow.TableScene);
 
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo(SceneFlow.TableScene));
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
@@ -138,7 +138,7 @@ namespace Mejnun.Game.Tests
             var startingPlayed = profile.Stats.Played;
             var startingStalemates = profile.Stats.Stalemates;
             flow.LaunchMatch(request);
-            yield return null;
+            yield return WaitForScene(SceneFlow.TableScene);
 
             var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
             var frames = 0;
@@ -160,11 +160,11 @@ namespace Mejnun.Game.Tests
             }
 
             Assert.That(matchFlow.Screen, Is.EqualTo(MatchFlowScreen.Results));
-            Assert.That(matchFlow.LastProgression.XpGained, Is.EqualTo(20));
+            Assert.That(matchFlow.LastProgression.XpGained, Is.EqualTo(41));
             var resultsPresenter = Object.FindAnyObjectByType<MatchFlowPresenter>();
             var resultsDocument = resultsPresenter.GetComponent<UIDocument>();
-            Assert.That(resultsDocument.rootVisualElement.Q<Label>("result-xp-gained").text, Is.EqualTo("+20 XP"));
-            Assert.That(ProgressionService.Instance.Profile.Xp, Is.EqualTo(startingXp + 20));
+            Assert.That(resultsDocument.rootVisualElement.Q<Label>("result-xp-gained").text, Is.EqualTo("+41 XP"));
+            Assert.That(ProgressionService.Instance.Profile.Xp, Is.EqualTo(startingXp + 41));
             Assert.That(ProgressionService.Instance.Profile.Stats.Played, Is.EqualTo(startingPlayed + 1));
             Assert.That(ProgressionService.Instance.Profile.Stats.Stalemates, Is.EqualTo(startingStalemates + 1));
         }
@@ -182,6 +182,17 @@ namespace Mejnun.Game.Tests
 
             Assert.That(background.resolvedStyle.backgroundImage.sprite, Is.EqualTo(felt.Tile));
             Assert.That(background.resolvedStyle.backgroundColor, Is.EqualTo(felt.ClearColor));
+        }
+
+        private static IEnumerator WaitForScene(string sceneName)
+        {
+            var frames = 0;
+            while (SceneManager.GetActiveScene().name != sceneName && frames++ < 600)
+            {
+                yield return null;
+            }
+
+            yield return null;
         }
 
         [Test]

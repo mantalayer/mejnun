@@ -109,9 +109,9 @@ namespace Mejnun.Cosmetics.Tests
 
         private void SendTap()
         {
-            var evt = PointerDownEvent.GetPooled();
-            root.Q<VisualElement>("deck-unlock-overlay").SendEvent(evt);
-            evt.Dispose();
+            // The test root is not attached to a panel, so UI Toolkit does not dispatch pointer events;
+            // invoke the same handler the overlay's PointerDownEvent callback uses.
+            presentation.Advance();
         }
     }
 }

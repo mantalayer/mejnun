@@ -114,6 +114,12 @@ namespace Mejnun.UI.FrontEnd
                 OnKindChanged(seat);
             }
 
+            var savedNickname = GameSettings.OnlineNickname;
+            if (matchMode == MatchMode.Solo && !IsBot(0) && !string.IsNullOrWhiteSpace(savedNickname))
+            {
+                nameFields[0].SetValueWithoutNotify(savedNickname);
+            }
+
             SetError(string.Empty);
             RefreshRows();
         }
@@ -175,6 +181,11 @@ namespace Mejnun.UI.FrontEnd
             }
 
             SetError(string.Empty);
+            if (mode == MatchMode.Solo && !IsBot(0) && !IsDefaultName(nameFields[0].value))
+            {
+                GameSettings.OnlineNickname = nameFields[0].value;
+            }
+
             onNext(new MatchRequest(seats, TimerSeconds(), mode));
         }
 
