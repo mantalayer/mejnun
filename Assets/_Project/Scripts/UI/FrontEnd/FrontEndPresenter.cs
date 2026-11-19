@@ -20,6 +20,7 @@ namespace Mejnun.UI.FrontEnd
         private Rect lastSafeArea;
         private int lastWidth;
         private int lastHeight;
+        private readonly SoftKeyboardBackGuard keyboardBackGuard = new SoftKeyboardBackGuard();
 
         public FrontEndFlow Flow => flow;
         public CosmeticCatalog Catalog => cosmeticCatalog;
@@ -52,6 +53,7 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var root = uiDocument.rootVisualElement;
+            UiScaleUtility.Apply(uiDocument);
             deckUnlockPlayer = new DeckUnlockPlayer(root, deckSkinLoader);
             progressionService = ProgressionService.Instance;
             progressionService.MatchRecorded += OnMatchRecorded;
@@ -66,13 +68,25 @@ namespace Mejnun.UI.FrontEnd
 
         private void Update()
         {
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            UiScaleUtility.Apply(uiDocument);
+            var focusedElement = uiDocument == null || uiDocument.rootVisualElement.panel == null
+                ? null
+                : uiDocument.rootVisualElement.panel.focusController.focusedElement as VisualElement;
+            keyboardBackGuard.Track(focusedElement, TouchScreenKeyboard.visible, Time.unscaledTime);
+
+            var keyboard = Keyboard.current;
+            var gamepad = Gamepad.current;
+            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame ||
+                gamepad != null && gamepad.buttonEast.wasPressedThisFrame)
             {
-                flow?.Back();
-            }
-            else if (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame)
-            {
-                flow?.Back();
+                if (keyboardBackGuard.ShouldSuppressBack(Time.unscaledTime))
+                {
+                    focusedElement?.Blur();
+                }
+                else
+                {
+                    flow?.Back();
+                }
             }
 
             if (Screen.width != lastWidth || Screen.height != lastHeight || Screen.safeArea != lastSafeArea)

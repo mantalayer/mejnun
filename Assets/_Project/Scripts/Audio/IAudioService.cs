@@ -7,5 +7,7 @@ namespace Mejnun.Audio
         void SetSwitch(string switchGroup, string switchValue);
         void SetRtpc(string rtpcName, float value);
         bool LoadBank(string bankName);
+        bool IsInitialized { get; }
+        string LoadBankResult(string bankName);
     }
 }

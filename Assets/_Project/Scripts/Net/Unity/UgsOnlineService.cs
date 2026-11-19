@@ -89,6 +89,38 @@ namespace Mejnun.Net.Unity
             }
         }
 
+        public async Task DeleteSessionAsync()
+        {
+            var session = Session;
+            if (session == null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (session.IsHost)
+                {
+                    await session.AsHost().DeleteAsync();
+                }
+                else
+                {
+                    await session.LeaveAsync();
+                }
+            }
+            catch when (session.IsHost)
+            {
+                await session.LeaveAsync();
+            }
+            finally
+            {
+                if (Session == session)
+                {
+                    Session = null;
+                }
+            }
+        }
+
         private SessionOptions CreateSessionOptions(int maxPlayers, string sessionName)
         {
             if (maxPlayers < 2 || maxPlayers > 6)

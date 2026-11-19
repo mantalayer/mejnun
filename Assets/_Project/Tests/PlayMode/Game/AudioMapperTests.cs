@@ -242,6 +242,13 @@ namespace Mejnun.Game.Tests
                 return true;
             }
 
+            public bool IsInitialized => true;
+
+            public string LoadBankResult(string bankName)
+            {
+                return "AK_Success";
+            }
+
             public void Clear()
             {
                 Posts.Clear();

@@ -7,7 +7,13 @@
             <ui:Label name="turn-label" class="status-label" text="Seat 1's turn" />
             <ui:Label name="timer-label" class="status-label timer-label" text="" />
         </ui:VisualElement>
-        <ui:Button name="pause-button" class="hud-button hamburger-button" text="☰" />
+        <ui:Button name="pause-button" class="hud-button hamburger-button" text="">
+            <ui:VisualElement class="hamburger-bars" picking-mode="Ignore">
+                <ui:VisualElement class="hamburger-bar" />
+                <ui:VisualElement class="hamburger-bar" />
+                <ui:VisualElement class="hamburger-bar" />
+            </ui:VisualElement>
+        </ui:Button>
         <ui:VisualElement class="bottom-area">
             <ui:VisualElement name="status-panel" class="hud-bar status-panel">
                 <ui:VisualElement class="draw-pile-status">
@@ -27,8 +33,10 @@
                 <ui:Button name="fit-board-button" class="hud-button" text="Fit board" />
                 <ui:Button name="compact-board-button" class="hud-button" text="Tidy board" />
                 <ui:Button name="mark-set-button" class="hud-button" text="Mark" />
-                <ui:Button name="fast-forward-button" class="hud-button" text="Fast forward" style="display: none" />
             </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="fast-forward-dock" class="fast-forward-dock" picking-mode="Ignore" style="display: none">
+            <ui:Button name="fast-forward-button" class="hud-button" text="Fast forward" style="display: none" />
         </ui:VisualElement>
         <ui:VisualElement name="opponents-strip" class="opponents-strip" picking-mode="Ignore">
             <ui:VisualElement name="left-opponents" class="opponent-side opponent-left" picking-mode="Ignore" />
@@ -37,6 +45,8 @@
         <ui:VisualElement name="top-opponents" class="opponents-top" picking-mode="Ignore" />
         <ui:VisualElement name="popup-layer" class="popup-layer" picking-mode="Ignore">
             <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
+            <ui:Label name="online-notice" class="online-notice" picking-mode="Ignore" />
+            <ui:Label name="online-waiting" class="online-waiting" picking-mode="Ignore" />
             <ui:Label name="halas-popup" class="halas-popup" text="Halas!" picking-mode="Ignore" />
             <ui:Label name="gone-down-popup" class="gone-down-popup" text="Gone Down" picking-mode="Ignore" />
             <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
@@ -77,6 +87,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="pause-panel" class="hud-dialog pause-panel" style="display: none">
             <ui:Label class="dialog-title" text="Paused" />
+            <ui:Label name="room-code-label" class="room-code-label" text="" style="display: none; -unity-text-align: middle-center;" />
             <ui:Button name="resume-button" class="hud-button primary-button" text="Resume" />
             <ui:Button name="restart-button" class="hud-button" text="Restart game" />
             <ui:Button name="settings-button" class="hud-button" text="Settings" />

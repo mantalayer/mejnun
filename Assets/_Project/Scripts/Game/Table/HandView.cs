@@ -20,6 +20,29 @@ namespace Mejnun.Game
             return screenHeight > screenWidth && cardCount > 8 ? 2 : 1;
         }
 
+        public static int CalculateRowLayout(bool portrait, int count, float cardWidth, float step,
+            float viewportWidth, out float fittedStep)
+        {
+            fittedStep = Mathf.Max(0f, step);
+            if (count <= 1 || cardWidth + (count - 1) * fittedStep <= viewportWidth)
+            {
+                return 1;
+            }
+
+            if (portrait)
+            {
+                var minimumStep = cardWidth * 0.3f;
+                var maximumFittingStep = (viewportWidth - cardWidth) / (count - 1);
+                if (maximumFittingStep >= minimumStep)
+                {
+                    fittedStep = Mathf.Clamp(fittedStep, minimumStep, maximumFittingStep);
+                    return 1;
+                }
+            }
+
+            return 2;
+        }
+
         public static int CalculateSortingOrder(int row, int column, int cardsPerRow, int rowCount)
         {
             return 100 + (rowCount - 1 - row) * cardsPerRow + column;
@@ -56,10 +79,17 @@ namespace Mejnun.Game
             var scaledCardSize = cardSize * cardScale;
             var viewportWidth = Mathf.Max(scaledCardSize.x, halfWidth * 2f - 0.2f);
             var step = scaledCardSize.x * Mathf.Clamp(GameSettings.HandSpread, 0.25f, 0.9f);
-            RowCount = CalculateRowCount(Screen.width, Screen.height, cardCount);
+            if (Application.isMobilePlatform && Screen.height > Screen.width)
+            {
+                RowCount = CalculateRowLayout(true, cardCount, scaledCardSize.x, step, viewportWidth, out step);
+            }
+            else
+            {
+                RowCount = CalculateRowCount(Screen.width, Screen.height, cardCount);
+            }
             var cardsPerRow = RowCount == 1 ? cardCount : Mathf.CeilToInt(cardCount / 2f);
             var liftedCount = liftedCardIds == null ? 0 : liftedCardIds.Count;
-            var rowWidth = scaledCardSize.x + (cardsPerRow + liftedCount - 1) * step;
+            var rowWidth = scaledCardSize.x + (cardsPerRow - 1) * step;
             var maxScroll = Mathf.Max(0f, rowWidth - viewportWidth);
             scrollOffset = Mathf.Clamp(scrollOffset, 0f, maxScroll);
             var firstX = -rowWidth * 0.5f + scaledCardSize.x * 0.5f - scrollOffset;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
 using UnityEngine;
@@ -57,11 +58,16 @@ namespace Mejnun.UI
         private Label goneDownPopup;
         private Label goneDownTag;
         private Label invalidMovePopup;
+        private Label onlineNotice;
+        private Label onlineWaiting;
+        private readonly Queue<string> pendingOnlineNotices = new Queue<string>();
+        private bool onlineNoticeShowing;
         private IVisualElementScheduledItem turnPopupHide;
         private IVisualElementScheduledItem goneDownPopupHide;
         private IVisualElementScheduledItem goneDownTagHide;
         private IVisualElementScheduledItem halasHide;
         private IVisualElementScheduledItem invalidMoveHide;
+        private IVisualElementScheduledItem onlineNoticeHide;
         private IReadOnlyList<int> revealedDownMeldIds;
         private int revealedDownSeat = -1;
         private int revealedDownTurnNumber = -1;
@@ -73,11 +79,23 @@ namespace Mejnun.UI
         private Label confirmMessage;
         private Toggle confirmDontAsk;
         private VisualElement pausePanel;
+        private Label roomCodeLabel;
         private VisualElement settingsPanel;
         private SettingsPanel settingsPanelBinder;
         private VisualElement helpPanel;
         private VisualElement bottomBar;
+        private VisualElement opponentsStrip;
+        private VisualElement fastForwardDock;
         private bool activeTurnPulsing;
+        private bool phoneSafeAreaApplied;
+        private bool hasSafeAreaSignature;
+        private Rect lastSafeArea;
+        private int lastSafeAreaWidth;
+        private int lastSafeAreaHeight;
+        private float lastSafeAreaPanelWidth;
+        private float lastSafeAreaPanelHeight;
+        private bool lastTallPhoneLayout;
+        private bool hasPhoneLayoutSignature;
         private const float ActiveTurnPulsePeriod = 1.6f;
         private const float ActiveTurnPulseMinAlpha = 0.35f;
         private static readonly Color ActiveTurnOutlineColor = new Color(177f / 255f, 224f / 255f, 120f / 255f, 1f);
@@ -99,6 +117,7 @@ namespace Mejnun.UI
         private bool lastInputRefreshEnabled;
         private bool lastInputRefreshHandEnabled;
         private bool hasInputRefreshSignature;
+        private readonly SoftKeyboardBackGuard keyboardBackGuard = new SoftKeyboardBackGuard();
 
         private void Awake()
         {
@@ -156,6 +175,8 @@ namespace Mejnun.UI
             if (matchFlow != null)
             {
                 matchFlow.ScreenChanged += OnMatchFlowScreenChanged;
+                matchFlow.OnlineSeatsChanged += OnOnlineSeatsChanged;
+                matchFlow.OnlineNotice += OnOnlineNotice;
                 if (matchFlow.TurnTimer != null)
                 {
                     matchFlow.TurnTimer.TimedOut += OnTimedOut;
@@ -184,6 +205,8 @@ namespace Mejnun.UI
             if (matchFlow != null)
             {
                 matchFlow.ScreenChanged -= OnMatchFlowScreenChanged;
+                matchFlow.OnlineSeatsChanged -= OnOnlineSeatsChanged;
+                matchFlow.OnlineNotice -= OnOnlineNotice;
                 if (matchFlow.TurnTimer != null)
                 {
                     matchFlow.TurnTimer.TimedOut -= OnTimedOut;
@@ -205,6 +228,7 @@ namespace Mejnun.UI
         private void OnDestroy()
         {
             tutorialOverlay?.Unbind();
+            onlineNoticeHide?.Pause();
             if (settingsPanelBinder != null)
             {
                 settingsPanelBinder.Closed -= CloseSettings;
@@ -215,6 +239,11 @@ namespace Mejnun.UI
         private void Update()
         {
             HandleKeyboardShortcuts();
+            if (pausePanel != null && pausePanel.resolvedStyle.display == DisplayStyle.Flex)
+            {
+                RefreshRoomCode();
+            }
+
             RefreshIfInputStateChanged();
             UpdateDownRevealTag();
             UpdateTimerLabel();
@@ -225,15 +254,185 @@ namespace Mejnun.UI
             tutorialOverlay?.Tick();
             if (root != null)
             {
+                UiScaleUtility.Apply(uiDocument);
+                var phoneLayout = IsPhoneScreen(Application.isMobilePlatform, Screen.width, Screen.height, Screen.dpi);
                 root.EnableInClassList("portrait-layout", Screen.height > Screen.width);
-                root.EnableInClassList("phone-layout",
-                    IsPhoneScreen(Application.isMobilePlatform, Screen.width, Screen.height, Screen.dpi));
+                root.EnableInClassList("phone-layout", phoneLayout);
+                ApplyPhoneSafeArea(phoneLayout);
+                UpdateOnlineWaiting();
+                var tallPhoneLayout = phoneLayout && Screen.height > Screen.width;
+                if (!hasPhoneLayoutSignature || tallPhoneLayout != lastTallPhoneLayout)
+                {
+                    hasPhoneLayoutSignature = true;
+                    lastTallPhoneLayout = tallPhoneLayout;
+                    if (tableController != null && tableController.Game != null)
+                    {
+                        RefreshSeats(tableController.Game.State);
+                    }
+                }
+
                 UpdateHandBottomInset();
                 UpdateBoardInsets();
                 UpdateFastForwardButton();
                 UpdateSetMarkers();
                 UpdateActiveTurnPulse();
             }
+        }
+
+        private void ApplyPhoneSafeArea(bool phoneLayout)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            if (!phoneLayout)
+            {
+                if (phoneSafeAreaApplied)
+                {
+                    root.style.paddingLeft = StyleKeyword.Null;
+                    root.style.paddingRight = StyleKeyword.Null;
+                    root.style.paddingTop = StyleKeyword.Null;
+                    root.style.paddingBottom = StyleKeyword.Null;
+                    if (turnPanel != null)
+                    {
+                        turnPanel.style.left = StyleKeyword.Null;
+                        turnPanel.style.top = StyleKeyword.Null;
+                    }
+
+                    if (pauseButton != null)
+                    {
+                        pauseButton.style.right = StyleKeyword.Null;
+                        pauseButton.style.top = StyleKeyword.Null;
+                    }
+
+                    if (opponentsStrip != null)
+                    {
+                        opponentsStrip.style.left = StyleKeyword.Null;
+                        opponentsStrip.style.right = StyleKeyword.Null;
+                        opponentsStrip.style.top = StyleKeyword.Null;
+                        opponentsStrip.style.bottom = StyleKeyword.Null;
+                    }
+
+                    if (topOpponents != null)
+                    {
+                        topOpponents.style.top = StyleKeyword.Null;
+                    }
+
+                    phoneSafeAreaApplied = false;
+                    hasSafeAreaSignature = false;
+                }
+
+                return;
+            }
+
+            if (root.panel == null || root.worldBound.width <= 0f || root.worldBound.height <= 0f)
+            {
+                return;
+            }
+
+            var safeArea = Screen.safeArea;
+            var bounds = root.worldBound;
+            if (hasSafeAreaSignature && lastSafeArea == safeArea && lastSafeAreaWidth == Screen.width &&
+                lastSafeAreaHeight == Screen.height && Mathf.Approximately(lastSafeAreaPanelWidth, bounds.width) &&
+                Mathf.Approximately(lastSafeAreaPanelHeight, bounds.height))
+            {
+                return;
+            }
+
+            var screenWidth = Mathf.Max(1f, Screen.width);
+            var screenHeight = Mathf.Max(1f, Screen.height);
+            var leftInset = Mathf.Max(0f, safeArea.xMin / screenWidth * bounds.width);
+            var rightInset = Mathf.Max(0f, (Screen.width - safeArea.xMax) / screenWidth * bounds.width);
+            var topInset = Mathf.Max(0f, (Screen.height - safeArea.yMax) / screenHeight * bounds.height);
+            var bottomInset = Mathf.Max(0f, safeArea.yMin / screenHeight * bounds.height);
+            const float cornerMargin = 12f;
+            root.style.paddingLeft = leftInset + cornerMargin;
+            root.style.paddingRight = rightInset + cornerMargin;
+            root.style.paddingTop = topInset + cornerMargin;
+            root.style.paddingBottom = bottomInset + cornerMargin;
+            if (turnPanel != null)
+            {
+                turnPanel.style.left = leftInset + cornerMargin;
+                turnPanel.style.top = topInset + cornerMargin;
+            }
+
+            if (pauseButton != null)
+            {
+                pauseButton.style.right = rightInset + cornerMargin;
+                pauseButton.style.top = topInset + cornerMargin;
+            }
+
+            if (opponentsStrip != null)
+            {
+                opponentsStrip.style.left = leftInset + cornerMargin;
+                opponentsStrip.style.right = rightInset + cornerMargin;
+                opponentsStrip.style.top = topInset + bounds.height * 0.2f;
+                opponentsStrip.style.bottom = bottomInset + bounds.height * 0.24f;
+            }
+
+            if (topOpponents != null)
+            {
+                topOpponents.style.top = topInset + 84f;
+            }
+
+            lastSafeArea = safeArea;
+            lastSafeAreaWidth = Screen.width;
+            lastSafeAreaHeight = Screen.height;
+            lastSafeAreaPanelWidth = bounds.width;
+            lastSafeAreaPanelHeight = bounds.height;
+            hasSafeAreaSignature = true;
+            phoneSafeAreaApplied = true;
+        }
+
+        private void UpdateOnlineWaiting()
+        {
+            if (onlineWaiting == null)
+            {
+                return;
+            }
+
+            var message = matchFlow == null ? string.Empty : matchFlow.OnlineWaitingMessage;
+            onlineWaiting.text = message;
+            onlineWaiting.style.display = string.IsNullOrEmpty(message) ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        private void OnOnlineSeatsChanged()
+        {
+            var game = tableController == null ? null : tableController.Game;
+            if (game != null)
+            {
+                RefreshSeats(game.State);
+            }
+        }
+
+        private void OnOnlineNotice(string message)
+        {
+            if (onlineNotice == null || string.IsNullOrWhiteSpace(message))
+            {
+                return;
+            }
+
+            pendingOnlineNotices.Enqueue(message);
+            ShowNextOnlineNotice();
+        }
+
+        private void ShowNextOnlineNotice()
+        {
+            if (onlineNotice == null || onlineNoticeShowing || pendingOnlineNotices.Count == 0)
+            {
+                return;
+            }
+
+            onlineNotice.text = pendingOnlineNotices.Dequeue();
+            onlineNoticeShowing = true;
+            onlineNotice.AddToClassList("popup-visible");
+            onlineNoticeHide = onlineNotice.schedule.Execute(() =>
+            {
+                onlineNotice.RemoveFromClassList("popup-visible");
+                onlineNoticeShowing = false;
+                ShowNextOnlineNotice();
+            }).StartingIn(3200);
         }
 
         private void UpdateActiveTurnPulse()
@@ -327,6 +526,8 @@ namespace Mejnun.UI
             goneDownPopup = root.Q<Label>("gone-down-popup");
             goneDownTag = root.Q<Label>("gone-down-tag");
             invalidMovePopup = root.Q<Label>("invalid-move-popup");
+            onlineNotice = root.Q<Label>("online-notice");
+            onlineWaiting = root.Q<Label>("online-waiting");
             confirmDialog = root.Q<VisualElement>("confirm-dialog");
             confirmMessage = root.Q<Label>("confirm-message");
             confirmDontAsk = root.Q<Toggle>("confirm-dont-ask");
@@ -334,12 +535,15 @@ namespace Mejnun.UI
             settingsPanel = root.Q<VisualElement>("settings-panel");
             helpPanel = root.Q<VisualElement>("help-panel");
             bottomBar = root.Q<VisualElement>("bottom-bar");
+            opponentsStrip = root.Q<VisualElement>("opponents-strip");
+            fastForwardDock = root.Q<VisualElement>("fast-forward-dock");
             statusPanel = root.Q<VisualElement>("status-panel");
             turnPanel = root.Q<VisualElement>("turn-panel");
             markerLayer = root.Q<VisualElement>("marker-layer");
             fastForwardButton = root.Q<Button>("fast-forward-button");
             markSetButton = root.Q<Button>("mark-set-button");
             skipTutorialButton = root.Q<Button>("skip-tutorial-button");
+            roomCodeLabel = root.Q<Label>("room-code-label");
         }
 
         private void RegisterButtons()
@@ -455,10 +659,26 @@ namespace Mejnun.UI
                 return;
             }
 
+            var phoneLayout = root != null && root.ClassListContains("phone-layout");
+            var target = phoneLayout ? fastForwardDock : bottomBar;
+            if (target != null && fastForwardButton.parent != target)
+            {
+                target.Add(fastForwardButton);
+            }
+
             var visible = GameSettings.ShowFastForward &&
                           (tableController != null && tableController.IsAutoFixing ||
                            matchFlow != null && matchFlow.BotDriver != null && matchFlow.BotDriver.IsPlaying);
             fastForwardButton.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (fastForwardDock != null)
+            {
+                fastForwardDock.style.display = phoneLayout && visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (phoneLayout && root != null && bottomBar != null && bottomBar.worldBound.height > 0f)
+                {
+                    fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;
+                }
+            }
+
             fastForwardButton.text = matchFlow != null && matchFlow.FastForward ? "Continue" : "Fast forward";
         }
 
@@ -787,7 +1007,8 @@ namespace Mejnun.UI
             if (turnPopup != null)
             {
                 turnPopup.text = Possessive(GetPlayerName(state.CurrentSeat)) + " Turn";
-                turnPopupHide = ShowPopup(turnPopup, turnPopupHide);
+                turnPopupHide = ShowPopup(turnPopup, turnPopupHide,
+                    root != null && root.ClassListContains("phone-layout") ? 2600 : 1600);
             }
         }
 
@@ -1051,7 +1272,8 @@ namespace Mejnun.UI
                 opponent.pickingMode = PickingMode.Ignore;
                 opponent.AddToClassList("opponent-seat");
                 var relativeSeat = (seat - viewerSeat + state.Hands.Count) % state.Hands.Count;
-                var opponentSide = GetOpponentSide(relativeSeat, state.Hands.Count - 1);
+                var opponentSide = GetOpponentSide(relativeSeat, state.Hands.Count - 1,
+                    root != null && root.ClassListContains("phone-layout") && Screen.height > Screen.width);
                 var name = new Label(GetPlayerName(seat) + (IsBotSeat(seat) ? " · bot" : string.Empty));
                 name.pickingMode = PickingMode.Ignore;
                 name.AddToClassList("opponent-name");
@@ -1139,9 +1361,34 @@ namespace Mejnun.UI
 
         public static OpponentSide GetOpponentSide(int relativeSeat, int opponentCount)
         {
+            return GetOpponentSide(relativeSeat, opponentCount, false);
+        }
+
+        public static OpponentSide GetOpponentSide(int relativeSeat, int opponentCount, bool tallLayout)
+        {
             if (opponentCount <= 1 || relativeSeat < 1 || relativeSeat > opponentCount)
             {
                 return OpponentSide.Top;
+            }
+
+            if (tallLayout)
+            {
+                if (opponentCount == 3)
+                {
+                    return relativeSeat == 2 ? OpponentSide.Top :
+                        relativeSeat == 1 ? OpponentSide.Left : OpponentSide.Right;
+                }
+
+                if (opponentCount == 4)
+                {
+                    return relativeSeat <= 2 ? OpponentSide.Left : OpponentSide.Right;
+                }
+
+                if (opponentCount == 5)
+                {
+                    return relativeSeat <= 2 ? OpponentSide.Left :
+                        relativeSeat == 3 ? OpponentSide.Top : OpponentSide.Right;
+                }
             }
 
             if (opponentCount == 2)
@@ -1453,6 +1700,20 @@ namespace Mejnun.UI
             SetVisible(settingsPanel, false);
             SetVisible(skipTutorialButton, matchFlow != null && matchFlow.Tutorial != null &&
                                            matchFlow.Tutorial.IsRunning);
+            RefreshRoomCode();
+        }
+
+        private void RefreshRoomCode()
+        {
+            var roomCode = matchFlow != null && matchFlow.Mode == MatchMode.Online
+                ? matchFlow.OnlineSessionCode
+                : null;
+            if (roomCodeLabel != null)
+            {
+                roomCodeLabel.text = string.IsNullOrWhiteSpace(roomCode) ? string.Empty : "Room code: " + roomCode;
+            }
+
+            SetVisible(roomCodeLabel, !string.IsNullOrWhiteSpace(roomCode));
         }
 
         private void RequestSkipTutorial()
@@ -1631,12 +1892,26 @@ namespace Mejnun.UI
 
         private void HandleKeyboardShortcuts()
         {
-            if (Keyboard.current == null || IsTextFieldFocused())
+            var keyboard = Keyboard.current;
+            var focusedElement = root == null || root.panel == null
+                ? null
+                : root.panel.focusController.focusedElement as VisualElement;
+            keyboardBackGuard.Track(focusedElement, TouchScreenKeyboard.visible, Time.unscaledTime);
+            if (keyboardBackGuard.ShouldSuppressBack(Time.unscaledTime))
+            {
+                if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
+                {
+                    BlurFocusedElement();
+                }
+
+                return;
+            }
+
+            if (keyboard == null || IsTextFieldFocused())
             {
                 return;
             }
 
-            var keyboard = Keyboard.current;
             if (keyboard.escapeKey.wasPressedThisFrame)
             {
                 if (confirmDialog != null && confirmDialog.resolvedStyle.display == DisplayStyle.Flex)

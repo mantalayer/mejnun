@@ -23,6 +23,10 @@ namespace Mejnun.Net.Unity
         private VisualElement disconnectPrompt;
         private string pendingDisconnectId;
         private SessionRecord migrationRecord;
+        private bool[] lastSeatConnections = Array.Empty<bool>();
+        private bool[] hasSeatStatus = Array.Empty<bool>();
+        private readonly Dictionary<string, string> seatNamesByAuthenticationId =
+            new Dictionary<string, string>();
 
         public bool IsRemoteAuthority => started;
         public bool ApplyCommandsLocally => clientSession != null;
@@ -56,6 +60,7 @@ namespace Mejnun.Net.Unity
                 StartWhenReady();
             }
 
+            RefreshOnlineSessionCode();
             hostSession?.Tick(Time.deltaTime);
         }
 
@@ -64,11 +69,13 @@ namespace Mejnun.Net.Unity
             if (hostSession != null)
             {
                 hostSession.StateChanged -= OnHostStateChanged;
+                hostSession.SeatStatusChanged -= OnHostSeatStatusChanged;
             }
 
             if (transport != null)
             {
                 transport.PlayerDisconnected -= OnPlayerDisconnected;
+                transport.HostDisconnected -= OnHostDisconnected;
             }
 
             if (clientSession != null)
@@ -80,6 +87,7 @@ namespace Mejnun.Net.Unity
             if (launch != null)
             {
                 launch.Session.SessionMigrated -= OnSessionMigrated;
+                launch.Session.SessionHostChanged -= OnSessionHostChanged;
                 launch.Service.MigrationHandler.DataRestored -= OnMigrationDataRestored;
             }
 
@@ -87,6 +95,7 @@ namespace Mejnun.Net.Unity
             {
                 matchFlow.Controller.SetCommandRelay(null);
                 matchFlow.SetOnlineAuthority(false, -1);
+                matchFlow.OnlineSessionCode = null;
             }
 
             disconnectPrompt?.RemoveFromHierarchy();
@@ -99,7 +108,8 @@ namespace Mejnun.Net.Unity
 
         public bool CanControlSeat(int seat)
         {
-            return started && seat == localSeat;
+            return started && seat == localSeat && matchFlow != null &&
+                   string.IsNullOrEmpty(matchFlow.OnlineWaitingMessage);
         }
 
         public bool Submit(IReadOnlyList<GameCommand> commands)
@@ -134,6 +144,7 @@ namespace Mejnun.Net.Unity
             if (choice == DisconnectChoice.SaveAndPause)
             {
                 matchFlow.SetOnlinePaused(true);
+                matchFlow.PostOnlineNotice("Match paused");
                 ShowPausedPrompt();
                 return true;
             }
@@ -157,6 +168,7 @@ namespace Mejnun.Net.Unity
 
             hostSession.Resume();
             matchFlow.SetOnlinePaused(false);
+            matchFlow.PostOnlineNotice("Match resumed");
             disconnectPrompt?.RemoveFromHierarchy();
             disconnectPrompt = null;
             pendingDisconnectId = null;
@@ -181,9 +193,14 @@ namespace Mejnun.Net.Unity
                 }
 
                 transport.PlayerDisconnected += OnPlayerDisconnected;
+                transport.HostDisconnected += OnHostDisconnected;
                 launch.Session.SessionMigrated += OnSessionMigrated;
+                launch.Session.SessionHostChanged += OnSessionHostChanged;
                 launch.Service.MigrationHandler.DataRestored += OnMigrationDataRestored;
                 localSeat = launch.IsHost ? 0 : -1;
+                matchFlow.OnlineSessionCode = !string.IsNullOrWhiteSpace(launch.Session.Code)
+                    ? launch.Session.Code
+                    : launch.SessionCode;
                 matchFlow.SetOnlineAuthority(true, localSeat);
                 matchFlow.Controller.SetCommandRelay(this);
                 if (!launch.IsHost)
@@ -197,6 +214,8 @@ namespace Mejnun.Net.Unity
                 {
                     throw new InvalidOperationException("Unable to initialize the online match.");
                 }
+
+                InitializeSeatStatusTracking(matchFlow.SeatCount);
             }
 
             if (started || matchFlow.IsInitializingRound || matchFlow.Game == null)
@@ -216,23 +235,44 @@ namespace Mejnun.Net.Unity
             started = true;
         }
 
+        private void RefreshOnlineSessionCode()
+        {
+            if (matchFlow == null || launch == null)
+            {
+                return;
+            }
+
+            var sessionCode = launch.Session == null ? null : launch.Session.Code;
+            if (string.IsNullOrWhiteSpace(sessionCode))
+            {
+                sessionCode = launch.SessionCode;
+            }
+
+            if (!string.IsNullOrWhiteSpace(sessionCode) && matchFlow.OnlineSessionCode != sessionCode)
+            {
+                matchFlow.OnlineSessionCode = sessionCode;
+            }
+        }
+
         private void StartHost()
         {
             snapshotStore = new CloudSaveSnapshotStore();
             hostSession = new HostSession(matchFlow.Game, snapshotStore);
             launch.Service.MigrationHandler.AuthoritativeSession = hostSession;
             hostSession.StateChanged += OnHostStateChanged;
-            transport.ConfigureHost(NetworkManager.Singleton, launch.Session, hostSession,
-                launch.AuthenticationId, launch.DisplayName);
+            hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
             if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
             {
-                hostSession.SubmitCommands(launch.AuthenticationId,
-                    new[] { GameCommand.ChooseRandomDealer() });
+                matchFlow.SetOnlineWaiting(GetWaitingMessage());
             }
+
+            transport.ConfigureHost(NetworkManager.Singleton, launch.Session, hostSession,
+                launch.AuthenticationId, launch.DisplayName);
         }
 
         private void StartClient()
         {
+            UpdateClientReadiness();
             transport.ConfigureClient(NetworkManager.Singleton, launch.Session, clientSession,
                 launch.AuthenticationId, launch.DisplayName);
         }
@@ -247,17 +287,20 @@ namespace Mejnun.Net.Unity
             localSeat = clientSession.LocalSeat;
             matchFlow.SetOnlineAuthority(true, localSeat);
             matchFlow.ApplyOnlineGame(game);
+            UpdateClientReadiness();
         }
 
         private void OnClientStatusChanged(NetMessage message)
         {
             if (message is SeatStatusMessage status)
             {
-                matchFlow.SetOnlineSeatStatus(status.Seat, status.DisplayName, status.IsBot);
+                HandleSeatStatus(status);
+                UpdateClientReadiness();
             }
             else if (message is PausedMessage paused)
             {
                 matchFlow.SetOnlinePaused(paused.Paused);
+                matchFlow.PostOnlineNotice(paused.Paused ? "Match paused" : "Match resumed");
             }
         }
 
@@ -267,6 +310,168 @@ namespace Mejnun.Net.Unity
             UpdateSeatStatus(authenticationId);
             ShowDisconnectPrompt(authenticationId);
             DisconnectRequested?.Invoke(authenticationId);
+        }
+
+        private void OnHostDisconnected()
+        {
+            matchFlow?.PostOnlineNotice("Host disconnected");
+        }
+
+        private void OnHostSeatStatusChanged(SeatStatusMessage status)
+        {
+            HandleSeatStatus(status);
+            UpdateHostReadiness();
+        }
+
+        private void HandleSeatStatus(SeatStatusMessage status)
+        {
+            if (status == null || matchFlow == null || status.Seat < 0 || status.Seat >= matchFlow.SeatCount)
+            {
+                return;
+            }
+
+            EnsureSeatStatusTracking(matchFlow.SeatCount);
+            var wasKnown = hasSeatStatus[status.Seat];
+            var wasConnected = lastSeatConnections[status.Seat];
+            var displayName = string.IsNullOrWhiteSpace(status.DisplayName)
+                ? "Player " + (status.Seat + 1)
+                : status.DisplayName;
+            if (!string.IsNullOrEmpty(status.AuthenticationId))
+            {
+                seatNamesByAuthenticationId[status.AuthenticationId] = displayName;
+            }
+
+            matchFlow.SetOnlineSeatStatus(status.Seat, displayName, status.IsBot);
+
+            var isLocalClientJoining = !wasKnown && status.Connected && status.Seat == localSeat &&
+                                       launch != null && !launch.IsHost;
+            if (isLocalClientJoining || (wasKnown && !wasConnected && status.Connected))
+            {
+                matchFlow.PostOnlineNotice(displayName + " joined");
+            }
+            else if (wasKnown && wasConnected && !status.Connected)
+            {
+                matchFlow.PostOnlineNotice(displayName + " disconnected");
+            }
+
+            lastSeatConnections[status.Seat] = status.Connected;
+            hasSeatStatus[status.Seat] = true;
+        }
+
+        private void UpdateHostReadiness()
+        {
+            if (hostSession == null || hostSession.Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                return;
+            }
+
+            var readySeatCount = CountReadySeats();
+            var enoughPlayersReady = launch.StartedEarly
+                ? readySeatCount >= 2
+                : hostSession.AreAllSeatsConnected;
+            if (!enoughPlayersReady)
+            {
+                matchFlow.SetOnlineWaiting(GetWaitingMessage());
+                return;
+            }
+
+            var wasWaiting = !string.IsNullOrEmpty(matchFlow.OnlineWaitingMessage);
+            matchFlow.SetOnlineWaiting(string.Empty);
+            if (wasWaiting)
+            {
+                CancelInvoke(nameof(PostAllPlayersJoinedNotice));
+                Invoke(nameof(PostAllPlayersJoinedNotice), 1.2f);
+                hostSession.SubmitCommands(launch.AuthenticationId,
+                    new[] { GameCommand.ChooseRandomDealer() });
+            }
+        }
+
+        private int CountReadySeats()
+        {
+            var readySeats = 0;
+            for (var seat = 0; seat < hostSession.Game.Setup.SeatCount; seat++)
+            {
+                if (hostSession.GetSeat(seat).Connected)
+                {
+                    readySeats++;
+                }
+            }
+
+            return readySeats;
+        }
+
+        private void UpdateClientReadiness()
+        {
+            if (launch == null || launch.IsHost || matchFlow == null || matchFlow.Game == null)
+            {
+                return;
+            }
+
+            if (matchFlow.Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                matchFlow.SetOnlineWaiting(string.Empty);
+                return;
+            }
+
+            var readySeats = 0;
+            for (var seat = 0; seat < matchFlow.SeatCount; seat++)
+            {
+                if (lastSeatConnections[seat])
+                {
+                    readySeats++;
+                }
+            }
+
+            var requiredSeats = launch.StartedEarly ? 2 : matchFlow.SeatCount;
+            if (readySeats >= requiredSeats)
+            {
+                matchFlow.SetOnlineWaiting(string.Empty);
+                return;
+            }
+
+            var message = "Waiting for players (" + readySeats + "/" + matchFlow.SeatCount + ")…";
+            var roomCode = matchFlow.OnlineSessionCode;
+            matchFlow.SetOnlineWaiting(string.IsNullOrWhiteSpace(roomCode)
+                ? message
+                : message + "\nRoom code: " + roomCode);
+        }
+
+        private void PostAllPlayersJoinedNotice()
+        {
+            matchFlow?.PostOnlineNotice("All players joined");
+        }
+
+        private string GetWaitingMessage()
+        {
+            var readySeats = 0;
+            for (var seat = 0; seat < hostSession.Game.Setup.SeatCount; seat++)
+            {
+                var status = hostSession.GetSeat(seat);
+                if (status.Connected || status.IsBot)
+                {
+                    readySeats++;
+                }
+            }
+
+            var message = "Waiting for players (" + readySeats + "/" + hostSession.Game.Setup.SeatCount + ")…";
+            var roomCode = matchFlow != null && launch != null && launch.IsHost
+                ? matchFlow.OnlineSessionCode
+                : null;
+            return string.IsNullOrWhiteSpace(roomCode) ? message : message + "\nRoom code: " + roomCode;
+        }
+
+        private void InitializeSeatStatusTracking(int seatCount)
+        {
+            lastSeatConnections = new bool[seatCount];
+            hasSeatStatus = new bool[seatCount];
+        }
+
+        private void EnsureSeatStatusTracking(int seatCount)
+        {
+            if (lastSeatConnections.Length != seatCount || hasSeatStatus.Length != seatCount)
+            {
+                InitializeSeatStatusTracking(seatCount);
+            }
         }
 
         private void OnMigrationDataRestored(SessionRecord record)
@@ -286,6 +491,26 @@ namespace Mejnun.Net.Unity
             }
         }
 
+        private void OnSessionHostChanged(string authenticationId)
+        {
+            if (launch == null || matchFlow == null || string.IsNullOrWhiteSpace(authenticationId))
+            {
+                return;
+            }
+
+            var displayName = launch.AuthenticationId == authenticationId
+                ? launch.DisplayName
+                : seatNamesByAuthenticationId.TryGetValue(authenticationId, out var seatName)
+                    ? seatName
+                    : null;
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                displayName = "A player";
+            }
+
+            matchFlow.PostOnlineNotice(displayName + " is now the host");
+        }
+
         private void RestoreMigratedHost()
         {
             if (migrationRecord == null)
@@ -296,6 +521,7 @@ namespace Mejnun.Net.Unity
             if (hostSession != null)
             {
                 hostSession.StateChanged -= OnHostStateChanged;
+                hostSession.SeatStatusChanged -= OnHostSeatStatusChanged;
             }
 
             if (clientSession != null)
@@ -331,6 +557,7 @@ namespace Mejnun.Net.Unity
             matchFlow.SetOnlineAuthority(true, localSeat);
             matchFlow.Controller.SetCommandRelay(this);
             matchFlow.ApplyOnlineGame(hostSession.Game);
+            hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
             transport.ConfigureHost(NetworkManager.Singleton, launch.Session, hostSession,
                 launch.AuthenticationId, launch.DisplayName);
         }

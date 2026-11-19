@@ -26,6 +26,7 @@ namespace Mejnun.UI
 
             Dispose();
             root = panel;
+            root.EnableInClassList("mobile-settings", Application.isMobilePlatform);
             tooltipLabel = root.Q<Label>("settings-tooltip");
             tableView = view;
             tableController = controller;
@@ -33,6 +34,12 @@ namespace Mejnun.UI
             if (accountSection != null)
             {
                 accountSection.style.display = Application.isMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+
+            var uiScaleRow = root.Q<VisualElement>("ui-scale-row");
+            if (uiScaleRow != null)
+            {
+                uiScaleRow.style.display = Application.isMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
             root.Q<Button>("settings-close-button")?.RegisterCallback<ClickEvent>(_ => Closed?.Invoke());
@@ -68,6 +75,8 @@ namespace Mejnun.UI
                 value => GameSettings.OverlapSets = value, RefreshTable);
             BindToggle("organic-board-toggle", () => GameSettings.OrganicBoard,
                 value => GameSettings.OrganicBoard = value, RefreshTable);
+            BindSlider("ui-scale-slider", () => GameSettings.UiScale,
+                value => GameSettings.UiScale = value);
 
             BindSlider("hand-arc-amount-slider", () => GameSettings.HandArcAmount,
                 value => GameSettings.HandArcAmount = value, () => tableView?.RefreshHandLayout());
@@ -296,6 +305,7 @@ namespace Mejnun.UI
             SetToggle("haptics-toggle", GameSettings.HapticsEnabled);
             SetToggle("overlap-sets-toggle", GameSettings.OverlapSets);
             SetToggle("organic-board-toggle", GameSettings.OrganicBoard);
+            SetSlider("ui-scale-slider", GameSettings.UiScale);
             SetSlider("hand-arc-amount-slider", GameSettings.HandArcAmount);
             SetSlider("hand-spread-slider", GameSettings.HandSpread);
             SetSlider("hand-card-scale-slider", GameSettings.HandCardScale);

@@ -20,6 +20,8 @@ namespace Mejnun.UI.FrontEnd
 
     public sealed class FrontEndFlow : IDisposable
     {
+        private const string StartedPropertyKey = "mejnun_started";
+        private const string PlayerNamePropertyKey = "_player_name";
         private readonly Stack<FrontEndScreen> backStack = new Stack<FrontEndScreen>();
         private readonly MainMenuScreen mainMenu;
         private readonly SetupScreen setup;
@@ -31,6 +33,10 @@ namespace Mejnun.UI.FrontEnd
         private MatchRequest pendingRequest;
         private ISession pendingOnlineSession;
         private string pendingOnlineName;
+        private string pendingOnlineCode;
+        private string pendingOnlineHostId;
+        private bool onlineStartRequested;
+        private bool onlineMatchLaunched;
 
         public FrontEndFlow(VisualElement root, CosmeticCatalog catalog, DeckSkinLoader loader)
         {
@@ -49,7 +55,7 @@ namespace Mejnun.UI.FrontEnd
             settings.Initialize(root.Q<VisualElement>("settings-panel"));
             settings.Closed += Back;
             root.Q<Button>("gallery-back-button").clicked += Back;
-            onlineScreen = new OnlineScreen(root, Back);
+            onlineScreen = new OnlineScreen(root, HandleOnlineBack);
             onlineScreen.Requested += HandleOnlineRequest;
             onlineScreen.ContinueRequested += ContinueOnlineMatch;
 
@@ -94,7 +100,8 @@ namespace Mejnun.UI.FrontEnd
         {
             if (CurrentScreen == FrontEndScreen.Online && pendingOnlineSession != null)
             {
-                LeavePendingOnlineSession();
+                LeaveOnlineLobby();
+                return;
             }
             if (tablePicker.IsPopupOpen)
             {
@@ -124,6 +131,7 @@ namespace Mejnun.UI.FrontEnd
             settings.Dispose();
             onlineScreen.Requested -= HandleOnlineRequest;
             onlineScreen.ContinueRequested -= ContinueOnlineMatch;
+            UnsubscribeOnlineSession();
         }
 
         public void OpenSetup(MatchMode mode)
@@ -155,6 +163,7 @@ namespace Mejnun.UI.FrontEnd
 
         public void OpenOnline()
         {
+            onlineScreen.HideLobby();
             onlineScreen.SetStatus(string.Empty);
             Push(FrontEndScreen.Online);
         }
@@ -237,11 +246,7 @@ namespace Mejnun.UI.FrontEnd
                 {
                     case OnlineAction.Create:
                         session = await onlineService.CreateSessionAsync(onlineScreen.SeatCount);
-                        pendingOnlineSession = session;
-                        pendingOnlineName = displayName;
-                        onlineScreen.SetStatus("Share this code with your opponent.");
-                        onlineScreen.ShowSessionCode(session.Code);
-                        return;
+                        break;
                     case OnlineAction.JoinByCode:
                         session = await onlineService.JoinByCodeAsync(sessionCode);
                         break;
@@ -252,7 +257,8 @@ namespace Mejnun.UI.FrontEnd
                         throw new ArgumentOutOfRangeException(nameof(action));
                 }
 
-                LaunchOnlineMatch(session, displayName);
+                EnterLobby(session, displayName,
+                    action == OnlineAction.JoinByCode ? sessionCode : session.Code);
             }
             catch (Exception exception)
             {
@@ -260,7 +266,10 @@ namespace Mejnun.UI.FrontEnd
             }
             finally
             {
-                onlineScreen.SetBusy(false);
+                if (!onlineStartRequested)
+                {
+                    onlineScreen.SetBusy(false);
+                }
             }
         }
 
@@ -268,19 +277,271 @@ namespace Mejnun.UI.FrontEnd
         {
             if (pendingOnlineSession == null)
             {
-                onlineScreen.SetStatus("Create a session before continuing.");
+                onlineScreen.SetStatus("Join or create a session first.");
                 return;
             }
 
-            var session = pendingOnlineSession;
-            pendingOnlineSession = null;
-            LaunchOnlineMatch(session, pendingOnlineName);
-            pendingOnlineName = null;
+            StartOnlineMatch();
         }
 
-        private void LaunchOnlineMatch(ISession session, string displayName)
+        private void EnterLobby(ISession session, string displayName, string sessionCode)
         {
-            OnlineLaunch.Set(onlineService, session, onlineService.IsHost, displayName);
+            pendingOnlineSession = session;
+            pendingOnlineName = displayName;
+            pendingOnlineCode = string.IsNullOrWhiteSpace(session.Code) ? sessionCode : session.Code;
+            pendingOnlineHostId = session.Host;
+            onlineStartRequested = false;
+            onlineMatchLaunched = false;
+            SubscribeOnlineSession(session);
+
+            if (IsSessionStarted(session))
+            {
+                LaunchOnlineMatch(session, displayName, pendingOnlineCode, IsSessionStartedEarly(session));
+                return;
+            }
+
+            RefreshOnlineLobby();
+            if (session.IsHost && session.PlayerCount >= session.MaxPlayers)
+            {
+                StartOnlineMatch();
+            }
+        }
+
+        private void SubscribeOnlineSession(ISession session)
+        {
+            session.Changed += OnOnlineSessionChanged;
+            session.PlayerJoined += OnOnlinePlayerJoined;
+            session.PlayerHasLeft += OnOnlinePlayerLeft;
+            session.SessionPropertiesChanged += OnOnlineSessionChanged;
+            session.Deleted += OnOnlineSessionEnded;
+            session.RemovedFromSession += OnOnlineSessionEnded;
+            session.SessionHostChanged += OnOnlineSessionHostChanged;
+        }
+
+        private void UnsubscribeOnlineSession()
+        {
+            if (pendingOnlineSession == null)
+            {
+                return;
+            }
+
+            pendingOnlineSession.Changed -= OnOnlineSessionChanged;
+            pendingOnlineSession.PlayerJoined -= OnOnlinePlayerJoined;
+            pendingOnlineSession.PlayerHasLeft -= OnOnlinePlayerLeft;
+            pendingOnlineSession.SessionPropertiesChanged -= OnOnlineSessionChanged;
+            pendingOnlineSession.Deleted -= OnOnlineSessionEnded;
+            pendingOnlineSession.RemovedFromSession -= OnOnlineSessionEnded;
+            pendingOnlineSession.SessionHostChanged -= OnOnlineSessionHostChanged;
+        }
+
+        private void OnOnlineSessionChanged()
+        {
+            var session = pendingOnlineSession;
+            if (session == null || onlineMatchLaunched)
+            {
+                return;
+            }
+
+            if (IsSessionStarted(session))
+            {
+                if (!session.IsHost)
+                {
+                    LaunchOnlineMatch(session, pendingOnlineName, pendingOnlineCode,
+                        IsSessionStartedEarly(session));
+                }
+
+                return;
+            }
+
+            RefreshOnlineLobby();
+            if (session.IsHost && session.PlayerCount >= session.MaxPlayers)
+            {
+                StartOnlineMatch();
+            }
+        }
+
+        private void OnOnlinePlayerJoined(string playerId)
+        {
+            OnOnlineSessionChanged();
+        }
+
+        private void OnOnlinePlayerLeft(string playerId)
+        {
+            if (string.Equals(playerId, pendingOnlineHostId, StringComparison.Ordinal))
+            {
+                CancelOnlineLobby();
+                return;
+            }
+
+            OnOnlineSessionChanged();
+        }
+
+        private void OnOnlineSessionHostChanged(string authenticationId)
+        {
+            CancelOnlineLobby();
+        }
+
+        private void OnOnlineSessionEnded()
+        {
+            CancelOnlineLobby();
+        }
+
+        private void RefreshOnlineLobby()
+        {
+            var session = pendingOnlineSession;
+            if (session == null || onlineMatchLaunched)
+            {
+                return;
+            }
+
+            var playerNames = new List<string>(session.PlayerCount);
+            for (var index = 0; index < session.Players.Count; index++)
+            {
+                var player = session.Players[index];
+                var playerName = player.Properties != null &&
+                                 player.Properties.TryGetValue(PlayerNamePropertyKey, out var nameProperty)
+                    ? nameProperty.Value
+                    : null;
+                if (string.IsNullOrWhiteSpace(playerName))
+                {
+                    playerName = string.Equals(player.Id, onlineService.AuthenticationId, StringComparison.Ordinal)
+                        ? pendingOnlineName
+                        : "Player " + (index + 1);
+                }
+
+                playerNames.Add(playerName);
+            }
+
+            onlineScreen.ShowLobby(pendingOnlineCode, session.IsHost, playerNames, session.MaxPlayers);
+        }
+
+        private static bool IsSessionStarted(ISession session)
+        {
+            return session.Properties != null && session.Properties.ContainsKey(StartedPropertyKey);
+        }
+
+        private static bool IsSessionStartedEarly(ISession session)
+        {
+            return session.Properties != null &&
+                   session.Properties.TryGetValue(StartedPropertyKey, out var property) &&
+                   string.Equals(property.Value, "early", StringComparison.Ordinal);
+        }
+
+        private async void StartOnlineMatch()
+        {
+            var session = pendingOnlineSession;
+            if (session == null || !session.IsHost || onlineStartRequested || onlineMatchLaunched)
+            {
+                return;
+            }
+
+            onlineStartRequested = true;
+            onlineScreen.SetBusy(true);
+            var startedEarly = session.PlayerCount < session.MaxPlayers;
+            try
+            {
+                var hostSession = session.AsHost();
+                hostSession.SetProperty(StartedPropertyKey,
+                    new SessionProperty(startedEarly ? "early" : "started"));
+                await hostSession.SavePropertiesAsync();
+                if (pendingOnlineSession == session)
+                {
+                    LaunchOnlineMatch(session, pendingOnlineName, pendingOnlineCode, startedEarly);
+                }
+            }
+            catch (Exception exception)
+            {
+                onlineStartRequested = false;
+                onlineScreen.SetBusy(false);
+                onlineScreen.SetStatus(exception.Message);
+            }
+        }
+
+        private void HandleOnlineBack()
+        {
+            if (CurrentScreen == FrontEndScreen.Online && pendingOnlineSession != null)
+            {
+                LeaveOnlineLobby();
+                return;
+            }
+
+            Back();
+        }
+
+        private async void LeaveOnlineLobby()
+        {
+            var session = pendingOnlineSession;
+            if (session == null)
+            {
+                Back();
+                return;
+            }
+
+            var wasHost = session.IsHost;
+            UnsubscribeOnlineSession();
+            ClearPendingOnlineSession();
+            onlineScreen.HideLobby();
+            onlineScreen.SetBusy(false);
+            onlineScreen.SetStatus(wasHost ? "The host cancelled the game." : "You left the lobby.");
+            try
+            {
+                if (wasHost)
+                {
+                    await onlineService.DeleteSessionAsync();
+                }
+                else
+                {
+                    await onlineService.LeaveAsync();
+                }
+            }
+            catch (Exception exception)
+            {
+                onlineScreen.SetStatus(exception.Message);
+            }
+        }
+
+        private async void CancelOnlineLobby()
+        {
+            if (pendingOnlineSession == null || onlineMatchLaunched)
+            {
+                return;
+            }
+
+            UnsubscribeOnlineSession();
+            ClearPendingOnlineSession();
+            onlineScreen.HideLobby();
+            onlineScreen.SetBusy(false);
+            onlineScreen.SetStatus("The host cancelled the game.");
+            try
+            {
+                await onlineService.LeaveAsync();
+            }
+            catch
+            {
+                // The session may already have been deleted or removed.
+            }
+        }
+
+        private void ClearPendingOnlineSession()
+        {
+            pendingOnlineSession = null;
+            pendingOnlineName = null;
+            pendingOnlineCode = null;
+            pendingOnlineHostId = null;
+            onlineStartRequested = false;
+        }
+
+        private void LaunchOnlineMatch(ISession session, string displayName, string sessionCode, bool startedEarly)
+        {
+            if (onlineMatchLaunched)
+            {
+                return;
+            }
+
+            onlineMatchLaunched = true;
+            UnsubscribeOnlineSession();
+            ClearPendingOnlineSession();
+            OnlineLaunch.Set(onlineService, session, session.IsHost, displayName, sessionCode, startedEarly);
             var seatCount = Math.Max(2, Math.Min(6, session.MaxPlayers));
             var seats = new SeatConfig[seatCount];
             seats[0] = SeatConfig.Human(displayName);
@@ -290,20 +551,6 @@ namespace Mejnun.UI.FrontEnd
             }
 
             SceneFlow.LoadTable(new MatchRequest(seats, 30, MatchMode.Online));
-        }
-
-        private async void LeavePendingOnlineSession()
-        {
-            pendingOnlineSession = null;
-            pendingOnlineName = null;
-            try
-            {
-                await onlineService.LeaveAsync();
-            }
-            catch (Exception exception)
-            {
-                onlineScreen.SetStatus(exception.Message);
-            }
         }
 
     }

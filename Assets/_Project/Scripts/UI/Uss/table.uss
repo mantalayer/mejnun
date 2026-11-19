@@ -118,7 +118,7 @@
     white-space: normal;
 }
 
-.hamburger-button {
+.hud-button.hamburger-button {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -127,7 +127,33 @@
     height: 44px;
     min-height: 44px;
     padding: 0;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     font-size: 24px;
+}
+
+.hamburger-bars {
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 20px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.hamburger-bar {
+    width: 26px;
+    height: 3px;
+    border-radius: 2px;
+    background-color: rgb(248, 248, 240);
+}
+
+.fast-forward-dock {
+    position: absolute;
+    right: 12px;
+    bottom: 104px;
 }
 
 .bottom-area {
@@ -499,6 +525,12 @@
     -unity-text-align: middle-center;
 }
 
+.room-code-label {
+    color: rgb(195, 211, 199);
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
 .pause-panel .unity-button {
     min-width: 180px;
     margin-bottom: 6px;
@@ -642,10 +674,125 @@
     max-width: 42%;
 }
 
+.phone-layout .turn-popup {
+    top: 52%;
+    left: 5%;
+    right: 5%;
+    width: auto;
+    max-width: none;
+    translate: 0 0;
+    font-size: 44px;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.phone-layout .hamburger-button {
+    width: 58px;
+    min-width: 58px;
+    height: 58px;
+    min-height: 58px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.phone-layout .hamburger-bars {
+    width: 30px;
+    height: 24px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.phone-layout .hamburger-bar {
+    width: 30px;
+    height: 4px;
+}
+
+.phone-layout .fast-forward-dock .hud-button {
+    min-width: 132px;
+    min-height: 52px;
+    font-size: 16px;
+}
+
+.phone-layout .opponents-strip {
+    position: absolute;
+    display: flex;
+    left: 0;
+    right: 0;
+    justify-content: center;
+}
+
+.phone-layout .opponent-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: auto;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.phone-layout .opponent-left {
+    left: 0;
+    right: auto;
+    align-items: flex-start;
+}
+
+.phone-layout .opponent-right {
+    left: auto;
+    right: 0;
+    align-items: flex-end;
+}
+
+.phone-layout .opponent-seat {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 .phone-layout .opponents-top {
     top: 84px;
     padding-left: 10%;
     padding-right: 10%;
+}
+
+.settings-panel.mobile-settings {
+    left: 3%;
+    right: 3%;
+    top: 4%;
+    bottom: 4%;
+    padding: 14px;
+}
+
+.online-notice,
+.online-waiting {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    top: 24%;
+    padding: 12px 18px;
+    border-radius: 10px;
+    background-color: rgba(8, 18, 14, 0.94);
+    color: rgb(248, 248, 240);
+    font-size: 22px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    opacity: 0;
+}
+
+.online-notice.popup-visible,
+.online-waiting {
+    opacity: 1;
+}
+
+.online-waiting {
+    top: 36%;
+    display: none;
+    border-width: 2px;
+    border-color: rgb(239, 195, 92);
 }
 
 .phone-layout .bottom-bar {
@@ -659,11 +806,12 @@
 .phone-layout .bottom-bar .hud-button {
     width: 18.6%;
     min-width: 0;
+    min-height: 52px;
     margin-left: 0.7%;
     margin-right: 0.7%;
     padding-left: 2px;
     padding-right: 2px;
-    font-size: 12px;
+    font-size: 15px;
     white-space: normal;
 }
 
