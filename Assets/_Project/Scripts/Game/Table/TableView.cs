@@ -10,6 +10,47 @@ namespace Mejnun.Game
     {
         private const int MaximumDrawFlightCards = 3;
         private const float DrawFlightDuration = 0.55f;
+        public const float BoardCollectSeconds = 0.4f;
+        private const float BoardCardFlightDuration = 0.28f;
+        private const float InitialDealDuration = 0.3f;
+        private const float InitialDealStagger = 0.1f;
+        private const float InitialDealWaitSeconds = 2f;
+        private const float BoardCardStagger = 0.003f;
+        private const float BoardCardStaggerLimit = 0.12f;
+        private const float BoardPileScale = 0.14f;
+
+        private sealed class BoardCardFlight
+        {
+            public byte CardId;
+            public CardView View;
+            public Vector3 Source;
+            public Vector3 Target;
+            public float StartTime;
+            public float EndTime;
+            public bool Started;
+        }
+
+        private sealed class InitialDealFlight
+        {
+            public int Seat;
+            public int CardIndex;
+            public byte CardId;
+            public CardView View;
+            public Vector3 Source;
+            public Vector3 Target;
+            public Vector2 LastTargetScreen;
+            public float SourceScale;
+            public float ScreenHeight;
+            public float TargetScale;
+            public float StartTime;
+            public float EndTime;
+            public bool Started;
+            public bool HasTarget;
+            public bool IsTransient;
+        }
+
+        public delegate bool CardSlotResolver(int seat, int cardIndex, out Vector2 screenPosition,
+            out float screenHeight);
 
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private DeckSkinCatalog skinCatalog;
@@ -26,6 +67,14 @@ namespace Mejnun.Game
         private readonly List<Card> hitTestHandCards = new List<Card>(Card.CardsPerDeck);
         private readonly List<CardView> drawingCards = new List<CardView>();
         private readonly List<int> drawingSeats = new List<int>();
+        private readonly List<BoardCardFlight> boardCollectFlights = new List<BoardCardFlight>();
+        private readonly List<BoardCardFlight> boardDealFlights = new List<BoardCardFlight>();
+        private readonly List<InitialDealFlight> initialDealFlights = new List<InitialDealFlight>();
+        private readonly Dictionary<byte, Vector3> boardStoredTargets = new Dictionary<byte, Vector3>();
+        private readonly HashSet<byte> restoreHiddenCardIds = new HashSet<byte>();
+        private readonly Dictionary<byte, Vector3> initialDealTargets = new Dictionary<byte, Vector3>();
+        private readonly HashSet<byte> initialDealCardIds = new HashSet<byte>();
+        private readonly List<Meld> emptyBoard = new List<Meld>();
         private readonly HandOrder handOrder = new HandOrder();
         private readonly Dictionary<byte, Vector3> liftedHandOffsets = new Dictionary<byte, Vector3>();
         private readonly Dictionary<byte, Vector3> liftedMeldOffsets = new Dictionary<byte, Vector3>();
@@ -45,6 +94,13 @@ namespace Mejnun.Game
         private float pixelsPerUnit = 100f;
         [SerializeField, Min(0.1f)] private float handReferenceSize = 5f;
         private Transform handRoot;
+        private float handIntroStartedAt;
+        private float handIntroDuration;
+        private float handIntroDelay;
+        private float handOutroStartedAt;
+        private float handOutroDuration;
+        private float handOutroDelay;
+        private bool handOutroCompleted;
         private float lastHandAspect;
         private bool hasHandAspect;
         private int handGapIndex = -1;
@@ -58,6 +114,21 @@ namespace Mejnun.Game
         private Vector2 drawPileScreenPosition;
         private float drawPileScreenHeight;
         private bool hasDrawPileScreenPosition;
+        private bool boardDealRequested;
+        private bool boardDealPlaying;
+        private bool boardCollecting;
+        private bool boardCleared;
+        private bool handsCleared;
+        private bool boardRestorePending;
+        private bool dealArmed;
+        private bool dealPending;
+        private bool dealStarted;
+        private bool collectionNotified;
+        private float boardDealRequestedAt;
+        private float boardDealDelay;
+        private float boardDealEndTime;
+        private float boardCollectEndTime;
+        private float dealRequestedAt;
         private readonly Dictionary<int, Vector3> seatScreenRects = new Dictionary<int, Vector3>();
         private readonly Dictionary<int, Vector2> seatScreenSteps = new Dictionary<int, Vector2>();
         private Func<int, bool> cpuSeatPredicate;
@@ -69,6 +140,11 @@ namespace Mejnun.Game
         public DeckSkinCatalog SkinCatalog => skinCatalog;
         public IReadOnlyDictionary<byte, CardView> ActiveCards => activeCards;
         public int ActiveCardCount => activeCards.Count;
+        public int BoardCardCount => boardCleared ? 0 : CountBoardCards(CurrentState);
+        public bool DealAnimationEnabled { get; set; }
+        public bool IsDealing => dealArmed || dealPending || initialDealFlights.Count > 0;
+        public CardSlotResolver SeatCardSlotResolver { get; set; }
+        public bool IsCollectingCards => boardCollecting || boardCollectFlights.Count > 0;
         public bool HandVisible => handVisible;
         public bool HandConcealed => handConcealed;
         public int HandSeat => !handVisible || CurrentState == null
@@ -76,6 +152,8 @@ namespace Mejnun.Game
             : DisplaySeat(CurrentState);
         public Camera ViewCamera => tableCamera == null ? null : tableCamera.Camera;
         public event Action IncomingCardsChanged;
+        public event Action CollectionCompleted;
+        public event Action DealCompleted;
 
         /// <summary>The seat whose hand is shown, or -1 to follow the current seat.</summary>
         public int ViewerSeat => viewerSeat;
@@ -188,7 +266,14 @@ namespace Mejnun.Game
 
         private void LateUpdate()
         {
+            UpdateBoardCardFlights();
+            UpdateInitialDealFlights();
             UpdateDrawingCards();
+            if (dealPending)
+            {
+                TryStartInitialDeal();
+            }
+
             if (tableCamera == null || tableCamera.Camera == null)
             {
                 return;
@@ -216,6 +301,7 @@ namespace Mejnun.Game
             if (seat >= 0 && seat < CurrentState.Hands.Count)
             {
                 LayoutHand(seat, 0f);
+                CaptureInitialDealTargets(seat);
             }
         }
 
@@ -227,11 +313,231 @@ namespace Mejnun.Game
             }
         }
 
+        public void PlayHandIntro(float duration, float delay)
+        {
+            handOutroCompleted = false;
+            handOutroDuration = 0f;
+            handOutroDelay = 0f;
+            handIntroDuration = Mathf.Max(0f, duration);
+            handIntroDelay = Mathf.Max(0f, delay);
+            handIntroStartedAt = Time.unscaledTime;
+        }
+
+        public void PlayHandOutro(float duration)
+        {
+            PlayHandOutro(duration, 0f);
+        }
+
+        public void PlayHandOutro(float duration, float delay)
+        {
+            handOutroDuration = Mathf.Max(0f, duration);
+            handOutroDelay = Mathf.Max(0f, delay);
+            handOutroStartedAt = Time.unscaledTime;
+            handOutroCompleted = handOutroDuration <= 0f && handOutroDelay <= 0f;
+        }
+
+        public void PlayBoardDeal(float delay)
+        {
+            boardDealFlights.Clear();
+            boardDealPlaying = false;
+            boardDealRequested = true;
+            boardDealRequestedAt = Time.unscaledTime;
+            boardDealDelay = Mathf.Max(0f, delay);
+            TryStartBoardDeal();
+        }
+
+        public void ArmDeal()
+        {
+            if (!DealAnimationEnabled)
+            {
+                return;
+            }
+
+            dealArmed = true;
+            dealPending = false;
+            dealStarted = false;
+            initialDealFlights.Clear();
+            initialDealCardIds.Clear();
+            initialDealTargets.Clear();
+        }
+
+        public void ResetForNewGame()
+        {
+            foreach (var cardId in restoreHiddenCardIds)
+            {
+                if (activeCards.TryGetValue(cardId, out var view))
+                {
+                    view.gameObject.SetActive(true);
+                }
+            }
+
+            restoreHiddenCardIds.Clear();
+            foreach (var cardId in initialDealCardIds)
+            {
+                if (activeCards.TryGetValue(cardId, out var view))
+                {
+                    view.gameObject.SetActive(true);
+                }
+            }
+
+            for (var index = 0; index < boardCollectFlights.Count; index++)
+            {
+                ReturnViewToPool(boardCollectFlights[index].View);
+            }
+
+            for (var index = 0; index < initialDealFlights.Count; index++)
+            {
+                var flight = initialDealFlights[index];
+                if (flight.IsTransient)
+                {
+                    ReturnViewToPool(flight.View);
+                }
+            }
+
+            foreach (var target in initialDealTargets)
+            {
+                if (activeCards.TryGetValue(target.Key, out var view))
+                {
+                    view.MoveTo(target.Value, 0f);
+                }
+            }
+
+            boardCleared = false;
+            handsCleared = false;
+            boardRestorePending = false;
+            boardCollecting = false;
+            boardCollectEndTime = 0f;
+            collectionNotified = true;
+            boardCollectFlights.Clear();
+            boardDealRequested = false;
+            boardDealPlaying = false;
+            boardDealFlights.Clear();
+            boardStoredTargets.Clear();
+            dealArmed = false;
+            dealPending = false;
+            dealStarted = false;
+            initialDealFlights.Clear();
+            initialDealCardIds.Clear();
+            initialDealTargets.Clear();
+        }
+
+        public void PrepareBoardRestore()
+        {
+            ResetForNewGame();
+            boardCleared = false;
+            boardRestorePending = true;
+        }
+
+        public float CollectBoardToPile()
+        {
+            if (boardCleared)
+            {
+                return Mathf.Max(0f, boardCollectEndTime - Time.unscaledTime);
+            }
+
+            boardDealRequested = false;
+            boardDealPlaying = false;
+            boardDealFlights.Clear();
+            boardCollectFlights.Clear();
+            boardStoredTargets.Clear();
+            boardCleared = true;
+            if (CurrentState == null)
+            {
+                return 0f;
+            }
+
+            var now = Time.unscaledTime;
+            var index = 0;
+            for (var meldIndex = 0; meldIndex < CurrentState.Board.Count; meldIndex++)
+            {
+                var meld = CurrentState.Board[meldIndex];
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    var cardId = meld.Cards[cardIndex].Id;
+                    if (activeCards.TryGetValue(cardId, out var view))
+                    {
+                        CollectActiveCard(view, now, index++);
+                    }
+                }
+            }
+
+            LayoutClearedBoard();
+            if (boardCollectFlights.Count == 0)
+            {
+                return 0f;
+            }
+
+            boardCollecting = true;
+            boardCollectEndTime = now + BoardCollectSeconds;
+            collectionNotified = false;
+            return BoardCollectSeconds;
+        }
+
+        public float CollectTableToPile()
+        {
+            var collectDelay = CollectBoardToPile();
+            if (handsCleared || CurrentState == null)
+            {
+                return collectDelay;
+            }
+
+            handsCleared = true;
+            var now = Time.unscaledTime;
+            var nextIndex = boardCollectFlights.Count;
+            var displayedSeat = DisplaySeat(CurrentState);
+            for (var seat = 0; seat < CurrentState.Hands.Count; seat++)
+            {
+                var hand = CurrentState.Hands[seat];
+                for (var cardIndex = 0; cardIndex < hand.Count; cardIndex++)
+                {
+                    var card = hand[cardIndex];
+                    if (activeCards.TryGetValue(card.Id, out var view))
+                    {
+                        CollectActiveCard(view, now, nextIndex++);
+                        continue;
+                    }
+
+                    if (TryCreateCollectionBack(card, seat, cardIndex, displayedSeat, out view))
+                    {
+                        CollectActiveCard(view, now, nextIndex++);
+                    }
+                }
+            }
+
+            LayoutClearedBoard();
+            if (boardCollectFlights.Count == 0)
+            {
+                boardCollecting = false;
+                return collectDelay;
+            }
+
+            boardCollecting = true;
+            boardCollectEndTime = Mathf.Max(boardCollectEndTime, now + BoardCollectSeconds);
+            collectionNotified = false;
+            return Mathf.Max(collectDelay, boardCollectEndTime - now);
+        }
+
         public void Sync(GameState state, TurnSession turn)
         {
             if (state == null)
             {
                 throw new ArgumentNullException(nameof(state));
+            }
+
+            if (DealAnimationEnabled && state.Phase == GamePhase.ChoosingDealer && !dealArmed)
+            {
+                ArmDeal();
+            }
+
+            if (dealArmed && state.Phase == GamePhase.Playing && !dealStarted && !dealPending)
+            {
+                dealPending = true;
+                dealRequestedAt = Time.unscaledTime;
+            }
+
+            if (!boardCollecting)
+            {
+                boardStoredTargets.Clear();
             }
 
             if (lastSyncedState != null && !ReferenceEquals(lastSyncedState, state))
@@ -258,6 +564,10 @@ namespace Mejnun.Game
             var activeHand = activeSeat >= 0 && activeSeat < state.Hands.Count
                 ? state.Hands[activeSeat]
                 : null;
+            if (handsCleared)
+            {
+                activeHand = null;
+            }
             var ownDrawnViews = new List<CardView>();
             var ownDrew = activeHand != null && ReferenceEquals(lastSyncedState, state) &&
                           state.Phase == GamePhase.Playing && hasDrawPileScreenPosition &&
@@ -278,7 +588,7 @@ namespace Mejnun.Game
                 }
             }
 
-            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            for (var meldIndex = 0; !boardCleared && meldIndex < state.Board.Count; meldIndex++)
             {
                 var cards = state.Board[meldIndex].Cards;
                 for (var cardIndex = 0; cardIndex < cards.Count; cardIndex++)
@@ -308,7 +618,7 @@ namespace Mejnun.Game
             var aspect = GetBoardViewportAspect();
             if (boardView != null && tableCamera != null && tableCamera.Camera != null)
             {
-                var arrangement = boardArrangement.Arrange(state.Board);
+                var arrangement = boardArrangement.Arrange(boardCleared ? emptyBoard : state.Board);
                 arrangedMelds.Clear();
                 for (var index = 0; index < arrangement.Count; index++)
                 {
@@ -317,6 +627,19 @@ namespace Mejnun.Game
 
                 UpdateLiftedBoardCardIds();
                 boardView.Layout(arrangedMelds, activeCards, aspect, cardSize, liftedBoardCardIds);
+                RestartCollectingFlightsAfterSync();
+                RestartBoardDealFlightsAfterSync();
+                if (boardRestorePending && !boardDealPlaying)
+                {
+                    if (hasDrawPileScreenPosition)
+                    {
+                        MoveRestoredBoardToPile();
+                    }
+                    else
+                    {
+                        HideRestoredBoardCards();
+                    }
+                }
                 if (tableCamera != null)
                 {
                     tableCamera.SetBoardBounds(boardView.CurrentBounds);
@@ -328,7 +651,7 @@ namespace Mejnun.Game
                 UpdateHandRoot();
             }
 
-            if (handVisible && activeHand != null)
+            if (handVisible && activeHand != null && !handsCleared)
             {
                 if (handRoot != null && tableCamera != null && tableCamera.Camera != null)
                 {
@@ -339,6 +662,14 @@ namespace Mejnun.Game
                 }
 
                 LayoutHand(activeSeat, ownDrawnViews.Count > 0 ? DrawFlightDuration : -1f);
+                CaptureInitialDealTargets(activeSeat);
+            }
+
+            ReconcileInitialDealFlights(activeSeat);
+
+            if (dealPending)
+            {
+                StashInitialDealHandAtPile();
             }
 
             if (cardsDrawingFromPile.Count > 0 && handRoot != null &&
@@ -389,12 +720,13 @@ namespace Mejnun.Game
                 for (var index = hitTestHandCards.Count - 1; index >= 0; index--)
                 {
                     var card = hitTestHandCards[index];
-                    if (liftedHandOffsets.ContainsKey(card.Id))
+                    if (liftedHandOffsets.ContainsKey(card.Id) || initialDealCardIds.Contains(card.Id))
                     {
                         continue;
                     }
 
                     if (activeCards.TryGetValue(card.Id, out var handViewCard) &&
+                        !handViewCard.IsMoving &&
                         handViewCard.ContainsWorldPoint(world) && handViewCard.SortingOrder > topSortingOrder)
                     {
                         topSortingOrder = handViewCard.SortingOrder;
@@ -429,7 +761,7 @@ namespace Mejnun.Game
                     var card = meld.Cards[cardIndex];
                     if (liftedBoardOffsets.ContainsKey(card.Id) ||
                         !activeCards.TryGetValue(card.Id, out var boardViewCard) ||
-                        !boardViewCard.Renderer.bounds.Contains(world))
+                        !boardViewCard.RestBoundsContains(world))
                     {
                         continue;
                     }
@@ -527,10 +859,20 @@ namespace Mejnun.Game
 
         public int GetIncomingCardCount(int seat)
         {
-            var count = 0;
+            var count = dealPending && CurrentState != null && seat >= 0 && seat < CurrentState.Hands.Count
+                ? CurrentState.Hands[seat].Count
+                : 0;
             for (var index = 0; index < drawingSeats.Count; index++)
             {
                 if (drawingSeats[index] == seat)
+                {
+                    count++;
+                }
+            }
+
+            for (var index = 0; index < initialDealFlights.Count; index++)
+            {
+                if (initialDealFlights[index].Seat == seat)
                 {
                     count++;
                 }
@@ -576,6 +918,792 @@ namespace Mejnun.Game
         public void ClearPendingNewMeldPoint()
         {
             boardView?.ClearPendingNewMeldPoint();
+        }
+
+        private void UpdateBoardCardFlights()
+        {
+            var now = Time.unscaledTime;
+            for (var index = boardCollectFlights.Count - 1; index >= 0; index--)
+            {
+                var flight = boardCollectFlights[index];
+                if (!flight.Started && now >= flight.StartTime)
+                {
+                    flight.View.MoveTo(flight.Target, BoardCardFlightDuration, BoardPileScale);
+                    flight.Started = true;
+                }
+
+                if (now >= flight.EndTime)
+                {
+                    flight.View.MoveTo(flight.Target, 0f, BoardPileScale);
+                    ReturnViewToPool(flight.View);
+                    boardCollectFlights.RemoveAt(index);
+                }
+            }
+
+            if (boardCollecting && now >= boardCollectEndTime && boardCollectFlights.Count == 0)
+            {
+                boardCollecting = false;
+                if (!collectionNotified)
+                {
+                    collectionNotified = true;
+                    CollectionCompleted?.Invoke();
+                }
+            }
+
+            if (boardDealRequested)
+            {
+                TryStartBoardDeal();
+            }
+
+            for (var index = boardDealFlights.Count - 1; index >= 0; index--)
+            {
+                var flight = boardDealFlights[index];
+                if (!flight.Started && now >= flight.StartTime)
+                {
+                    if (activeCards.TryGetValue(flight.CardId, out var view) && view == flight.View)
+                    {
+                        view.MoveTo(flight.Target, BoardCardFlightDuration);
+                    }
+
+                    flight.Started = true;
+                }
+
+                if (now >= flight.EndTime)
+                {
+                    boardDealFlights.RemoveAt(index);
+                }
+            }
+
+            if (boardDealPlaying && now >= boardDealEndTime)
+            {
+                boardDealPlaying = false;
+            }
+        }
+
+        private void TryStartBoardDeal()
+        {
+            if (!boardDealRequested)
+            {
+                return;
+            }
+
+            if (Time.unscaledTime - boardDealRequestedAt > 2f)
+            {
+                boardDealRequested = false;
+                boardRestorePending = false;
+                RevealRestoredBoardCards();
+                return;
+            }
+
+            if (CurrentState == null || tableCamera == null || tableCamera.Camera == null ||
+                !hasDrawPileScreenPosition || !IsFinite(drawPileScreenPosition.x) ||
+                !IsFinite(drawPileScreenPosition.y) || (BoardCardCount > 0 && boardView?.CurrentLayout == null))
+            {
+                return;
+            }
+
+            boardDealRequested = false;
+            if (boardRestorePending)
+            {
+                MoveRestoredBoardToPile();
+            }
+
+            if (BoardCardCount == 0)
+            {
+                boardRestorePending = false;
+                return;
+            }
+
+            var cards = new List<BoardCardFlight>(BoardCardCount);
+            for (var meldIndex = 0; meldIndex < CurrentState.Board.Count; meldIndex++)
+            {
+                var meld = CurrentState.Board[meldIndex];
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    var cardId = meld.Cards[cardIndex].Id;
+                    if (!activeCards.TryGetValue(cardId, out var view) ||
+                        !TryGetPilePoint(view.transform.parent, out var pilePoint))
+                    {
+                        continue;
+                    }
+
+                    cards.Add(new BoardCardFlight
+                    {
+                        CardId = cardId,
+                        View = view,
+                        Target = boardStoredTargets.TryGetValue(cardId, out var storedTarget)
+                            ? storedTarget
+                            : view.TargetLocalPosition
+                    });
+                    view.transform.localPosition = pilePoint;
+                    view.SetStartScale(BoardPileScale);
+                }
+            }
+
+            if (cards.Count == 0)
+            {
+                return;
+            }
+
+            var now = Time.unscaledTime;
+            for (var index = 0; index < cards.Count; index++)
+            {
+                var flight = cards[index];
+                var stagger = Mathf.Min(index * BoardCardStagger, BoardCardStaggerLimit);
+                flight.StartTime = now + boardDealDelay + stagger;
+                flight.EndTime = flight.StartTime + BoardCardFlightDuration;
+                boardDealFlights.Add(flight);
+            }
+
+            boardDealPlaying = true;
+            boardRestorePending = false;
+            boardDealEndTime = now + boardDealDelay + BoardCardStaggerLimit + BoardCardFlightDuration;
+        }
+
+        private bool TryGetPilePoint(Transform parent, out Vector3 localPoint)
+        {
+            localPoint = default;
+            if (tableCamera == null || tableCamera.Camera == null || !hasDrawPileScreenPosition)
+            {
+                return false;
+            }
+
+            var camera = tableCamera.Camera;
+            var worldPoint = camera.ScreenToWorldPoint(new Vector3(drawPileScreenPosition.x,
+                drawPileScreenPosition.y, Mathf.Abs(camera.transform.position.z)));
+            worldPoint.z = 0f;
+            localPoint = parent == null ? worldPoint : parent.InverseTransformPoint(worldPoint);
+            return IsFinite(localPoint.x) && IsFinite(localPoint.y) && IsFinite(localPoint.z);
+        }
+
+        private void RestartCollectingFlightsAfterSync()
+        {
+            if (!boardCollecting)
+            {
+                return;
+            }
+
+            var now = Time.unscaledTime;
+            for (var index = 0; index < boardCollectFlights.Count; index++)
+            {
+                var flight = boardCollectFlights[index];
+                if (!flight.Started || now >= flight.EndTime)
+                {
+                    continue;
+                }
+
+                flight.View.MoveTo(flight.Target, Mathf.Max(0f, flight.EndTime - now), BoardPileScale);
+            }
+        }
+
+        private void RestartBoardDealFlightsAfterSync()
+        {
+            if (!boardDealPlaying)
+            {
+                return;
+            }
+
+            var now = Time.unscaledTime;
+            for (var index = 0; index < boardDealFlights.Count; index++)
+            {
+                var flight = boardDealFlights[index];
+                if (!flight.Started || now >= flight.EndTime ||
+                    !activeCards.TryGetValue(flight.CardId, out var view) || view != flight.View)
+                {
+                    continue;
+                }
+
+                view.MoveTo(flight.Target, Mathf.Max(0f, flight.EndTime - now));
+            }
+        }
+
+        private void MoveRestoredBoardToPile()
+        {
+            if (CurrentState == null || !hasDrawPileScreenPosition)
+            {
+                return;
+            }
+
+            for (var meldIndex = 0; meldIndex < CurrentState.Board.Count; meldIndex++)
+            {
+                var meld = CurrentState.Board[meldIndex];
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    var cardId = meld.Cards[cardIndex].Id;
+                    if (!activeCards.TryGetValue(cardId, out var view) ||
+                        !TryGetPilePoint(view.transform.parent, out var pilePoint))
+                    {
+                        continue;
+                    }
+
+                    if (!boardStoredTargets.ContainsKey(cardId))
+                    {
+                        boardStoredTargets[cardId] = view.TargetLocalPosition;
+                    }
+
+                    view.transform.localPosition = pilePoint;
+                    view.SetStartScale(BoardPileScale);
+                    view.gameObject.SetActive(true);
+                    restoreHiddenCardIds.Remove(cardId);
+                }
+            }
+        }
+
+        private void HideRestoredBoardCards()
+        {
+            if (CurrentState == null)
+            {
+                return;
+            }
+
+            for (var meldIndex = 0; meldIndex < CurrentState.Board.Count; meldIndex++)
+            {
+                var meld = CurrentState.Board[meldIndex];
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    var cardId = meld.Cards[cardIndex].Id;
+                    if (activeCards.TryGetValue(cardId, out var view))
+                    {
+                        if (!boardStoredTargets.ContainsKey(cardId))
+                        {
+                            boardStoredTargets[cardId] = view.TargetLocalPosition;
+                        }
+
+                        restoreHiddenCardIds.Add(cardId);
+                        view.gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+
+        private void RevealRestoredBoardCards()
+        {
+            foreach (var cardId in restoreHiddenCardIds)
+            {
+                if (!activeCards.TryGetValue(cardId, out var view))
+                {
+                    continue;
+                }
+
+                view.gameObject.SetActive(true);
+                if (boardStoredTargets.TryGetValue(cardId, out var target))
+                {
+                    view.MoveTo(target, 0f);
+                }
+            }
+
+            restoreHiddenCardIds.Clear();
+        }
+
+        private void UpdateInitialDealFlights()
+        {
+            var now = Time.unscaledTime;
+            var incomingCardsChanged = false;
+            for (var index = initialDealFlights.Count - 1; index >= 0; index--)
+            {
+                var flight = initialDealFlights[index];
+                if (flight.View == null)
+                {
+                    initialDealFlights.RemoveAt(index);
+                    incomingCardsChanged = true;
+                    continue;
+                }
+
+                if (TryGetPilePoint(handRoot, out var pilePoint))
+                {
+                    if (!flight.Started)
+                    {
+                        flight.Source = pilePoint;
+                    }
+                }
+
+                if (!flight.Started && now < flight.StartTime)
+                {
+                    flight.View.ApplyScale(flight.TargetScale);
+                    flight.View.SetStartScale(flight.SourceScale / Mathf.Max(flight.TargetScale, 0.01f));
+                    flight.View.transform.localPosition = flight.Source;
+                    continue;
+                }
+
+                if (!flight.Started)
+                {
+                    flight.Started = true;
+                    flight.EndTime = flight.StartTime + InitialDealDuration;
+                    flight.View.gameObject.SetActive(true);
+                }
+
+                TryGetInitialDealTarget(flight, out var target, out var targetScale);
+                flight.Target = target;
+                flight.TargetScale = targetScale;
+                flight.View.ApplyScale(targetScale);
+                var progress = Mathf.Clamp01((now - flight.StartTime) / InitialDealDuration);
+                var eased = progress * progress * (3f - 2f * progress);
+                flight.View.transform.localPosition = Vector3.Lerp(flight.Source, target, eased);
+                var scale = Mathf.Lerp(flight.SourceScale, targetScale, eased);
+                flight.View.transform.localScale = Vector3.one * (flight.View.BaseScale * scale);
+                if (progress < 1f)
+                {
+                    continue;
+                }
+
+                flight.View.transform.localPosition = target;
+                flight.View.ApplyScale(targetScale);
+                if (flight.IsTransient)
+                {
+                    ReturnViewToPool(flight.View);
+                }
+                else
+                {
+                    initialDealCardIds.Remove(flight.CardId);
+                }
+
+                initialDealFlights.RemoveAt(index);
+                incomingCardsChanged = true;
+            }
+
+            if (incomingCardsChanged)
+            {
+                IncomingCardsChanged?.Invoke();
+            }
+
+            if (dealStarted && initialDealFlights.Count == 0)
+            {
+                CompleteInitialDeal();
+            }
+        }
+
+        private void CaptureInitialDealTargets(int seat)
+        {
+            if (!handVisible || CurrentState == null || seat < 0 || seat >= CurrentState.Hands.Count)
+            {
+                return;
+            }
+
+            var hand = CurrentState.Hands[seat];
+            for (var index = 0; index < hand.Count; index++)
+            {
+                var cardId = hand[index].Id;
+                if (initialDealTargets.ContainsKey(cardId) && activeCards.TryGetValue(cardId, out var view) &&
+                    view.transform.parent == handRoot)
+                {
+                    initialDealTargets[cardId] = view.TargetLocalPosition;
+                }
+            }
+        }
+
+        private void ReconcileInitialDealFlights(int activeSeat)
+        {
+            if (CurrentState == null || initialDealFlights.Count == 0)
+            {
+                return;
+            }
+
+            for (var index = 0; index < initialDealFlights.Count; index++)
+            {
+                var flight = initialDealFlights[index];
+                CardView handView = null;
+                var hasHandView = handVisible && flight.Seat == activeSeat && flight.Seat >= 0 &&
+                                  flight.Seat < CurrentState.Hands.Count &&
+                                  activeCards.TryGetValue(flight.CardId, out handView) && handView != null &&
+                                  handView.transform.parent == handRoot;
+                if (hasHandView)
+                {
+                    if (flight.View != handView)
+                    {
+                        var position = flight.Started && flight.View != null &&
+                                       flight.View.CardId == flight.CardId
+                            ? flight.View.transform.localPosition
+                            : flight.Source;
+                        if (flight.IsTransient)
+                        {
+                            ReturnViewToPool(flight.View);
+                        }
+
+                        flight.View = handView;
+                        flight.IsTransient = false;
+                        initialDealTargets[flight.CardId] = handView.TargetLocalPosition;
+                        initialDealCardIds.Add(flight.CardId);
+                        handView.ApplyScale(handView.LayoutScale);
+                        handView.transform.localPosition = position;
+                        handView.gameObject.SetActive(flight.Started);
+                    }
+                    else
+                    {
+                        initialDealTargets[flight.CardId] = handView.TargetLocalPosition;
+                        initialDealCardIds.Add(flight.CardId);
+                        if (!flight.Started)
+                        {
+                            handView.gameObject.SetActive(false);
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (flight.IsTransient || flight.Seat < 0 || flight.Seat >= CurrentState.Hands.Count ||
+                    flight.CardIndex < 0 || flight.CardIndex >= CurrentState.Hands[flight.Seat].Count)
+                {
+                    continue;
+                }
+
+                var card = CurrentState.Hands[flight.Seat][flight.CardIndex];
+                if (card.Id != flight.CardId)
+                {
+                    continue;
+                }
+
+                var carriedPosition = flight.Started && flight.View != null &&
+                                      flight.View.CardId == flight.CardId
+                    ? flight.View.transform.localPosition
+                    : flight.Source;
+                var transientView = CreateTransientCardView(card, CurrentState, false);
+                transientView.SetLayoutPose(Quaternion.identity, 0.7f);
+                transientView.transform.localPosition = carriedPosition;
+                transientView.gameObject.SetActive(flight.Started);
+                flight.View = transientView;
+                flight.IsTransient = true;
+                initialDealTargets.Remove(flight.CardId);
+                initialDealCardIds.Remove(flight.CardId);
+            }
+        }
+
+        private bool TryGetInitialDealTarget(InitialDealFlight flight, out Vector3 target, out float targetScale)
+        {
+            target = flight.Target;
+            targetScale = flight.TargetScale;
+            if (flight.View == null)
+            {
+                return false;
+            }
+
+            if (!flight.IsTransient && initialDealTargets.TryGetValue(flight.CardId, out target))
+            {
+                targetScale = Mathf.Max(0.01f, flight.View.LayoutScale);
+                return true;
+            }
+
+            if (SeatCardSlotResolver != null &&
+                SeatCardSlotResolver(flight.Seat, flight.CardIndex, out var screenPosition,
+                    out var screenHeight) && IsFinite(screenPosition.x) && IsFinite(screenPosition.y) &&
+                IsFinite(screenHeight) && screenHeight > 0f)
+            {
+                flight.LastTargetScreen = screenPosition;
+                flight.ScreenHeight = screenHeight;
+                flight.HasTarget = true;
+            }
+            else if (!flight.HasTarget)
+            {
+                var displayedSeat = CurrentState == null ? -1 : DisplaySeat(CurrentState);
+                flight.LastTargetScreen = GetDealScreenPosition(flight.Seat, flight.CardIndex, displayedSeat);
+                flight.ScreenHeight = seatScreenRects.TryGetValue(flight.Seat, out var screenRect)
+                    ? screenRect.z
+                    : 0f;
+                flight.HasTarget = true;
+            }
+
+            target = HandLocalPoint(flight.LastTargetScreen);
+            targetScale = flight.ScreenHeight > 0f
+                ? GetScreenHeightScale(flight.LastTargetScreen, flight.ScreenHeight, flight.View)
+                : Mathf.Max(0.01f, flight.View.LayoutScale);
+            return true;
+        }
+
+        private float GetInitialDealSourceScale(CardView view, float targetScale)
+        {
+            if (drawPileScreenHeight > 0f)
+            {
+                return GetScreenHeightScale(drawPileScreenPosition, drawPileScreenHeight, view);
+            }
+
+            return Mathf.Max(0.01f, targetScale * BoardPileScale);
+        }
+
+        private void StashInitialDealHandAtPile()
+        {
+            if (CurrentState == null)
+            {
+                return;
+            }
+
+            var pilePoint = default(Vector3);
+            var hasPilePoint = handRoot != null && tableCamera != null && tableCamera.Camera != null &&
+                               TryGetPilePoint(handRoot, out pilePoint);
+
+            var seat = DisplaySeat(CurrentState);
+            if (!handVisible || seat < 0 || seat >= CurrentState.Hands.Count)
+            {
+                return;
+            }
+
+            var hand = CurrentState.Hands[seat];
+            for (var index = 0; index < hand.Count; index++)
+            {
+                var cardId = hand[index].Id;
+                if (!activeCards.TryGetValue(cardId, out var view) || initialDealTargets.ContainsKey(cardId))
+                {
+                    continue;
+                }
+
+                initialDealTargets.Add(cardId, view.TargetLocalPosition);
+                initialDealCardIds.Add(cardId);
+                if (hasPilePoint)
+                {
+                    view.transform.localPosition = pilePoint;
+                    view.SetStartScale(BoardPileScale);
+                }
+
+                view.gameObject.SetActive(false);
+            }
+        }
+
+        private void TryStartInitialDeal()
+        {
+            if (!dealPending || CurrentState == null || CurrentState.Phase != GamePhase.Playing)
+            {
+                return;
+            }
+
+            if (Time.unscaledTime - dealRequestedAt > InitialDealWaitSeconds)
+            {
+                RevealStashedInitialDealCards();
+                CompleteInitialDeal();
+                return;
+            }
+
+            if (tableCamera == null || tableCamera.Camera == null || handRoot == null ||
+                !hasDrawPileScreenPosition || !IsFinite(drawPileScreenPosition.x) ||
+                !IsFinite(drawPileScreenPosition.y) || !TryGetPilePoint(handRoot, out var pilePoint))
+            {
+                return;
+            }
+
+            var maxCards = 0;
+            for (var seat = 0; seat < CurrentState.Hands.Count; seat++)
+            {
+                maxCards = Mathf.Max(maxCards, CurrentState.Hands[seat].Count);
+            }
+
+            var displayedSeat = DisplaySeat(CurrentState);
+            var now = Time.unscaledTime;
+            var sequence = 0;
+            for (var cardIndex = 0; cardIndex < maxCards; cardIndex++)
+            {
+                for (var offset = 1; offset <= CurrentState.Hands.Count; offset++)
+                {
+                    var seat = CurrentState.Dealer.HasValue
+                        ? (CurrentState.Dealer.Value + offset) % CurrentState.Hands.Count
+                        : (displayedSeat + offset) % CurrentState.Hands.Count;
+                    var hand = CurrentState.Hands[seat];
+                    if (cardIndex >= hand.Count)
+                    {
+                        continue;
+                    }
+
+                    var card = hand[cardIndex];
+                    CardView view = null;
+                    var isVisibleOwnCard = seat == displayedSeat && handVisible &&
+                                           activeCards.TryGetValue(card.Id, out view);
+                    Vector3 target;
+                    var isTransient = !isVisibleOwnCard;
+                    if (isVisibleOwnCard)
+                    {
+                        target = initialDealTargets.TryGetValue(card.Id, out var savedTarget)
+                            ? savedTarget
+                            : view.TargetLocalPosition;
+                        initialDealTargets[card.Id] = target;
+                        initialDealCardIds.Add(card.Id);
+                        view.transform.localPosition = pilePoint;
+                        view.SetStartScale(BoardPileScale);
+                    }
+                    else
+                    {
+                        view = CreateTransientCardView(card, CurrentState, false);
+                        target = HandLocalPoint(GetDealScreenPosition(seat, cardIndex, displayedSeat));
+                        view.SetLayoutPose(Quaternion.identity, 0.7f);
+                        view.transform.localPosition = pilePoint;
+                        view.SetStartScale(BoardPileScale);
+                        view.gameObject.SetActive(false);
+                    }
+
+                    var startTime = now + sequence * InitialDealStagger;
+                    var flight = new InitialDealFlight
+                    {
+                        Seat = seat,
+                        CardIndex = cardIndex,
+                        CardId = card.Id,
+                        View = view,
+                        Source = pilePoint,
+                        Target = target,
+                        StartTime = startTime,
+                        EndTime = startTime + InitialDealDuration,
+                        IsTransient = isTransient
+                    };
+                    TryGetInitialDealTarget(flight, out flight.Target, out flight.TargetScale);
+                    flight.SourceScale = GetInitialDealSourceScale(view, flight.TargetScale);
+                    view.ApplyScale(flight.TargetScale);
+                    view.SetStartScale(flight.SourceScale / Mathf.Max(flight.TargetScale, 0.01f));
+                    initialDealFlights.Add(flight);
+                    sequence++;
+                }
+            }
+
+            dealPending = false;
+            dealStarted = true;
+            dealArmed = false;
+            if (initialDealFlights.Count == 0)
+            {
+                CompleteInitialDeal();
+            }
+
+            IncomingCardsChanged?.Invoke();
+        }
+
+        private void RevealStashedInitialDealCards()
+        {
+            foreach (var target in initialDealTargets)
+            {
+                if (activeCards.TryGetValue(target.Key, out var view))
+                {
+                    view.gameObject.SetActive(true);
+                    view.MoveTo(target.Value, 0f);
+                }
+            }
+
+            initialDealCardIds.Clear();
+            initialDealTargets.Clear();
+        }
+
+        private void CompleteInitialDeal()
+        {
+            dealPending = false;
+            dealArmed = false;
+            dealStarted = false;
+            if (initialDealFlights.Count == 0)
+            {
+                initialDealCardIds.Clear();
+                initialDealTargets.Clear();
+            }
+
+            IncomingCardsChanged?.Invoke();
+            DealCompleted?.Invoke();
+        }
+
+        private Vector2 GetDealScreenPosition(int seat, int cardIndex, int displayedSeat)
+        {
+            if (seatScreenRects.TryGetValue(seat, out var screenRect))
+            {
+                seatScreenSteps.TryGetValue(seat, out var step);
+                return new Vector2(screenRect.x, screenRect.y) + step * cardIndex;
+            }
+
+            var screenX = Screen.width * (seat + 1f) / Mathf.Max(CurrentState.Hands.Count + 1f, 1f);
+            var screenY = seat == displayedSeat ? Screen.height * 0.08f : Screen.height * 0.82f;
+            return new Vector2(screenX, screenY);
+        }
+
+        private CardView CreateTransientCardView(Card card, GameState state, bool faceUp)
+        {
+            PreparePool();
+            var view = cardPool.Count > 0 ? cardPool.Pop() : InstantiateCardView();
+            view.gameObject.SetActive(true);
+            var skin = ResolveSkin(state, card.Deck);
+            var face = skin == null ? null : skin.GetFace(card.Suit, card.Rank);
+            var back = skin == null
+                ? null
+                : skinCatalog.ResolveBack(state.DeckFaces[card.Deck], card.Deck);
+            view.SetParentKeepWorld(handRoot, true);
+            view.ConfigureCamera(tableCamera, skin == null ? 100f : skin.PixelsPerUnit);
+            view.SetLayoutPose(Quaternion.identity, 1f);
+            view.SetCard(card, face, back, faceUp, false);
+            view.SetSortingOrder(CardView.DragSortingOrder);
+            return view;
+        }
+
+        private bool TryCreateCollectionBack(Card card, int seat, int cardIndex, int displayedSeat,
+            out CardView view)
+        {
+            view = null;
+            if (handRoot == null || tableCamera == null || tableCamera.Camera == null)
+            {
+                return false;
+            }
+
+            view = CreateTransientCardView(card, CurrentState, false);
+            view.transform.localPosition = HandLocalPoint(GetDealScreenPosition(seat, cardIndex, displayedSeat));
+            view.SetStartScale(0.7f);
+            return true;
+        }
+
+        private void CollectActiveCard(CardView view, float now, int index)
+        {
+            if (view == null)
+            {
+                return;
+            }
+
+            if (activeCards.TryGetValue(view.CardId, out var activeView) && activeView == view)
+            {
+                activeCards.Remove(view.CardId);
+            }
+
+            if (!TryGetPilePoint(view.transform.parent, out var target))
+            {
+                ReturnViewToPool(view);
+                return;
+            }
+
+            var startTime = now + Mathf.Min(index * BoardCardStagger, BoardCardStaggerLimit);
+            boardCollectFlights.Add(new BoardCardFlight
+            {
+                CardId = view.CardId,
+                View = view,
+                Target = target,
+                StartTime = startTime,
+                EndTime = startTime + BoardCardFlightDuration
+            });
+        }
+
+        private void ReturnViewToPool(CardView view)
+        {
+            if (view == null)
+            {
+                return;
+            }
+
+            if (activeCards.TryGetValue(view.CardId, out var activeView) && activeView == view)
+            {
+                activeCards.Remove(view.CardId);
+            }
+
+            view.gameObject.SetActive(false);
+            cardPool.Push(view);
+        }
+
+        private void LayoutClearedBoard()
+        {
+            if (boardView == null || tableCamera == null || tableCamera.Camera == null)
+            {
+                return;
+            }
+
+            boardView.Layout(emptyBoard, activeCards, GetBoardViewportAspect(), cardSize, liftedBoardCardIds);
+            tableCamera.SetBoardBounds(boardView.CurrentBounds);
+        }
+
+        private static int CountBoardCards(GameState state)
+        {
+            if (state == null || state.Board == null)
+            {
+                return 0;
+            }
+
+            var count = 0;
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                count += state.Board[meldIndex].Cards.Count;
+            }
+
+            return count;
         }
 
         private List<Card> FindCardsDrawnFromPile(GameState state, out int drawingSeat)
@@ -1419,7 +2547,49 @@ namespace Mejnun.Game
             var cameraPosition = camera.transform.position;
             var viewPlanePoint = new Vector3(cameraPosition.x, cameraPosition.y, 0f);
             var localPosition = camera.transform.InverseTransformPoint(viewPlanePoint);
-            handRoot.localPosition = new Vector3(0f, 0f, localPosition.z);
+            var introOffset = 0f;
+            if (handIntroDuration > 0f)
+            {
+                introOffset = -camera.orthographicSize * 2f;
+                var elapsed = Time.unscaledTime - handIntroStartedAt - handIntroDelay;
+                if (elapsed >= 0f)
+                {
+                    var progress = Mathf.Clamp01(elapsed / handIntroDuration);
+                    var eased = progress * progress * (3f - 2f * progress);
+                    introOffset = -camera.orthographicSize * 2f * (1f - eased);
+                    if (progress >= 1f)
+                    {
+                        handIntroDuration = 0f;
+                    }
+                }
+            }
+
+            var handHeight = camera.orthographicSize * 2f;
+            var outroOffset = 0f;
+            if (handOutroCompleted)
+            {
+                outroOffset = -handHeight;
+            }
+            else if (handOutroDuration > 0f || handOutroDelay > 0f)
+            {
+                var elapsed = Time.unscaledTime - handOutroStartedAt - handOutroDelay;
+                if (elapsed >= 0f)
+                {
+                    var progress = handOutroDuration <= 0f
+                        ? 1f
+                        : Mathf.Clamp01(elapsed / handOutroDuration);
+                    var eased = progress * progress * (3f - 2f * progress);
+                    outroOffset = -handHeight * eased;
+                    if (progress >= 1f)
+                    {
+                        handOutroDuration = 0f;
+                        handOutroDelay = 0f;
+                        handOutroCompleted = true;
+                    }
+                }
+            }
+
+            handRoot.localPosition = new Vector3(localPosition.x, introOffset + outroOffset, localPosition.z);
             handRoot.localRotation = Quaternion.identity;
             var scale = camera.orthographicSize / Mathf.Max(handReferenceSize, 0.1f);
             handRoot.localScale = Vector3.one * scale;

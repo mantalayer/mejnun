@@ -6,6 +6,19 @@ namespace Mejnun.Editor
 {
     public static class ProfileDebugMenu
     {
+        [MenuItem("Mejnun/Debug/Force Mobile Layout")]
+        public static void ToggleForceMobileLayout()
+        {
+            DeviceProfile.SetForceMobile(!DeviceProfile.ForceMobile);
+        }
+
+        [MenuItem("Mejnun/Debug/Force Mobile Layout", true)]
+        public static bool ValidateForceMobileLayout()
+        {
+            Menu.SetChecked("Mejnun/Debug/Force Mobile Layout", DeviceProfile.ForceMobile);
+            return true;
+        }
+
         [MenuItem("Mejnun/Debug/Profile/Add 100 XP")]
         public static void AddXp()
         {

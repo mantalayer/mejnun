@@ -11,6 +11,9 @@ namespace Mejnun.Game
     {
         [Min(1f)] public float DragThresholdPixels = 10f;
         [Min(1f)] public float PinchThresholdPixels = 24f;
+        [Min(1f)] public float PanLockPixels = 16f;
+        [Min(0.1f)] public float PanSettleSeconds = 0.25f;
+        [Min(0f)] public float PanStillPixelsPerSecond = 4f;
         [Min(0.1f)] public float LongPressSeconds = 0.35f;
         [Min(0.1f)] public float DoubleTapSeconds = 0.3f;
         [Min(1f)] public float DoubleTapDistancePixels = 40f;
@@ -70,10 +73,7 @@ namespace Mejnun.Game
         private bool trackingPinch;
         private int firstPinchTouchId;
         private int secondPinchTouchId;
-        private bool pinchZooming;
-        private float pinchStartDistance;
-        private Vector2 previousPinchCenter;
-        private float previousPinchDistance;
+        private readonly TwoFingerGesture twoFingerGesture = new TwoFingerGesture();
 
         public event Action<PointerGesture> Gesture;
         public GestureSettings Settings => settings;
@@ -186,31 +186,20 @@ namespace Mejnun.Game
                 {
                     firstPinchTouchId = firstTouchId;
                     secondPinchTouchId = secondTouchId;
-                    pinchStartDistance = distance;
-                    pinchZooming = false;
+                    twoFingerGesture.Begin(center, distance, Time.unscaledTime);
                 }
                 else
                 {
-                    var scale = 1f;
-                    if (!pinchZooming && Mathf.Abs(distance - pinchStartDistance) >= settings.PinchThresholdPixels)
-                    {
-                        pinchZooming = true;
-                    }
-                    else if (pinchZooming && previousPinchDistance > 0f && distance > 0f)
-                    {
-                        scale = distance / previousPinchDistance;
-                    }
-
-                    Emit(PointerGestureKind.Pinch, center, center - previousPinchCenter, false, scale);
+                    var update = twoFingerGesture.Update(center, distance, Time.unscaledTime, settings);
+                    Emit(PointerGestureKind.Pinch, center, update.Delta, false, update.Scale);
                 }
 
-                previousPinchCenter = center;
-                previousPinchDistance = distance;
                 trackingPinch = true;
                 return true;
             }
 
             trackingPinch = false;
+            twoFingerGesture.Reset();
             if (touches.Count == 0)
             {
                 if (pointerDown && pointerIsTouch)

@@ -31,6 +31,12 @@ namespace Mejnun.UI.FrontEnd
         private readonly Button backButton;
         private bool isLobby;
         private bool isHost;
+        private bool lobbyTransitionRunning;
+        private bool transitioningToLobby;
+        private int lobbyTransitionVersion;
+        private string lobbyCode;
+        private IReadOnlyList<string> lobbyPlayerNames;
+        private int lobbyMaxPlayers;
 
         public event Action<OnlineAction, string, string> Requested;
         public event Action ContinueRequested;
@@ -121,25 +127,116 @@ namespace Mejnun.UI.FrontEnd
 
         public void ShowLobby(string code, bool host, IReadOnlyList<string> playerNames, int maxPlayers)
         {
+            var wasLobby = isLobby;
             isLobby = true;
             isHost = host;
-            setupContainer.style.display = DisplayStyle.None;
-            codeLabel.text = string.IsNullOrWhiteSpace(code) ? "Session code unavailable" : code;
-            codeLabel.style.display = DisplayStyle.Flex;
-            playersLabel.text = FormatPlayerNames(playerNames);
-            playersLabel.style.display = DisplayStyle.Flex;
-            statusLabel.text = "Waiting for players (" + (playerNames == null ? 0 : playerNames.Count) + "/" +
-                               maxPlayers + ")…";
-            continueButton.text = "Start now";
-            continueButton.style.display = host ? DisplayStyle.Flex : DisplayStyle.None;
-            continueButton.SetEnabled(host);
-            backButton.text = "Leave lobby";
+            lobbyCode = code;
+            lobbyPlayerNames = playerNames;
+            lobbyMaxPlayers = maxPlayers;
+            if (lobbyTransitionRunning && transitioningToLobby)
+            {
+                return;
+            }
+
+            if (wasLobby && !lobbyTransitionRunning)
+            {
+                ApplyLobbyContent();
+                return;
+            }
+
+            BeginLobbyTransition(true);
         }
 
         public void HideLobby()
         {
+            var wasLobby = isLobby;
             isLobby = false;
             isHost = false;
+            if (lobbyTransitionRunning && !transitioningToLobby)
+            {
+                return;
+            }
+
+            if (!wasLobby && !lobbyTransitionRunning)
+            {
+                ApplySetupContent();
+                return;
+            }
+
+            BeginLobbyTransition(false);
+        }
+
+        private void BeginLobbyTransition(bool showLobby)
+        {
+            ScreenTransition.Cancel(root);
+            var version = ++lobbyTransitionVersion;
+            if (root.panel == null)
+            {
+                lobbyTransitionRunning = false;
+                if (showLobby)
+                {
+                    ApplyLobbyContent();
+                }
+                else
+                {
+                    ApplySetupContent();
+                }
+
+                return;
+            }
+
+            lobbyTransitionRunning = true;
+            transitioningToLobby = showLobby;
+            ScreenTransition.ExitVertical(root, !showLobby, () =>
+            {
+                if (version != lobbyTransitionVersion)
+                {
+                    return;
+                }
+
+                if (showLobby)
+                {
+                    ApplyLobbyContent();
+                }
+                else
+                {
+                    ApplySetupContent();
+                }
+
+                ScreenTransition.EnterVertical(root, showLobby, () =>
+                {
+                    if (version != lobbyTransitionVersion)
+                    {
+                        return;
+                    }
+
+                    if (showLobby)
+                    {
+                        ApplyLobbyContent();
+                    }
+
+                    lobbyTransitionRunning = false;
+                });
+            });
+        }
+
+        private void ApplyLobbyContent()
+        {
+            setupContainer.style.display = DisplayStyle.None;
+            codeLabel.text = string.IsNullOrWhiteSpace(lobbyCode) ? "Session code unavailable" : lobbyCode;
+            codeLabel.style.display = DisplayStyle.Flex;
+            playersLabel.text = FormatPlayerNames(lobbyPlayerNames);
+            playersLabel.style.display = DisplayStyle.Flex;
+            statusLabel.text = "Waiting for players (" + (lobbyPlayerNames == null ? 0 : lobbyPlayerNames.Count) +
+                               "/" + lobbyMaxPlayers + ")…";
+            continueButton.text = "Start now";
+            continueButton.style.display = isHost ? DisplayStyle.Flex : DisplayStyle.None;
+            continueButton.SetEnabled(isHost);
+            backButton.text = "Leave lobby";
+        }
+
+        private void ApplySetupContent()
+        {
             setupContainer.style.display = DisplayStyle.Flex;
             codeLabel.style.display = DisplayStyle.None;
             playersLabel.text = string.Empty;

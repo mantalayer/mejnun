@@ -24,6 +24,8 @@ namespace Mejnun.UI.FrontEnd
         private readonly Button resumeButton;
         private readonly ProgressBar levelProgress;
         private readonly MenuCardCursor cardCursor;
+        private readonly FeltWipe feltWipe;
+        private string currentFeltId;
 
         public MainMenuScreen(VisualElement documentRoot, CosmeticCatalog catalog, Action<MatchMode> playAction,
             Action resumeAction, Action openGallery, Action openSettings, Action startTutorial = null,
@@ -32,6 +34,7 @@ namespace Mejnun.UI.FrontEnd
             root = documentRoot.Q<VisualElement>("main-menu-screen");
             frontendRoot = documentRoot.Q<VisualElement>("frontend-root");
             cosmeticCatalog = catalog;
+            feltWipe = new FeltWipe(frontendRoot);
             play = playAction;
             resume = resumeAction;
             gallery = openGallery;
@@ -61,7 +64,7 @@ namespace Mejnun.UI.FrontEnd
             root.Q<Button>("gallery-button").clicked += () => gallery?.Invoke();
             root.Q<Button>("settings-button").clicked += () => settings?.Invoke();
             var quitButton = root.Q<Button>("quit-button");
-            quitButton.style.display = Application.isMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
+            quitButton.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
             quitButton.clicked += QuitGame;
             AddVersionLabel();
             progression.Changed += Refresh;
@@ -70,6 +73,7 @@ namespace Mejnun.UI.FrontEnd
         }
 
         public VisualElement Root => root;
+        public string CurrentFeltId => currentFeltId;
 
         public bool IsTutorialPromptVisible => tutorialPrompt != null &&
                                                tutorialPrompt.style.display == DisplayStyle.Flex;
@@ -137,6 +141,36 @@ namespace Mejnun.UI.FrontEnd
             cardCursor.SetVisible(visible);
         }
 
+        public void RefreshBackground()
+        {
+            ShowFelt(MenuFeltBackground.ResolveFeltId(progression.Profile), true);
+        }
+
+        public void ShowFelt(string feltId, bool animate, Action completed = null)
+        {
+            var requestedId = string.IsNullOrWhiteSpace(feltId) ? TableFeltAssigner.GreenFelt : feltId;
+            var felt = ResolveFelt(requestedId);
+            var resolvedId = felt == null ? requestedId : felt.Id;
+            var shouldAnimate = animate && !string.IsNullOrWhiteSpace(currentFeltId);
+            if (string.Equals(currentFeltId, resolvedId, StringComparison.Ordinal))
+            {
+                completed?.Invoke();
+                return;
+            }
+
+            currentFeltId = resolvedId;
+            if (shouldAnimate)
+            {
+                feltWipe.Play(felt, completed);
+            }
+            else
+            {
+                feltWipe.Cancel();
+                MenuFeltBackground.Apply(frontendRoot, felt);
+                completed?.Invoke();
+            }
+        }
+
         private void AddVersionLabel()
         {
             if (root.Q<Label>("version-label") != null)
@@ -157,6 +191,7 @@ namespace Mejnun.UI.FrontEnd
         public void Dispose()
         {
             progression.Changed -= Refresh;
+            feltWipe.Cancel();
             cardCursor.Dispose();
         }
 
@@ -164,14 +199,18 @@ namespace Mejnun.UI.FrontEnd
         {
             resumeButton.style.display = SavedGame.HasSave ? DisplayStyle.Flex : DisplayStyle.None;
             var profile = progression.Profile;
-            var feltId = MenuFeltBackground.ResolveFeltId(profile);
-            var felt = cosmeticCatalog == null || cosmeticCatalog.Felts == null
-                ? null
-                : cosmeticCatalog.Felts.Resolve(feltId) ?? cosmeticCatalog.Felts.Resolve(TableFeltAssigner.GreenFelt);
-            MenuFeltBackground.Apply(frontendRoot, felt);
+            RefreshBackground();
             var progress = ProgressionRules.LevelProgress(profile.Xp);
             levelProgress.value = progress.needed <= 0 ? 0f : 100f * progress.into / progress.needed;
             levelProgress.title = "Level " + profile.Level + " · " + progress.into + " / " + progress.needed + " XP";
+        }
+
+        private TableFelt ResolveFelt(string feltId)
+        {
+            return cosmeticCatalog == null || cosmeticCatalog.Felts == null
+                ? null
+                : cosmeticCatalog.Felts.Resolve(feltId) ??
+                  cosmeticCatalog.Felts.Resolve(TableFeltAssigner.GreenFelt);
         }
     }
 }

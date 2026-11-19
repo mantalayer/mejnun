@@ -26,20 +26,20 @@ namespace Mejnun.UI
 
             Dispose();
             root = panel;
-            root.EnableInClassList("mobile-settings", Application.isMobilePlatform);
+            root.EnableInClassList("mobile-settings", DeviceProfile.IsMobilePlatform);
             tooltipLabel = root.Q<Label>("settings-tooltip");
             tableView = view;
             tableController = controller;
             var accountSection = root.Q<VisualElement>("account-settings-section");
             if (accountSection != null)
             {
-                accountSection.style.display = Application.isMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
+                accountSection.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
             var uiScaleRow = root.Q<VisualElement>("ui-scale-row");
             if (uiScaleRow != null)
             {
-                uiScaleRow.style.display = Application.isMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
+                uiScaleRow.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
             root.Q<Button>("settings-close-button")?.RegisterCallback<ClickEvent>(_ => Closed?.Invoke());
@@ -67,6 +67,8 @@ namespace Mejnun.UI
                 value => GameSettings.HintBoardMoves = value);
             BindToggle("hint-jiggle-toggle", () => GameSettings.HintJiggle,
                 value => GameSettings.HintJiggle = value);
+            BindToggle("hover-highlight-toggle", () => GameSettings.CardHoverHighlight,
+                value => GameSettings.CardHoverHighlight = value);
             BindToggle("reduced-motion-toggle", () => GameSettings.ReducedMotion,
                 value => GameSettings.ReducedMotion = value);
             BindToggle("haptics-toggle", () => GameSettings.HapticsEnabled,
@@ -301,6 +303,7 @@ namespace Mejnun.UI
             SetToggle("show-fast-forward-toggle", GameSettings.ShowFastForward);
             SetToggle("hint-board-moves-toggle", GameSettings.HintBoardMoves);
             SetToggle("hint-jiggle-toggle", GameSettings.HintJiggle);
+            SetToggle("hover-highlight-toggle", GameSettings.CardHoverHighlight);
             SetToggle("reduced-motion-toggle", GameSettings.ReducedMotion);
             SetToggle("haptics-toggle", GameSettings.HapticsEnabled);
             SetToggle("overlap-sets-toggle", !GameSettings.OverlapSets);

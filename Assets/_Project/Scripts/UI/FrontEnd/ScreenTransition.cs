@@ -14,12 +14,22 @@ namespace Mejnun.UI.FrontEnd
 
         public static void Enter(VisualElement element, bool fromRight)
         {
-            Animate(element, fromRight, false, null);
+            Animate(element, fromRight, false, null, false);
         }
 
         public static void Exit(VisualElement element, bool toRight, Action completed)
         {
-            Animate(element, toRight, true, completed);
+            Animate(element, toRight, true, completed, false);
+        }
+
+        public static void EnterVertical(VisualElement element, bool fromBottom, Action completed = null)
+        {
+            Animate(element, fromBottom, false, completed, true);
+        }
+
+        public static void ExitVertical(VisualElement element, bool toBottom, Action completed)
+        {
+            Animate(element, toBottom, true, completed, true);
         }
 
         public static void Cancel(VisualElement element)
@@ -33,7 +43,8 @@ namespace Mejnun.UI.FrontEnd
             state.Cancel();
         }
 
-        private static void Animate(VisualElement element, bool positiveDirection, bool exiting, Action completed)
+        private static void Animate(VisualElement element, bool positiveDirection, bool exiting, Action completed,
+            bool vertical)
         {
             if (element == null)
             {
@@ -50,20 +61,24 @@ namespace Mejnun.UI.FrontEnd
 
             var state = new TransitionState(element, completed);
             Running.Add(element, state);
-            var parentWidth = element.parent == null ? 0f : element.parent.layout.width;
-            var distance = Mathf.Max(parentWidth, element.layout.width);
+            var parentExtent = element.parent == null
+                ? 0f
+                : vertical ? element.parent.layout.height : element.parent.layout.width;
+            var elementExtent = vertical ? element.layout.height : element.layout.width;
+            var distance = Mathf.Max(parentExtent, elementExtent);
             var direction = positiveDirection ? 1f : -1f;
             state.StartOffset = exiting ? 0f : direction * distance;
             state.EndOffset = exiting ? direction * distance : 0f;
             state.StartOpacity = exiting ? 1f : 0f;
             state.EndOpacity = exiting ? 0f : 1f;
+            state.Vertical = vertical;
 
             if (exiting)
             {
                 state.MakeAbsolute(element.layout);
             }
 
-            Apply(element, state.StartOffset, state.StartOpacity);
+            Apply(element, state.StartOffset, state.StartOpacity, state.Vertical);
             state.StartTime = Time.unscaledTime;
             state.Scheduled = element.schedule.Execute(() => Update(state)).Every(UpdateIntervalMilliseconds);
         }
@@ -86,7 +101,7 @@ namespace Mejnun.UI.FrontEnd
             var eased = progress * progress * (3f - 2f * progress);
             var offset = Mathf.Lerp(state.StartOffset, state.EndOffset, eased);
             var opacity = Mathf.Lerp(state.StartOpacity, state.EndOpacity, eased);
-            Apply(state.Element, offset, opacity);
+            Apply(state.Element, offset, opacity, state.Vertical);
             if (progress < 1f)
             {
                 return;
@@ -96,10 +111,11 @@ namespace Mejnun.UI.FrontEnd
             state.Complete();
         }
 
-        private static void Apply(VisualElement element, float offset, float opacity)
+        private static void Apply(VisualElement element, float offset, float opacity, bool vertical)
         {
-            element.style.translate = new Translate(new Length(offset, LengthUnit.Pixel),
-                new Length(0f, LengthUnit.Pixel));
+            element.style.translate = vertical
+                ? new Translate(new Length(0f, LengthUnit.Pixel), new Length(offset, LengthUnit.Pixel))
+                : new Translate(new Length(offset, LengthUnit.Pixel), new Length(0f, LengthUnit.Pixel));
             element.style.opacity = opacity;
         }
 
@@ -139,6 +155,7 @@ namespace Mejnun.UI.FrontEnd
             public float EndOffset { get; set; }
             public float StartOpacity { get; set; }
             public float EndOpacity { get; set; }
+            public bool Vertical { get; set; }
             public bool Active { get; private set; }
 
             public void MakeAbsolute(Rect rect)

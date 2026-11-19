@@ -10,6 +10,7 @@ namespace Mejnun.Game
         private const string ConfirmLeaveKey = "settings.confirm.leave";
         private const string HintBoardMovesKey = "settings.hints.boardMoves";
         private const string HintJiggleKey = "settings.hints.jiggle";
+        private const string CardHoverHighlightKey = "settings.cards.hoverHighlight";
         private const string ReducedMotionKey = "settings.reducedMotion";
         private const string HapticsKey = "settings.haptics";
         private const string HandArcAmountKey = "settings.hand.arcAmount";
@@ -76,6 +77,12 @@ namespace Mejnun.Game
             set => Set(HintJiggleKey, value);
         }
 
+        public static bool CardHoverHighlight
+        {
+            get => Get(CardHoverHighlightKey, true);
+            set => Set(CardHoverHighlightKey, value);
+        }
+
         /// <summary>Set once the tutorial has been played (finished or skipped); stops the first-Play tutorial prompt.</summary>
         public static bool TutorialCompleted
         {
@@ -133,7 +140,7 @@ namespace Mejnun.Game
 
         public static float UiScale
         {
-            get => Mathf.Clamp(Get(UiScaleKey, Application.isMobilePlatform ? 1.5f : 1f), 0.8f, 3f);
+            get => Mathf.Clamp(Get(UiScaleKey, DeviceProfile.IsMobilePlatform ? 1.5f : 1f), 0.8f, 3f);
             set => Set(UiScaleKey, Mathf.Clamp(value, 0.8f, 3f));
         }
 
@@ -252,6 +259,7 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(ConfirmLeaveKey);
             PlayerPrefs.DeleteKey(HintBoardMovesKey);
             PlayerPrefs.DeleteKey(HintJiggleKey);
+            PlayerPrefs.DeleteKey(CardHoverHighlightKey);
             PlayerPrefs.DeleteKey(ReducedMotionKey);
             PlayerPrefs.DeleteKey(HapticsKey);
             PlayerPrefs.DeleteKey(HandArcAmountKey);

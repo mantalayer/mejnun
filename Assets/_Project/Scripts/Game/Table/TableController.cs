@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mejnun.AI;
 using Mejnun.Core;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Mejnun.Game
 {
@@ -39,6 +40,7 @@ namespace Mejnun.Game
         private bool sweepSelectActive;
         private bool autoFixing;
         private bool markModeActive;
+        private byte? hoveredCardId;
         [SerializeField, Min(0f)] private float timeoutFixStepSeconds = 0.6f;
         private readonly SetMarkers setMarkers = new SetMarkers();
 
@@ -62,13 +64,14 @@ namespace Mejnun.Game
 
         /// <summary>True when the local player may act: a game is in progress and the current seat accepts input.</summary>
         public bool InputEnabled => game != null && game.State.Phase == GamePhase.Playing &&
-                                    !inputPaused && !autoFixing &&
+                                    !inputPaused && !autoFixing && !(tableView != null && tableView.IsDealing) &&
                                     (seatInputFilter == null || seatInputFilter(game.State.CurrentSeat)) &&
                                     (commandRelay == null || !commandRelay.IsRemoteAuthority ||
                                      commandRelay.CanControlSeat(game.State.CurrentSeat));
 
         public bool HandInputEnabled => game != null && game.State.Phase == GamePhase.Playing && !inputPaused &&
-                                        !autoFixing && HandSeat >= 0 && HandSeat < game.State.Hands.Count &&
+                                        !autoFixing && !(tableView != null && tableView.IsDealing) &&
+                                        HandSeat >= 0 && HandSeat < game.State.Hands.Count &&
                                         (seatInputFilter == null || seatInputFilter(HandSeat)) &&
                                         (commandRelay == null || !commandRelay.IsRemoteAuthority ||
                                          commandRelay.CanControlSeat(HandSeat));
@@ -104,14 +107,73 @@ namespace Mejnun.Game
             {
                 pointerRouter.Gesture += HandlePointerGesture;
             }
+
+            if (tableView != null)
+            {
+                tableView.DealCompleted += HandleDealCompleted;
+            }
         }
 
         private void OnDisable()
         {
+            SetHoveredCard(null);
             if (pointerRouter != null)
             {
                 pointerRouter.Gesture -= HandlePointerGesture;
             }
+
+            if (tableView != null)
+            {
+                tableView.DealCompleted -= HandleDealCompleted;
+            }
+        }
+
+        private void Update()
+        {
+            var mouse = Mouse.current;
+            if (!GameSettings.CardHoverHighlight || tableView == null || mouse == null ||
+                mouse.leftButton.isPressed || mouse.rightButton.isPressed || mouse.middleButton.isPressed ||
+                dragActive || handScrollActive || panActive || meldReorderActive || sweepSelectActive)
+            {
+                SetHoveredCard(null);
+                return;
+            }
+
+            var position = mouse.position.ReadValue();
+            if (UiPointerBlocker.IsOverUi(position))
+            {
+                SetHoveredCard(null);
+                return;
+            }
+
+            var hit = tableView.HitTest(position);
+            SetHoveredCard(hit.Kind == GestureHitKind.HandCard || hit.Kind == GestureHitKind.BoardCard
+                ? hit.CardId
+                : (byte?)null);
+        }
+
+        private void SetHoveredCard(byte? cardId)
+        {
+            if (hoveredCardId == cardId)
+            {
+                return;
+            }
+
+            if (hoveredCardId.HasValue)
+            {
+                tableView?.GetCardView(hoveredCardId.Value)?.SetHovered(false);
+            }
+
+            hoveredCardId = cardId;
+            if (hoveredCardId.HasValue)
+            {
+                tableView?.GetCardView(hoveredCardId.Value)?.SetHovered(true);
+            }
+        }
+
+        private void HandleDealCompleted()
+        {
+            SynchronizeViews();
         }
 
         private void OnDestroy()
@@ -1013,6 +1075,7 @@ namespace Mejnun.Game
             foreach (var pair in tableView.ActiveCards)
             {
                 pair.Value.SetSelected(gestureInterpreter.IsSelected(pair.Key));
+                pair.Value.SetHovered(hoveredCardId == pair.Key);
                 pair.Value.SetHinted(hintedCardIds.Contains(pair.Key));
                 var focused = tutorialFocusActive && tutorialFocusIds.Contains(pair.Key);
                 pair.Value.SetTutorialFocus(focused);

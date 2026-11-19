@@ -79,7 +79,7 @@ namespace Mejnun.Game
             var scaledCardSize = cardSize * cardScale;
             var viewportWidth = Mathf.Max(scaledCardSize.x, halfWidth * 2f - 0.2f);
             var step = scaledCardSize.x * Mathf.Clamp(GameSettings.HandSpread, 0.25f, 0.9f);
-            if (Application.isMobilePlatform && Screen.height > Screen.width)
+            if (DeviceProfile.IsMobilePlatform && Screen.height > Screen.width)
             {
                 RowCount = CalculateRowLayout(true, cardCount, scaledCardSize.x, step, viewportWidth, out step);
             }

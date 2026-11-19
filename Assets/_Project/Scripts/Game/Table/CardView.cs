@@ -16,6 +16,7 @@ namespace Mejnun.Game
         private Vector3 tweenStart;
         private Vector3 tweenTarget;
         private Vector3 tweenScaleStart;
+        private Vector3 tweenScaleTarget;
         private float tweenElapsed;
         private float pixelsPerUnit = 100f;
         private float currentTweenDuration;
@@ -24,10 +25,12 @@ namespace Mejnun.Game
         private bool handLayer;
         private bool faceUp;
         private bool selected;
+        private bool hovered;
         private bool hinted;
         private bool lastCardWarning;
         private bool tutorialFocus;
         private bool dimmed;
+        private SpriteRenderer cardHighlight;
         private SpriteRenderer focusGlow;
         private SpriteRenderer hintGlow;
         private SpriteRenderer hintGlowBloom;
@@ -36,16 +39,22 @@ namespace Mejnun.Game
         private Quaternion layoutRotation = Quaternion.identity;
         private float layoutScale = 1f;
         private float baseScale = 1f;
+        private Vector3 liftBasePosition;
+        private Vector3 lastWrittenPosition;
+        private float liftAmount;
+        private bool hasWrittenPosition;
         private int sortingOrder;
 
         public byte CardId { get; private set; }
         public byte Deck { get; private set; }
         public bool IsFaceUp => faceUp;
         public bool IsSelected => selected;
+        public bool IsHovered => hovered;
         public bool IsHinted => hinted;
         public bool IsTutorialFocused => tutorialFocus;
         public bool IsDimmed => dimmed;
         public bool IsMoving => moving;
+        public Vector3 TargetLocalPosition => moving ? tweenTarget : GetBaseLocalPosition();
         public Sprite CurrentFaceSprite => faceSprite;
         public SpriteRenderer Renderer => spriteRenderer;
         public float BaseScale => baseScale;
@@ -101,6 +110,13 @@ namespace Mejnun.Game
         {
             selected = isSelected;
             ApplyTint();
+            RefreshCardHighlight();
+        }
+
+        public void SetHovered(bool isHovered)
+        {
+            hovered = isHovered;
+            RefreshCardHighlight();
         }
 
         /// <summary>Outline playable cards; selection tint remains independent.</summary>
@@ -201,6 +217,11 @@ namespace Mejnun.Game
                 focusGlow.sortingOrder = rendererOrder + 1;
             }
 
+            if (cardHighlight != null)
+            {
+                cardHighlight.sortingOrder = rendererOrder + 1;
+            }
+
             if (hintGlowBloom != null)
             {
                 hintGlowBloom.sortingOrder = rendererOrder + 1;
@@ -234,8 +255,15 @@ namespace Mejnun.Game
 
         public void MoveTo(Vector3 position, float duration = -1f)
         {
+            MoveTo(position, duration, 1f);
+        }
+
+        public void MoveTo(Vector3 position, float duration, float targetScaleMultiplier)
+        {
+            var basePosition = GetBaseLocalPosition();
             tweenTarget = position;
-            var targetScale = Vector3.one * (baseScale * layoutScale);
+            var targetScale = Vector3.one * (baseScale * layoutScale * Mathf.Max(0.01f, targetScaleMultiplier));
+            tweenScaleTarget = targetScale;
             var moveDuration = duration;
             if (moveDuration < 0f && nextMoveDuration >= 0f)
             {
@@ -247,16 +275,17 @@ namespace Mejnun.Game
             }
 
             nextMoveDuration = -1f;
-            if (moveDuration <= 0f || (Vector3.SqrMagnitude(transform.localPosition - position) < 0.000001f &&
+            if (moveDuration <= 0f || (Vector3.SqrMagnitude(basePosition - position) < 0.000001f &&
                                        Vector3.SqrMagnitude(transform.localScale - targetScale) < 0.000001f))
             {
                 moving = false;
-                transform.localPosition = Snap(position);
+                liftBasePosition = Snap(position);
                 transform.localScale = targetScale;
+                WriteLiftedPosition();
                 return;
             }
 
-            tweenStart = transform.localPosition;
+            tweenStart = basePosition;
             tweenScaleStart = transform.localScale;
             tweenElapsed = 0f;
             currentTweenDuration = moveDuration;
@@ -270,6 +299,7 @@ namespace Mejnun.Game
 
         private void Update()
         {
+            GetBaseLocalPosition();
             var time = Time.unscaledTime;
             var animationRotation = Quaternion.identity;
             if (hinted && GameSettings.HintJiggle && !GameSettings.ReducedMotion)
@@ -290,19 +320,31 @@ namespace Mejnun.Game
             transform.localRotation = layoutRotation * animationRotation;
             UpdateHintGlow(time);
             UpdateFocusGlow(time);
+            UpdateCardHighlight();
 
             if (moving)
             {
-                tweenElapsed += Time.deltaTime;
+                tweenElapsed += Time.unscaledDeltaTime;
                 var amount = Mathf.Clamp01(tweenElapsed / currentTweenDuration);
-                transform.localPosition = Snap(Vector3.Lerp(tweenStart, tweenTarget, amount));
-                transform.localScale = Vector3.Lerp(tweenScaleStart,
-                    Vector3.one * (baseScale * layoutScale), amount);
+                liftBasePosition = Snap(Vector3.Lerp(tweenStart, tweenTarget, amount));
+                transform.localScale = Vector3.Lerp(tweenScaleStart, tweenScaleTarget, amount);
                 if (amount >= 1f)
                 {
                     moving = false;
                 }
             }
+
+            var liftTarget = selected ? 0.14f : hovered && GameSettings.CardHoverHighlight ? 0.10f : 0f;
+            var suppressLift = sortingOrder >= DragSortingOrder - 1;
+            if (suppressLift)
+            {
+                liftTarget = 0f;
+            }
+
+            liftAmount = suppressLift || GameSettings.ReducedMotion
+                ? liftTarget
+                : Mathf.MoveTowards(liftAmount, liftTarget, Time.unscaledDeltaTime * 2f);
+            WriteLiftedPosition();
         }
 
         public bool ContainsWorldPoint(Vector3 worldPoint)
@@ -315,9 +357,14 @@ namespace Mejnun.Game
             var bounds = spriteRenderer.sprite == null
                 ? new Bounds(Vector3.zero, new Vector3(0.64f, 0.97f, 0f))
                 : spriteRenderer.sprite.bounds;
-            var localPoint = transform.InverseTransformPoint(worldPoint);
+            var localPoint = transform.InverseTransformPoint(worldPoint + GetWorldLiftOffset());
             return localPoint.x >= bounds.min.x && localPoint.x <= bounds.max.x &&
                    localPoint.y >= bounds.min.y && localPoint.y <= bounds.max.y;
+        }
+
+        public bool RestBoundsContains(Vector3 worldPoint)
+        {
+            return ContainsWorldPoint(worldPoint);
         }
 
         private TableCamera tableCamera;
@@ -341,6 +388,7 @@ namespace Mejnun.Game
 
             RefreshShadow();
             ApplyTint();
+            RefreshCardHighlight();
             RefreshHintGlow();
         }
 
@@ -388,11 +436,7 @@ namespace Mejnun.Game
                 return;
             }
 
-            if (selected)
-            {
-                spriteRenderer.color = new Color(1f, 0.82f, 0.36f, 1f);
-            }
-            else if (dimmed)
+            if (dimmed)
             {
                 spriteRenderer.color = new Color(0.5f, 0.5f, 0.55f, 1f);
             }
@@ -400,6 +444,30 @@ namespace Mejnun.Game
             {
                 spriteRenderer.color = Color.white;
             }
+        }
+
+        private void RefreshCardHighlight()
+        {
+            if ((selected || hovered && GameSettings.CardHoverHighlight) && cardHighlight == null &&
+                spriteRenderer != null && spriteRenderer.sprite != null)
+            {
+                cardHighlight = CreateHintSprite("Card Highlight", 1.08f);
+            }
+
+            UpdateCardHighlight();
+        }
+
+        private void UpdateCardHighlight()
+        {
+            if (cardHighlight == null)
+            {
+                return;
+            }
+
+            var visible = selected || hovered && GameSettings.CardHoverHighlight;
+            cardHighlight.enabled = visible;
+            cardHighlight.color = new Color(1f, 0.78f, 0.12f, selected ? 0.78f : 0.48f);
+            cardHighlight.sprite = spriteRenderer.sprite;
         }
 
         private void RefreshHintOutline()
@@ -470,6 +538,39 @@ namespace Mejnun.Game
             {
                 focusGlow.sprite = spriteRenderer.sprite;
             }
+
+            if (cardHighlight != null)
+            {
+                cardHighlight.sprite = spriteRenderer.sprite;
+            }
+        }
+
+        private Vector3 GetBaseLocalPosition()
+        {
+            if (!hasWrittenPosition || (transform.localPosition - lastWrittenPosition).sqrMagnitude > 0.000001f)
+            {
+                liftBasePosition = transform.localPosition;
+            }
+
+            return liftBasePosition;
+        }
+
+        private void WriteLiftedPosition()
+        {
+            transform.localPosition = liftBasePosition + GetLocalLiftOffset();
+            lastWrittenPosition = transform.localPosition;
+            hasWrittenPosition = true;
+        }
+
+        private Vector3 GetLocalLiftOffset()
+        {
+            return layoutRotation * Vector3.up * (0.92f * layoutScale * liftAmount);
+        }
+
+        private Vector3 GetWorldLiftOffset()
+        {
+            var parent = transform.parent;
+            return parent == null ? GetLocalLiftOffset() : parent.TransformVector(GetLocalLiftOffset());
         }
 
         private void UpdateFocusGlow(float time)
