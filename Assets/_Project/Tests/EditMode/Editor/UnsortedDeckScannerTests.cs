@@ -161,7 +161,7 @@ namespace Mejnun.Editor.Tests
                 }
             }
 
-            Assert.That(light.BackIds, Has.Length.EqualTo(27));
+            Assert.That(light.BackIds, Has.Length.EqualTo(23));
             Assert.That(light.GetBack("back_28"), Is.Not.Null);
             Assert.That(contrast.AlternateBacks[0].Sprite, Is.SameAs(light.AlternateBacks[0].Sprite));
             Assert.That(catalog.GetSkinIds(), Does.Contain(light.Id + ":back_28"));

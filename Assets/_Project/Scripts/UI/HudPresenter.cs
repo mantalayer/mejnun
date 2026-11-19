@@ -161,6 +161,8 @@ namespace Mejnun.UI
 
         private void OnEnable()
         {
+            root?.RegisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
+            GameSettings.Changed += OnSettingsChanged;
             if (tableController != null)
             {
                 tableController.Synchronized += OnSynchronized;
@@ -191,6 +193,8 @@ namespace Mejnun.UI
 
         private void OnDisable()
         {
+            root?.UnregisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
+            GameSettings.Changed -= OnSettingsChanged;
             if (tableController != null)
             {
                 tableController.Synchronized -= OnSynchronized;
@@ -250,7 +254,11 @@ namespace Mejnun.UI
             UpdateLastCardBadges();
             UpdateDrawPilePosition();
             UpdateDrawFlightOverlay();
-            compactBoardButton?.SetEnabled(GameSettings.OrganicBoard && tableView != null);
+            if (compactBoardButton != null)
+            {
+                compactBoardButton.style.display = GameSettings.OrganicBoard ? DisplayStyle.Flex : DisplayStyle.None;
+                compactBoardButton.SetEnabled(tableView != null);
+            }
             tutorialOverlay?.Tick();
             if (root != null)
             {
@@ -406,6 +414,14 @@ namespace Mejnun.UI
             }
         }
 
+        private void OnSettingsChanged(string key)
+        {
+            if (key == GameSettings.OpponentCardScaleKey && tableController?.Game != null)
+            {
+                RefreshSeats(tableController.Game.State);
+            }
+        }
+
         private void OnOnlineNotice(string message)
         {
             if (onlineNotice == null || string.IsNullOrWhiteSpace(message))
@@ -466,6 +482,22 @@ namespace Mejnun.UI
             bottomBar.style.borderBottomColor = color;
             bottomBar.style.borderLeftColor = color;
             bottomBar.style.borderRightColor = color;
+        }
+
+        private void OnHudPointerDown(PointerDownEvent evt)
+        {
+            if (matchFlow == null || !matchFlow.IsOnline || tableController == null || tableController.Game == null ||
+                matchFlow.IsLocalSeat(tableController.Game.State.CurrentSeat))
+            {
+                return;
+            }
+
+            var target = evt.target as VisualElement;
+            if ((bottomBar != null && (bottomBar.Contains(target) || bottomBar.worldBound.Contains(evt.position))) ||
+                (statusPanel != null && (statusPanel.Contains(target) || statusPanel.worldBound.Contains(evt.position))))
+            {
+                ShowInvalidMove(RuleError.NotYourTurn);
+            }
         }
 
         public static bool IsPhoneScreen(bool isMobilePlatform, int width, int height, float dpi)
@@ -660,10 +692,9 @@ namespace Mejnun.UI
             }
 
             var phoneLayout = root != null && root.ClassListContains("phone-layout");
-            var target = phoneLayout ? fastForwardDock : bottomBar;
-            if (target != null && fastForwardButton.parent != target)
+            if (fastForwardDock != null && fastForwardButton.parent != fastForwardDock)
             {
-                target.Add(fastForwardButton);
+                fastForwardDock.Add(fastForwardButton);
             }
 
             var visible = GameSettings.ShowFastForward &&
@@ -672,10 +703,23 @@ namespace Mejnun.UI
             fastForwardButton.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
             if (fastForwardDock != null)
             {
-                fastForwardDock.style.display = phoneLayout && visible ? DisplayStyle.Flex : DisplayStyle.None;
-                if (phoneLayout && root != null && bottomBar != null && bottomBar.worldBound.height > 0f)
+                fastForwardDock.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (root != null && bottomBar != null && bottomBar.worldBound.height > 0f)
                 {
-                    fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;
+                    if (phoneLayout)
+                    {
+                        fastForwardDock.style.left = StyleKeyword.Auto;
+                        fastForwardDock.style.right = 12f;
+                        fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;
+                        fastForwardDock.style.height = StyleKeyword.Auto;
+                    }
+                    else
+                    {
+                        fastForwardDock.style.left = bottomBar.worldBound.xMax - root.worldBound.xMin + 8f;
+                        fastForwardDock.style.right = StyleKeyword.Auto;
+                        fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMax;
+                        fastForwardDock.style.height = bottomBar.worldBound.height;
+                    }
                 }
             }
 
@@ -893,15 +937,19 @@ namespace Mejnun.UI
                 var anchorHeight = anchorBounds.height;
                 if (anchorHeight <= 0f)
                 {
-                    anchorHeight = 44f * Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f);
+                    var baseHeight = cards.ClassListContains("opponent-cards-phone-stack") ? 32f : 44f;
+                    anchorHeight = baseHeight * Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f);
                 }
 
                 if (anchorBounds.width > 0f && anchorHeight > 0f &&
                     TryPanelToScreen(anchorBounds.center, out var anchorPosition))
                 {
-                    var stepSize = 30f * Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f) * 0.32f *
+                    var compactStack = cards.ClassListContains("opponent-cards-phone-stack");
+                    var overlap = compactStack ? 0.18f : 0.32f;
+                    var cardHeight = compactStack ? 32f : 30f;
+                    var stepSize = cardHeight * Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f) * overlap *
                                    Screen.height / panelHeight;
-                    var vertical = cards.ClassListContains("opponent-cards-vertical");
+                    var vertical = compactStack || cards.ClassListContains("opponent-cards-vertical");
                     var step = vertical ? new Vector2(0f, -stepSize) : new Vector2(stepSize, 0f);
                     var target = lastCard == null ? anchorPosition : anchorPosition + step;
                     tableView.SetSeatScreenRect(seat, target, anchorHeight * Screen.height / panelHeight, step);
@@ -1105,7 +1153,8 @@ namespace Mejnun.UI
             }
 
             bottomBar?.EnableInClassList("active-turn",
-                state.Phase == GamePhase.Playing && !IsBotSeat(activeSeat));
+                state.Phase == GamePhase.Playing && !IsBotSeat(activeSeat) &&
+                (matchFlow == null || !matchFlow.IsOnline || matchFlow.IsLocalSeat(activeSeat)));
 
             if (drawPileLabel != null)
             {
@@ -1165,7 +1214,11 @@ namespace Mejnun.UI
                 markSetButton.text = tableController.MarkModeActive ? "Marking…" : "Mark";
             }
 
-            compactBoardButton?.SetEnabled(GameSettings.OrganicBoard && tableView != null);
+            if (compactBoardButton != null)
+            {
+                compactBoardButton.style.display = GameSettings.OrganicBoard ? DisplayStyle.Flex : DisplayStyle.None;
+                compactBoardButton.SetEnabled(tableView != null);
+            }
             ApplyTutorialButtons();
 
             RefreshSeats(state);
@@ -1261,6 +1314,7 @@ namespace Mejnun.UI
             var viewerSeat = tableView != null && tableView.ViewerSeat >= 0
                 ? tableView.ViewerSeat
                 : state.CurrentSeat;
+            var phoneLayout = root != null && root.ClassListContains("phone-layout");
             for (var seat = 0; seat < state.Hands.Count; seat++)
             {
                 if (seat == viewerSeat)
@@ -1281,6 +1335,11 @@ namespace Mejnun.UI
                 var cards = new VisualElement();
                 cards.pickingMode = PickingMode.Ignore;
                 cards.AddToClassList("opponent-cards");
+                if (phoneLayout)
+                {
+                    cards.AddToClassList("opponent-cards-phone-stack");
+                }
+
                 if (opponentSide != OpponentSide.Top)
                 {
                     cards.AddToClassList("opponent-cards-vertical");
@@ -1290,8 +1349,8 @@ namespace Mejnun.UI
                 var incomingCount = tableView == null ? 0 : tableView.GetIncomingCardCount(seat);
                 var visibleCardCount = Mathf.Max(0, state.Hands[seat].Count - incomingCount);
                 var cardScale = Mathf.Clamp(GameSettings.OpponentCardScale, 0.5f, 2f);
-                var cardWidth = 30f * cardScale;
-                var cardHeight = 44f * cardScale;
+                var cardWidth = (phoneLayout ? 22f : 30f) * cardScale;
+                var cardHeight = (phoneLayout ? 32f : 44f) * cardScale;
                 for (var cardIndex = 0; cardIndex < state.Hands[seat].Count; cardIndex++)
                 {
                     var cardBack = new VisualElement();
@@ -1307,7 +1366,11 @@ namespace Mejnun.UI
                     cardBack.style.height = cardHeight;
                     if (cardIndex > 0)
                     {
-                        if (opponentSide == OpponentSide.Top)
+                        if (phoneLayout)
+                        {
+                            cardBack.style.marginTop = -cardHeight * 0.82f;
+                        }
+                        else if (opponentSide == OpponentSide.Top)
                         {
                             cardBack.style.marginLeft = -cardWidth * 0.68f;
                         }
@@ -1327,6 +1390,15 @@ namespace Mejnun.UI
                     }
 
                     cards.Add(cardBack);
+                }
+
+                if (phoneLayout)
+                {
+                    var count = new Label(state.Hands[seat].Count.ToString());
+                    count.pickingMode = PickingMode.Ignore;
+                    count.name = "opponent-count-" + seat;
+                    count.AddToClassList("opponent-count");
+                    opponent.Add(count);
                 }
 
                 if (visibleCardCount == 1)
@@ -1556,7 +1628,7 @@ namespace Mejnun.UI
             switch (error)
             {
                 case RuleError.NotYourTurn:
-                    return "You can only move cards on your turn.";
+                    return "It’s not your turn.";
                 case RuleError.WrongPhase:
                     return "That move is not available right now.";
                 case RuleError.NotDownBoardAccess:

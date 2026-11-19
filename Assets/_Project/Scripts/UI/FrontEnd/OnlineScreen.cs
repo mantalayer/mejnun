@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mejnun.Game;
 using UnityEngine.UIElements;
 
 namespace Mejnun.UI.FrontEnd
@@ -18,7 +19,8 @@ namespace Mejnun.UI.FrontEnd
         private readonly VisualElement setupContainer;
         private readonly TextField nicknameField;
         private readonly TextField codeField;
-        private readonly IntegerField seatCountField;
+        private readonly SliderInt seatCountField;
+        private readonly DropdownField turnTimerField;
         private readonly Label statusLabel;
         private readonly Label codeLabel;
         private readonly Label playersLabel;
@@ -38,8 +40,12 @@ namespace Mejnun.UI.FrontEnd
             root = documentRoot.Q<VisualElement>("online-screen");
             setupContainer = root.Q<VisualElement>("online-setup");
             nicknameField = root.Q<TextField>("online-nickname-field");
+            RefreshNickname();
             codeField = root.Q<TextField>("online-code-field");
-            seatCountField = root.Q<IntegerField>("online-seat-count-field");
+            seatCountField = root.Q<SliderInt>("online-seat-count-field");
+            seatCountField.lowValue = 2;
+            seatCountField.highValue = 6;
+            turnTimerField = root.Q<DropdownField>("online-turn-timer-field");
             statusLabel = root.Q<Label>("online-status");
             codeLabel = root.Q<Label>("online-session-code");
             playersLabel = root.Q<Label>("online-lobby-players");
@@ -48,6 +54,10 @@ namespace Mejnun.UI.FrontEnd
             quickMatchButton = root.Q<Button>("online-quick-match-button");
             continueButton = root.Q<Button>("online-continue-button");
             backButton = root.Q<Button>("online-back-button");
+
+            turnTimerField.choices = new List<string>
+                { "Off", "30 seconds", "60 seconds", "90 seconds", "120 seconds" };
+            turnTimerField.SetValueWithoutNotify("Off");
 
             createButton.clicked += () => Request(OnlineAction.Create);
             joinButton.clicked += () => Request(OnlineAction.JoinByCode);
@@ -59,6 +69,29 @@ namespace Mejnun.UI.FrontEnd
 
         public string Nickname => nicknameField.value;
         public int SeatCount => Math.Max(2, Math.Min(6, seatCountField.value));
+        public int TimerSeconds
+        {
+            get
+            {
+                switch (turnTimerField.value)
+                {
+                    case "30 seconds": return 30;
+                    case "60 seconds": return 60;
+                    case "90 seconds": return 90;
+                    case "120 seconds": return 120;
+                    default: return 0;
+                }
+            }
+        }
+
+        public void RefreshNickname()
+        {
+            var savedNickname = GameSettings.OnlineNickname;
+            if (!string.IsNullOrWhiteSpace(savedNickname))
+            {
+                nicknameField.SetValueWithoutNotify(savedNickname);
+            }
+        }
 
         public void SetVisible(bool visible)
         {
@@ -118,6 +151,7 @@ namespace Mejnun.UI.FrontEnd
 
         private void Request(OnlineAction action)
         {
+            GameSettings.OnlineNickname = Nickname;
             codeLabel.style.display = DisplayStyle.None;
             playersLabel.style.display = DisplayStyle.None;
             continueButton.style.display = DisplayStyle.None;

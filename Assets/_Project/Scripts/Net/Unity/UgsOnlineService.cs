@@ -40,16 +40,18 @@ namespace Mejnun.Net.Unity
             }
         }
 
-        public async Task<IHostSession> CreateSessionAsync(int maxPlayers, string sessionName = "Mejnun")
+        public async Task<IHostSession> CreateSessionAsync(int maxPlayers, string sessionName = "Mejnun",
+            Dictionary<string, PlayerProperty> playerProperties = null)
         {
             EnsureNetworkManager();
-            var options = CreateSessionOptions(maxPlayers, sessionName);
+            var options = CreateSessionOptions(maxPlayers, sessionName, playerProperties);
             var session = await MultiplayerService.Instance.CreateSessionAsync(options);
             Session = session;
             return session;
         }
 
-        public async Task<ISession> JoinByCodeAsync(string sessionCode)
+        public async Task<ISession> JoinByCodeAsync(string sessionCode,
+            Dictionary<string, PlayerProperty> playerProperties = null)
         {
             if (string.IsNullOrWhiteSpace(sessionCode))
             {
@@ -58,14 +60,18 @@ namespace Mejnun.Net.Unity
 
             EnsureNetworkManager();
             Session = await MultiplayerService.Instance.JoinSessionByCodeAsync(sessionCode.Trim(),
-                new JoinSessionOptions().WithPlayerName().WithHostMigration(MigrationHandler));
+                new JoinSessionOptions
+                {
+                    PlayerProperties = playerProperties ?? new Dictionary<string, PlayerProperty>()
+                }.WithPlayerName().WithHostMigration(MigrationHandler));
             return Session;
         }
 
-        public async Task<ISession> QuickMatchAsync(int maxPlayers, string sessionName = "Mejnun")
+        public async Task<ISession> QuickMatchAsync(int maxPlayers, string sessionName = "Mejnun",
+            Dictionary<string, PlayerProperty> playerProperties = null)
         {
             EnsureNetworkManager();
-            var options = CreateSessionOptions(maxPlayers, sessionName);
+            var options = CreateSessionOptions(maxPlayers, sessionName, playerProperties);
             Session = await MultiplayerService.Instance.MatchmakeSessionAsync(
                 new QuickJoinOptions
                 {
@@ -121,7 +127,8 @@ namespace Mejnun.Net.Unity
             }
         }
 
-        private SessionOptions CreateSessionOptions(int maxPlayers, string sessionName)
+        private SessionOptions CreateSessionOptions(int maxPlayers, string sessionName,
+            Dictionary<string, PlayerProperty> playerProperties)
         {
             if (maxPlayers < 2 || maxPlayers > 6)
             {
@@ -132,7 +139,8 @@ namespace Mejnun.Net.Unity
             {
                 Name = string.IsNullOrWhiteSpace(sessionName) ? "Mejnun" : sessionName.Trim(),
                 MaxPlayers = maxPlayers,
-                IsPrivate = false
+                IsPrivate = false,
+                PlayerProperties = playerProperties ?? new Dictionary<string, PlayerProperty>()
             }.WithRelayNetwork().WithPlayerName().WithHostMigration(MigrationHandler);
         }
 

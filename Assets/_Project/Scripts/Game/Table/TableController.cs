@@ -399,6 +399,12 @@ namespace Mejnun.Game
                 return CommandResult.Failure(RuleError.WrongPhase);
             }
 
+            if (IsRemoteTurnBlocked())
+            {
+                NotifyInvalid(RuleError.NotYourTurn);
+                return CommandResult.Failure(RuleError.NotYourTurn);
+            }
+
             if (batch == null)
             {
                 return CommandResult.Failure(RuleError.EmptyMove);
@@ -434,6 +440,12 @@ namespace Mejnun.Game
                 return CommandResult.Failure(RuleError.WrongPhase);
             }
 
+            if (IsRemoteTurnBlocked())
+            {
+                NotifyInvalid(RuleError.NotYourTurn);
+                return CommandResult.Failure(RuleError.NotYourTurn);
+            }
+
             if (!GateAllows(command, origin))
             {
                 return Blocked();
@@ -443,6 +455,7 @@ namespace Mejnun.Game
             if (isRelayed && command.Type != CommandType.ChooseRandomDealer &&
                 !commandRelay.CanControlSeat(command.Seat))
             {
+                NotifyInvalid(RuleError.NotYourTurn);
                 return CommandResult.Failure(RuleError.NotYourTurn);
             }
 
@@ -875,6 +888,13 @@ namespace Mejnun.Game
             return CommandResult.Failure(RuleError.TutorialBlocked);
         }
 
+        private bool IsRemoteTurnBlocked()
+        {
+            return game != null && game.State.Phase == GamePhase.Playing && commandRelay != null &&
+                   commandRelay.IsRemoteAuthority &&
+                   !commandRelay.CanControlSeat(game.State.CurrentSeat);
+        }
+
         private CommandResult ApplyBatch(CommandBatch batch)
         {
             if (commandRelay != null && commandRelay.IsRemoteAuthority && !commandRelay.ApplyCommandsLocally)
@@ -1030,6 +1050,27 @@ namespace Mejnun.Game
             if (game == null || tableView == null)
             {
                 return;
+            }
+
+            if (IsRemoteTurnBlocked() && (pointerGesture.Kind == PointerGestureKind.Tap ||
+                                          pointerGesture.Kind == PointerGestureKind.DoubleTap))
+            {
+                var blockedHit = tableView.HitTest(pointerGesture.Position);
+                if (blockedHit.Kind != GestureHitKind.HandCard && blockedHit.Kind != GestureHitKind.HandArea)
+                {
+                    NotifyInvalid(RuleError.NotYourTurn);
+                    return;
+                }
+            }
+
+            if (IsRemoteTurnBlocked() && pointerGesture.Kind == PointerGestureKind.DragStarted)
+            {
+                var blockedHit = tableView.HitTest(pointerGesture.StartPosition, true);
+                if (blockedHit.Kind == GestureHitKind.BoardCard || blockedHit.Kind == GestureHitKind.MeldGrip)
+                {
+                    NotifyInvalid(RuleError.NotYourTurn);
+                    return;
+                }
             }
 
             if (markModeActive && (pointerGesture.Kind == PointerGestureKind.Tap ||
@@ -1342,7 +1383,15 @@ namespace Mejnun.Game
                         var target = tableView.HitTest(pointerGesture.Position);
                         var type = pointerGesture.IsLongPress ? GestureType.LongPressDrag : GestureType.Drag;
                         tableView.EndHandLift();
-                        ExecuteHandGesture(new GestureInput(type, dragSource, target));
+                        if (IsRemoteTurnBlocked() && target.Kind != GestureHitKind.HandCard &&
+                            target.Kind != GestureHitKind.HandArea)
+                        {
+                            NotifyInvalid(RuleError.NotYourTurn);
+                        }
+                        else
+                        {
+                            ExecuteHandGesture(new GestureInput(type, dragSource, target));
+                        }
                     }
 
                     dragActive = false;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Mejnun.Cosmetics;
 using Mejnun.Game;
 using Mejnun.Net.Unity;
@@ -20,16 +21,35 @@ namespace Mejnun.UI.FrontEnd
 
     public sealed class FrontEndFlow : IDisposable
     {
+        private static readonly FrontEndScreen[] Screens =
+        {
+            FrontEndScreen.MainMenu,
+            FrontEndScreen.Setup,
+            FrontEndScreen.Gallery,
+            FrontEndScreen.Settings,
+            FrontEndScreen.Online
+        };
+
         private const string StartedPropertyKey = "mejnun_started";
         private const string PlayerNamePropertyKey = "_player_name";
+        private const string PlayerCosmeticsPropertyKey = "mejnun_cosmetics";
+        private const string MatchCosmeticsPropertyKey = "mejnun_match_cosmetics";
+        private const string TimerPropertyKey = "mejnun_timer";
         private readonly Stack<FrontEndScreen> backStack = new Stack<FrontEndScreen>();
         private readonly MainMenuScreen mainMenu;
         private readonly SetupScreen setup;
         private readonly TablePickerScreen tablePicker;
+        private readonly TablePickerScreen onlineTablePicker;
         private readonly GalleryScreen gallery;
         private readonly SettingsPanel settings;
         private readonly OnlineScreen onlineScreen;
+        private readonly VisualElement setupRoot;
+        private readonly VisualElement galleryRoot;
+        private readonly VisualElement settingsRoot;
+        private readonly VisualElement onlineRoot;
         private readonly UgsOnlineService onlineService = new UgsOnlineService();
+        private FrontEndScreen currentScreen;
+        private bool hasCurrentScreen;
         private MatchRequest pendingRequest;
         private ISession pendingOnlineSession;
         private string pendingOnlineName;
@@ -45,14 +65,20 @@ namespace Mejnun.UI.FrontEnd
                 throw new ArgumentNullException(nameof(root));
             }
 
+            setupRoot = root.Q<VisualElement>("setup-screen");
+            galleryRoot = root.Q<VisualElement>("gallery-screen");
+            settingsRoot = root.Q<VisualElement>("settings-panel");
+            onlineRoot = root.Q<VisualElement>("online-screen");
             mainMenu = new MainMenuScreen(root, catalog, OpenSetup, ResumeMatch, () => OpenGallery(), OpenSettings,
-                StartTutorial, OpenOnline);
+                StartTutorial, OpenOnline, loader);
             tablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader);
+            onlineTablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader,
+                "online-setup", "online-");
             setup = new SetupScreen(root, OnSetupNext, Back, MatchMode.Solo);
             setup.SetCanStart(() => tablePicker.CanStart);
             gallery = new GalleryScreen(root, catalog, ProgressionService.Instance, loader);
             settings = new SettingsPanel();
-            settings.Initialize(root.Q<VisualElement>("settings-panel"));
+            settings.Initialize(settingsRoot);
             settings.Closed += Back;
             root.Q<Button>("gallery-back-button").clicked += Back;
             onlineScreen = new OnlineScreen(root, HandleOnlineBack);
@@ -91,7 +117,7 @@ namespace Mejnun.UI.FrontEnd
                     OpenSettings();
                     break;
                 default:
-                    ShowScreen(FrontEndScreen.MainMenu);
+                    ShowScreen(FrontEndScreen.MainMenu, true);
                     break;
             }
         }
@@ -103,9 +129,18 @@ namespace Mejnun.UI.FrontEnd
                 LeaveOnlineLobby();
                 return;
             }
-            if (tablePicker.IsPopupOpen)
+            if (tablePicker.IsPopupOpen || onlineTablePicker.IsPopupOpen)
             {
-                tablePicker.ClosePopup();
+                if (tablePicker.IsPopupOpen)
+                {
+                    tablePicker.ClosePopup();
+                }
+
+                if (onlineTablePicker.IsPopupOpen)
+                {
+                    onlineTablePicker.ClosePopup();
+                }
+
                 return;
             }
 
@@ -120,7 +155,7 @@ namespace Mejnun.UI.FrontEnd
             }
 
             backStack.Pop();
-            ShowScreen(backStack.Peek());
+            ShowScreen(backStack.Peek(), true);
         }
 
         public void Dispose()
@@ -136,6 +171,7 @@ namespace Mejnun.UI.FrontEnd
 
         public void OpenSetup(MatchMode mode)
         {
+            tablePicker.ReloadPicks();
             setup.SetMode(mode);
             Push(FrontEndScreen.Setup);
         }
@@ -163,7 +199,9 @@ namespace Mejnun.UI.FrontEnd
 
         public void OpenOnline()
         {
+            onlineTablePicker.ReloadPicks();
             onlineScreen.HideLobby();
+            onlineScreen.RefreshNickname();
             onlineScreen.SetStatus(string.Empty);
             Push(FrontEndScreen.Online);
         }
@@ -216,19 +254,104 @@ namespace Mejnun.UI.FrontEnd
             ShowScreen(screen);
         }
 
-        private void ShowScreen(FrontEndScreen screen)
+        private void ShowScreen(FrontEndScreen screen, bool backwards = false)
         {
-            mainMenu.SetVisible(screen == FrontEndScreen.MainMenu);
-            setup.SetVisible(screen == FrontEndScreen.Setup);
-            gallery.SetVisible(screen == FrontEndScreen.Gallery);
-            onlineScreen.SetVisible(screen == FrontEndScreen.Online);
-            if (screen == FrontEndScreen.Settings)
+            var previousScreen = currentScreen;
+            var hadPreviousScreen = hasCurrentScreen;
+            currentScreen = screen;
+            hasCurrentScreen = true;
+
+            if (!hadPreviousScreen || previousScreen == screen)
             {
-                settings.Show();
+                for (var index = 0; index < Screens.Length; index++)
+                {
+                    var otherScreen = Screens[index];
+                    if (otherScreen == screen)
+                    {
+                        continue;
+                    }
+
+                    ScreenTransition.Cancel(GetScreenRoot(otherScreen));
+                    SetScreenVisible(otherScreen, false);
+                }
+
+                ScreenTransition.Cancel(GetScreenRoot(screen));
+                SetScreenVisible(screen, true);
+                return;
             }
-            else
+
+            for (var index = 0; index < Screens.Length; index++)
             {
-                settings.Hide();
+                var otherScreen = Screens[index];
+                if (otherScreen == screen || otherScreen == previousScreen)
+                {
+                    continue;
+                }
+
+                ScreenTransition.Cancel(GetScreenRoot(otherScreen));
+                SetScreenVisible(otherScreen, false);
+            }
+
+            var incomingRoot = GetScreenRoot(screen);
+            var outgoingRoot = GetScreenRoot(previousScreen);
+            SetScreenVisible(screen, true);
+            ScreenTransition.Enter(incomingRoot, backwards);
+            ScreenTransition.Exit(outgoingRoot, !backwards, () =>
+            {
+                if (currentScreen != previousScreen)
+                {
+                    SetScreenVisible(previousScreen, false);
+                }
+            });
+        }
+
+        private VisualElement GetScreenRoot(FrontEndScreen screen)
+        {
+            switch (screen)
+            {
+                case FrontEndScreen.MainMenu:
+                    return mainMenu.Root;
+                case FrontEndScreen.Setup:
+                    return setupRoot;
+                case FrontEndScreen.Gallery:
+                    return galleryRoot;
+                case FrontEndScreen.Settings:
+                    return settingsRoot;
+                case FrontEndScreen.Online:
+                    return onlineRoot;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(screen), screen, null);
+            }
+        }
+
+        private void SetScreenVisible(FrontEndScreen screen, bool visible)
+        {
+            switch (screen)
+            {
+                case FrontEndScreen.MainMenu:
+                    mainMenu.SetVisible(visible);
+                    break;
+                case FrontEndScreen.Setup:
+                    setup.SetVisible(visible);
+                    break;
+                case FrontEndScreen.Gallery:
+                    gallery.SetVisible(visible);
+                    break;
+                case FrontEndScreen.Settings:
+                    if (visible)
+                    {
+                        settings.Show();
+                    }
+                    else
+                    {
+                        settings.Hide();
+                    }
+                    break;
+                case FrontEndScreen.Online:
+                    onlineScreen.SetVisible(visible);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(screen), screen, null);
             }
         }
 
@@ -245,13 +368,16 @@ namespace Mejnun.UI.FrontEnd
                 switch (action)
                 {
                     case OnlineAction.Create:
-                        session = await onlineService.CreateSessionAsync(onlineScreen.SeatCount);
+                        session = await onlineService.CreateSessionAsync(onlineScreen.SeatCount,
+                            playerProperties: CreateOnlinePlayerProperties());
                         break;
                     case OnlineAction.JoinByCode:
-                        session = await onlineService.JoinByCodeAsync(sessionCode);
+                        session = await onlineService.JoinByCodeAsync(sessionCode,
+                            CreateOnlinePlayerProperties());
                         break;
                     case OnlineAction.QuickMatch:
-                        session = await onlineService.QuickMatchAsync(onlineScreen.SeatCount);
+                        session = await onlineService.QuickMatchAsync(onlineScreen.SeatCount,
+                            playerProperties: CreateOnlinePlayerProperties());
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(action));
@@ -441,6 +567,11 @@ namespace Mejnun.UI.FrontEnd
             try
             {
                 var hostSession = session.AsHost();
+                hostSession.SetProperty(TimerPropertyKey, new SessionProperty(
+                    onlineScreen.TimerSeconds.ToString(CultureInfo.InvariantCulture), VisibilityPropertyOptions.Member));
+                hostSession.SetProperty(MatchCosmeticsPropertyKey,
+                    new SessionProperty(SelectRandomPlayerCosmetics(session) ?? string.Empty,
+                        VisibilityPropertyOptions.Member));
                 hostSession.SetProperty(StartedPropertyKey,
                     new SessionProperty(startedEarly ? "early" : "started"));
                 await hostSession.SavePropertiesAsync();
@@ -550,7 +681,63 @@ namespace Mejnun.UI.FrontEnd
                 seats[seat] = SeatConfig.Human("Player " + (seat + 1));
             }
 
-            SceneFlow.LoadTable(new MatchRequest(seats, 30, MatchMode.Online));
+            var timerSeconds = ReadOnlineTimer(session);
+            var cosmeticsToken = ReadSessionProperty(session, MatchCosmeticsPropertyKey);
+            if (!TablePickerScreen.TryDecodeCosmeticsToken(cosmeticsToken, out var selectedDeckPicks,
+                    out var selectedFeltPick))
+            {
+                selectedDeckPicks = new[] { onlineTablePicker.GetDeckPick(0), onlineTablePicker.GetDeckPick(1) };
+                selectedFeltPick = onlineTablePicker.FeltPick;
+            }
+
+            var request = new MatchRequest(seats, timerSeconds, MatchMode.Online);
+            SceneFlow.LoadTable(onlineTablePicker.CreateMatchRequest(request, selectedDeckPicks, selectedFeltPick));
+        }
+
+        private Dictionary<string, PlayerProperty> CreateOnlinePlayerProperties()
+        {
+            var deckPicks = new[] { onlineTablePicker.GetDeckPick(0), onlineTablePicker.GetDeckPick(1) };
+            var cosmetics = TablePickerScreen.EncodeCosmeticsToken(deckPicks, onlineTablePicker.FeltPick);
+            return new Dictionary<string, PlayerProperty>
+            {
+                { PlayerCosmeticsPropertyKey, new PlayerProperty(cosmetics, VisibilityPropertyOptions.Member) }
+            };
+        }
+
+        private static string SelectRandomPlayerCosmetics(ISession session)
+        {
+            if (session?.Players == null || session.Players.Count == 0)
+            {
+                return null;
+            }
+
+            var choices = new List<string>();
+            for (var index = 0; index < session.Players.Count; index++)
+            {
+                var properties = session.Players[index].Properties;
+                if (properties != null && properties.TryGetValue(PlayerCosmeticsPropertyKey, out var property) &&
+                    TablePickerScreen.TryDecodeCosmeticsToken(property.Value, out _, out _))
+                {
+                    choices.Add(property.Value);
+                }
+            }
+
+            return choices.Count == 0 ? null : choices[new Random().Next(choices.Count)];
+        }
+
+        private static int ReadOnlineTimer(ISession session)
+        {
+            var value = ReadSessionProperty(session, TimerPropertyKey);
+            return int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seconds)
+                ? Math.Max(0, Math.Min(120, seconds))
+                : 0;
+        }
+
+        private static string ReadSessionProperty(ISession session, string key)
+        {
+            return session?.Properties != null && session.Properties.TryGetValue(key, out var property)
+                ? property.Value
+                : null;
         }
 
     }

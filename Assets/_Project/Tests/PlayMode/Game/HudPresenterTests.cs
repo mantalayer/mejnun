@@ -165,6 +165,22 @@ namespace Mejnun.Game.Tests
                 }
             }
 
+            var originalOpponentCardScale = GameSettings.OpponentCardScale;
+            var opponentSeat = (matchFlow.Game.State.CurrentSeat + 1) % matchFlow.Game.State.Hands.Count;
+            try
+            {
+                GameSettings.OpponentCardScale = 1.5f;
+                yield return null;
+
+                var resizedCard = root.Q<VisualElement>("opponent-card-" + opponentSeat + "-0");
+                var baseCardWidth = root.ClassListContains("phone-layout") ? 22f : 30f;
+                Assert.That(resizedCard.resolvedStyle.width, Is.EqualTo(baseCardWidth * 1.5f).Within(0.1f));
+            }
+            finally
+            {
+                GameSettings.OpponentCardScale = originalOpponentCardScale;
+            }
+
             matchFlow.SetPaused(true);
             Assert.That(drawPass.enabledInHierarchy, Is.False);
             matchFlow.SetPaused(false);

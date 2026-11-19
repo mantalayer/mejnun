@@ -16,7 +16,7 @@ namespace Mejnun.Game
         private const string HandSpreadKey = "settings.hand.spread";
         private const string HandCardScaleKey = "settings.hand.cardScale";
         private const string HandLiftKey = "settings.hand.lift";
-        private const string OpponentCardScaleKey = "settings.opponents.cardScale";
+        public const string OpponentCardScaleKey = "settings.opponents.cardScale";
         private const string ZoomSensitivityKey = "settings.camera.zoomSensitivity";
         private const string UiScaleKey = "settings.ui.scale";
         private const string CpuSpeedKey = "settings.cpu.speed.v2";
@@ -33,10 +33,8 @@ namespace Mejnun.Game
         private const string VolumeVoiceKey = "settings.audio.voice";
         private const string LanguageKey = "settings.language";
         private const string QuickMatchBotFillKey = "settings.online.botFill";
+        private const string OnlineNicknameKey = "settings.online.nickname";
         private const string TutorialCompletedKey = "settings.tutorial.completed";
-        private const float PhoneMaxShortSideInches = 4.5f;
-        private const int PhoneMaxShortSidePixels = 1200;
-        private const float PhoneMinAspectRatio = 1.9f;
         private static readonly float[] CpuDelayMultipliers = { 6f, 4f, 3f, 2f, 1f, 0.5f };
         private static bool fastForward;
 
@@ -50,7 +48,7 @@ namespace Mejnun.Game
 
         public static bool ConfirmDraw
         {
-            get => Get(ConfirmDrawKey, true);
+            get => Get(ConfirmDrawKey, false);
             set => Set(ConfirmDrawKey, value);
         }
 
@@ -62,13 +60,13 @@ namespace Mejnun.Game
 
         public static bool ConfirmLeave
         {
-            get => Get(ConfirmLeaveKey, true);
+            get => Get(ConfirmLeaveKey, false);
             set => Set(ConfirmLeaveKey, value);
         }
 
         public static bool HintBoardMoves
         {
-            get => Get(HintBoardMovesKey, false);
+            get => Get(HintBoardMovesKey, true);
             set => Set(HintBoardMovesKey, value);
         }
 
@@ -99,25 +97,25 @@ namespace Mejnun.Game
 
         public static float HandArcAmount
         {
-            get => Get(HandArcAmountKey, 0.5f);
+            get => Get(HandArcAmountKey, 0.246f);
             set => Set(HandArcAmountKey, value);
         }
 
         public static float HandSpread
         {
-            get => Get(HandSpreadKey, 0.52f);
+            get => Get(HandSpreadKey, 0.5147f);
             set => Set(HandSpreadKey, value);
         }
 
         public static float HandCardScale
         {
-            get => Get(HandCardScaleKey, 1f);
+            get => Get(HandCardScaleKey, 1.245f);
             set => Set(HandCardScaleKey, value);
         }
 
         public static float HandLift
         {
-            get => Get(HandLiftKey, 0.15f);
+            get => Get(HandLiftKey, 0.149f);
             set => Set(HandLiftKey, value);
         }
 
@@ -129,33 +127,14 @@ namespace Mejnun.Game
 
         public static float ZoomSensitivity
         {
-            get => Get(ZoomSensitivityKey, 1f);
+            get => Get(ZoomSensitivityKey, 5f);
             set => Set(ZoomSensitivityKey, value);
         }
 
         public static float UiScale
         {
-            get => Mathf.Clamp(Get(UiScaleKey, IsPhoneScreen ? 1.35f : 1f), 0.8f, 2f);
-            set => Set(UiScaleKey, Mathf.Clamp(value, 0.8f, 2f));
-        }
-
-        private static bool IsPhoneScreen
-        {
-            get
-            {
-                if (!Application.isMobilePlatform)
-                {
-                    return false;
-                }
-
-                var shortSide = Mathf.Min(Screen.width, Screen.height);
-                var longSide = Mathf.Max(Screen.width, Screen.height);
-                var aspectRatio = shortSide <= 0 ? 0f : longSide / (float)shortSide;
-                var phoneSized = Screen.dpi > 0f
-                    ? shortSide / Screen.dpi <= PhoneMaxShortSideInches
-                    : shortSide <= PhoneMaxShortSidePixels;
-                return phoneSized && aspectRatio >= PhoneMinAspectRatio;
-            }
+            get => Mathf.Clamp(Get(UiScaleKey, Application.isMobilePlatform ? 1.5f : 1f), 0.8f, 3f);
+            set => Set(UiScaleKey, Mathf.Clamp(value, 0.8f, 3f));
         }
 
         public static int CpuSpeed
@@ -179,25 +158,25 @@ namespace Mejnun.Game
 
         public static bool OverlapSets
         {
-            get => Get(OverlapSetsKey, false);
+            get => Get(OverlapSetsKey, true);
             set => Set(OverlapSetsKey, value);
         }
 
         public static bool OrganicBoard
         {
-            get => Get(OrganicBoardKey, false);
+            get => Get(OrganicBoardKey, true);
             set => Set(OrganicBoardKey, value);
         }
 
         public static float BoardCardSpread
         {
-            get => Mathf.Clamp(Get(BoardCardSpreadKey, 1f), 0.5f, 1.5f);
+            get => Mathf.Clamp(Get(BoardCardSpreadKey, 0.99f), 0.5f, 1.5f);
             set => Set(BoardCardSpreadKey, Mathf.Clamp(value, 0.5f, 1.5f));
         }
 
         public static float CardMessiness
         {
-            get => Mathf.Clamp01(Get(CardMessinessKey, 0f));
+            get => Mathf.Clamp01(Get(CardMessinessKey, 0.251f));
             set => Set(CardMessinessKey, Mathf.Clamp01(value));
         }
 
@@ -247,7 +226,7 @@ namespace Mejnun.Game
         {
             get
             {
-                var value = PlayerPrefs.GetInt(QuickMatchBotFillKey, 60);
+                var value = PlayerPrefs.GetInt(QuickMatchBotFillKey, 30);
                 return value == 0 || value == 30 ? value : 60;
             }
             set
@@ -257,6 +236,12 @@ namespace Mejnun.Game
                 PlayerPrefs.Save();
                 Changed?.Invoke(QuickMatchBotFillKey);
             }
+        }
+
+        public static string OnlineNickname
+        {
+            get => PlayerPrefs.GetString(OnlineNicknameKey, string.Empty);
+            set => Set(OnlineNicknameKey, value?.Trim() ?? string.Empty);
         }
 
         public static void ResetForTests()
@@ -290,6 +275,7 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(VolumeVoiceKey);
             PlayerPrefs.DeleteKey(LanguageKey);
             PlayerPrefs.DeleteKey(QuickMatchBotFillKey);
+            PlayerPrefs.DeleteKey(OnlineNicknameKey);
             FastForward = false;
             Changed = null;
         }

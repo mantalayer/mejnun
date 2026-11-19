@@ -89,6 +89,20 @@ namespace Mejnun.UI.FrontEnd
                 cards.Add(image);
             }
 
+            if (skin.CardBack != null)
+            {
+                var image = new Image
+                {
+                    sprite = skin.CardBack,
+                    scaleMode = ScaleMode.ScaleToFit
+                };
+                image.AddToClassList("gallery-face");
+                image.AddToClassList("gallery-card-back");
+                grid.Add(image);
+                cards.Add(image);
+            }
+
+            var layoutColumns = 0;
             grid.RegisterCallback<GeometryChangedEvent>(_ =>
             {
                 var width = grid.contentRect.width;
@@ -101,31 +115,57 @@ namespace Mejnun.UI.FrontEnd
                 const float cardAspect = 0.72f;
                 const float gap = 2f;
                 var bestWidth = 0f;
-                var bestHeight = 0f;
+                var bestColumns = 0;
                 for (var columns = 1; columns <= cards.Count; columns++)
                 {
                     var rows = (cards.Count + columns - 1) / columns;
-                    var columnWidth = (width - gap * columns) / columns;
-                    var rowHeight = (height - gap * rows) / rows;
+                    var columnWidth = (width - gap * (columns - 1)) / columns;
+                    var rowHeight = (height - gap * (rows - 1)) / rows;
                     var cardWidth = Mathf.Min(columnWidth, rowHeight * cardAspect);
                     if (cardWidth > bestWidth)
                     {
                         bestWidth = cardWidth;
-                        bestHeight = cardWidth / cardAspect;
+                        bestColumns = columns;
                     }
                 }
 
-                if (bestWidth <= 0f || bestHeight <= 0f)
+                bestWidth = Mathf.Floor(bestWidth);
+                if (bestWidth <= 0f || bestColumns <= 0)
                 {
                     return;
                 }
 
+                if (bestColumns != layoutColumns)
+                {
+                    grid.Clear();
+                    for (var start = 0; start < cards.Count; start += bestColumns)
+                    {
+                        var row = new VisualElement();
+                        row.AddToClassList("gallery-deck-row");
+                        var end = Mathf.Min(start + bestColumns, cards.Count);
+                        for (var index = start; index < end; index++)
+                        {
+                            row.Add(cards[index]);
+                        }
+
+                        if (end < cards.Count)
+                        {
+                            row.style.marginBottom = gap;
+                        }
+
+                        grid.Add(row);
+                    }
+
+                    layoutColumns = bestColumns;
+                }
+
+                var cardHeight = bestWidth / cardAspect;
                 for (var index = 0; index < cards.Count; index++)
                 {
                     cards[index].style.width = bestWidth;
-                    cards[index].style.height = bestHeight;
-                    cards[index].style.marginRight = gap;
-                    cards[index].style.marginBottom = gap;
+                    cards[index].style.height = cardHeight;
+                    cards[index].style.marginRight = index % bestColumns < bestColumns - 1 ? gap : 0f;
+                    cards[index].style.marginBottom = 0f;
                 }
             });
             return grid;

@@ -40,18 +40,19 @@ namespace Mejnun.UI.FrontEnd
         }
 
         public TablePickerScreen(VisualElement documentRoot, CosmeticCatalog cosmeticCatalog,
-            ProgressionService progressionService, Action<string> showGallery, DeckSkinLoader loader = null)
+            ProgressionService progressionService, Action<string> showGallery, DeckSkinLoader loader = null,
+            string rootName = "setup-screen", string namePrefix = "")
         {
-            root = documentRoot.Q<VisualElement>("setup-screen");
+            root = documentRoot.Q<VisualElement>(rootName);
             popup = documentRoot.Q<VisualElement>("cosmetic-popup");
             popupHost = popup.parent ?? documentRoot;
             popupTail = popup.Q<VisualElement>("cosmetic-popup-tail");
             catalog = cosmeticCatalog;
             progression = progressionService ?? throw new ArgumentNullException(nameof(progressionService));
             previews = new CosmeticPreviews(loader);
-            deckPreviewButtons[0] = root.Q<Button>("deck-preview-0");
-            deckPreviewButtons[1] = root.Q<Button>("deck-preview-1");
-            feltPreviewButton = root.Q<Button>("felt-preview");
+            deckPreviewButtons[0] = root.Q<Button>(namePrefix + "deck-preview-0");
+            deckPreviewButtons[1] = root.Q<Button>(namePrefix + "deck-preview-1");
+            feltPreviewButton = root.Q<Button>(namePrefix + "felt-preview");
             popupTitle = popup.Q<Label>("cosmetic-popup-title");
             lockedNotice = popup.Q<Label>("cosmetic-locked-notice");
             deckGrid = popup.Q<ScrollView>("deck-selector-grid");
@@ -77,6 +78,12 @@ namespace Mejnun.UI.FrontEnd
         public string FeltPick => feltPick;
         public bool CanStart => HasDistinctPicks();
         public bool IsPopupOpen => popupOpen;
+
+        public void ReloadPicks()
+        {
+            RestoreLastPicks();
+            Refresh();
+        }
 
         public void SetSetupRequest(MatchRequest request)
         {
@@ -627,9 +634,15 @@ namespace Mejnun.UI.FrontEnd
 
         private bool HasDistinctPicks()
         {
-            return deckPicks[0] == null || deckPicks[1] == null ||
-                   !string.Equals(DeckFaceId.GetSkinId(deckPicks[0]), DeckFaceId.GetSkinId(deckPicks[1]),
-                       StringComparison.Ordinal);
+            return HasDistinctPicks(deckPicks);
+        }
+
+        private static bool HasDistinctPicks(IReadOnlyList<string> picks)
+        {
+            return picks != null && picks.Count == 2 &&
+                   (picks[0] == null || picks[1] == null ||
+                    !string.Equals(DeckFaceId.GetSkinId(picks[0]), DeckFaceId.GetSkinId(picks[1]),
+                        StringComparison.Ordinal));
         }
 
         private void OnPreviewLoaded()
@@ -665,19 +678,30 @@ namespace Mejnun.UI.FrontEnd
 
         public MatchRequest CreateMatchRequest()
         {
-            if (setupRequest == null || !HasDistinctPicks())
+            if (setupRequest == null)
+            {
+                throw new InvalidOperationException("Two different deck selections are required to start a match.");
+            }
+
+            return CreateMatchRequest(setupRequest, deckPicks, feltPick);
+        }
+
+        public MatchRequest CreateMatchRequest(MatchRequest request, IReadOnlyList<string> selectedDeckPicks,
+            string selectedFeltPick)
+        {
+            if (request == null || request.Resume || !HasDistinctPicks(selectedDeckPicks))
             {
                 throw new InvalidOperationException("Two different deck selections are required to start a match.");
             }
 
             var evaluator = progression.CreateUnlockEvaluator();
             var randomFacePool = new List<string>(evaluator.OwnedFaceIds());
-            var seed = setupRequest.Seed ?? CreateSeed();
+            var seed = request.Seed ?? CreateSeed();
 
             string[] feltPool;
-            if (feltPick != null)
+            if (selectedFeltPick != null)
             {
-                feltPool = new[] { feltPick };
+                feltPool = new[] { selectedFeltPick };
             }
             else
             {
@@ -691,10 +715,45 @@ namespace Mejnun.UI.FrontEnd
                 feltPool = new[] { ownedFelts[feltRng.NextInt(ownedFelts.Length)] };
             }
 
-            var request = new MatchRequest(setupRequest.Seats, setupRequest.TurnSeconds, setupRequest.Mode,
-                deckPicks: deckPicks, randomFacePool: randomFacePool, feltPool: feltPool,
+            return new MatchRequest(request.Seats, request.TurnSeconds, request.Mode,
+                deckPicks: new[] { selectedDeckPicks[0], selectedDeckPicks[1] }, randomFacePool: randomFacePool, feltPool: feltPool,
                 seed: seed);
-            return request;
+        }
+
+        public static string EncodeCosmeticsToken(IReadOnlyList<string> selectedDeckPicks, string selectedFeltPick)
+        {
+            if (selectedDeckPicks == null || selectedDeckPicks.Count != 2)
+            {
+                throw new ArgumentException("Two deck selections are required.", nameof(selectedDeckPicks));
+            }
+
+            return (selectedDeckPicks[0] ?? string.Empty) + "|" + (selectedDeckPicks[1] ?? string.Empty) + "|" +
+                   (selectedFeltPick ?? string.Empty);
+        }
+
+        public static bool TryDecodeCosmeticsToken(string token, out string[] selectedDeckPicks,
+            out string selectedFeltPick)
+        {
+            selectedDeckPicks = null;
+            selectedFeltPick = null;
+            if (token == null)
+            {
+                return false;
+            }
+
+            var parts = token.Split('|');
+            if (parts.Length != 3)
+            {
+                return false;
+            }
+
+            selectedDeckPicks = new[]
+            {
+                string.IsNullOrEmpty(parts[0]) ? null : parts[0],
+                string.IsNullOrEmpty(parts[1]) ? null : parts[1]
+            };
+            selectedFeltPick = string.IsNullOrEmpty(parts[2]) ? null : parts[2];
+            return true;
         }
 
         private DeckSkinInfo? FindSkin(string id)

@@ -9,7 +9,7 @@ namespace Mejnun.Cosmetics.Tests
     public sealed class CosmeticContentTests
     {
         [Test]
-        public void CosmeticCatalogContainsAllSkinsAndThreeConfiguredFelts()
+        public void CosmeticCatalogContainsAllSkinsAndSixConfiguredFelts()
         {
             var catalog = AssetDatabase.LoadAssetAtPath<CosmeticCatalog>(
                 "Assets/_Project/Data/Cosmetics/CosmeticCatalog.asset");
@@ -18,8 +18,8 @@ namespace Mejnun.Cosmetics.Tests
             Assert.That(catalog.Decks.GetEntries(), Has.Count.EqualTo(26));
             Assert.That(catalog.Decks.Skins, Has.Count.EqualTo(25));
             Assert.That(catalog.Decks.AddressableSkins, Has.Count.EqualTo(1));
-            Assert.That(catalog.Felts.Felts, Has.Count.EqualTo(3));
-            Assert.That(catalog.GetUnlockEntries(), Has.Count.EqualTo(29));
+            Assert.That(catalog.Felts.Felts, Has.Count.EqualTo(6));
+            Assert.That(catalog.GetUnlockEntries(), Has.Count.EqualTo(32));
 
             var pixelPastel = catalog.Decks.AddressableSkins[0];
             var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -40,7 +40,7 @@ namespace Mejnun.Cosmetics.Tests
                 "Assets/_Project/Data/Felts/TableFeltCatalog.asset");
             var green = felts.Resolve("green");
             var burgundy = felts.Resolve("burgundy");
-            var midnight = felts.Resolve("midnight");
+            var blue = felts.Resolve("blue");
 
             Assert.That(pixelPastel.Unlock.Kind, Is.EqualTo(UnlockKind.Level));
             Assert.That(pixelPastel.Unlock.Target, Is.EqualTo(2));
@@ -49,12 +49,11 @@ namespace Mejnun.Cosmetics.Tests
             Assert.That(green.Unlock.Kind, Is.EqualTo(UnlockKind.Free));
             Assert.That(green.Mode, Is.EqualTo(FeltRenderMode.Tiled));
             Assert.That(burgundy.Unlock.Kind, Is.EqualTo(UnlockKind.Free));
-            Assert.That(burgundy.Mode, Is.EqualTo(FeltRenderMode.TiledWithBorder));
-            Assert.That(burgundy.Border, Is.Not.Null);
-            Assert.That(midnight.Unlock.Kind, Is.EqualTo(UnlockKind.Level));
-            Assert.That(midnight.Unlock.Target, Is.EqualTo(3));
-            Assert.That(midnight.Mode, Is.EqualTo(FeltRenderMode.Image));
-            Assert.That(midnight.Image, Is.Not.Null);
+            Assert.That(burgundy.Mode, Is.EqualTo(FeltRenderMode.Tiled));
+            Assert.That(blue.Id, Is.EqualTo("blue"));
+            Assert.That(blue.Unlock.Kind, Is.EqualTo(UnlockKind.Level));
+            Assert.That(blue.Unlock.Target, Is.EqualTo(3));
+            Assert.That(blue.Mode, Is.EqualTo(FeltRenderMode.Tiled));
         }
     }
 }

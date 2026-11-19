@@ -40,6 +40,8 @@ namespace Mejnun.Game
         private bool applicationPaused;
         private bool remoteAuthority;
         private int onlineLocalSeat = -1;
+        private bool onlineDeckPreloadPending;
+        private MejnunGame pendingOnlineGame;
         private string onlineWaitingMessage = string.Empty;
         private float elapsedMatchSeconds;
         private MatchRequest activeRequest;
@@ -64,6 +66,7 @@ namespace Mejnun.Game
             : activeRequest.Mode;
         public TurnTimer TurnTimer => turnTimer;
         public int TurnSeconds { get; private set; }
+        public bool IsOnline => remoteAuthority && Mode == MatchMode.Online;
         public IReadOnlyList<SeatConfig> Seats => seats;
         public MatchRequest ActiveRequest => activeRequest;
         public bool FastForward
@@ -235,8 +238,7 @@ namespace Mejnun.Game
 
         private void Update()
         {
-            if (Mode != MatchMode.Online && !matchPaused && !applicationPaused && Game != null &&
-                Game.State.Phase == GamePhase.Playing &&
+            if (!matchPaused && !applicationPaused && Game != null && Game.State.Phase == GamePhase.Playing &&
                 !IsBotSeat(Game.State.CurrentSeat))
             {
                 elapsedMatchSeconds += Time.unscaledDeltaTime;
@@ -292,7 +294,14 @@ namespace Mejnun.Game
             onlineLocalSeat = localSeat;
             if (turnTimer != null)
             {
-                turnTimer.enabled = !enabled;
+                turnTimer.enabled = true;
+                turnTimer.SetDisplayOnly(enabled);
+                if (enabled)
+                {
+                    TurnSeconds = Mathf.Max(0, activeRequest == null ? 0 : activeRequest.TurnSeconds);
+                    turnTimer.SetDuration(TurnSeconds);
+                    turnTimer.Paused = matchPaused;
+                }
             }
 
             if (tableController != null)
@@ -303,6 +312,11 @@ namespace Mejnun.Game
             }
 
             ApplyOnlineViewer();
+        }
+
+        public bool IsLocalSeat(int seat)
+        {
+            return IsOnline && seat >= 0 && seat == onlineLocalSeat;
         }
 
         public void SetOnlineSeatStatus(int seat, string name, bool isBot)
@@ -342,6 +356,58 @@ namespace Mejnun.Game
                 return;
             }
 
+            var duration = authoritativeGame.Setup.TurnSeconds;
+            if (TurnSeconds != duration)
+            {
+                TurnSeconds = duration;
+                turnTimer?.SetDuration(duration);
+            }
+
+            if (turnTimer != null)
+            {
+                turnTimer.SetDisplayOnly(true);
+                turnTimer.Paused = matchPaused;
+            }
+            if (onlineDeckPreloadPending)
+            {
+                pendingOnlineGame = authoritativeGame;
+                return;
+            }
+
+            if (deckSkinLoader != null && authoritativeGame.State.DeckFaces != null)
+            {
+                onlineDeckPreloadPending = true;
+                pendingOnlineGame = authoritativeGame;
+                if (deckSkinLoader.Preload(authoritativeGame.State.DeckFaces, OnOnlineDecksPreloaded))
+                {
+                    return;
+                }
+
+                onlineDeckPreloadPending = false;
+                pendingOnlineGame = null;
+            }
+
+            ApplyOnlineGameNow(authoritativeGame);
+        }
+
+        private void OnOnlineDecksPreloaded()
+        {
+            var game = pendingOnlineGame;
+            pendingOnlineGame = null;
+            onlineDeckPreloadPending = false;
+            if (game != null)
+            {
+                ApplyOnlineGameNow(game);
+            }
+        }
+
+        private void ApplyOnlineGameNow(MejnunGame authoritativeGame)
+        {
+            if (!remoteAuthority || authoritativeGame == null)
+            {
+                return;
+            }
+
             Game = authoritativeGame;
             tableController?.Resync(authoritativeGame);
             ApplyOnlineViewer();
@@ -360,6 +426,11 @@ namespace Mejnun.Game
             }
 
             matchPaused = paused;
+            if (turnTimer != null)
+            {
+                turnTimer.Paused = paused;
+            }
+
             tableController?.SetInputPaused(paused || !string.IsNullOrEmpty(onlineWaitingMessage));
         }
 
@@ -1020,11 +1091,14 @@ namespace Mejnun.Game
             if (!resultRecorded && seats.Length >= 2 && HumanCount >= 1)
             {
                 resultRecorded = true;
-                var localWin = result.Winner.HasValue && result.Winner.Value >= 0 &&
-                               result.Winner.Value < seats.Length && !seats[result.Winner.Value].IsBot;
                 var mode = activeRequest == null
                     ? (HumanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo)
                     : activeRequest.Mode;
+                var localWin = result.Winner.HasValue && result.Winner.Value >= 0 &&
+                               result.Winner.Value < seats.Length &&
+                               (mode == MatchMode.Online
+                                   ? result.Winner.Value == onlineLocalSeat
+                                   : !seats[result.Winner.Value].IsBot);
                 var beatHardBot = false;
                 var hasBot = false;
                 var cpuDifficulty = 0;

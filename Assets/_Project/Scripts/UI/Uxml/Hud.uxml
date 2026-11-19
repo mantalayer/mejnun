@@ -28,14 +28,14 @@
                 <ui:Button name="redo-button" class="hud-button" text="Redo" />
                 <ui:Button name="revert-button" class="hud-button" text="Revert" />
                 <ui:Button name="fix-board-button" class="hud-button" text="Fix board" />
-                <ui:Button name="sort-suit-button" class="hud-button" text="Sort: suit" />
                 <ui:Button name="sort-rank-button" class="hud-button" text="Sort: rank" />
-                <ui:Button name="fit-board-button" class="hud-button" text="Fit board" />
+                <ui:Button name="sort-suit-button" class="hud-button" text="Sort: suit" />
+                <ui:Button name="fit-board-button" class="hud-button" text="Reset Camera" />
                 <ui:Button name="compact-board-button" class="hud-button" text="Tidy board" />
                 <ui:Button name="mark-set-button" class="hud-button" text="Mark" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="fast-forward-dock" class="fast-forward-dock" picking-mode="Ignore" style="display: none">
+        <ui:VisualElement name="fast-forward-dock" class="fast-forward-dock hud-bar" picking-mode="Ignore" style="display: none">
             <ui:Button name="fast-forward-button" class="hud-button" text="Fast forward" style="display: none" />
         </ui:VisualElement>
         <ui:VisualElement name="opponents-strip" class="opponents-strip" picking-mode="Ignore">

@@ -9,14 +9,14 @@ namespace Mejnun.Cosmetics
             var baseXp = summary.CanAwardWin && summary.LocalWin
                 ? 60 + (summary.MejnunWin ? 20 : 0)
                 : summary.Stalemate ? 15 : 10;
-            var difficultyMultiplier = summary.CpuDifficulty == 0 ? 1f :
-                summary.CpuDifficulty == 1 ? 1.4f : 1.8f;
+            var difficultyMultiplier = summary.CpuDifficulty == 0 ? 1.0 :
+                summary.CpuDifficulty == 1 ? 1.4 : 1.8;
             var duration = summary.DurationSeconds;
             var speedMultiplier = duration <= 300
-                ? 1.5f
+                ? 1.5
                 : duration >= 1800
-                    ? 0.75f
-                    : 1.5f - (duration - 300) * 0.75f / 1500f;
+                    ? 0.75
+                    : 1.5 - (duration - 300) * 0.75 / 1500.0;
             return (int)Math.Round(baseXp * difficultyMultiplier * speedMultiplier,
                 MidpointRounding.AwayFromZero);
         }

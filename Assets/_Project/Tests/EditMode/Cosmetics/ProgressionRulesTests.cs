@@ -52,6 +52,15 @@ namespace Mejnun.Cosmetics.Tests
         }
 
         [Test]
+        public void OnlineWinnerEarnsMoreXpThanOnlineLoser()
+        {
+            var winner = new MatchSummary(MatchMode.Online, 2, 2, true, false, false, false, 0, 900);
+            var loser = new MatchSummary(MatchMode.Online, 2, 2, false, false, false, false, 0, 900);
+
+            Assert.That(ProgressionRules.XpFor(winner), Is.GreaterThan(ProgressionRules.XpFor(loser)));
+        }
+
+        [Test]
         public void LevelCurveHandlesBoundaries()
         {
             Assert.That(ProgressionRules.LevelForXp(0), Is.EqualTo(1));
