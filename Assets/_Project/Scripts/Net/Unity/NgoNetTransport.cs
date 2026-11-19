@@ -26,6 +26,7 @@ namespace Mejnun.Net.Unity
         private bool joinSent;
 
         public event Action<string> PlayerDisconnected;
+        public event Action HostDisconnected;
         public event Action<Exception> TransportError;
 
         public void PrepareForHostMigration()
@@ -160,6 +161,7 @@ namespace Mejnun.Net.Unity
             if (!isHost && networkManager != null && clientId == networkManager.LocalClientId)
             {
                 joinSent = false;
+                HostDisconnected?.Invoke();
             }
         }
 

@@ -90,6 +90,21 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void HandLayoutFitsOneRowAndOnlyFallsBackWhenPortraitIsTooNarrow()
+        {
+            var rows = HandView.CalculateRowLayout(true, 10, 100f, 60f, 1000f, out var fittedStep);
+            Assert.That(rows, Is.EqualTo(1));
+            Assert.That(fittedStep, Is.EqualTo(60f));
+
+            rows = HandView.CalculateRowLayout(true, 10, 100f, 80f, 800f, out fittedStep);
+            Assert.That(rows, Is.EqualTo(1));
+            Assert.That(fittedStep, Is.EqualTo(700f / 9f).Within(0.001f));
+
+            rows = HandView.CalculateRowLayout(true, 10, 100f, 80f, 350f, out fittedStep);
+            Assert.That(rows, Is.EqualTo(2));
+        }
+
+        [Test]
         public void HandArcAmountControlsCardLiftAndTilt()
         {
             HandView.CalculateArcPose(-1f, 0f, out var edgeOffset, out var edgeAngle);

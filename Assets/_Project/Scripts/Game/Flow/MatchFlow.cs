@@ -40,6 +40,7 @@ namespace Mejnun.Game
         private bool applicationPaused;
         private bool remoteAuthority;
         private int onlineLocalSeat = -1;
+        private string onlineWaitingMessage = string.Empty;
         private float elapsedMatchSeconds;
         private MatchRequest activeRequest;
         private readonly CardTracker cardTracker = new CardTracker();
@@ -89,6 +90,10 @@ namespace Mejnun.Game
         }
 
         public event Action<MatchFlowScreen> ScreenChanged;
+        public event Action OnlineSeatsChanged;
+        public event Action<string> OnlineNotice;
+
+        public string OnlineWaitingMessage => onlineWaitingMessage;
 
         public string HandoffMessage => CurrentSeat < 0
             ? string.Empty
@@ -279,6 +284,8 @@ namespace Mejnun.Game
             return StartMatch(request.Seats, request.Seed, request.IsTutorial ? 0 : request.TurnSeconds, request);
         }
 
+        public string OnlineSessionCode { get; set; }
+
         public void SetOnlineAuthority(bool enabled, int localSeat)
         {
             remoteAuthority = enabled;
@@ -295,11 +302,7 @@ namespace Mejnun.Game
                     : seat => !IsBotSeat(seat));
             }
 
-            if (tableView != null && enabled && localSeat >= 0)
-            {
-                tableView.SetViewerSeat(localSeat);
-                tableView.SetHandVisible(true);
-            }
+            ApplyOnlineViewer();
         }
 
         public void SetOnlineSeatStatus(int seat, string name, bool isBot)
@@ -315,6 +318,21 @@ namespace Mejnun.Game
                 ? SeatConfig.Bot(displayName, BotDifficulty.Medium)
                 : SeatConfig.Human(displayName);
             tableView?.SetCpuSeatPredicate(IsBotSeat);
+            OnlineSeatsChanged?.Invoke();
+        }
+
+        public void PostOnlineNotice(string message)
+        {
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                OnlineNotice?.Invoke(message);
+            }
+        }
+
+        public void SetOnlineWaiting(string message)
+        {
+            onlineWaitingMessage = message ?? string.Empty;
+            tableController?.SetInputPaused(matchPaused || !string.IsNullOrEmpty(onlineWaitingMessage));
         }
 
         public void ApplyOnlineGame(MejnunGame authoritativeGame)
@@ -326,6 +344,7 @@ namespace Mejnun.Game
 
             Game = authoritativeGame;
             tableController?.Resync(authoritativeGame);
+            ApplyOnlineViewer();
             if (authoritativeGame.State.Phase == GamePhase.Finished && authoritativeGame.State.Result != null &&
                 Screen != MatchFlowScreen.Results)
             {
@@ -341,7 +360,7 @@ namespace Mejnun.Game
             }
 
             matchPaused = paused;
-            tableController?.SetInputPaused(paused);
+            tableController?.SetInputPaused(paused || !string.IsNullOrEmpty(onlineWaitingMessage));
         }
 
         /// <summary>Leaves the tutorial: it counts as completed, nothing is saved, and the menu is shown.</summary>
@@ -494,8 +513,16 @@ namespace Mejnun.Game
             if (tableView != null)
             {
                 tableView.ClearCpuPlacementViews();
-                tableView.SetViewerSeat(-1);
-                tableView.SetHandVisible(false);
+                if (remoteAuthority && onlineLocalSeat >= 0)
+                {
+                    ApplyOnlineViewer();
+                }
+                else
+                {
+                    tableView.SetViewerSeat(-1);
+                    tableView.SetHandVisible(false);
+                }
+
                 tableView.ApplyFelt(Game.State.TableFeltId);
             }
 
@@ -606,7 +633,7 @@ namespace Mejnun.Game
 
             if (tableController != null)
             {
-                tableController.SetInputPaused(paused);
+                tableController.SetInputPaused(paused || !string.IsNullOrEmpty(onlineWaitingMessage));
             }
 
             if (botDriver != null)
@@ -704,8 +731,16 @@ namespace Mejnun.Game
             if (tableView != null)
             {
                 tableView.ClearCpuPlacementViews();
-                tableView.SetViewerSeat(-1);
-                tableView.SetHandVisible(false);
+                if (remoteAuthority && onlineLocalSeat >= 0)
+                {
+                    ApplyOnlineViewer();
+                }
+                else
+                {
+                    tableView.SetViewerSeat(-1);
+                    tableView.SetHandVisible(false);
+                }
+
                 tableView.ApplyFelt(feltId);
             }
 
@@ -738,8 +773,11 @@ namespace Mejnun.Game
                 tutorialDirector.Begin(MejnunTutorial.Create(), tableController, botDriver);
             }
 
-            SetScreen(dealer.HasValue ? MatchFlowScreen.Turn : MatchFlowScreen.DealerQuestion);
+            SetScreen(dealer.HasValue || Mode == MatchMode.Online
+                ? MatchFlowScreen.Turn
+                : MatchFlowScreen.DealerQuestion);
             tableController.Initialize(Game);
+            ApplyOnlineViewer();
             return true;
         }
 
@@ -779,6 +817,18 @@ namespace Mejnun.Game
         {
             IsInitializingRound = false;
             tableController.Initialize(Game);
+            ApplyOnlineViewer();
+        }
+
+        private void ApplyOnlineViewer()
+        {
+            if (!remoteAuthority || onlineLocalSeat < 0 || tableView == null)
+            {
+                return;
+            }
+
+            tableView.SetViewerSeat(onlineLocalSeat);
+            tableView.SetHandVisible(true);
         }
 
         private static string[] CopyStrings(IReadOnlyList<string> values)
@@ -808,7 +858,7 @@ namespace Mejnun.Game
                 }
                 else if (state.Phase == GamePhase.ChoosingDealer)
                 {
-                    SetScreen(MatchFlowScreen.DealerQuestion);
+                    SetScreen(MatchFlowScreen.Turn);
                 }
                 else if (state.Phase == GamePhase.Playing && Screen != MatchFlowScreen.Results)
                 {

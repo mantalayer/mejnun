@@ -38,6 +38,24 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void UiScaleClampsToSupportedRange()
+        {
+            var originalScale = GameSettings.UiScale;
+            try
+            {
+                GameSettings.UiScale = 0f;
+                Assert.That(GameSettings.UiScale, Is.EqualTo(0.8f));
+
+                GameSettings.UiScale = 3f;
+                Assert.That(GameSettings.UiScale, Is.EqualTo(2f));
+            }
+            finally
+            {
+                GameSettings.UiScale = originalScale;
+            }
+        }
+
+        [Test]
         public void AudioVolumesMapFromZeroToOneIntoWwiseRtpcs()
         {
             var originalMaster = GameSettings.VolumeMaster;
@@ -103,6 +121,13 @@ namespace Mejnun.Game.Tests
             public bool LoadBank(string bankName)
             {
                 return true;
+            }
+
+            public bool IsInitialized => true;
+
+            public string LoadBankResult(string bankName)
+            {
+                return "AK_Success";
             }
         }
     }

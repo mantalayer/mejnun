@@ -51,6 +51,23 @@ namespace Mejnun.Net
         public ISnapshotStore SnapshotStore => snapshotStore;
         public event Action<string, NetMessage> MessageSent;
         public event Action<MejnunGame> StateChanged;
+        public event Action<SeatStatusMessage> SeatStatusChanged;
+
+        public bool AreAllSeatsConnected
+        {
+            get
+            {
+                for (var index = 0; index < seats.Length; index++)
+                {
+                    if (!seats[index].Connected && !seats[index].IsBot)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
 
         public static HostSession FromRecord(SessionRecord record, ISnapshotStore snapshotStore = null)
         {
@@ -345,8 +362,10 @@ namespace Mejnun.Net
             for (var seat = 0; seat < seats.Length; seat++)
             {
                 var entry = seats[seat];
-                SendAll(new SeatStatusMessage(seat, entry.AuthenticationId, entry.DisplayName,
-                    entry.Connected, entry.IsBot));
+                var message = new SeatStatusMessage(seat, entry.AuthenticationId, entry.DisplayName,
+                    entry.Connected, entry.IsBot);
+                SeatStatusChanged?.Invoke(message);
+                SendAll(message);
             }
         }
 

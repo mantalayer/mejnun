@@ -186,6 +186,28 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
+        public IEnumerator OnlineHostKeepsLocalHandVisibleAfterStartingAndApplyingAuthoritativeGame()
+        {
+            LoadTable();
+            yield return null;
+            var flow = Object.FindAnyObjectByType<MatchFlow>();
+            Assert.That(flow, Is.Not.Null);
+
+            flow.SetOnlineAuthority(true, 0);
+            var request = new MatchRequest(new[] { SeatConfig.Human("Sam"), SeatConfig.Human("Alex") },
+                mode: Mejnun.Cosmetics.MatchMode.Online, seed: 777UL);
+            Assert.That(flow.StartMatch(request), Is.True);
+            yield return WaitForRoundInitialization(flow);
+
+            Assert.That(flow.Table.ViewerSeat, Is.EqualTo(0));
+            Assert.That(flow.Table.HandVisible, Is.True);
+
+            flow.ApplyOnlineGame(flow.Game);
+            Assert.That(flow.Table.ViewerSeat, Is.EqualTo(0));
+            Assert.That(flow.Table.HandVisible, Is.True);
+        }
+
+        [UnityTest]
         public IEnumerator AMatchNeedsAtLeastOneHuman()
         {
             LoadTable();

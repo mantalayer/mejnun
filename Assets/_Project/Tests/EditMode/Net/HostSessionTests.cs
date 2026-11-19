@@ -129,6 +129,28 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
+        public void Host_SeatStatusChangesTrackConnectionsAndReadiness()
+        {
+            var host = NewHost();
+            var statuses = new System.Collections.Generic.List<SeatStatusMessage>();
+            host.SeatStatusChanged += statuses.Add;
+
+            host.Join("player-a", "A");
+
+            Assert.That(host.AreAllSeatsConnected, Is.False);
+            Assert.That(statuses.Exists(status => status.Seat == 0 && status.Connected &&
+                                                   status.DisplayName == "A"), Is.True);
+
+            host.Join("player-b", "B");
+
+            Assert.That(host.AreAllSeatsConnected, Is.True);
+            Assert.That(statuses.Exists(status => status.Seat == 1 && status.Connected &&
+                                                   status.DisplayName == "B"), Is.True);
+            Assert.That(host.Disconnect("player-b", DisconnectChoice.Wait), Is.True);
+            Assert.That(host.AreAllSeatsConnected, Is.False);
+        }
+
+        [Test]
         public void Host_SavePauseAndMigrationRestoreTheSession()
         {
             var store = new InMemorySnapshotStore();

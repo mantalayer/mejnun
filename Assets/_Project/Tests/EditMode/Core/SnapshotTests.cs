@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using Mejnun.Core.Tests.TestUtil;
@@ -203,17 +204,31 @@ namespace Mejnun.Core.Tests
             var viewerSeat = game.State.CurrentSeat;
             var hiddenSeat = (viewerSeat + 1) % game.Setup.SeatCount;
             var firstSnapshot = SnapshotSerializer.WriteForSeat(game, viewerSeat);
-            var hiddenHand = game.State.Hands[hiddenSeat];
-            var firstCard = hiddenHand[0];
-            hiddenHand[0] = hiddenHand[1];
-            hiddenHand[1] = firstCard;
-            var firstDrawCard = game.State.DrawPile[0];
-            game.State.DrawPile[0] = game.State.DrawPile[1];
-            game.State.DrawPile[1] = firstDrawCard;
+            SwapFirstSameDeckPair(game.State.Hands[hiddenSeat]);
+            SwapFirstSameDeckPair(game.State.DrawPile);
 
             var secondSnapshot = SnapshotSerializer.WriteForSeat(game, viewerSeat);
 
             CollectionAssert.AreEqual(firstSnapshot, secondSnapshot);
+        }
+
+        [Test]
+        public void Snapshot_WriteForSeatPreservesDeckOfHiddenCards()
+        {
+            var game = NewGame();
+            var viewerSeat = game.State.CurrentSeat;
+            var redacted = SnapshotSerializer.Read(SnapshotSerializer.WriteForSeat(game, viewerSeat));
+
+            for (var seat = 0; seat < game.State.Hands.Count; seat++)
+            {
+                if (seat != viewerSeat)
+                {
+                    CollectionAssert.AreEqual(CountDecks(game.State.Hands[seat]),
+                        CountDecks(redacted.State.Hands[seat]));
+                }
+            }
+
+            CollectionAssert.AreEqual(CountDecks(game.State.DrawPile), CountDecks(redacted.State.DrawPile));
         }
 
         [Test]
@@ -246,6 +261,36 @@ namespace Mejnun.Core.Tests
             }
 
             return ids;
+        }
+
+        private static void SwapFirstSameDeckPair(IList<Card> cards)
+        {
+            for (var first = 0; first < cards.Count; first++)
+            {
+                for (var second = first + 1; second < cards.Count; second++)
+                {
+                    if (cards[first].Deck == cards[second].Deck)
+                    {
+                        var card = cards[first];
+                        cards[first] = cards[second];
+                        cards[second] = card;
+                        return;
+                    }
+                }
+            }
+
+            throw new InvalidOperationException("The card collection does not contain two cards from one deck.");
+        }
+
+        private static int[] CountDecks(IReadOnlyList<Card> cards)
+        {
+            var counts = new int[Card.DeckCount];
+            for (var index = 0; index < cards.Count; index++)
+            {
+                counts[cards[index].Deck]++;
+            }
+
+            return counts;
         }
 
         private static int GetStateOffset(byte[] snapshot)

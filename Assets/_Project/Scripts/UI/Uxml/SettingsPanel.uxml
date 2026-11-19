@@ -82,6 +82,11 @@
             <ui:Label class="settings-section-title" text="Accessibility" />
             <ui:Toggle name="reduced-motion-toggle" label="Reduce motion" tooltip="Reduces nonessential movement and animation." />
             <ui:Toggle name="haptics-toggle" label="Haptics" tooltip="Enables vibration feedback on supported devices." />
+            <ui:VisualElement name="ui-scale-row" class="settings-row">
+                <ui:Label class="setting-label" text="UI size" />
+                <ui:Slider name="ui-scale-slider" low-value="0.8" high-value="2" tooltip="Scales interface text and controls on phones." />
+                <ui:Label name="ui-scale-value" class="setting-value" />
+            </ui:VisualElement>
         </ui:ScrollView>
 
         <ui:ScrollView name="settings-page-audio" class="settings-scroll settings-page" style="display: none">

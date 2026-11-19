@@ -18,6 +18,7 @@ namespace Mejnun.Game
         private const string HandLiftKey = "settings.hand.lift";
         private const string OpponentCardScaleKey = "settings.opponents.cardScale";
         private const string ZoomSensitivityKey = "settings.camera.zoomSensitivity";
+        private const string UiScaleKey = "settings.ui.scale";
         private const string CpuSpeedKey = "settings.cpu.speed.v2";
         private const string LegacyCpuSpeedKey = "settings.cpu.speed";
         private const string ShowFastForwardKey = "settings.cpu.showFastForward";
@@ -33,6 +34,9 @@ namespace Mejnun.Game
         private const string LanguageKey = "settings.language";
         private const string QuickMatchBotFillKey = "settings.online.botFill";
         private const string TutorialCompletedKey = "settings.tutorial.completed";
+        private const float PhoneMaxShortSideInches = 4.5f;
+        private const int PhoneMaxShortSidePixels = 1200;
+        private const float PhoneMinAspectRatio = 1.9f;
         private static readonly float[] CpuDelayMultipliers = { 6f, 4f, 3f, 2f, 1f, 0.5f };
         private static bool fastForward;
 
@@ -127,6 +131,31 @@ namespace Mejnun.Game
         {
             get => Get(ZoomSensitivityKey, 1f);
             set => Set(ZoomSensitivityKey, value);
+        }
+
+        public static float UiScale
+        {
+            get => Mathf.Clamp(Get(UiScaleKey, IsPhoneScreen ? 1.35f : 1f), 0.8f, 2f);
+            set => Set(UiScaleKey, Mathf.Clamp(value, 0.8f, 2f));
+        }
+
+        private static bool IsPhoneScreen
+        {
+            get
+            {
+                if (!Application.isMobilePlatform)
+                {
+                    return false;
+                }
+
+                var shortSide = Mathf.Min(Screen.width, Screen.height);
+                var longSide = Mathf.Max(Screen.width, Screen.height);
+                var aspectRatio = shortSide <= 0 ? 0f : longSide / (float)shortSide;
+                var phoneSized = Screen.dpi > 0f
+                    ? shortSide / Screen.dpi <= PhoneMaxShortSideInches
+                    : shortSide <= PhoneMaxShortSidePixels;
+                return phoneSized && aspectRatio >= PhoneMinAspectRatio;
+            }
         }
 
         public static int CpuSpeed
@@ -246,6 +275,7 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(HandLiftKey);
             PlayerPrefs.DeleteKey(OpponentCardScaleKey);
             PlayerPrefs.DeleteKey(ZoomSensitivityKey);
+            PlayerPrefs.DeleteKey(UiScaleKey);
             PlayerPrefs.DeleteKey(CpuSpeedKey);
             PlayerPrefs.DeleteKey(LegacyCpuSpeedKey);
             PlayerPrefs.DeleteKey(ShowFastForwardKey);

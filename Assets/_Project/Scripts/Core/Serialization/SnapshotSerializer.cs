@@ -81,16 +81,21 @@ namespace Mejnun.Core
                 visible[state.Hands[viewerSeat][cardIndex].Id] = true;
             }
 
-            var canonicalIds = new List<byte>();
+            var canonicalIdsByDeck = new List<byte>[Card.DeckCount];
+            for (var deck = 0; deck < canonicalIdsByDeck.Length; deck++)
+            {
+                canonicalIdsByDeck[deck] = new List<byte>();
+            }
+
             for (byte cardId = 0; cardId < Card.CardCount; cardId++)
             {
                 if (!visible[cardId])
                 {
-                    canonicalIds.Add(cardId);
+                    canonicalIdsByDeck[cardId / Card.CardsPerDeck].Add(cardId);
                 }
             }
 
-            var nextCard = 0;
+            var nextCardsByDeck = new int[Card.DeckCount];
             for (var seat = 0; seat < state.Hands.Count; seat++)
             {
                 if (seat == viewerSeat)
@@ -101,13 +106,17 @@ namespace Mejnun.Core
                 var hand = state.Hands[seat];
                 for (var cardIndex = 0; cardIndex < hand.Count; cardIndex++)
                 {
-                    hand[cardIndex] = Card.FromId(GetCanonicalCard(canonicalIds, nextCard++));
+                    var deck = hand[cardIndex].Deck;
+                    hand[cardIndex] = Card.FromId(GetCanonicalCard(canonicalIdsByDeck[deck],
+                        nextCardsByDeck[deck]++));
                 }
             }
 
             for (var cardIndex = 0; cardIndex < state.DrawPile.Count; cardIndex++)
             {
-                state.DrawPile[cardIndex] = Card.FromId(GetCanonicalCard(canonicalIds, nextCard++));
+                var deck = state.DrawPile[cardIndex].Deck;
+                state.DrawPile[cardIndex] = Card.FromId(GetCanonicalCard(canonicalIdsByDeck[deck],
+                    nextCardsByDeck[deck]++));
             }
         }
 

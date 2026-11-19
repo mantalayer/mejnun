@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Reflection;
+using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
 using Mejnun.UI;
@@ -24,6 +25,17 @@ namespace Mejnun.Game.Tests
                 HudPresenter.OpponentSide.Top, HudPresenter.OpponentSide.Right);
         }
 
+        [Test]
+        public void TallPhoneLayoutKeepsAtMostTwoOpponentsOnEachSide()
+        {
+            AssertTallOpponentSides(3, HudPresenter.OpponentSide.Left, HudPresenter.OpponentSide.Top,
+                HudPresenter.OpponentSide.Right);
+            AssertTallOpponentSides(4, HudPresenter.OpponentSide.Left, HudPresenter.OpponentSide.Left,
+                HudPresenter.OpponentSide.Right, HudPresenter.OpponentSide.Right);
+            AssertTallOpponentSides(5, HudPresenter.OpponentSide.Left, HudPresenter.OpponentSide.Left,
+                HudPresenter.OpponentSide.Top, HudPresenter.OpponentSide.Right, HudPresenter.OpponentSide.Right);
+        }
+
         [UnityTest]
         public IEnumerator TableSceneHudReflectsTheActiveTurnState()
         {
@@ -43,6 +55,7 @@ namespace Mejnun.Game.Tests
             var document = presenter.GetComponent<UIDocument>();
             Assert.That(document, Is.Not.Null);
             var root = document.rootVisualElement;
+            var hudRoot = root.Q<VisualElement>("hud-root");
             var drawPileStack = root.Q<VisualElement>("draw-pile-stack");
             var drawPileLabel = root.Q<Label>("draw-pile-label");
             var endTurn = root.Q<Button>("end-turn-button");
@@ -72,7 +85,8 @@ namespace Mejnun.Game.Tests
             Assert.That(exitButton, Is.Not.Null);
             Assert.That(exitButton.text, Is.EqualTo("Main menu"));
             Assert.That(pauseButton, Is.Not.Null);
-            Assert.That(pauseButton.text, Is.EqualTo("☰"));
+            Assert.That(pauseButton.text, Is.Empty);
+            Assert.That(pauseButton.Query<VisualElement>(className: "hamburger-bar").ToList().Count, Is.EqualTo(3));
             Assert.That(pauseButton.parent, Is.Not.SameAs(bottomBar));
             Assert.That(pausePanel, Is.Not.Null);
             Assert.That(exitButton.parent, Is.SameAs(pausePanel));
@@ -100,7 +114,7 @@ namespace Mejnun.Game.Tests
             Assert.That(timerLabel, Is.Not.Null);
             Assert.That(drawPileLabel, Is.Not.Null);
             Assert.That(statusPanel.parent, Is.SameAs(bottomArea));
-            Assert.That(turnPanel.parent, Is.SameAs(root));
+            Assert.That(turnPanel.parent, Is.SameAs(hudRoot));
             Assert.That(turnLabel.parent, Is.SameAs(turnPanel));
             Assert.That(timerLabel.parent, Is.SameAs(turnPanel));
             Assert.That(turnLabel.parent, Is.Not.SameAs(statusPanel));
@@ -231,6 +245,59 @@ namespace Mejnun.Game.Tests
             Assert.That(HudPresenter.IsPhoneScreen(false, 2560, 1600, 96f), Is.False);
             Assert.That(HudPresenter.IsPhoneScreen(true, 1920, 1080, 0f), Is.True);
             Assert.That(HudPresenter.IsPhoneScreen(true, 2560, 1600, 0f), Is.False);
+        }
+
+        [Test]
+        public void SoftKeyboardBackGuardSuppressesBackWhileInputIsActiveAndForDismissGracePeriod()
+        {
+            var guard = new SoftKeyboardBackGuard();
+            var textField = new TextField();
+            var focusedChild = new VisualElement();
+            textField.Add(focusedChild);
+
+            guard.Track(focusedChild, false, 1f);
+            Assert.That(guard.ShouldSuppressBack(1f), Is.True);
+            Assert.That(guard.ShouldSuppressBack(1.34f), Is.True);
+            Assert.That(guard.ShouldSuppressBack(1.36f), Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator RoomCodeAppearingAfterPauseIsRefreshedIntoThePausePanel()
+        {
+            SceneManager.LoadScene("Table", LoadSceneMode.Single);
+            yield return null;
+
+            var matchFlow = Object.FindAnyObjectByType<MatchFlow>();
+            var presenter = Object.FindAnyObjectByType<HudPresenter>();
+            Assert.That(matchFlow, Is.Not.Null);
+            Assert.That(presenter, Is.Not.Null);
+            var seats = new[] { SeatConfig.Human("Sam"), SeatConfig.Human("Alex") };
+            Assert.That(matchFlow.StartMatch(new MatchRequest(seats, 30, MatchMode.Online)), Is.True);
+            yield return WaitForRoundInitialization(matchFlow);
+
+            var togglePause = typeof(HudPresenter).GetMethod("TogglePause",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(togglePause, Is.Not.Null);
+            togglePause.Invoke(presenter, null);
+            var roomCodeLabel = presenter.GetComponent<UIDocument>().rootVisualElement.Q<Label>("room-code-label");
+            Assert.That(roomCodeLabel, Is.Not.Null);
+            Assert.That(roomCodeLabel.resolvedStyle.display, Is.EqualTo(DisplayStyle.None));
+
+            matchFlow.OnlineSessionCode = "ABCD12";
+            yield return null;
+
+            Assert.That(roomCodeLabel.text, Is.EqualTo("Room code: ABCD12"));
+            Assert.That(roomCodeLabel.resolvedStyle.display, Is.EqualTo(DisplayStyle.Flex));
+        }
+
+        private static void AssertTallOpponentSides(int opponentCount, params HudPresenter.OpponentSide[] expected)
+        {
+            Assert.That(expected.Length, Is.EqualTo(opponentCount));
+            for (var relativeSeat = 1; relativeSeat <= opponentCount; relativeSeat++)
+            {
+                Assert.That(HudPresenter.GetOpponentSide(relativeSeat, opponentCount, true),
+                    Is.EqualTo(expected[relativeSeat - 1]));
+            }
         }
 
         private static void AssertOpponentSides(int seatCount, params HudPresenter.OpponentSide[] expected)

@@ -29,13 +29,16 @@
             <ui:VisualElement name="online-screen" class="frontend-screen online-screen" style="display: none;">
                 <ui:Label text="Play online" class="flow-title"/>
                 <ui:Label text="Sign in anonymously and join with a session code, or find a quick match." class="frontend-copy online-description"/>
-                <ui:TextField name="online-nickname-field" label="Nickname" value="Player" class="online-field"/>
-                <ui:IntegerField name="online-seat-count-field" label="Players" value="2" class="online-field"/>
-                <ui:Button name="online-create-button" text="Create session" class="frontend-button primary-flow-button"/>
-                <ui:TextField name="online-code-field" label="Session code" class="online-field"/>
-                <ui:Button name="online-join-button" text="Join by code" class="frontend-button"/>
-                <ui:Button name="online-quick-match-button" text="Quick match" class="frontend-button"/>
+                <ui:VisualElement name="online-setup">
+                    <ui:TextField name="online-nickname-field" label="Nickname" value="Player" class="online-field"/>
+                    <ui:IntegerField name="online-seat-count-field" label="Players" value="2" class="online-field"/>
+                    <ui:Button name="online-create-button" text="Create session" class="frontend-button primary-flow-button"/>
+                    <ui:TextField name="online-code-field" label="Session code" class="online-field"/>
+                    <ui:Button name="online-join-button" text="Join by code" class="frontend-button"/>
+                    <ui:Button name="online-quick-match-button" text="Quick match" class="frontend-button"/>
+                </ui:VisualElement>
                 <ui:Label name="online-session-code" text="" class="online-session-code" style="display: none;"/>
+                <ui:Label name="online-lobby-players" text="" class="online-lobby-players" style="display: none;"/>
                 <ui:Label name="online-status" text="" class="flow-error online-status"/>
                 <ui:VisualElement class="frontend-actions">
                     <ui:Button name="online-back-button" text="Back" class="flow-button"/>

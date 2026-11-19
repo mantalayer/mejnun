@@ -16,17 +16,26 @@ namespace Mejnun.Game
         private TurnTimer turnTimer;
         private bool mainBankLoaded;
         private bool timerSampleActive;
+        private bool audioInitializationWarningLogged;
+        private float audioInitializationStartedAt;
+        private float nextBankLoadAttemptTime;
         private string currentMusic;
+        private const float AudioInitializationWarningDelaySeconds = 5f;
+        private const float BankLoadLogIntervalSeconds = 5f;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void RegisterForSceneLoads()
         {
+            WwiseAudioService.EnsureInitialized();
+            WwiseAudioService.EnsureDedicatedListener();
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            WwiseAudioService.EnsureInitialized();
+            WwiseAudioService.EnsureDedicatedListener();
             var flow = FindAnyObjectByType<MatchFlow>();
             if (flow != null && FindAnyObjectByType<AudioDirector>() == null)
             {
@@ -42,6 +51,9 @@ namespace Mejnun.Game
 
         private void Awake()
         {
+            WwiseAudioService.EnsureInitialized();
+            WwiseAudioService.EnsureDedicatedListener();
+            audioInitializationStartedAt = Time.unscaledTime;
             audioService = new WwiseAudioService(gameObject);
             mapper = new GameAudioMapper(audioService);
             if (FindAnyObjectByType<MenuAudioCue>() != null)
@@ -73,9 +85,28 @@ namespace Mejnun.Game
 
         private void Update()
         {
-            if (!mainBankLoaded && audioService.LoadBank("Main"))
+            var engineInitialized = audioService != null && audioService.IsInitialized;
+            if (!engineInitialized && !audioInitializationWarningLogged &&
+                Time.unscaledTime - audioInitializationStartedAt >= AudioInitializationWarningDelaySeconds)
             {
-                mainBankLoaded = true;
+                audioInitializationWarningLogged = true;
+                Debug.LogError("Wwise sound engine is not initialized; check AkInitializer and platform initialization settings.", this);
+            }
+
+            if (!mainBankLoaded && engineInitialized && Time.unscaledTime >= nextBankLoadAttemptTime)
+            {
+                var result = audioService.LoadBankResult("Main");
+                if (result == "AK_Success" || result == "AK_BankAlreadyLoaded")
+                {
+                    mainBankLoaded = true;
+                    Debug.Log("Wwise Main sound bank loaded.", this);
+                }
+                else
+                {
+                    Debug.LogError("Wwise Main sound bank failed to load: " + result, this);
+                }
+
+                nextBankLoadAttemptTime = Time.unscaledTime + BankLoadLogIntervalSeconds;
             }
 
             SyncTurnTimer();
@@ -93,6 +124,7 @@ namespace Mejnun.Game
             mapper.AdvanceFrame(Time.unscaledDeltaTime);
             HookUiDocuments();
         }
+
 
         public void ReportTurnTimer(float remainingSeconds, float totalSeconds)
         {
