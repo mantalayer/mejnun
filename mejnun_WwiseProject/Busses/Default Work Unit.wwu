@@ -89,7 +89,7 @@
 						<Bus Name="UI" ID="{34948992-8AAF-491D-9F2D-6F6B5962F769}">
 							<ObjectLists>
 								<ObjectList Name="RTPC">
-									<RTPC Name="" ID="{20E618E2-AE4D-479C-9D0D-BB3AC475D81A}" ShortID="1217250784">
+									<RTPC Name="" ID="{A80EC420-AB09-4555-A248-85A3AAAC4D73}" ShortID="426494247">
 										<PropertyList>
 											<Property Name="PropertyName" Type="string" Value="BusVolume"/>
 										</PropertyList>
@@ -99,7 +99,7 @@
 											</Reference>
 											<Reference Name="Curve">
 												<Custom>
-													<Curve Name="" ID="{244E138B-0AF4-4C44-B6B8-89B8C68B70C3}">
+													<Curve Name="" ID="{ED5007F8-1870-49C8-9423-2F853D08D152}">
 														<PropertyList>
 															<Property Name="Flags" Type="int32" Value="3"/>
 														</PropertyList>

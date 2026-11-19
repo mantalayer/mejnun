@@ -126,12 +126,7 @@ namespace Mejnun.Game
                 {
                     Ui = TutorialUiKind.Popup,
                     Title = "You're not Down yet",
-                    Body = "Try putting your A♠ on " + CpuName + "'s set.",
-                    FocusCards = Cards("AS"),
-                    Target = TutorialTarget.MeldContaining(C("JS")),
-                    Allowed = TutorialAction.MoveCards,
-                    ExpectRejection = true,
-                    Solution = new[] { CpuIntent.AddToMeldContaining(C("JS"), C("AS")) }
+                    Body = "You can't use the table until you're Down. First, put down a set from your own hand."
                 },
                 new TutorialStep("h1b-go-down")
                 {
@@ -139,6 +134,7 @@ namespace Mejnun.Game
                     Title = "Go Down first",
                     Body = "Until you're Down you can only play sets from your own hand. " +
                            "Put 7♥ 8♥ 9♥ on the empty table.",
+                    PartialBody = "Keep going—finish placing all three cards from your hand to go Down.",
                     FocusCards = Cards("7H", "8H", "9H"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.MoveCards,
@@ -178,7 +174,8 @@ namespace Mejnun.Game
                 {
                     Ui = TutorialUiKind.Popup,
                     Title = "Same kind",
-                    Body = "Tap 5♣ 5♦ 5♠ to select them, then tap the empty table.",
+                    Body = "Put 5♣ 5♦ 5♠ on the empty table.",
+                    PartialBody = "Keep going—finish placing all three cards.",
                     FocusCards = Cards("5C", "5D", "5S"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.MoveCards,
@@ -313,6 +310,7 @@ namespace Mejnun.Game
                     Ui = TutorialUiKind.Popup,
                     Title = "Start a group",
                     Body = "Put 3♥ 4♥ on the empty table. It's only two cards, so it shows red for now.",
+                    PartialBody = "Keep going—finish placing both cards.",
                     FocusCards = Cards("3H", "4H"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.MoveCards,

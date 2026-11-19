@@ -30,6 +30,28 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void HandSlotGestureUsesSlotIndexInBothGesturePaths()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);
+            var hand = game.State.Hands[game.State.CurrentSeat];
+            var source = GestureHit.HandCard(hand[0].Id, 0);
+            var target = GestureHit.HandSlot(2);
+            var interpreter = new GestureInterpreter();
+
+            var handResult = interpreter.InterpretHandGesture(new GestureInput(GestureType.Drag, source, target),
+                hand.Count);
+            var tableResult = interpreter.Interpret(new GestureInput(GestureType.Drag, source, target), game.State,
+                game.Turn);
+
+            Assert.That(handResult.HandOrderChanged, Is.True);
+            Assert.That(handResult.ReorderTargetIndex, Is.EqualTo(2));
+            Assert.That(handResult.ReorderTargetIsSlot, Is.True);
+            Assert.That(tableResult.HandOrderChanged, Is.True);
+            Assert.That(tableResult.ReorderTargetIndex, Is.EqualTo(2));
+            Assert.That(tableResult.ReorderTargetIsSlot, Is.True);
+        }
+
+        [Test]
         public void HandGestureIgnoresBoardDropsAndBoardTaps()
         {
             var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);

@@ -52,6 +52,23 @@ namespace Mejnun.Game.EditMode.Tests
         }
 
         [Test]
+        public void Script_NotDownBeatIsAcknowledgedAndPartialPlacementStepsHaveFollowUpText()
+        {
+            var steps = MejnunTutorial.Create().Steps;
+            var notDown = steps.Single(step => step.Id == "h1a-not-down");
+
+            Assert.That(notDown.CompletesOnAcknowledge, Is.True);
+            Assert.That(notDown.ExpectRejection, Is.False);
+            Assert.That(notDown.Solution, Is.Empty);
+            Assert.That(steps.Single(step => step.Id == "h1b-go-down").PartialBody,
+                Does.Contain("finish placing all three cards"));
+            Assert.That(steps.Single(step => step.Id == "h1d-same-kind").PartialBody,
+                Does.Contain("finish placing all three cards"));
+            Assert.That(steps.Single(step => step.Id == "h3a-group").PartialBody,
+                Does.Contain("finish placing both cards"));
+        }
+
+        [Test]
         public void Script_ReplaysFromDealToMejnunWithEveryStepCompletingInOrder()
         {
             var tutorial = MejnunTutorial.Create();

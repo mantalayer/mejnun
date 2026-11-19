@@ -10,6 +10,13 @@ namespace Mejnun.Game
 
         private readonly List<Card> orderedCards = new List<Card>(12);
         private float scrollOffset;
+        private float layoutFirstX;
+        private float layoutStep;
+        private int layoutCardsPerRow = 1;
+        private float layoutBottomY;
+        private float layoutRowStep;
+        private float layoutArcAmount;
+        private int layoutCardCount;
 
         public float ScrollOffset => scrollOffset;
         public int RowCount { get; private set; } = 1;
@@ -71,6 +78,7 @@ namespace Mejnun.Game
             {
                 scrollOffset = 0f;
                 HandTopY = -referenceSize;
+                layoutCardCount = 0;
                 return;
             }
 
@@ -96,6 +104,13 @@ namespace Mejnun.Game
             var bottomY = -referenceSize + scaledCardSize.y * 0.5f + bottomMargin + bottomInset +
                           Mathf.Clamp(GameSettings.HandLift, 0f, 1.5f);
             var rowStep = scaledCardSize.y * 0.68f;
+            layoutFirstX = firstX;
+            layoutStep = step;
+            layoutCardsPerRow = cardsPerRow;
+            layoutBottomY = bottomY;
+            layoutRowStep = rowStep;
+            layoutArcAmount = Mathf.Clamp(GameSettings.HandArcAmount, 0f, 1.5f);
+            layoutCardCount = cardCount;
             var displayIndex = 0;
             var gapInserted = false;
             HandTopY = float.NegativeInfinity;
@@ -124,8 +139,7 @@ namespace Mejnun.Game
                 var normalizedPosition = cardsPerRow <= 1
                     ? 0f
                     : (column - (cardsPerRow - 1) * 0.5f) / ((cardsPerRow - 1) * 0.5f);
-                var arcAmount = Mathf.Clamp(GameSettings.HandArcAmount, 0f, 1.5f);
-                CalculateArcPose(normalizedPosition, arcAmount, out var arcOffset, out var angle);
+                CalculateArcPose(normalizedPosition, layoutArcAmount, out var arcOffset, out var angle);
                 view.SetLayoutPose(Quaternion.Euler(0f, 0f, angle), cardScale);
                 var centerY = bottomY + row * rowStep + arcOffset;
                 view.MoveTo(new Vector3(firstX + column * step, centerY, 0f), moveDuration);
@@ -150,6 +164,37 @@ namespace Mejnun.Game
         public void ResetScroll()
         {
             scrollOffset = 0f;
+        }
+
+        public int GetSlotIndex(Vector3 localPoint)
+        {
+            if (layoutCardCount <= 0)
+            {
+                return 0;
+            }
+
+            var nearestIndex = 0;
+            var nearestDistance = float.PositiveInfinity;
+            for (var index = 0; index < layoutCardCount; index++)
+            {
+                var row = RowCount == 1 ? 0 : index / layoutCardsPerRow;
+                var column = RowCount == 1 ? index : index % layoutCardsPerRow;
+                var normalizedPosition = layoutCardsPerRow <= 1
+                    ? 0f
+                    : (column - (layoutCardsPerRow - 1) * 0.5f) / ((layoutCardsPerRow - 1) * 0.5f);
+                CalculateArcPose(normalizedPosition, layoutArcAmount, out var arcOffset, out _);
+                var x = layoutFirstX + column * layoutStep;
+                var y = layoutBottomY + row * layoutRowStep + arcOffset;
+                var distance = (localPoint.x - x) * (localPoint.x - x) +
+                               (localPoint.y - y) * (localPoint.y - y);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestIndex = index;
+                }
+            }
+
+            return nearestIndex;
         }
 
         public void Reorder(HandOrder order, int seat, byte cardId, int targetIndex)

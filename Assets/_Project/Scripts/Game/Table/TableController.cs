@@ -392,8 +392,16 @@ namespace Mejnun.Game
                 {
                     var reorderedCards = interpretation.ReorderedCardIds ??
                                          new[] { interpretation.ReorderedCardId };
-                    tableView.HandOrder.ReorderGroup(game.State.CurrentSeat, reorderedCards,
-                        interpretation.ReorderTargetIndex);
+                    if (interpretation.ReorderTargetIsSlot)
+                    {
+                        tableView.HandOrder.MoveGroupToSlot(game.State.CurrentSeat, reorderedCards,
+                            interpretation.ReorderTargetIndex);
+                    }
+                    else
+                    {
+                        tableView.HandOrder.ReorderGroup(game.State.CurrentSeat, reorderedCards,
+                            interpretation.ReorderTargetIndex);
+                    }
                     SynchronizeViews();
                 }
 
@@ -436,7 +444,14 @@ namespace Mejnun.Game
             {
                 var reorderedCards = interpretation.ReorderedCardIds ??
                                      new[] { interpretation.ReorderedCardId };
-                tableView.HandOrder.ReorderGroup(seat, reorderedCards, interpretation.ReorderTargetIndex);
+                if (interpretation.ReorderTargetIsSlot)
+                {
+                    tableView.HandOrder.MoveGroupToSlot(seat, reorderedCards, interpretation.ReorderTargetIndex);
+                }
+                else
+                {
+                    tableView.HandOrder.ReorderGroup(seat, reorderedCards, interpretation.ReorderTargetIndex);
+                }
             }
 
             SynchronizeViews();
@@ -1320,7 +1335,15 @@ namespace Mejnun.Game
 
                     if (dragActive)
                     {
-                        var target = tableView.HitTest(pointerGesture.Position);
+                        if (dragSource.Kind == GestureHitKind.HandCard)
+                        {
+                            tableView.UpdateHandLift(pointerGesture.Position);
+                        }
+
+                        var target = dragSource.Kind == GestureHitKind.HandCard &&
+                                     tableView.TryGetHandDropTarget(out var handDropTarget)
+                            ? handDropTarget
+                            : tableView.HitTest(pointerGesture.Position);
                         var type = pointerGesture.IsLongPress ? GestureType.LongPressDrag : GestureType.Drag;
                         if (target.Kind == GestureHitKind.EmptyBoard)
                         {
@@ -1443,11 +1466,14 @@ namespace Mejnun.Game
 
                     if (dragActive && dragSource.Kind == GestureHitKind.HandCard)
                     {
-                        var target = tableView.HitTest(pointerGesture.Position);
+                        tableView.UpdateHandLift(pointerGesture.Position);
+                        var target = tableView.TryGetHandDropTarget(out var handDropTarget)
+                            ? handDropTarget
+                            : tableView.HitTest(pointerGesture.Position);
                         var type = pointerGesture.IsLongPress ? GestureType.LongPressDrag : GestureType.Drag;
                         tableView.EndHandLift();
                         if (IsRemoteTurnBlocked() && target.Kind != GestureHitKind.HandCard &&
-                            target.Kind != GestureHitKind.HandArea)
+                            target.Kind != GestureHitKind.HandArea && target.Kind != GestureHitKind.HandSlot)
                         {
                             NotifyInvalid(RuleError.NotYourTurn);
                         }

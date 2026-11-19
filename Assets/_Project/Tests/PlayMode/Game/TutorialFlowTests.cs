@@ -61,7 +61,7 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
-        public IEnumerator FirstTurnRejectsTheNotDownDropHighlightsCardsAndAcceptsTapAndDrag()
+        public IEnumerator FirstTurnExplainsNotDownThenAllowsCardsToBePlacedOneAtATime()
         {
             var flow = default(MatchFlow);
             yield return StartTutorial(result => flow = result);
@@ -73,6 +73,10 @@ namespace Mejnun.Game.Tests
             yield return null;
             yield return null;
 
+            var popup = FindCoachPopup();
+            Assert.That(popup, Is.Not.Null);
+            Assert.That(popup.Q<Label>("coach-body").text, Does.Contain("can't use the table until you're Down"));
+
             // Real presses arrive in bottom-left screen space; the coach popup must not swallow presses on the hand.
             var camera = flow.Table.ViewCamera;
             foreach (var handCard in flow.Game.State.Hands[MejnunTutorial.PlayerSeat])
@@ -82,19 +86,15 @@ namespace Mejnun.Game.Tests
                 Assert.That(flow.Table.HitTest(centre, true).Kind, Is.EqualTo(GestureHitKind.HandCard));
             }
 
-            var popup = FindCoachPopup();
-            Assert.That(popup, Is.Not.Null);
             var panelSize = popup.panel.visualTree.worldBound.size;
             var popupCentre = popup.worldBound.center;
             var popupScreen = new Vector2(popupCentre.x * Screen.width / panelSize.x,
                 Screen.height - popupCentre.y * Screen.height / panelSize.y);
             Assert.That(UiPointerBlocker.IsOverUi(popupScreen), Is.True, "Presses on the coach popup stay in the UI.");
 
-            var spades = flow.Game.State.Board[0];
-            var refused = flow.Controller.ExecuteGesture(new GestureInput(GestureType.Drag, HandHit(flow, "AS"),
-                GestureHit.MeldGap(spades.Id, spades.Cards.Count)));
-            Assert.That(refused.Error, Is.EqualTo(RuleError.NotDownBoardAccess));
-            Assert.That(flow.Tutorial.CurrentStep.Id, Is.EqualTo("h1b-go-down"), "The expected refusal advances.");
+            flow.Tutorial.Advance();
+            Assert.That(flow.Tutorial.CurrentStep.Id, Is.EqualTo("h1b-go-down"));
+            Assert.That(popup.Q<Label>("coach-body").text, Is.EqualTo(flow.Tutorial.CurrentStep.Body));
 
             Assert.That(flow.Table.GetCardView(Id("7H")).IsTutorialFocused, Is.True);
             Assert.That(flow.Table.GetCardView(Id("9H")).IsTutorialFocused, Is.True);
@@ -110,20 +110,27 @@ namespace Mejnun.Game.Tests
             CollectionAssert.AreEqual(before, SnapshotSerializer.Write(flow.Game), "Blocked commands change nothing.");
             Assert.That(flow.Tutorial.CurrentStep.Id, Is.EqualTo("h1b-go-down"));
 
-            // Tap-select the three hearts, then tap the empty table.
-            foreach (var card in new[] { "7H", "8H", "9H" })
-            {
-                Assert.That(flow.Controller.ExecuteGesture(new GestureInput(GestureType.Tap, HandHit(flow, card),
-                    GestureHit.None)).Ok, Is.True);
-            }
+            Assert.That(flow.Controller.ExecuteGesture(new GestureInput(GestureType.Drag, HandHit(flow, "7H"),
+                GestureHit.EmptyBoard())).Ok, Is.True);
+            var partialBody = flow.Tutorial.CurrentStep.PartialBody;
+            Assert.That(flow.Tutorial.CurrentBody, Is.EqualTo(partialBody));
+            Assert.That(popup.Q<Label>("coach-body").text, Is.EqualTo(partialBody));
+            var partialMeld = CpuIntent.FindMeldContaining(flow.Game.State, MejnunTutorial.C("7H"), out _);
+            Assert.That(flow.Controller.TutorialTargetMeldId, Is.EqualTo(partialMeld.Id));
+            Assert.That(flow.Controller.TutorialEmptyTarget, Is.False);
 
-            Assert.That(flow.Controller.ExecuteGesture(new GestureInput(GestureType.Tap, GestureHit.EmptyBoard(),
-                GestureHit.None)).Ok, Is.True);
+            Assert.That(flow.Controller.ExecuteGesture(new GestureInput(GestureType.Drag, HandHit(flow, "8H"),
+                GestureHit.MeldGap(partialMeld.Id, partialMeld.Cards.Count))).Ok, Is.True);
+            Assert.That(flow.Tutorial.CurrentBody, Is.EqualTo(partialBody));
+            partialMeld = CpuIntent.FindMeldContaining(flow.Game.State, MejnunTutorial.C("7H"), out _);
+            Assert.That(flow.Controller.ExecuteGesture(new GestureInput(GestureType.Drag, HandHit(flow, "9H"),
+                GestureHit.MeldGap(partialMeld.Id, partialMeld.Cards.Count))).Ok, Is.True);
             Assert.That(flow.Game.State.PlayerPhases[0], Is.EqualTo(PlayerPhase.Down));
             Assert.That(flow.Tutorial.CurrentStep.Id, Is.EqualTo("h1b-board-open"));
 
             flow.Tutorial.Advance();
             Assert.That(flow.Tutorial.CurrentStep.Id, Is.EqualTo("h1c-ace-high"));
+            var spades = flow.Game.State.Board[0];
             Assert.That(flow.Controller.TutorialTargetMeldId, Is.EqualTo(spades.Id));
 
             // Drag the ace onto Layla's set.

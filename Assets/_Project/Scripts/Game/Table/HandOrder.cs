@@ -95,6 +95,33 @@ namespace Mejnun.Game
             order.InsertRange(insertion, group);
         }
 
+        public void MoveGroupToSlot(int seat, IReadOnlyList<byte> cardIds, int slotIndex)
+        {
+            if (cardIds == null || cardIds.Count == 0)
+            {
+                return;
+            }
+
+            var order = GetOrCreateOrder(seat);
+            var group = new List<byte>(cardIds.Count);
+            for (var index = 0; index < order.Count; index++)
+            {
+                if (Contains(cardIds, order[index]))
+                {
+                    group.Add(order[index]);
+                }
+            }
+
+            if (group.Count == 0)
+            {
+                return;
+            }
+
+            order.RemoveAll(id => group.Contains(id));
+            var insertion = slotIndex < 0 ? 0 : slotIndex > order.Count ? order.Count : slotIndex;
+            order.InsertRange(insertion, group);
+        }
+
         public void SortBySuit(int seat, IReadOnlyList<Card> hand)
         {
             Synchronize(seat, hand);

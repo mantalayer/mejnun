@@ -102,6 +102,7 @@ namespace Mejnun.UI
             }
 
             director.StepStarted += ShowStep;
+            director.BodyChanged += UpdateBody;
             director.Nudge += ShowNudge;
             director.Finished += Hide;
             director.Skipped += Hide;
@@ -116,6 +117,7 @@ namespace Mejnun.UI
             if (director != null)
             {
                 director.StepStarted -= ShowStep;
+                director.BodyChanged -= UpdateBody;
                 director.Nudge -= ShowNudge;
                 director.Finished -= Hide;
                 director.Skipped -= Hide;
@@ -161,7 +163,7 @@ namespace Mejnun.UI
                 modalScrim.style.display = DisplayStyle.None;
                 coachPopup.style.display = DisplayStyle.Flex;
                 coachTitle.text = step.Title;
-                coachBody.text = step.Body;
+                coachBody.text = director == null ? step.Body : director.CurrentBody;
                 coachNextButton.style.display = step.CompletesOnAcknowledge ? DisplayStyle.Flex : DisplayStyle.None;
                 coachPopup.AddToClassList("coach-visible");
                 AnchorCoachPopup(step);
@@ -173,6 +175,15 @@ namespace Mejnun.UI
             }
 
             refreshButtons?.Invoke();
+        }
+
+        private void UpdateBody()
+        {
+            var step = CurrentStep;
+            if (step?.Ui == TutorialUiKind.Popup && coachBody != null && director != null)
+            {
+                coachBody.text = director.CurrentBody;
+            }
         }
 
         private void ShowModal(TutorialStep step)

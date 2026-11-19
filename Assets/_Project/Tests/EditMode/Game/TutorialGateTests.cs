@@ -62,7 +62,7 @@ namespace Mejnun.Game.EditMode.Tests
         }
 
         [Test]
-        public void Gate_AllowsOnlyTheExactFocusCardsToTheTarget()
+        public void Gate_AllowsPartialFocusCardsAndRequiresTheSameMeldAfterPlacementStarts()
         {
             var (_, game, gate) = AtStep("h1b-go-down");
             var state = game.State;
@@ -70,11 +70,21 @@ namespace Mejnun.Game.EditMode.Tests
             Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("7H", "8H", "9H"), CardTarget.NewMeld(0)),
                 CommandOrigin.Gesture, state), Is.True);
             Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("7H", "8H"), CardTarget.NewMeld(0)),
-                CommandOrigin.Gesture, state), Is.False, "a partial selection is refused");
+                CommandOrigin.Gesture, state), Is.True, "a partial selection can start the set");
+            Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("7H"), CardTarget.NewMeld(0)),
+                CommandOrigin.Gesture, state), Is.True);
             Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("5C", "5D", "5S"), CardTarget.NewMeld(0)),
                 CommandOrigin.Gesture, state), Is.False, "other cards are refused");
             Assert.That(gate.Allows(GameCommand.EndTurn(0), CommandOrigin.Command, state), Is.False);
             Assert.That(gate.Allows(GameCommand.DrawOrPass(0), CommandOrigin.Command, state), Is.False);
+
+            Assert.That(game.Apply(GameCommand.MoveCards(0, Ids("7H"), CardTarget.NewMeld(0))).Ok, Is.True);
+            var partialMeld = CpuIntent.FindMeldContaining(game.State, C("7H"), out _);
+            Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("8H"),
+                    CardTarget.Meld(partialMeld.Id, partialMeld.Cards.Count)),
+                CommandOrigin.Gesture, game.State), Is.True);
+            Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("8H"), CardTarget.NewMeld(0)),
+                CommandOrigin.Gesture, game.State), Is.False, "the next card must join the partial set");
         }
 
         [Test]
@@ -138,14 +148,17 @@ namespace Mejnun.Game.EditMode.Tests
         }
 
         [Test]
-        public void Gate_LetsTheNotDownAttemptThroughSoTheEngineRefusesIt()
+        public void NotDownBeatExplainsTheRuleAndWaitsForAcknowledgement()
         {
-            var (_, game, gate) = AtStep("h1a-not-down");
-            var spades = CpuIntent.FindMeldContaining(game.State, C("JS"), out _);
-            var command = GameCommand.MoveCards(0, Ids("AS"), CardTarget.Meld(spades.Id, 3));
+            var (tutorial, game, gate) = AtStep("h1a-not-down");
+            var step = tutorial.Steps.First(candidate => candidate.Id == "h1a-not-down");
 
-            Assert.That(gate.Allows(command, CommandOrigin.Gesture, game.State), Is.True);
-            Assert.That(game.Apply(command).Error, Is.EqualTo(RuleError.NotDownBoardAccess));
+            Assert.That(step.CompletesOnAcknowledge, Is.True);
+            Assert.That(step.ExpectRejection, Is.False);
+            Assert.That(step.Allowed, Is.EqualTo(TutorialAction.None));
+            Assert.That(step.Body, Does.Contain("can't use the table until you're Down"));
+            Assert.That(gate.Allows(GameCommand.MoveCards(0, Ids("AS"), CardTarget.NewMeld(0)),
+                CommandOrigin.Gesture, game.State), Is.False);
         }
     }
 }

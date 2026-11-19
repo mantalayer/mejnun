@@ -19,10 +19,15 @@ namespace Mejnun.Game
         private int stepIndex = -1;
         private int pendingIndex = -1;
         private bool advancing;
+        private bool isPartial;
 
         public MejnunTutorial Tutorial { get; private set; }
         public bool IsRunning { get; private set; }
         public int StepIndex => stepIndex;
+        public bool IsPartial => isPartial;
+        public string CurrentBody => CurrentStep == null ? string.Empty : IsPartial
+            ? CurrentStep.PartialBody
+            : CurrentStep.Body;
 
         public TutorialStep CurrentStep => IsRunning && Tutorial != null && stepIndex >= 0 &&
                                            stepIndex < Tutorial.Steps.Count
@@ -30,6 +35,7 @@ namespace Mejnun.Game
             : null;
 
         public event Action<TutorialStep> StepStarted;
+        public event Action BodyChanged;
         public event Action<RuleError> Nudge;
         public event Action Finished;
         public event Action Skipped;
@@ -100,6 +106,7 @@ namespace Mejnun.Game
 
             IsRunning = false;
             stepIndex = -1;
+            isPartial = false;
             gate = null;
         }
 
@@ -149,6 +156,8 @@ namespace Mejnun.Game
             stepIndex = index;
             var step = Tutorial.Steps[index];
             gate.Step = step;
+            var game = controller == null ? null : controller.Game;
+            isPartial = IsPartialStep(step, game == null ? null : game.State, game == null ? null : game.Turn);
             if (bots != null)
             {
                 bots.Held = step.HoldCpu || step.Ui == TutorialUiKind.Modal;
@@ -184,9 +193,17 @@ namespace Mejnun.Game
                     targetMeldId = meld.Id;
                 }
             }
+            else if (step.Target.Kind == TutorialTargetKind.EmptyBoard && IsPartial && state != null)
+            {
+                var meld = FindPartialMeld(state, step);
+                if (meld != null)
+                {
+                    targetMeldId = meld.Id;
+                }
+            }
 
             controller.SetTutorialFocus(step.FocusCardIds(), targetMeldId,
-                step.Target.Kind == TutorialTargetKind.EmptyBoard);
+                step.Target.Kind == TutorialTargetKind.EmptyBoard && targetMeldId == null);
         }
 
         private void CheckCompletion()
@@ -211,8 +228,82 @@ namespace Mejnun.Game
                 return;
             }
 
+            UpdatePartialState(state, turn);
             ApplyFocus();
             CheckCompletion();
+        }
+
+        private void UpdatePartialState(GameState state, TurnSession turn)
+        {
+            var partial = IsPartialStep(CurrentStep, state, turn);
+            if (partial == isPartial)
+            {
+                return;
+            }
+
+            isPartial = partial;
+            BodyChanged?.Invoke();
+        }
+
+        private static bool IsPartialStep(TutorialStep step, GameState state, TurnSession turn)
+        {
+            return step != null && !string.IsNullOrWhiteSpace(step.PartialBody) && state != null &&
+                   step.IsComplete != null && !step.IsComplete(state, turn) && FindPartialMeld(state, step) != null;
+        }
+
+        private static Meld FindPartialMeld(GameState state, TutorialStep step)
+        {
+            if (state == null || step.FocusCards.Count == 0)
+            {
+                return null;
+            }
+
+            Meld partialMeld = null;
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var meld = state.Board[meldIndex];
+                if (meld.Cards.Count == 0 || meld.Cards.Count >= step.FocusCards.Count)
+                {
+                    continue;
+                }
+
+                var containsFocusOnly = true;
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    if (!IsFocusCard(step, meld.Cards[cardIndex].Id))
+                    {
+                        containsFocusOnly = false;
+                        break;
+                    }
+                }
+
+                if (!containsFocusOnly)
+                {
+                    continue;
+                }
+
+                if (partialMeld != null)
+                {
+                    return null;
+                }
+
+                partialMeld = meld;
+            }
+
+            return partialMeld;
+        }
+
+        private static bool IsFocusCard(TutorialStep step, byte cardId)
+        {
+            for (var index = 0; index < step.FocusCards.Count; index++)
+            {
+                if (step.FocusCards[index].Id == cardId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void HandleInvalidGesture(RuleError error)

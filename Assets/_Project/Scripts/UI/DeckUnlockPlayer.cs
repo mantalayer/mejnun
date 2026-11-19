@@ -19,10 +19,11 @@ namespace Mejnun.UI
             unlockPresentation = new DeckUnlockPresentation(documentRoot);
         }
 
-        public void Play(ProgressionReport report)
+        public void Play(ProgressionReport report, Action finished = null)
         {
             if (report == null || ReferenceEquals(lastPlayedReport, report))
             {
+                finished?.Invoke();
                 return;
             }
 
@@ -31,6 +32,7 @@ namespace Mejnun.UI
             var entries = ProgressionService.Instance.Catalog?.Decks?.GetEntries();
             if (entries == null)
             {
+                finished?.Invoke();
                 return;
             }
 
@@ -56,6 +58,7 @@ namespace Mejnun.UI
 
             if (candidates.Count == 0)
             {
+                finished?.Invoke();
                 return;
             }
 
@@ -76,7 +79,7 @@ namespace Mejnun.UI
                     resolved[index] = CreatePresentationItem(candidates[index], candidates[index].Skin);
                 }
 
-                PlayResolvedDecks(resolved);
+                PlayResolvedDecks(resolved, finished);
                 return;
             }
 
@@ -106,7 +109,7 @@ namespace Mejnun.UI
                     pendingLoads--;
                     if (pendingLoads == 0)
                     {
-                        PlayResolvedDecks(resolved);
+                        PlayResolvedDecks(resolved, finished);
                     }
                 });
             }
@@ -124,7 +127,7 @@ namespace Mejnun.UI
                 string.IsNullOrWhiteSpace(entry.Artist) ? skin.Artist : entry.Artist);
         }
 
-        private void PlayResolvedDecks(IReadOnlyList<DeckUnlockPresentationItem> resolved)
+        private void PlayResolvedDecks(IReadOnlyList<DeckUnlockPresentationItem> resolved, Action finished)
         {
             var items = new List<DeckUnlockPresentationItem>();
             for (var index = 0; index < resolved.Count; index++)
@@ -135,10 +138,7 @@ namespace Mejnun.UI
                 }
             }
 
-            if (items.Count > 0)
-            {
-                unlockPresentation.Play(items, null);
-            }
+            unlockPresentation.Play(items, finished);
         }
     }
 }
