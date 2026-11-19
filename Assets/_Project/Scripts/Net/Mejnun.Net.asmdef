@@ -1,0 +1,17 @@
+{
+  "name": "Mejnun.Net",
+  "rootNamespace": "Mejnun.Net",
+  "references": [
+    "Mejnun.Core",
+    "Mejnun.AI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": true
+}

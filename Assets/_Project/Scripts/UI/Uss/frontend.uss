@@ -67,6 +67,30 @@
     width: 100%;
 }
 
+.online-screen {
+    width: 92%;
+    max-width: 520px;
+    align-items: stretch;
+}
+
+.online-description,
+.online-status {
+    margin-bottom: 12px;
+}
+
+.online-field {
+    margin-bottom: 10px;
+}
+
+.online-session-code {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    color: rgb(245, 220, 145);
+    font-size: 24px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
 .tutorial-prompt {
     position: absolute;
     left: 0;

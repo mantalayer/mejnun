@@ -15,6 +15,7 @@ namespace Mejnun.UI.FrontEnd
         private readonly Action gallery;
         private readonly Action settings;
         private readonly Action howToPlay;
+        private readonly Action online;
         private readonly VisualElement tutorialPrompt;
         private MatchMode pendingMode;
         private readonly VisualElement frontendRoot;
@@ -24,7 +25,8 @@ namespace Mejnun.UI.FrontEnd
         private readonly ProgressBar levelProgress;
 
         public MainMenuScreen(VisualElement documentRoot, CosmeticCatalog catalog, Action<MatchMode> playAction,
-            Action resumeAction, Action openGallery, Action openSettings, Action startTutorial = null)
+            Action resumeAction, Action openGallery, Action openSettings, Action startTutorial = null,
+            Action openOnline = null)
         {
             root = documentRoot.Q<VisualElement>("main-menu-screen");
             frontendRoot = documentRoot.Q<VisualElement>("frontend-root");
@@ -34,6 +36,7 @@ namespace Mejnun.UI.FrontEnd
             gallery = openGallery;
             settings = openSettings;
             howToPlay = startTutorial;
+            online = openOnline;
             progression = ProgressionService.Instance;
             tutorialPrompt = root.Q<VisualElement>("tutorial-prompt");
             resumeButton = root.Q<Button>("resume-match-button");
@@ -53,7 +56,7 @@ namespace Mejnun.UI.FrontEnd
                 tutorialPrompt.Q<Button>("tutorial-prompt-skip-button").clicked += DeclineTutorialPrompt;
             }
             resumeButton.clicked += () => resume?.Invoke();
-            root.Q<Button>("online-button").SetEnabled(false);
+            root.Q<Button>("online-button").clicked += () => online?.Invoke();
             root.Q<Button>("gallery-button").clicked += () => gallery?.Invoke();
             root.Q<Button>("settings-button").clicked += () => settings?.Invoke();
             var quitButton = root.Q<Button>("quit-button");

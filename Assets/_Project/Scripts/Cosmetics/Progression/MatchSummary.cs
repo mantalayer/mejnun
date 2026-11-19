@@ -6,7 +6,8 @@ namespace Mejnun.Cosmetics
     {
         Solo,
         PassAndPlay,
-        Tutorial
+        Tutorial,
+        Online
     }
 
     public readonly struct MatchSummary
