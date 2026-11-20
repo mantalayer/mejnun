@@ -793,10 +793,13 @@ namespace Mejnun.Game
                     : GestureHit.MeldGap(boardHit.MeldId, boardHit.InsertIndex);
             }
 
-            if (activeHand != null && handView != null && handRoot != null &&
-                handRoot.InverseTransformPoint(world).y <= handView.HandTopY)
+            if (activeHand != null && handView != null && handRoot != null)
             {
-                return GestureHit.HandArea(activeHand.Count);
+                var localPointer = handRoot.InverseTransformPoint(world);
+                if (localPointer.y <= handView.HandTopY && handView.ContainsHandX(localPointer.x))
+                {
+                    return GestureHit.HandArea(activeHand.Count);
+                }
             }
 
             return GestureHit.EmptyBoard();

@@ -9,6 +9,8 @@ namespace Mejnun.UI
 {
     public sealed class SettingsPanel
     {
+        public const float CompactWidthThreshold = 560f;
+
         private static readonly string[] SettingsPageKeys =
             { "gameplay", "table", "hints", "accessibility", "audio", "general", "rules", "credits" };
         private VisualElement root;
@@ -30,6 +32,8 @@ namespace Mejnun.UI
             Dispose();
             root = panel;
             root.EnableInClassList("mobile-settings", DeviceProfile.IsMobilePlatform);
+            root.RegisterCallback<GeometryChangedEvent>(OnRootGeometryChanged);
+            UpdateCompactLayout(root.contentRect.width);
             tooltipLabel = root.Q<Label>("settings-tooltip");
             tableView = view;
             tableController = controller;
@@ -92,6 +96,8 @@ namespace Mejnun.UI
                 value => GameSettings.OverlapSets = !value, RefreshTable);
             BindToggle("organic-board-toggle", () => !GameSettings.OrganicBoard,
                 value => GameSettings.OrganicBoard = !value, RefreshTable);
+            BindToggle("hide-opponent-hands-toggle", () => GameSettings.HideOpponentHands,
+                value => GameSettings.HideOpponentHands = value);
             BindSlider("ui-scale-slider", () => GameSettings.UiScale,
                 value => GameSettings.UiScale = value);
 
@@ -105,6 +111,8 @@ namespace Mejnun.UI
                 value => GameSettings.HandLift = value, () => tableView?.RefreshHandLayout());
             BindSlider("opponent-card-scale-slider", () => GameSettings.OpponentCardScale,
                 value => GameSettings.OpponentCardScale = value, RefreshTable);
+            BindSlider("edge-pan-width-slider", () => GameSettings.EdgePanWidth,
+                value => GameSettings.EdgePanWidth = value);
             BindSlider("zoom-sensitivity-slider", () => GameSettings.ZoomSensitivity,
                 value => GameSettings.ZoomSensitivity = value);
             BindSlider("board-card-spread-slider", () => GameSettings.BoardCardSpread,
@@ -148,6 +156,12 @@ namespace Mejnun.UI
 
         public void Dispose()
         {
+            if (root != null)
+            {
+                root.UnregisterCallback<GeometryChangedEvent>(OnRootGeometryChanged);
+                root.RemoveFromClassList("settings-compact");
+            }
+
             GameSettings.Changed -= OnSettingsChanged;
             if (languageChangedHandler != null)
             {
@@ -160,6 +174,21 @@ namespace Mejnun.UI
                 Loc.LanguageChanged -= localizedValuesHandler;
                 localizedValuesHandler = null;
             }
+        }
+
+        public static bool IsCompactWidth(float width)
+        {
+            return width > 0f && width <= CompactWidthThreshold;
+        }
+
+        private void OnRootGeometryChanged(GeometryChangedEvent evt)
+        {
+            UpdateCompactLayout(evt.newRect.width);
+        }
+
+        private void UpdateCompactLayout(float width)
+        {
+            root?.EnableInClassList("settings-compact", IsCompactWidth(width));
         }
 
         private void BindToggle(string name, Func<bool> getValue, Action<bool> setValue,
@@ -427,12 +456,14 @@ namespace Mejnun.UI
             SetToggle("battery-saver-toggle", GameSettings.BatterySaver);
             SetToggle("overlap-sets-toggle", !GameSettings.OverlapSets);
             SetToggle("organic-board-toggle", !GameSettings.OrganicBoard);
+            SetToggle("hide-opponent-hands-toggle", GameSettings.HideOpponentHands);
             SetSlider("ui-scale-slider", GameSettings.UiScale);
             SetSlider("hand-arc-amount-slider", GameSettings.HandArcAmount);
             SetSlider("hand-spread-slider", GameSettings.HandSpread);
             SetSlider("hand-card-scale-slider", GameSettings.HandCardScale);
             SetSlider("hand-lift-slider", GameSettings.HandLift);
             SetSlider("opponent-card-scale-slider", GameSettings.OpponentCardScale);
+            SetSlider("edge-pan-width-slider", GameSettings.EdgePanWidth);
             SetSlider("zoom-sensitivity-slider", GameSettings.ZoomSensitivity);
             SetSlider("board-card-spread-slider", GameSettings.BoardCardSpread);
             SetSlider("card-messiness-slider", GameSettings.CardMessiness);
@@ -472,7 +503,8 @@ namespace Mejnun.UI
                 return;
             }
 
-            var isPercent = name.StartsWith("volume-", StringComparison.Ordinal) || name == "card-messiness-slider";
+            var isPercent = name.StartsWith("volume-", StringComparison.Ordinal) || name == "card-messiness-slider" ||
+                            name == "edge-pan-width-slider";
             valueLabel.text = isPercent
                 ? Loc.Format("settings.value.percent", Mathf.RoundToInt(value * 100f))
                 : Loc.Format("settings.value.multiplier", value.ToString("0.##"));

@@ -121,6 +121,9 @@ namespace Mejnun.UI.FrontEnd
 
         private sealed class TransitionState
         {
+            private readonly ScrollView scrollView;
+            private readonly ScrollerVisibility verticalScrollerVisibility;
+            private readonly ScrollerVisibility horizontalScrollerVisibility;
             private readonly StyleEnum<Position> position;
             private readonly StyleLength left;
             private readonly StyleLength right;
@@ -136,6 +139,13 @@ namespace Mejnun.UI.FrontEnd
             {
                 Element = element;
                 completed = onCompleted;
+                scrollView = element as ScrollView;
+                if (scrollView != null)
+                {
+                    verticalScrollerVisibility = scrollView.verticalScrollerVisibility;
+                    horizontalScrollerVisibility = scrollView.horizontalScrollerVisibility;
+                }
+
                 position = element.style.position;
                 left = element.style.left;
                 right = element.style.right;
@@ -160,6 +170,12 @@ namespace Mejnun.UI.FrontEnd
 
             public void MakeAbsolute(Rect rect)
             {
+                if (scrollView != null)
+                {
+                    scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+                    scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+                }
+
                 Element.style.position = Position.Absolute;
                 Element.style.left = rect.x;
                 Element.style.right = StyleKeyword.Auto;
@@ -205,6 +221,11 @@ namespace Mejnun.UI.FrontEnd
                 Element.style.height = height;
                 Element.style.translate = translate;
                 Element.style.opacity = opacity;
+                if (scrollView != null)
+                {
+                    scrollView.verticalScrollerVisibility = verticalScrollerVisibility;
+                    scrollView.horizontalScrollerVisibility = horizontalScrollerVisibility;
+                }
             }
         }
     }

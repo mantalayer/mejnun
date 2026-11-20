@@ -16,6 +16,7 @@ namespace Mejnun.UI
         private const float TableExitDuration = 0.7f;
         private const int OnlineWaitingFadeMilliseconds = 180;
         private const float TableEdgeOffscreenMargin = 24f;
+        private const float OpponentHandTuckDuration = 0.25f;
 
         private enum TableEdge
         {
@@ -33,6 +34,14 @@ namespace Mejnun.UI
             public Vector2 AppliedOffset;
             public float StartedAt;
             public bool HasEdge;
+        }
+
+        private sealed class OpponentHandTuckState
+        {
+            public float From;
+            public float To;
+            public float StartedAt;
+            public Vector2 LastTuckedOffset;
         }
 
         public enum OpponentSide
@@ -90,6 +99,10 @@ namespace Mejnun.UI
         private IVisualElementScheduledItem halasHide;
         private IVisualElementScheduledItem invalidMoveHide;
         private readonly List<TableEdgeOffset> tableEdgeAnimations = new List<TableEdgeOffset>();
+        private readonly Dictionary<int, OpponentHandTuckState> opponentHandTuckStates =
+            new Dictionary<int, OpponentHandTuckState>();
+        private readonly List<IVisualElementScheduledItem> opponentHandTuckAnimations =
+            new List<IVisualElementScheduledItem>();
         private List<TableEdgeOffset> tableExitTargets;
         private float tableExitStartedAt;
         private bool tableExitAnimating;
@@ -503,6 +516,12 @@ namespace Mejnun.UI
             }
 
             tableEdgeAnimations.Clear();
+            for (var index = 0; index < opponentHandTuckAnimations.Count; index++)
+            {
+                opponentHandTuckAnimations[index]?.Pause();
+            }
+
+            opponentHandTuckAnimations.Clear();
             CompleteTableExit();
             root?.UnregisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
             GameSettings.Changed -= OnSettingsChanged;
@@ -942,7 +961,8 @@ namespace Mejnun.UI
             if (key == "settings.accessibility.leftHanded")
                 ApplyHandedness();
 
-            if (key == GameSettings.OpponentCardScaleKey && tableController?.Game != null)
+            if ((key == GameSettings.OpponentCardScaleKey || key == GameSettings.HideOpponentHandsKey) &&
+                tableController?.Game != null)
             {
                 RefreshSeats(tableController.Game.State);
             }
@@ -1984,6 +2004,9 @@ namespace Mejnun.UI
                     continue;
                 }
 
+                var shouldTuck = GameSettings.HideOpponentHands && state.Phase == GamePhase.Playing &&
+                                 state.Board.Count > 0 && seat != state.CurrentSeat;
+                var tuckState = GetOpponentHandTuckState(seat, shouldTuck);
                 var opponent = new VisualElement();
                 opponent.pickingMode = PickingMode.Ignore;
                 opponent.AddToClassList("opponent-seat");
@@ -2081,10 +2104,12 @@ namespace Mejnun.UI
                     opponent.AddToClassList("active-seat");
                 }
 
+                SetOpponentHandOffset(opponent, tuckState.LastTuckedOffset * GetOpponentHandTuckAmount(tuckState));
+                ConfigureOpponentHandTuck(opponent, cards, opponentSide, tuckState);
                 switch (opponentSide)
                 {
                     case OpponentSide.Left:
-                        leftOpponents?.Add(opponent);
+                        leftOpponents?.Insert(0, opponent);
                         break;
                     case OpponentSide.Right:
                         rightOpponents?.Add(opponent);
@@ -2094,6 +2119,132 @@ namespace Mejnun.UI
                         break;
                 }
             }
+        }
+
+        private OpponentHandTuckState GetOpponentHandTuckState(int seat, bool shouldTuck)
+        {
+            var target = shouldTuck ? 1f : 0f;
+            if (!opponentHandTuckStates.TryGetValue(seat, out var tuckState))
+            {
+                tuckState = new OpponentHandTuckState
+                {
+                    From = 0f,
+                    To = target,
+                    StartedAt = Time.unscaledTime
+                };
+                opponentHandTuckStates.Add(seat, tuckState);
+                return tuckState;
+            }
+
+            var current = GetOpponentHandTuckAmount(tuckState);
+            if (!Mathf.Approximately(tuckState.To, target))
+            {
+                tuckState.From = current;
+                tuckState.To = target;
+                tuckState.StartedAt = Time.unscaledTime;
+            }
+
+            return tuckState;
+        }
+
+        private void ConfigureOpponentHandTuck(VisualElement opponent, VisualElement cards, OpponentSide side,
+            OpponentHandTuckState tuckState)
+        {
+            void OnGeometryChanged(GeometryChangedEvent evt)
+            {
+                if (opponent.panel == null || opponent.worldBound.width <= 0f || opponent.worldBound.height <= 0f ||
+                    cards.worldBound.width <= 0f || cards.worldBound.height <= 0f)
+                {
+                    return;
+                }
+
+                opponent.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+                var tuckedOffset = CalculateOpponentHandTuckOffset(opponent, cards, side);
+                tuckState.LastTuckedOffset = tuckedOffset;
+                var currentAmount = GetOpponentHandTuckAmount(tuckState);
+                if (GameSettings.ReducedMotion)
+                {
+                    tuckState.From = tuckState.To;
+                    tuckState.StartedAt = Time.unscaledTime;
+                    SetOpponentHandOffset(opponent, tuckedOffset * tuckState.To);
+                    return;
+                }
+
+                SetOpponentHandOffset(opponent, tuckedOffset * currentAmount);
+                if (Mathf.Approximately(currentAmount, tuckState.To))
+                {
+                    SetOpponentHandOffset(opponent, tuckedOffset * tuckState.To);
+                    return;
+                }
+
+                AnimateOpponentHandOffset(opponent, tuckedOffset, tuckState);
+            }
+
+            opponent.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+        }
+
+        private void AnimateOpponentHandOffset(VisualElement opponent, Vector2 tuckedOffset,
+            OpponentHandTuckState tuckState)
+        {
+            IVisualElementScheduledItem animation = null;
+            SetOpponentHandOffset(opponent, tuckedOffset * GetOpponentHandTuckAmount(tuckState));
+            animation = opponent.schedule.Execute(() =>
+            {
+                if (opponent.panel == null)
+                {
+                    animation.Pause();
+                    opponentHandTuckAnimations.Remove(animation);
+                    return;
+                }
+
+                var amount = GetOpponentHandTuckAmount(tuckState);
+                SetOpponentHandOffset(opponent, tuckedOffset * amount);
+                if (Mathf.Approximately(amount, tuckState.To))
+                {
+                    SetOpponentHandOffset(opponent, tuckedOffset * tuckState.To);
+                    animation.Pause();
+                    opponentHandTuckAnimations.Remove(animation);
+                }
+            }).Every(0);
+            opponentHandTuckAnimations.Add(animation);
+        }
+
+        private static float GetOpponentHandTuckAmount(OpponentHandTuckState tuckState)
+        {
+            var progress = Mathf.Clamp01((Time.unscaledTime - tuckState.StartedAt) / OpponentHandTuckDuration);
+            var eased = 1f - Mathf.Pow(1f - progress, 3f);
+            return Mathf.Lerp(tuckState.From, tuckState.To, eased);
+        }
+
+        private static Vector2 CalculateOpponentHandTuckOffset(VisualElement opponent, VisualElement cards,
+            OpponentSide side)
+        {
+            var opponentBounds = opponent.worldBound;
+            var cardBounds = cards.worldBound;
+            switch (side)
+            {
+                case OpponentSide.Left:
+                    return new Vector2(Mathf.Min(0f,
+                        opponentBounds.xMin - cardBounds.xMax + cardBounds.width * 0.5f), 0f);
+                case OpponentSide.Right:
+                    return new Vector2(Mathf.Max(0f,
+                        opponentBounds.xMax - cardBounds.xMin - cardBounds.width * 0.5f), 0f);
+                default:
+                    return new Vector2(0f, Mathf.Min(0f,
+                        opponentBounds.yMin - cardBounds.yMax + cardBounds.height * 0.5f));
+            }
+        }
+
+        private static void SetOpponentHandOffset(VisualElement opponent, Vector2 offset)
+        {
+            if (offset.sqrMagnitude <= 0.001f)
+            {
+                opponent.style.translate = StyleKeyword.Null;
+                return;
+            }
+
+            opponent.style.translate = new Translate(new Length(offset.x, LengthUnit.Pixel),
+                new Length(offset.y, LengthUnit.Pixel));
         }
 
         public static OpponentSide GetOpponentSide(int relativeSeat, int opponentCount)

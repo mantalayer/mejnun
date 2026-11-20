@@ -23,6 +23,43 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void EdgePanZoneCoversLeftRightAndTopButNotBottom()
+        {
+            const float width = 1000f;
+            const float height = 800f;
+            const float fraction = 0.08f;
+
+            var hadEdgePanWidth = PlayerPrefs.HasKey(GameSettings.EdgePanWidthKey);
+            var previousEdgePanWidth = PlayerPrefs.GetFloat(GameSettings.EdgePanWidthKey,
+                GameSettings.DefaultEdgePanWidth);
+            try
+            {
+                PlayerPrefs.DeleteKey(GameSettings.EdgePanWidthKey);
+                Assert.That(GameSettings.EdgePanWidth, Is.EqualTo(GameSettings.DefaultEdgePanWidth));
+            }
+            finally
+            {
+                if (hadEdgePanWidth)
+                {
+                    PlayerPrefs.SetFloat(GameSettings.EdgePanWidthKey, previousEdgePanWidth);
+                }
+                else
+                {
+                    PlayerPrefs.DeleteKey(GameSettings.EdgePanWidthKey);
+                }
+
+                PlayerPrefs.Save();
+            }
+
+            Assert.That(PointerRouter.IsInEdgePanZone(new Vector2(32f, 400f), width, height, fraction), Is.True);
+            Assert.That(PointerRouter.IsInEdgePanZone(new Vector2(968f, 400f), width, height, fraction), Is.True);
+            Assert.That(PointerRouter.IsInEdgePanZone(new Vector2(500f, 750f), width, height, fraction), Is.True);
+            Assert.That(PointerRouter.IsInEdgePanZone(new Vector2(500f, 32f), width, height, fraction), Is.False);
+            Assert.That(PointerRouter.IsInEdgePanZone(new Vector2(500f, 400f), width, height, fraction), Is.False);
+            Assert.That(PointerRouter.IsInEdgePanZone(new Vector2(500f, 400f), width, height, 0f), Is.False);
+        }
+
+        [Test]
         public void DraggedCardRemainsAboveBoardCardsAcrossLayout()
         {
             var oldOrganicBoard = GameSettings.OrganicBoard;

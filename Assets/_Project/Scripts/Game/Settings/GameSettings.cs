@@ -21,6 +21,9 @@ namespace Mejnun.Game
         private const string HandCardScaleKey = "settings.hand.cardScale";
         private const string HandLiftKey = "settings.hand.lift";
         public const string OpponentCardScaleKey = "settings.opponents.cardScale";
+        public const string HideOpponentHandsKey = "settings.opponents.hideIdle";
+        public const string EdgePanWidthKey = "settings.camera.edgePanWidth";
+        public const float DefaultEdgePanWidth = 0.08f;
         private const string ZoomSensitivityKey = "settings.camera.zoomSensitivity";
         private const string UiScaleKey = "settings.ui.scale";
         private const string CpuSpeedKey = "settings.cpu.speed.v2";
@@ -151,6 +154,18 @@ namespace Mejnun.Game
         {
             get => Get(OpponentCardScaleKey, 1f);
             set => Set(OpponentCardScaleKey, value);
+        }
+
+        public static bool HideOpponentHands
+        {
+            get => Get(HideOpponentHandsKey, DeviceProfile.IsMobilePlatform);
+            set => Set(HideOpponentHandsKey, value);
+        }
+
+        public static float EdgePanWidth
+        {
+            get => Mathf.Clamp(Get(EdgePanWidthKey, DefaultEdgePanWidth), 0f, 0.25f);
+            set => Set(EdgePanWidthKey, Mathf.Clamp(value, 0f, 0.25f));
         }
 
         public static float ZoomSensitivity
@@ -294,6 +309,8 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(HandCardScaleKey);
             PlayerPrefs.DeleteKey(HandLiftKey);
             PlayerPrefs.DeleteKey(OpponentCardScaleKey);
+            PlayerPrefs.DeleteKey(HideOpponentHandsKey);
+            PlayerPrefs.DeleteKey(EdgePanWidthKey);
             PlayerPrefs.DeleteKey(ZoomSensitivityKey);
             PlayerPrefs.DeleteKey(UiScaleKey);
             PlayerPrefs.DeleteKey(CpuSpeedKey);

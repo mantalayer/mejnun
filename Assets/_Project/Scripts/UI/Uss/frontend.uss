@@ -56,15 +56,16 @@
 }
 
 .main-menu-screen {
-    width: 100%;
-    max-width: 520px;
+    width: 90%;
+    max-width: 480px;
     align-items: center;
     justify-content: center;
 }
 
 .main-menu-screen .frontend-button {
     align-self: stretch;
-    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .online-screen {
@@ -434,6 +435,39 @@
     margin-right: 12px;
 }
 
+.setup-fields > .unity-base-field,
+.setup-fields .seat-name {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.setup-fields .unity-base-field__label {
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+    flex-shrink: 0;
+    margin-left: 0;
+    margin-right: 4px;
+    padding-left: 0;
+    padding-right: 0;
+    white-space: normal;
+}
+
+.setup-fields .unity-base-field__input {
+    margin-left: 0;
+}
+
+.setup-fields .unity-base-popup-field,
+.setup-fields .unity-base-popup-field:hover,
+.setup-fields .unity-base-popup-field:focus,
+.setup-fields .unity-base-popup-field:active {
+    background-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+}
+
 .cosmetic-picker-panel {
     width: 32%;
     min-width: 190px;
@@ -643,7 +677,7 @@
 
 .landscape-layout .main-menu-screen,
 .portrait-layout .main-menu-screen {
-    max-width: 520px;
+    max-width: 480px;
 }
 
 .landscape-layout .setup-screen {

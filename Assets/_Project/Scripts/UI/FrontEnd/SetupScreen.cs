@@ -59,7 +59,12 @@ namespace Mejnun.UI.FrontEnd
                 kindFields[seat].RegisterValueChangedCallback(_ => OnKindChanged(seatIndex));
             }
 
-            modeField.SetEnabled(false);
+            // Seat one is always the local human, so it has no kind or style choice.
+            kindFields[0].style.display = DisplayStyle.None;
+            styleFields[0].style.display = DisplayStyle.None;
+            modeField.SetEnabled(true);
+            modeField.RegisterValueChangedCallback(_ =>
+                SetMode(modeField.index == 1 ? MatchMode.PassAndPlay : MatchMode.Solo));
             RenderChoices(HumanKindIndex, (int)BotStyle.Balanced, 0);
             seatCountField.RegisterValueChangedCallback(OnSeatCountChanged);
             root.Q<Button>("setup-back-button").clicked += back;
@@ -210,6 +215,7 @@ namespace Mejnun.UI.FrontEnd
         private void OnKindChanged(int seat)
         {
             styleFields[seat].SetEnabled(IsBot(seat));
+            RefreshRows();
             if (!IsDefaultName(nameFields[seat].value))
             {
                 return;
@@ -241,7 +247,7 @@ namespace Mejnun.UI.FrontEnd
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
                 seatRows[seat].style.display = seat < seatCount ? DisplayStyle.Flex : DisplayStyle.None;
-                styleFields[seat].style.display = IsBot(seat) ? DisplayStyle.Flex : DisplayStyle.None;
+                styleFields[seat].style.display = seat > 0 && IsBot(seat) ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
 
@@ -291,7 +297,7 @@ namespace Mejnun.UI.FrontEnd
 
         private bool IsBot(int seat)
         {
-            return kindFields[seat].index > HumanKindIndex;
+            return seat > 0 && kindFields[seat].index > HumanKindIndex;
         }
 
         private BotDifficulty Difficulty(int seat)

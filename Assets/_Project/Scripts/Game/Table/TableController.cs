@@ -1186,9 +1186,19 @@ namespace Mejnun.Game
             }
         }
 
-        private void HighlightLongPress(GestureHit hit)
+        private void HandleLongPress(Vector2 position, bool playCue)
         {
-            var cardIds = gestureInterpreter.GetLongPressCardIds(hit, game.State);
+            var cardIds = gestureInterpreter.GetLongPressCardIds(tableView.HitTest(position), game.State);
+            if (cardIds.Length == 0)
+            {
+                return;
+            }
+
+            if (playCue)
+            {
+                Haptics.LongPress();
+            }
+
             for (var index = 0; index < cardIds.Length; index++)
             {
                 var cardView = tableView.GetCardView(cardIds[index]);
@@ -1218,6 +1228,19 @@ namespace Mejnun.Game
                 return;
             }
 
+            var dragHit = GestureHit.None;
+            if (pointerGesture.Kind == PointerGestureKind.DragStarted)
+            {
+                dragHit = tableView.HitTest(pointerGesture.StartPosition, true);
+                if (PointerRouter.IsInEdgePanZone(pointerGesture.StartPosition, Screen.width, Screen.height,
+                        GameSettings.EdgePanWidth) &&
+                    (dragHit.Kind == GestureHitKind.BoardCard || dragHit.Kind == GestureHitKind.MeldGrip ||
+                     dragHit.Kind == GestureHitKind.MeldGap))
+                {
+                    dragHit = GestureHit.EmptyBoard();
+                }
+            }
+
             if (IsRemoteTurnBlocked() && (pointerGesture.Kind == PointerGestureKind.Tap ||
                                           pointerGesture.Kind == PointerGestureKind.DoubleTap))
             {
@@ -1231,7 +1254,7 @@ namespace Mejnun.Game
 
             if (IsRemoteTurnBlocked() && pointerGesture.Kind == PointerGestureKind.DragStarted)
             {
-                var blockedHit = tableView.HitTest(pointerGesture.StartPosition, true);
+                var blockedHit = dragHit;
                 if (blockedHit.Kind == GestureHitKind.BoardCard || blockedHit.Kind == GestureHitKind.MeldGrip)
                 {
                     NotifyInvalid(RuleError.NotYourTurn);
@@ -1269,7 +1292,7 @@ namespace Mejnun.Game
             if (pointerGesture.Kind == PointerGestureKind.DragStarted)
             {
                 SetMarkMode(false);
-                dragSource = tableView.HitTest(pointerGesture.StartPosition, true);
+                dragSource = dragHit;
                 sweepSelectActive = dragSource.Kind == GestureHitKind.HandCard && pointerGesture.IsLongPress &&
                                     (InputEnabled || HandInputEnabled);
                 var boardDragWhileDisabled = !InputEnabled &&
@@ -1354,8 +1377,7 @@ namespace Mejnun.Game
                     break;
                 }
                 case PointerGestureKind.LongPress:
-                    Haptics.LongPress();
-                    HighlightLongPress(tableView.HitTest(pointerGesture.Position));
+                    HandleLongPress(pointerGesture.Position, true);
                     break;
                 case PointerGestureKind.DragStarted:
                     if (meldReorderActive)
@@ -1511,7 +1533,7 @@ namespace Mejnun.Game
                     break;
                 }
                 case PointerGestureKind.LongPress:
-                    HighlightLongPress(tableView.HitTest(pointerGesture.Position));
+                    HandleLongPress(pointerGesture.Position, false);
                     break;
                 case PointerGestureKind.DragStarted:
                     if (dragActive)
