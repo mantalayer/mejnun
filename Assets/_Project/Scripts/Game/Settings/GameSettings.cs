@@ -32,7 +32,7 @@ namespace Mejnun.Game
         private const string VolumeMusicKey = "settings.audio.music";
         private const string VolumeSfxKey = "settings.audio.sfx";
         private const string VolumeVoiceKey = "settings.audio.voice";
-        private const string LanguageKey = "settings.language";
+        private const string LanguageKey = Mejnun.Localization.LanguagePreference.PlayerPrefsKey;
         private const string QuickMatchBotFillKey = "settings.online.botFill";
         private const string OnlineNicknameKey = "settings.online.nickname";
         private const string TutorialCompletedKey = "settings.tutorial.completed";
@@ -223,10 +223,13 @@ namespace Mejnun.Game
             set => Set(VolumeVoiceKey, Mathf.Clamp01(value));
         }
 
+        // Locale code chosen in Settings, or empty to follow the platform
+        // (Steam game language / device languages). Switching the running
+        // language goes through Loc.SetLanguage, which saves the same key.
         public static string Language
         {
-            get => PlayerPrefs.GetString(LanguageKey, "en");
-            set => Set(LanguageKey, string.IsNullOrWhiteSpace(value) ? "en" : value);
+            get => PlayerPrefs.GetString(LanguageKey, Mejnun.Localization.LanguagePreference.FollowPlatform);
+            set => Set(LanguageKey, value?.Trim() ?? Mejnun.Localization.LanguagePreference.FollowPlatform);
         }
 
         public static int QuickMatchBotFill

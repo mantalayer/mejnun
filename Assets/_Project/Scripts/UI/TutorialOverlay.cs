@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -186,7 +187,38 @@ namespace Mejnun.UI
             }
         }
 
+        /// <summary>Re-renders the visible popup or rule page after the language changes, keeping the current page.</summary>
+        public void RefreshLanguage()
+        {
+            var step = CurrentStep;
+            if (layer == null || step == null)
+            {
+                return;
+            }
+
+            if (step.Ui == TutorialUiKind.Modal && modalScrim.style.display.value == DisplayStyle.Flex)
+            {
+                var index = pageIndex;
+                BuildPages(step);
+                pageIndex = Mathf.Clamp(index, 0, pages.Count - 1);
+                ShowPage();
+            }
+            else if (step.Ui == TutorialUiKind.Popup && coachPopup.style.display.value == DisplayStyle.Flex)
+            {
+                coachTitle.text = step.Title;
+                coachBody.text = director == null ? step.Body : director.CurrentBody;
+            }
+        }
+
         private void ShowModal(TutorialStep step)
+        {
+            BuildPages(step);
+            pageIndex = 0;
+            modalScrim.style.display = DisplayStyle.Flex;
+            ShowPage();
+        }
+
+        private void BuildPages(TutorialStep step)
         {
             pages.Clear();
             pages.Add(new TutorialPage(step.Title, step.Body, step.Diagram));
@@ -194,10 +226,6 @@ namespace Mejnun.UI
             {
                 pages.Add(step.Pages[index]);
             }
-
-            pageIndex = 0;
-            modalScrim.style.display = DisplayStyle.Flex;
-            ShowPage();
         }
 
         private void ShowPage()
@@ -208,9 +236,13 @@ namespace Mejnun.UI
             BuildDiagram(page.Diagram);
             var paged = pages.Count > 1;
             rulePage.style.display = paged ? DisplayStyle.Flex : DisplayStyle.None;
-            rulePage.text = (pageIndex + 1) + " / " + pages.Count;
+            rulePage.text = Loc.Format("tutorial.ui.rule.page", pageIndex + 1, pages.Count);
             ruleBackButton.style.display = paged && pageIndex > 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            ruleOkButton.text = !paged ? "Got it" : pageIndex + 1 < pages.Count ? "Next" : "Done";
+            ruleOkButton.text = !paged
+                ? Loc.Get("tutorial.ui.rule.got_it")
+                : pageIndex + 1 < pages.Count
+                    ? Loc.Get("tutorial.ui.rule.next")
+                    : Loc.Get("tutorial.ui.rule.done");
         }
 
         private void NextPage()
@@ -265,7 +297,9 @@ namespace Mejnun.UI
                 }
 
                 groupElement.Add(cards);
-                var caption = new Label((group.Valid ? "✓ " : "✗ ") + group.Caption);
+                var caption = new Label(group.Valid
+                    ? Loc.Format("tutorial.ui.diagram.valid", group.Caption)
+                    : Loc.Format("tutorial.ui.diagram.invalid", group.Caption));
                 caption.AddToClassList("diagram-caption");
                 groupElement.Add(caption);
                 ruleDiagram.Add(groupElement);
@@ -278,16 +312,16 @@ namespace Mejnun.UI
             switch (card.Rank)
             {
                 case Rank.Ace:
-                    rank = "A";
+                    rank = "A"; // loc-ignore: card index letter, must match the printed card faces
                     break;
                 case Rank.Jack:
-                    rank = "J";
+                    rank = "J"; // loc-ignore: card index letter, must match the printed card faces
                     break;
                 case Rank.Queen:
-                    rank = "Q";
+                    rank = "Q"; // loc-ignore: card index letter, must match the printed card faces
                     break;
                 case Rank.King:
-                    rank = "K";
+                    rank = "K"; // loc-ignore: card index letter, must match the printed card faces
                     break;
                 default:
                     rank = ((int)card.Rank + 1).ToString();

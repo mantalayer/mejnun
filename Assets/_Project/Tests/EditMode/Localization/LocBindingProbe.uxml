@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Label name="probe-label">
+        <Bindings>
+            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="app.name" />
+        </Bindings>
+    </ui:Label>
+</ui:UXML>

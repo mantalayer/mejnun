@@ -1,0 +1,3882 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_sw
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: sw
+  m_SharedData: {fileID: 11400000, guid: d63316e15cef2427c94a329ac604c22b, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 4825848250703282629
+  m_TableData:
+  - m_Id: 6548981014530
+    m_Localized: Kadi huwekwa mezani kwa seti. Aina hiyo hiyo ni kadi 3 au 4 za cheo
+      kimoja, zote ni suti tofauti. Kadi moja kwa moja ni kadi 3 au zaidi za suti
+      moja, kwa mpangilio.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208840
+    m_Localized: Uko Chini!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208849
+    m_Localized: Maradufu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208865
+    m_Localized: Rudia kurudisha nyuma. Revert huweka upya zamu nzima, na bodi ya
+      Fix inajaribu kukutengenezea meza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208872
+    m_Localized: Kukopa kutoka kwa seti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208878
+    m_Localized: Wachezaji walio chini wanaweza pia kuanza seti mpya kabisa kutoka
+      mikononi mwao.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208879
+    m_Localized: Imekwama
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208885
+    m_Localized: "Weka 2\u2665 kwenye 3\u2665 4\u2665 5\u2665."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208893
+    m_Localized: Chini
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403141
+    m_Localized: Zamu zilizopangwa kwa wakati
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403152
+    m_Localized: Kijitabu {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403154
+    m_Localized: '{0} (Boti ya wastani)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403159
+    m_Localized: Mchezo umekwisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403183
+    m_Localized: Nuhu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403185
+    m_Localized: Theodore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403195
+    m_Localized: Jack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403220
+    m_Localized: Sacha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403223
+    m_Localized: Emil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403224
+    m_Localized: Elias
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403236
+    m_Localized: Mattia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403241
+    m_Localized: Gael
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597442
+    m_Localized: Ludvig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597446
+    m_Localized: Antoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597450
+    m_Localized: Nikodemu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597455
+    m_Localized: Artem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597461
+    m_Localized: Matvey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597470
+    m_Localized: Yusufu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597476
+    m_Localized: Ahmet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597478
+    m_Localized: Kian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597489
+    m_Localized: Tariq
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597494
+    m_Localized: Aarav
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597500
+    m_Localized: Krishna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597504
+    m_Localized: Babatunde
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597506
+    m_Localized: Chinedu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791744
+    m_Localized: Ha-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791747
+    m_Localized: Eun-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791754
+    m_Localized: Huy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791782
+    m_Localized: Isla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986062
+    m_Localized: Marie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986064
+    m_Localized: Ginevra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986081
+    m_Localized: Selma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986082
+    m_Localized: Nora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986089
+    m_Localized: Hanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986102
+    m_Localized: Ksenia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986104
+    m_Localized: Katerina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986106
+    m_Localized: Georgia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180362
+    m_Localized: Nehir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180364
+    m_Localized: Leyla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180367
+    m_Localized: Parisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180381
+    m_Localized: Saanvi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180382
+    m_Localized: Ananya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180386
+    m_Localized: Anika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180392
+    m_Localized: Nneka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180398
+    m_Localized: Zihan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180408
+    m_Localized: Sakura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180409
+    m_Localized: Yui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180410
+    m_Localized: Mio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180411
+    m_Localized: Hina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180425
+    m_Localized: Trang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180426
+    m_Localized: Huong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180430
+    m_Localized: Samantha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180431
+    m_Localized: Nathalie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180433
+    m_Localized: Janelle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180440
+    m_Localized: Sari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763269
+    m_Localized: Meza Kamili
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763284
+    m_Localized: Fikia kiwango cha 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763286
+    m_Localized: Fungua kila uso na fani ya staha ya bure au inayoweza kulipwa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763295
+    m_Localized: Kurudi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763297
+    m_Localized: Chini ya Waya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763299
+    m_Localized: Barabara ya Kifalme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763316
+    m_Localized: Shinda kwa vidokezo vilivyozimwa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763321
+    m_Localized: Pepo wa Kasi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957585
+    m_Localized: Chagua kwanza kuuliza swali mara 10.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957590
+    m_Localized: Shinda {0:plural:{} mchezo|{} michezo}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549022957592
+    m_Localized: Ununuzi unahitajika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957604
+    m_Localized: Blueeyedrat Classic Light 1rangi 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957605
+    m_Localized: Blueeyedrat Classic Light 2rangi 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957612
+    m_Localized: Sepia 2 ya rangi ya Blueeyedrat Classic 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957620
+    m_Localized: Nyeusi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151878
+    m_Localized: Wasifu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151880
+    m_Localized: Matunzio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346185
+    m_Localized: '{0:plural:{} sekunde|{} sekunde}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346187
+    m_Localized: Chagua deki mbili na kisu cha meza. Chaguo za mchezaji zitachaguliwa
+      kwa mechi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346188
+    m_Localized: Unda kipindi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346191
+    m_Localized: Ulinganisho wa haraka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346195
+    m_Localized: Ulitoka kwenye ukumbi wa kushawishi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346200
+    m_Localized: Hakuna wachezaji waliounganishwa bado.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346205
+    m_Localized: Solo dhidi ya AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346210
+    m_Localized: '{0:plural:{} sekunde|{} sekunde}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346217
+    m_Localized: Usawa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346224
+    m_Localized: Sitaha {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346226
+    m_Localized: Felt ya meza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346232
+    m_Localized: Matunzio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346234
+    m_Localized: Mandharinyuma ya ubao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346238
+    m_Localized: Mpya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346242
+    m_Localized: Inamilikiwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346243
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346249
+    m_Localized: Meza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346262
+    m_Localized: Uliza kabla ya kurudisha kadi batili mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346267
+    m_Localized: Barafu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346268
+    m_Localized: Polepole sana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346280
+    m_Localized: Kiasi cha tao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346290
+    m_Localized: Inua mkono
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346291
+    m_Localized: Hurekebisha umbali ambao kadi huinuka zinapochaguliwa au kuelea.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346299
+    m_Localized: Huongeza tofauti ndogo ya asili katika uwekaji wa kadi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346309
+    m_Localized: Huwasha maoni ya mtetemo kwenye vifaa vinavyotumika.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346310
+    m_Localized: Ukubwa wa kiolesura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540483
+    m_Localized: Huweka sauti ya sauti.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540491
+    m_Localized: '{0:plural:{} sekunde|{} sekunde}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540496
+    m_Localized: "{0}\xD7"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540501
+    m_Localized: Muuzaji humpa kila mchezaji kadi 11, moja baada ya nyingine, kutoka
+      kwa mchezaji wa kwanza kwa mwelekeo wa saa. Kadi zilizobaki hutengeneza rundo
+      la droo linaloelekea chini, na mchezaji wa kwanza aliyechaguliwa huchukua zamu
+      ya kwanza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540503
+    m_Localized: Kuwa wa kwanza kutoa mkono wako wote ili kushinda. Mchezo ni raundi
+      moja; mshindi hutangulia katika mchezo unaofuata.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540504
+    m_Localized: Seti za aina moja zina kadi 3-4 za kiwango sawa, huku kila suti
+      ikiwa tofauti. Safu zilizonyooka zina kadi 3-13 mfululizo za kiwango sawa,
+      bila kiwango kinachorudiwa. Ace inaweza kuwa ya chini (A-2-3) au ya juu (Q-K-A),
+      lakini si zote mbili; K-A-2 hairuhusiwi. Kila seti ya ubao lazima iwe halali;
+      seti za kadi moja na mbili si halali.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540511
+    m_Localized: Zamu zilizopangwa kwa wakati
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540520
+    m_Localized: Mwisho wa zamu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540526
+    m_Localized: 'Panga: suti'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540529
+    m_Localized: Marko
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540533
+    m_Localized: 'Kidokezo: imewashwa'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540538
+    m_Localized: Imeshuka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540565
+    m_Localized: Thibitisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540572
+    m_Localized: Wasifu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540587
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734793
+    m_Localized: '{0}: {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734794
+    m_Localized: Umemaliza mafunzo. Uko tayari kwa mchezo halisi!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734800
+    m_Localized: Deki mpya imefunguliwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1341120512
+    m_Localized: Mejnun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 695204831232
+    m_Localized: Kiotomatiki (lugha ya kifaa)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656669331456
+    m_Localized: Sawa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302976
+    m_Localized: Ghairi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302977
+    m_Localized: Rudi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302978
+    m_Localized: Funga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302979
+    m_Localized: Imewashwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302980
+    m_Localized: Imezimwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302981
+    m_Localized: Ndiyo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302982
+    m_Localized: Hapana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302983
+    m_Localized: Endelea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302984
+    m_Localized: Imekamilika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302985
+    m_Localized: Imefungwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302986
+    m_Localized: "Inapakia\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548909711360
+    m_Localized: Karibu Mejnun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014528
+    m_Localized: 'Mejnun anachezwa na deki mbili kamili: kadi 104. Kila mtu anapewa
+      11. Kuwa wa kwanza kumimina mkono wako mezani ili kushinda.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014529
+    m_Localized: Seti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014531
+    m_Localized: Zamu ya {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208832
+    m_Localized: '{0} anatangulia. Angalia anachofanya.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208833
+    m_Localized: '{0} iko chini'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208834
+    m_Localized: '{0} weka chini seti iliyotengenezwa kwa mkono wake pekee. Hiyo
+      inaitwa kwenda chini, na seti moja inatosha.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208835
+    m_Localized: Bado hujashuka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208836
+    m_Localized: Huwezi kutumia meza hadi utakapokuwa umechoka. Kwanza, weka seti
+      kutoka kwa mkono wako mwenyewe.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208837
+    m_Localized: Nenda chini kwanza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208838
+    m_Localized: "Hadi utakapokuwa chini unaweza kucheza seti kwa mkono wako mwenyewe.
+      Weka 7\u2665 8\u2665 9\u2665 kwenye meza tupu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208839
+    m_Localized: "Endelea\u2014malizia kuweka kadi zote tatu kutoka mkononi mwako
+      ili ushuke."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208841
+    m_Localized: 'Sasa meza nzima ni yako kutumia: ongeza kwenye seti yoyote, panga
+      upya, gawanya. Na unaweza kuendelea kucheza zamu hii hiyo.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208842
+    m_Localized: Ongeza kwenye seti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208843
+    m_Localized: "Sasa weka A\u2660 yako kwenye J\u2660 Q\u2660 K\u2660 ya {0}."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208844
+    m_Localized: Ace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208845
+    m_Localized: Ace inaweza kuwa ya chini (A-2-3) au ya juu (Q-K-A), lakini mnyoofu
+      hauzunguki kamwe (K-A-2).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208846
+    m_Localized: Aina hiyo hiyo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208847
+    m_Localized: "Weka 5\u2663 5\u2666 5\u2660 kwenye meza tupu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208848
+    m_Localized: "Endelea\u2014malizia kuweka kadi zote tatu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208850
+    m_Localized: 'Kwa deki mbili, kila kadi ina kadi mbili: suti na cheo kimoja,
+      kutoka deki nyingine (nyuma yake inaonekana tofauti). Kadi mbili haziwezi kamwe
+      kuwekwa katika seti moja.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208851
+    m_Localized: Maliza zamu yako
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208852
+    m_Localized: Unaweza kumaliza zamu yako wakati kila seti kwenye meza ni halali
+      na umecheza angalau kadi moja kutoka mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208853
+    m_Localized: Tazama {0}.
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208854
+    m_Localized: Seti yoyote ni ya haki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208855
+    m_Localized: "{0} aliongeza 10\u2665 J\u2665 kwenye mioyo yenu na 5\u2665 kwenye
+      tano zenu. Ukishakuwa chini unaweza kuongeza kwenye seti yoyote mezani."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208856
+    m_Localized: Gawanya moja kwa moja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208857
+    m_Localized: "Bonyeza kwa muda mrefu 10\u2665 na uiburute hadi kwenye meza tupu.
+      10\u2665 J\u2665 huja nayo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208858
+    m_Localized: Bado sijaweka seti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208859
+    m_Localized: "10\u2665 J\u2665 ina muhtasari mwekundu: si seti halali. Hiyo ni
+      sawa katikati ya zamu, lakini huwezi kumaliza zamu yako hadi kila seti iwe
+      halali."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208860
+    m_Localized: Tumia maradufu yako
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208861
+    m_Localized: "Weka 9\u2665 yako kwenye 10\u2665 J\u2665. Ni maradufu ya 9\u2665
+      katika seti nyingine, kwa hivyo inaruhusiwa hapa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208862
+    m_Localized: Tendua
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208863
+    m_Localized: Umefanya kosa? Tendua hatua moja nyuma. Jaribu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208864
+    m_Localized: Rudia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208866
+    m_Localized: Kila seti ni halali tena. Maliza zamu yako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208867
+    m_Localized: '{0} droo'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208868
+    m_Localized: '{0} hakuweza kucheza, kwa hivyo alichora. Kuchora kunachukua kadi
+      moja kutoka kwenye rundo na kumaliza zamu yako.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208869
+    m_Localized: Anzisha kikundi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208870
+    m_Localized: "Weka 3\u2665 4\u2665 kwenye meza tupu. Ni kadi mbili tu, kwa hivyo
+      zinaonyesha nyekundu kwa sasa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208871
+    m_Localized: "Endelea\u2014malizia kuweka kadi zote mbili."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208873
+    m_Localized: "Aina nne bado inafanya kazi na tatu. Buruta 5\u2665 kati ya tano
+      kwenye 3\u2665 4\u2665."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208874
+    m_Localized: Seti zote ni halali. Maliza zamu yako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208875
+    m_Localized: Kadi moja imesalia!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208876
+    m_Localized: "Mchezaji anapokosa kadi yake ya mwisho, kiti chake hutetemeka na
+      kuonyesha ! \u2014 kila mtu anaweza kuona kwamba anakaribia kushinda."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208877
+    m_Localized: Seti mpya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208880
+    m_Localized: "A\u2665 yako haitoshi popote mezani."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208881
+    m_Localized: Chora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208882
+    m_Localized: Gusa Chora ili kuchukua kadi na kumaliza zamu yako. Kuchora pia
+      hurejesha kadi zozote ulizoweka zamu hii.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208883
+    m_Localized: '{0} pia imekwama.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548985208884
+    m_Localized: "Ulichora 2\u2665"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208886
+    m_Localized: Asidi ya chini
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208887
+    m_Localized: "Sasa A\u2665 inafaa katika sehemu ya chini: A-2-3-4-5\u2665. Cheza
+      kadi yako ya mwisho!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208888
+    m_Localized: MEJNUN!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208889
+    m_Localized: Umeondoa mkono wako na ukashinda. Mambo machache zaidi ni vizuri
+      kujua.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208890
+    m_Localized: Aina hiyo hiyo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208891
+    m_Localized: Sawa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208892
+    m_Localized: Suti mchanganyiko
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208894
+    m_Localized: Juu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403136
+    m_Localized: Hakuna kufunga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403137
+    m_Localized: Mara mbili
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403138
+    m_Localized: Seti sawa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403139
+    m_Localized: Rundo la kuchomoa tupu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403140
+    m_Localized: Wakati rundo la droo likiisha, Droo inakuwa Pasi. Ikiwa kila mtu
+      atapiga pasi mfululizo, mchezaji mwenye kadi chache zaidi atashinda. Sare ni
+      Sare.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403142
+    m_Localized: "Katika michezo iliyopangwa kwa wakati, saa huhesabu kila zamu.
+      Inapoisha \u2014 Halas! \u2014 zamu halali huisha, vinginevyo karata zako hurudi
+      nyuma na unavuta."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403143
+    m_Localized: Rekebisha ubao na urudi nyuma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403144
+    m_Localized: Bodi ya kurekebisha inajaribu kufanya kila seti iwe halali huku
+      ikiendelea na mienendo yako. Revert hurudisha meza nzima jinsi ilivyokuwa mwanzoni
+      mwa zamu yako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403145
+    m_Localized: Vidokezo na meza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403146
+    m_Localized: Vidokezo huonyesha kadi unazoweza kucheza. Bana ili kukuza, buruta
+      hadi kwenye sehemu ya kugeuza, na utumie Fit ili kuona jedwali zima.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403147
+    m_Localized: Mchezo unaofuata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403148
+    m_Localized: Mshindi anaongoza katika mchezo unaofuata.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403149
+    m_Localized: Layla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403150
+    m_Localized: Wewe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403151
+    m_Localized: Mchezaji {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403153
+    m_Localized: '{0} (Boti rahisi)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403155
+    m_Localized: '{0} (Boti ngumu)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403156
+    m_Localized: "Pitisha hadi {0} \u2014 gusa ili kufichua"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403157
+    m_Localized: Msuguano
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403158
+    m_Localized: '{0} ushindi!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403160
+    m_Localized: '{0} walimwaga mikono yao.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403161
+    m_Localized: '{0} alikuwa na kadi chache zaidi wakati rundo la droo lilipoisha.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403162
+    m_Localized: Alama ya kadi chache zaidi ililingana. Chagua ni nani atakayetangulia.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403163
+    m_Localized: Nani anapaswa kwenda kwanza?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403164
+    m_Localized: Mechi imesitishwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403165
+    m_Localized: Mechi inaendelea tena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403166
+    m_Localized: Seva mwenyeji imetenganishwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403167
+    m_Localized: '{0} alijiunga'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403168
+    m_Localized: '{0} imeunganishwa'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403169
+    m_Localized: Wachezaji wote walijiunga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403170
+    m_Localized: '{0} sasa ndiye mwenyeji'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403171
+    m_Localized: Mchezaji sasa ndiye mwenyeji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403172
+    m_Localized: "Inasubiri wachezaji ({0}/{1})\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403173
+    m_Localized: 'Inasubiri wachezaji ({0}/{1})...
+
+      Nambari ya chumba: {2}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6548989403174
+    m_Localized: Mchezaji amekataliwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403175
+    m_Localized: Wasubiri, acha roboti ya Kati ichukue nafasi, au hifadhi na usitishe.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403176
+    m_Localized: Subiri / pasi otomatiki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403177
+    m_Localized: Acha AI ichukue nafasi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403178
+    m_Localized: Hifadhi na usitishe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403179
+    m_Localized: Mechi imehifadhiwa na kusimamishwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403180
+    m_Localized: Mwenyeji anaweza kuendelea na kipindi hiki wakati kila mtu yuko
+      tayari.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403181
+    m_Localized: Endelea na mechi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403182
+    m_Localized: Liam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403184
+    m_Localized: Oliver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403186
+    m_Localized: Yakobo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403187
+    m_Localized: Henry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403188
+    m_Localized: Eliya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403189
+    m_Localized: William
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403190
+    m_Localized: Muhammad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403191
+    m_Localized: Arthur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403192
+    m_Localized: George
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403193
+    m_Localized: Thomas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403194
+    m_Localized: Oscar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403196
+    m_Localized: Harry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403197
+    m_Localized: Alfie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403198
+    m_Localized: Mateo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403199
+    m_Localized: Hugo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403200
+    m_Localized: Martin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403201
+    m_Localized: Leo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403202
+    m_Localized: Lucas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403203
+    m_Localized: Pablo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403204
+    m_Localized: Alejandro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403205
+    m_Localized: Manuel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403206
+    m_Localized: Santiago
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403207
+    m_Localized: Sebastian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403208
+    m_Localized: Emiliano
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403209
+    m_Localized: Diego
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403210
+    m_Localized: Leonardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403211
+    m_Localized: Danieli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403212
+    m_Localized: Mauricio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403213
+    m_Localized: Iker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403214
+    m_Localized: Gabrieli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403215
+    m_Localized: Rafaeli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403216
+    m_Localized: Louis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403217
+    m_Localized: Jules
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403218
+    m_Localized: Adamu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403219
+    m_Localized: Mael
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403221
+    m_Localized: Gabin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403222
+    m_Localized: Matteo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403225
+    m_Localized: Kifini
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403226
+    m_Localized: Paulo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403227
+    m_Localized: Feliksi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403228
+    m_Localized: Yona
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403229
+    m_Localized: Ben
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403230
+    m_Localized: Lorenzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403231
+    m_Localized: Tommaso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403232
+    m_Localized: Edoardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403233
+    m_Localized: Andrea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403234
+    m_Localized: Francesco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403235
+    m_Localized: Alessandro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403237
+    m_Localized: Riccardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403238
+    m_Localized: Miguel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403239
+    m_Localized: Heitor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403240
+    m_Localized: Artur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403242
+    m_Localized: Ravi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403243
+    m_Localized: Bernardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403244
+    m_Localized: Davi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403245
+    m_Localized: Theo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403246
+    m_Localized: Nils
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403247
+    m_Localized: Agosti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597440
+    m_Localized: Axel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597441
+    m_Localized: Arvid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597443
+    m_Localized: Olle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597444
+    m_Localized: Vincent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597445
+    m_Localized: Hjalmar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597447
+    m_Localized: Januari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597448
+    m_Localized: Aleksander
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597449
+    m_Localized: Franciszek
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597451
+    m_Localized: Szymon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597452
+    m_Localized: Filip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597453
+    m_Localized: Wojciech
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597454
+    m_Localized: Mikhail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597456
+    m_Localized: Maxim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597457
+    m_Localized: Ivan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597458
+    m_Localized: Dmitry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597459
+    m_Localized: Timofey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597460
+    m_Localized: Lev
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597462
+    m_Localized: Georgios
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597463
+    m_Localized: Dimitris
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597464
+    m_Localized: Nikos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597465
+    m_Localized: Andreas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597466
+    m_Localized: Konstantinos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597467
+    m_Localized: Ioannis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597468
+    m_Localized: Panagiotis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597469
+    m_Localized: Christos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597471
+    m_Localized: Emir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597472
+    m_Localized: Kerem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597473
+    m_Localized: Eymen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597474
+    m_Localized: Mustafa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597475
+    m_Localized: Ali
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597477
+    m_Localized: Omeri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597479
+    m_Localized: Omid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597480
+    m_Localized: Arman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597481
+    m_Localized: Dario
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597482
+    m_Localized: Reza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597483
+    m_Localized: Amir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597484
+    m_Localized: Parsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597485
+    m_Localized: Hossein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597486
+    m_Localized: Zayn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597487
+    m_Localized: Omar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597488
+    m_Localized: Ibrahimu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597490
+    m_Localized: Hamza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597491
+    m_Localized: Khalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597492
+    m_Localized: Karim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597493
+    m_Localized: Faisal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597495
+    m_Localized: Arjun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597496
+    m_Localized: Vihaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597497
+    m_Localized: Aditya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597498
+    m_Localized: Reyansh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597499
+    m_Localized: Vivaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597501
+    m_Localized: Ishaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597502
+    m_Localized: Chukwuemeka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597503
+    m_Localized: Oluwaseun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597505
+    m_Localized: Olumide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597507
+    m_Localized: Obinna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597508
+    m_Localized: Adebayo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597509
+    m_Localized: Ifeanyi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597510
+    m_Localized: Yichen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597511
+    m_Localized: Yuxuan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597512
+    m_Localized: Haoyu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597513
+    m_Localized: Zimo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597514
+    m_Localized: Haoran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597515
+    m_Localized: Muchen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597516
+    m_Localized: Zirui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597517
+    m_Localized: Junjie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597518
+    m_Localized: Haruto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597519
+    m_Localized: Minato
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597520
+    m_Localized: Ren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597521
+    m_Localized: Asahi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597522
+    m_Localized: Sota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597523
+    m_Localized: Yuto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597524
+    m_Localized: Riku
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597525
+    m_Localized: Itsuki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597526
+    m_Localized: Min-Juni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597527
+    m_Localized: Seo-Juni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791745
+    m_Localized: Do-yun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791746
+    m_Localized: Ji-ho
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791748
+    m_Localized: Si-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791749
+    m_Localized: Ye-Juni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791750
+    m_Localized: Minh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791751
+    m_Localized: Khoa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791752
+    m_Localized: Duy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791753
+    m_Localized: Tuan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791755
+    m_Localized: Bao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791756
+    m_Localized: Phuc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791757
+    m_Localized: Quang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791758
+    m_Localized: Jose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791759
+    m_Localized: Juan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791760
+    m_Localized: Carlo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791761
+    m_Localized: Joaquin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791762
+    m_Localized: Nathanieli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791763
+    m_Localized: Ezekieli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791764
+    m_Localized: Yakobo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791765
+    m_Localized: Malaika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791766
+    m_Localized: Bima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791767
+    m_Localized: Rizky
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791768
+    m_Localized: Dimas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791769
+    m_Localized: Arya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791770
+    m_Localized: Budi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791771
+    m_Localized: Fajar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791772
+    m_Localized: Bayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791773
+    m_Localized: Raka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791774
+    m_Localized: Olivia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791775
+    m_Localized: Emma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791776
+    m_Localized: Amelia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791777
+    m_Localized: Charlotte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791778
+    m_Localized: Ava
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791779
+    m_Localized: Isabella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791780
+    m_Localized: Evelyn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791781
+    m_Localized: Harper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791783
+    m_Localized: Lily
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791784
+    m_Localized: Poppy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791785
+    m_Localized: Freya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791786
+    m_Localized: Ivy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791787
+    m_Localized: Florence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791788
+    m_Localized: Neema
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791789
+    m_Localized: Willow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791790
+    m_Localized: Lucia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791791
+    m_Localized: Sofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791792
+    m_Localized: Martina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791793
+    m_Localized: Valeria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791794
+    m_Localized: Julia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791795
+    m_Localized: Paula
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791796
+    m_Localized: Daniela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791797
+    m_Localized: Alba
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791798
+    m_Localized: Regina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791799
+    m_Localized: Camila
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791800
+    m_Localized: Valentina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791801
+    m_Localized: Ximena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791802
+    m_Localized: Renata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791803
+    m_Localized: Romina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791804
+    m_Localized: Mariana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791805
+    m_Localized: Natalia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791806
+    m_Localized: Louise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986048
+    m_Localized: Jade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986049
+    m_Localized: Ambre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986050
+    m_Localized: Alma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986051
+    m_Localized: Waridi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986052
+    m_Localized: Anna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986053
+    m_Localized: Lina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986054
+    m_Localized: Agathe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986055
+    m_Localized: Sophia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986056
+    m_Localized: Emilia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986057
+    m_Localized: Hana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986058
+    m_Localized: Mia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986059
+    m_Localized: Clara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986060
+    m_Localized: Lea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986061
+    m_Localized: Ella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986063
+    m_Localized: Giulia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986065
+    m_Localized: Victoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986066
+    m_Localized: Aurora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986067
+    m_Localized: Beatrice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986068
+    m_Localized: Ludovica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986069
+    m_Localized: Francesca
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986070
+    m_Localized: Chiara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986071
+    m_Localized: Helena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986072
+    m_Localized: Cecilia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986073
+    m_Localized: Maite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986074
+    m_Localized: Alice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986075
+    m_Localized: Laura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986076
+    m_Localized: Manuela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986077
+    m_Localized: Heloisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986078
+    m_Localized: Liz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986079
+    m_Localized: Elsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986080
+    m_Localized: Vera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986083
+    m_Localized: Astrid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986084
+    m_Localized: Alva
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986085
+    m_Localized: Ebba
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986086
+    m_Localized: Saga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986087
+    m_Localized: Zofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986088
+    m_Localized: Zuzanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986090
+    m_Localized: Maja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986091
+    m_Localized: Lena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986092
+    m_Localized: Oliwia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986093
+    m_Localized: Pola
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986094
+    m_Localized: Antonina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986095
+    m_Localized: Anastasia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986096
+    m_Localized: Polina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986097
+    m_Localized: Victoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986098
+    m_Localized: Ekaterina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986099
+    m_Localized: Alisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986100
+    m_Localized: Varvara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986101
+    m_Localized: Darya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986103
+    m_Localized: Eleni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986105
+    m_Localized: Dimitra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180352
+    m_Localized: Maria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180353
+    m_Localized: Vasiliki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180354
+    m_Localized: Ioanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180355
+    m_Localized: Despina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180356
+    m_Localized: Zeynep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180357
+    m_Localized: Elif
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180358
+    m_Localized: Defne
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180359
+    m_Localized: Asli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180360
+    m_Localized: Eylul
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180361
+    m_Localized: Azra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180363
+    m_Localized: Ecrin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180365
+    m_Localized: Sara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180366
+    m_Localized: Negin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180368
+    m_Localized: Zahra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180369
+    m_Localized: Shirin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180370
+    m_Localized: Royal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180371
+    m_Localized: Mahsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180372
+    m_Localized: Aisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180373
+    m_Localized: Noor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180374
+    m_Localized: Maryam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180375
+    m_Localized: Fatima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180376
+    m_Localized: Layan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180377
+    m_Localized: Salma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180378
+    m_Localized: Jana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180379
+    m_Localized: Reem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180380
+    m_Localized: Aadhya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180383
+    m_Localized: Diya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180384
+    m_Localized: Myra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180385
+    m_Localized: Kiara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180387
+    m_Localized: Avni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180388
+    m_Localized: Amina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180389
+    m_Localized: Adaeze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180390
+    m_Localized: Ngozi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180391
+    m_Localized: Chioma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180393
+    m_Localized: Folake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180394
+    m_Localized: Temitope
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180395
+    m_Localized: Ifeoma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180396
+    m_Localized: Yinuo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180397
+    m_Localized: Xinyi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180399
+    m_Localized: Yutong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180400
+    m_Localized: Ruoxi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180401
+    m_Localized: Yuxi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180402
+    m_Localized: Xinyan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180403
+    m_Localized: Mengyao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180404
+    m_Localized: Tsumugi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180405
+    m_Localized: Himari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180406
+    m_Localized: Rin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180407
+    m_Localized: Ema
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180412
+    m_Localized: Seo-yeon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180413
+    m_Localized: Ji-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180414
+    m_Localized: Min-seo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180415
+    m_Localized: Ha-eun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180416
+    m_Localized: Ji-an
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180417
+    m_Localized: Seo-ah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180418
+    m_Localized: Ha-yoon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180419
+    m_Localized: Su-ah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180420
+    m_Localized: Linh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180421
+    m_Localized: Mai
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180422
+    m_Localized: Thao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180423
+    m_Localized: Ngoc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180424
+    m_Localized: Anh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180427
+    m_Localized: Lan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180428
+    m_Localized: Malaika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180429
+    m_Localized: Althea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180432
+    m_Localized: Binti mfalme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180434
+    m_Localized: Kristine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180435
+    m_Localized: Jasmine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180436
+    m_Localized: Putri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180437
+    m_Localized: Dewi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180438
+    m_Localized: Siti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180439
+    m_Localized: Ayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180441
+    m_Localized: Intan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180442
+    m_Localized: Indah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180443
+    m_Localized: Wulan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568960
+    m_Localized: Mchezo wa Kwanza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568961
+    m_Localized: Maliza mchezo wako wa kwanza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568962
+    m_Localized: Ushindi wa Kwanza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568963
+    m_Localized: Shinda mchezo wako wa kwanza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568964
+    m_Localized: MEJNUN ya kwanza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763264
+    m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763265
+    m_Localized: Ushindi Kumi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763266
+    m_Localized: Shinda michezo 10.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763267
+    m_Localized: Shinda Boti Ngumu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763268
+    m_Localized: Piga roboti ngumu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763270
+    m_Localized: Cheza mchezo wenye viti sita.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763271
+    m_Localized: Kawaida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763272
+    m_Localized: Cheza michezo 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763273
+    m_Localized: Mkongwe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763274
+    m_Localized: Cheza michezo 250.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763275
+    m_Localized: Imetiwa viungo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763276
+    m_Localized: Shinda michezo 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763277
+    m_Localized: Mwalimu wa MEJNUN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763278
+    m_Localized: Shinda michezo 200.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763279
+    m_Localized: Kiwango cha 10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763280
+    m_Localized: Fikia kiwango cha 10.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763281
+    m_Localized: Kiwango cha 25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763282
+    m_Localized: Fikia kiwango cha 25.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763283
+    m_Localized: Kiwango cha 50
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763285
+    m_Localized: Mkusanyaji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763287
+    m_Localized: "MEJNUN \xD710"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763288
+    m_Localized: Shinda michezo 10 kwa kuondoa vitu vyote mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763289
+    m_Localized: Safisha Safi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763290
+    m_Localized: Shuka chini na utoe vitu mkononi mwako kwa zamu ile ile, huku vidokezo
+      na Ubao wa Kurekebisha ukiwa umezimwa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763291
+    m_Localized: Umeme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763292
+    m_Localized: Shinda ndani ya zamu zako tano za kwanza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763293
+    m_Localized: Ghafla ya Mwisho
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763294
+    m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako huku rundo la droo likiwa
+      tupu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763296
+    m_Localized: Shinda baada ya kushikilia kadi 20 au zaidi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763298
+    m_Localized: Shinda hesabu ya mwisho wa rundo kwa kadi moja haswa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763300
+    m_Localized: Tengeneza kadi kamili 13 moja kwa moja kutoka kwa Ace hadi mfalme.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763301
+    m_Localized: Ace ya Juu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763302
+    m_Localized: Kamilisha malkia-mfalme-ace moja kwa moja.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763303
+    m_Localized: Mlango Mkubwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763304
+    m_Localized: Nenda chini na angalau seti tatu kwa wakati mmoja.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763305
+    m_Localized: Mbunifu majengo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763306
+    m_Localized: Weka angalau kadi nane za mkono kwa zamu moja.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763307
+    m_Localized: Daktari wa upasuaji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763308
+    m_Localized: Gawanya mkato ulionyooka na umalizie zamu kwa ubao halali.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763309
+    m_Localized: Muda Uliokopwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763310
+    m_Localized: Chukua kadi kutoka kwa seti ya kadi nne za aina moja na uitumie.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763311
+    m_Localized: Kuona Mara Mbili
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763312
+    m_Localized: Maliza zamu yako kwa nakala zote mbili za kadi kwenye seti tofauti.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763313
+    m_Localized: Mgonjwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763314
+    m_Localized: Shinda bila kutumia Ubao wa Kutendua, Kurudisha Nyuma, au Kurekebisha.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763315
+    m_Localized: Hakuna Magurudumu ya Mafunzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763317
+    m_Localized: Halas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763318
+    m_Localized: Pata muda wako wa kupumzika.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763319
+    m_Localized: Baridi Chini ya Shinikizo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763320
+    m_Localized: Maliza zamu halali zikiwa zimesalia chini ya sekunde tatu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763322
+    m_Localized: Shinda mchezo uliochezwa kwenye kipima muda cha sekunde 30.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957568
+    m_Localized: Mwuaji Mkubwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957569
+    m_Localized: Shinda dhidi ya roboti tano ngumu katika jedwali kamili.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957570
+    m_Localized: Ujanja wa Kofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957571
+    m_Localized: Shinda michezo mitatu mfululizo ya roboti.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957572
+    m_Localized: Haizuiliwi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957573
+    m_Localized: Shinda michezo mitano mfululizo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957574
+    m_Localized: Kwenda Mtandaoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957575
+    m_Localized: Maliza mchezo wa mtandaoni.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957576
+    m_Localized: Mrithi wa Umati
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957577
+    m_Localized: Shinda mchezo wa mtandaoni ukiwa na angalau wachezaji wanne wa kibinadamu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957578
+    m_Localized: Mwenyeji wa Sherehe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957579
+    m_Localized: Mwenyeji wa michezo 10 mtandaoni.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957580
+    m_Localized: Ipitishe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957581
+    m_Localized: Maliza mchezo wa kupitisha na kucheza na angalau wanadamu wanne.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957582
+    m_Localized: Hata Steven
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957583
+    m_Localized: Maliza mchezo katika hali ya kutofungana.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957584
+    m_Localized: Kiti cha Moto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957586
+    m_Localized: mafanikio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957587
+    m_Localized: Mafanikio.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957588
+    m_Localized: Inapatikana sasa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957589
+    m_Localized: Fikia kiwango cha {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549022957591
+    m_Localized: Pata {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549022957593
+    m_Localized: na {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549022957594
+    m_Localized: Zamani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957595
+    m_Localized: Pembe za Ndovu za Kawaida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957596
+    m_Localized: Rangi ya Pikseli ya Pastel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957597
+    m_Localized: Blueeyedrat Classic Contrast 2rangi 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957598
+    m_Localized: Blueeyedrat Classic Contrast 2rangi 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957599
+    m_Localized: Blueeyedrat Classic Contrast 4rangi 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957600
+    m_Localized: Blueeyedrat Classic Tofauti 4rangi 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957601
+    m_Localized: Blueeyedrat Classic Contrast 4color 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957602
+    m_Localized: Rangi ya Blueeyedrat ya Kawaida Nyeusi 1 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957603
+    m_Localized: Rangi ya Blueeyedrat ya Kawaida Nyeusi 2 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957606
+    m_Localized: Rangi ya Blueeyedrat Classic Light 2 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957607
+    m_Localized: Mwanga wa Blueeyedrat Classic 4rangi 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957608
+    m_Localized: Mwanga wa Blueeyedrat Classic 4rangi 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957609
+    m_Localized: Mwanga wa Blueeyedrat Classic 4color 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957610
+    m_Localized: Sepia ya Blueeyedrat Classic 1rangi 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957611
+    m_Localized: Sepia 2 ya Blueeyedrat Classic 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957613
+    m_Localized: Png za Kadi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957614
+    m_Localized: Hack Deck
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957615
+    m_Localized: Kadi za Karatasi1 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957616
+    m_Localized: Reigns
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957617
+    m_Localized: Sofu Kubwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957618
+    m_Localized: Sofu ya Kati
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957619
+    m_Localized: Sofu Ndogo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957621
+    m_Localized: Bluu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957622
+    m_Localized: Burgundy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957623
+    m_Localized: Kijani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151872
+    m_Localized: Zambarau
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151873
+    m_Localized: Kijani kibichi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151874
+    m_Localized: Mchezo wa kadi wa seti, mkakati, na machafuko kidogo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151875
+    m_Localized: Cheza Solo dhidi ya AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151876
+    m_Localized: Cheza Pasi na ucheze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151877
+    m_Localized: Jinsi ya kucheza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151879
+    m_Localized: Cheza Mtandaoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151881
+    m_Localized: Mipangilio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151882
+    m_Localized: Acha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151883
+    m_Localized: "Kiwango cha {0} \xB7 {1} / {2} XP"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549027151884
+    m_Localized: v{0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549027151885
+    m_Localized: Mgeni huko Mejnun?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346176
+    m_Localized: Mchezo mfupi unaoongozwa unakufundisha kila sheria kwa kucheza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346177
+    m_Localized: Cheza mafunzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346178
+    m_Localized: Najua sheria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346179
+    m_Localized: Cheza mtandaoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346180
+    m_Localized: Ingia bila kujulikana na ujiunge na msimbo wa kipindi, au pata ulinganisho
+      wa haraka.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346181
+    m_Localized: Jina la utani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346182
+    m_Localized: Wachezaji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346183
+    m_Localized: Kipima muda cha kugeuka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346184
+    m_Localized: Imezimwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346186
+    m_Localized: Vipodozi vya mezani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346189
+    m_Localized: Msimbo wa kipindi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346190
+    m_Localized: Jiunge kwa msimbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346192
+    m_Localized: "Inaunganisha\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346193
+    m_Localized: Jiunge au unda kipindi kwanza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346194
+    m_Localized: Mwenyeji alighairi mchezo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346196
+    m_Localized: Msimbo wa kipindi haupatikani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346197
+    m_Localized: "Inasubiri wachezaji ({0}/{1})\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346198
+    m_Localized: Anza sasa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346199
+    m_Localized: Ondoka kwenye ukumbi wa kushawishi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346201
+    m_Localized: "\u2022 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346202
+    m_Localized: Mchezaji {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346203
+    m_Localized: Mpangilio wa mechi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346204
+    m_Localized: Hali
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346206
+    m_Localized: Pasi na ucheze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346207
+    m_Localized: Viti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346208
+    m_Localized: Kipima muda cha kugeuka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346209
+    m_Localized: Imezimwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346211
+    m_Localized: Kiti {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346212
+    m_Localized: Mchezaji {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346213
+    m_Localized: Binadamu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346214
+    m_Localized: Roboti rahisi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346215
+    m_Localized: Boti ya wastani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346216
+    m_Localized: Roboti ngumu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346218
+    m_Localized: Zuia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346219
+    m_Localized: Kizuizi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346220
+    m_Localized: Angalau kiti kimoja lazima kiwe cha mwanadamu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346221
+    m_Localized: Vipodozi vya mezani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346222
+    m_Localized: Chagua deki mbili na fulana ya meza. Bofya hakikisho ili kuvinjari.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346223
+    m_Localized: Anza mchezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346225
+    m_Localized: Staha isiyo ya kawaida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346227
+    m_Localized: Hisia isiyo ya kawaida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346228
+    m_Localized: Chagua staha {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346229
+    m_Localized: Chagua fulana ya meza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346230
+    m_Localized: Haijafunguliwa bado.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346231
+    m_Localized: "Bado haijafunguliwa \u2014 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346233
+    m_Localized: Deki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346235
+    m_Localized: '{0} / {1} deki zinazomilikiwa'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346236
+    m_Localized: '{0} / {1} mandharinyuma ya ubao yanamilikiwa'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346237
+    m_Localized: "\U0001F512 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549031346239
+    m_Localized: Chagua kipodozi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346240
+    m_Localized: Vinjari mandharinyuma ya deki na ubao.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346241
+    m_Localized: Bidhaa hii haipo tena kwenye orodha.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346244
+    m_Localized: Mpya katika Ghala
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346245
+    m_Localized: Hakikisho halipatikani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346246
+    m_Localized: Upakiaji wa awali
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346247
+    m_Localized: Mipangilio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346248
+    m_Localized: Mchezo wa kuigiza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346250
+    m_Localized: Vidokezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346251
+    m_Localized: Ufikivu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346252
+    m_Localized: Sauti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346253
+    m_Localized: Jumla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346254
+    m_Localized: Sheria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346255
+    m_Localized: Mikopo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346256
+    m_Localized: Mchezo na uthibitisho
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346257
+    m_Localized: Thibitisha kurejeshwa kwa ubao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346258
+    m_Localized: Uliza kabla ya kurudisha kadi zote mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346259
+    m_Localized: Thibitisha kuchora kadi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346260
+    m_Localized: Uliza kabla ya kuchora au kupitisha inapopatikana.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346261
+    m_Localized: Thibitisha kurekebisha ubao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346263
+    m_Localized: Thibitisha kuondoka au kuanzisha upya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346264
+    m_Localized: Uliza kabla ya kuondoka au kuanzisha tena mchezo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346265
+    m_Localized: Kasi ya kusogeza CPU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346266
+    m_Localized: Hudhibiti jinsi wachezaji wa CPU wanavyofanya shughuli zao haraka.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346269
+    m_Localized: Polepole
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346270
+    m_Localized: Kawaida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346271
+    m_Localized: Haraka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346272
+    m_Localized: Haraka sana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346273
+    m_Localized: Kila mtu anaweza kushuka zamu ya kwanza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346274
+    m_Localized: Huruhusu kila mchezaji kushuka wakati wa zamu yake ya kwanza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346275
+    m_Localized: Onyesha kitufe cha kusogeza mbele kwa haraka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346276
+    m_Localized: Onyesha kidhibiti cha kasi kupitia zamu za CPU.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346277
+    m_Localized: Meza na mkono
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346278
+    m_Localized: Kadi iliyoangaziwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346279
+    m_Localized: Huchora na kuinua kadi kidogo chini ya kielekezi cha kipanya.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346281
+    m_Localized: Hurekebisha kiasi cha mkono wako kinachopinda.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346282
+    m_Localized: Kadi iliyosambazwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346283
+    m_Localized: Hubadilisha nafasi kati ya kadi mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346284
+    m_Localized: Ukubwa wa kadi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346285
+    m_Localized: Hubadilisha ukubwa wa kadi zako za mkononi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346286
+    m_Localized: Ukubwa wa kadi ya mpinzani
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346287
+    m_Localized: Hubadilisha ukubwa wa kadi zinazoonyeshwa mikononi mwa wachezaji
+      wengine.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346288
+    m_Localized: Unyeti wa kukuza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346289
+    m_Localized: Hudhibiti jinsi jedwali linavyokuza kwa kasi wakati wa kusogeza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346292
+    m_Localized: Chora visanduku kuzunguka seti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346293
+    m_Localized: Anaelezea kila seti kwenye meza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346294
+    m_Localized: Panga seti kwenye gridi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346295
+    m_Localized: Sehemu huwekwa kwenye gridi nadhifu badala ya kikaboni kote mezani.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346296
+    m_Localized: Kadi ya ubao iliyopangwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346297
+    m_Localized: Hubadilisha nafasi kati ya kadi katika seti za bodi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346298
+    m_Localized: Uchafu wa kadi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346300
+    m_Localized: Vidokezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346301
+    m_Localized: Kadi muhimu za ubao zenye vidokezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346302
+    m_Localized: Angazia kadi za ubao zinazoweza kusaidia katika hatua ya kisheria.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346303
+    m_Localized: Kadi zenye vidokezo vya kutikisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346304
+    m_Localized: Hutumia uhuishaji mfupi ili kuvutia umakini kwenye kadi zilizodokezwa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346305
+    m_Localized: Ufikivu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346306
+    m_Localized: Punguza mwendo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346307
+    m_Localized: Hupunguza mwendo na uhuishaji usio wa lazima.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346308
+    m_Localized: Haptiki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346311
+    m_Localized: Maandishi na vidhibiti vya kiolesura cha mizani kwenye vifaa vya
+      mkononi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346312
+    m_Localized: Sauti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346313
+    m_Localized: Kiasi cha Mwalimu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346314
+    m_Localized: Huweka kiwango cha jumla cha mchezo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346315
+    m_Localized: Kiasi cha muziki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346316
+    m_Localized: Huweka sauti ya muziki wa usuli.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540480
+    m_Localized: Kiasi cha athari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540481
+    m_Localized: Huweka kiwango cha athari za kadi na kiolesura.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540482
+    m_Localized: Kiasi cha sauti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540484
+    m_Localized: Lugha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540485
+    m_Localized: Lugha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540486
+    m_Localized: Huchagua lugha ya kiolesura.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540487
+    m_Localized: Mtandaoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540488
+    m_Localized: Jaza mechi za haraka na roboti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540489
+    m_Localized: Huweka muda wa mechi kusubiri kabla ya kuongeza wachezaji wa CPU.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540490
+    m_Localized: Imezimwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540492
+    m_Localized: Akaunti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540493
+    m_Localized: Vipengele vya akaunti vinakuja baadaye
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540494
+    m_Localized: Vipengele vya akaunti bado havipatikani.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540495
+    m_Localized: '{0}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540497
+    m_Localized: Vipengele na wachezaji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540498
+    m_Localized: "Mejnun hutumia deki mbili za kawaida zenye kadi 52 zilizochanganywa:
+      jumla ya kadi 104, bila vichekesho. Kadi zinazolingana kutoka deki hizo mbili
+      ni za watu wawili. Cheza na wachezaji 2\u20136, ukisonga kwa mwendo wa saa
+      (kushoto)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540499
+    m_Localized: Nani anatangulia na kushughulika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540500
+    m_Localized: 'Kompyuta inakubali. Mshindi wa mchezo uliopita anaongoza ikiwa
+      bado wanacheza. Vinginevyo, wachezaji huchagua nani anaongoza kwa swali: gusa
+      kiti ndani au dhidi ya akili bandia, au piga kura mtandaoni. Kura za mtandaoni
+      huchukua sekunde 20; sare huvunjika bila mpangilio.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540502
+    m_Localized: Lengo na seti halali
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540505
+    m_Localized: Kushuka chini
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540506
+    m_Localized: Kabla ya kushuka, unaweza kutengeneza seti mpya kwa kutumia kadi
+      pekee kutoka kwa mkono wako; huwezi kutumia au kubadilisha seti zilizopo za
+      ubao. Unaweza kucheza seti moja au zaidi, bila pointi za chini kabisa. Ukishathibitisha
+      angalau seti moja halali ya mkono pekee, umeshuka na unaweza kutumia ubao mzima
+      kwa zamu iliyobaki. Kadi zinazotumika kushuka hubaki kwenye ubao kwa zamu hiyo.
+      Tendua au Rudisha nyuma zinaweza kutendua kushuka.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540507
+    m_Localized: Unaposhuka, unaweza kupanga upya ubao, ikiwa ni pamoja na kuufanya
+      usiwe halali kwa muda. Ili kumaliza zamu yako, ubao lazima uwe halali na lazima
+      uwe umecheza angalau kadi moja kutoka mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540508
+    m_Localized: Vitendo vya kugeuza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540509
+    m_Localized: Chora (au Pitisha wakati rundo halina kitu) inapatikana kila wakati.
+      Hurejesha ubao mwanzoni mwa zamu yako, hurudisha kadi zako ulizocheza mkononi
+      mwako, huchota kadi moja ikiwezekana, na kumaliza zamu yako. Mwisho wa Zamu
+      unapatikana wakati ubao unafaa na umecheza kadi ya mkono au umeshuka.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540510
+    m_Localized: Tendua hatua nyuma kupitia hatua zako; Rudia tena hatua isiyotekelezwa
+      katika zamu ile ile. Hatua mpya na vitendo vya kugeuza huondoa Rudia. Bodi
+      ya Kurekebisha hujaribu kuweka michezo halali kutoka kwa mkono wako wakati
+      wa kurekebisha bodi; kadi ambazo haziwezi kutumia hurudi kwenye mkono wako.
+      Revert hurejesha bodi katika hali yake ya kuanza kugeuza na kurudisha kadi
+      zako zilizochezwa kwenye mkono wako. Vitendo vya uharibifu vinaweza kukuomba
+      uthibitishe.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540512
+    m_Localized: Mwenyeji anaweza kuchagua sekunde 30, 60, 90, au 120 kwa kila zamu,
+      au kuzima kipima muda katika michezo ya nje ya mtandao. Michezo ya mtandaoni
+      hupangwa kila wakati. Wakati unapoisha, ubao halali usio na michezo ya mkono
+      huwekwa na unachora; ubao batili usio na michezo ya mkono hurejeshwa na unachora.
+      Ukicheza kadi za mkono na ubao ni halali, zamu yako inaisha bila sare. Ikiwa
+      ni batili, mienendo yako hutenduliwa hadi iwe halali; unachora tu ikiwa hakuna
+      kadi ya mkono iliyobaki kwenye ubao.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540513
+    m_Localized: Tupa rundo la droo na vikwazo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540514
+    m_Localized: 'Wakati rundo la droo likiwa tupu, Droo inakuwa Pasi: hakuna kadi
+      inayotolewa na ubao unarudishwa nyuma. Ikiwa kila mchezaji anayeshiriki atapita
+      mfululizo bila kucheza kadi, mchezaji mwenye kadi chache zaidi atashinda ikiwa
+      ndiye pekee mwenye idadi hiyo. Ikiwa wachezaji watalingana kwa kadi chache
+      zaidi, mchezo utakuwa Msuguano bila mshindi.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540515
+    m_Localized: Mikopo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540516
+    m_Localized: Ubunifu na uundaji wa michezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540517
+    m_Localized: Imetengenezwa kwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540518
+    m_Localized: Unity 6, Bomba la Utoaji wa Universal, Mfumo wa Kuingiza, Audiokinetic
+      Wwise, Huduma za Michezo ya Unity, na Steamworks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540519
+    m_Localized: Asante kwa kucheza!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540521
+    m_Localized: Tendua
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540522
+    m_Localized: Rudia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540523
+    m_Localized: Rudisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540524
+    m_Localized: Ubao wa kurekebisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540525
+    m_Localized: 'Panga: cheo'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540527
+    m_Localized: Weka Kamera upya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540528
+    m_Localized: Ubao nadhifu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540530
+    m_Localized: "Kuweka alama\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540531
+    m_Localized: Chora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540532
+    m_Localized: Pasi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540534
+    m_Localized: 'Kidokezo: imezimwa'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540535
+    m_Localized: Songa mbele haraka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540536
+    m_Localized: Endelea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540537
+    m_Localized: Halas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540539
+    m_Localized: "{0} \xB7 Ameanguka"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540540
+    m_Localized: "{0} anafikiria\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540541
+    m_Localized: Zamu yako
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540542
+    m_Localized: Zamu ya {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540543
+    m_Localized: Zamu Yako
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540544
+    m_Localized: Zamu ya {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540545
+    m_Localized: Kiti {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540546
+    m_Localized: 'Chora rundo: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540547
+    m_Localized: 'Muda: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540548
+    m_Localized: Sio zamu yako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540549
+    m_Localized: Uhamisho huo haupatikani kwa sasa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540550
+    m_Localized: Nenda chini kabla ya kutumia kadi kutoka ubaoni.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540551
+    m_Localized: Kadi zilizo ubaoni haziwezi kurudishwa mkononi mwako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540552
+    m_Localized: Lazima ucheze hatua halali kabla ya kumaliza zamu yako.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540553
+    m_Localized: Seti hiyo haifikii mahitaji ya kupunguzwa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540554
+    m_Localized: Seti haiwezi kuwa na kadi moja mara mbili.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540555
+    m_Localized: Seti hiyo ina kadi nyingi mno.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540556
+    m_Localized: Kadi hiyo haiwezi kuongezwa kwenye seti hii.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540557
+    m_Localized: Chagua mahali halali pa kadi hiyo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540558
+    m_Localized: Hatua hiyo inajumuisha kadi zaidi ya mara moja.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540559
+    m_Localized: Chagua angalau kadi moja ya kuhamisha.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540560
+    m_Localized: Kadi au seti hiyo haipatikani tena.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540561
+    m_Localized: Mchezo huu tayari umekwisha.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540562
+    m_Localized: Jaribu kadi zilizoangaziwa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540563
+    m_Localized: Hatua hiyo hairuhusiwi na sheria za mchezo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540564
+    m_Localized: Usiulize tena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540566
+    m_Localized: Rudisha kadi zako zote mkononi mwako?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540567
+    m_Localized: Baadhi ya kadi batili zitarudi mkononi mwako. Umerekebisha ubao?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540568
+    m_Localized: Umeruka mafunzo? Unaweza kuyarudia wakati wowote kutoka Jinsi ya
+      kucheza.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540569
+    m_Localized: Umerudi kwenye menyu kuu? Mchezo huu utahifadhiwa ili uweze kuuendeleza
+      baadaye.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540570
+    m_Localized: Utaanza upya mchezo huu? Raundi ya sasa itapotea.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540571
+    m_Localized: Imesitishwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540573
+    m_Localized: Anzisha upya mchezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540574
+    m_Localized: Mipangilio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540575
+    m_Localized: Ruka mafunzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540576
+    m_Localized: Msaada
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540577
+    m_Localized: Menyu kuu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540578
+    m_Localized: 'Nambari ya chumba: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540579
+    m_Localized: Njia za mkato za PC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540580
+    m_Localized: 'Ctrl/Cmd+Z Tendua
+
+      Ctrl/Cmd+Shift+Z au Ctrl+Y Rudia
+
+      Mwisho
+      wa Nafasi Mgeuko
+
+      D Chora / pitisha
+
+      Rudisha R
+
+      Ubao wa Kurekebisha
+      F
+
+      Kidokezo cha H
+
+      F1 Karatasi hii
+
+      Esc au P Pumzika'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540581
+    m_Localized: Jaribu kadi zilizoangaziwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540582
+    m_Localized: Ruka mafunzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540583
+    m_Localized: Inayofuata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540584
+    m_Localized: Nimeelewa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540585
+    m_Localized: Inayofuata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540586
+    m_Localized: Imekamilika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540588
+    m_Localized: "\u2713 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540589
+    m_Localized: "\u2717 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549035540590
+    m_Localized: Nani anatangulia?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540591
+    m_Localized: Mchezaji wa kwanza bila mpangilio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540592
+    m_Localized: Gusa ili kufichua
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540593
+    m_Localized: MEJNUN!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540594
+    m_Localized: Mafanikio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734784
+    m_Localized: Mpya katika Ghala
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734785
+    m_Localized: Bado haijafunguliwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734786
+    m_Localized: Menyu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734787
+    m_Localized: Mechi ya Marudio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734788
+    m_Localized: Cheza kweli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734789
+    m_Localized: Anza raundi mpya?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734790
+    m_Localized: Usiulize tena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734791
+    m_Localized: Mechi ya Marudio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734792
+    m_Localized: Kadi zilizobaki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734795
+    m_Localized: +{0} XP
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734796
+    m_Localized: Kiwango cha juu! Kiwango cha {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734797
+    m_Localized: "Kiwango cha {0} \xB7 {1} / {2} XP"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734798
+    m_Localized: 'Mpya: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734799
+    m_Localized: 'Bado haijafunguliwa: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 6549039734801
+    m_Localized: Gusa ili kuendelea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734802
+    m_Localized: na {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  references:
+    version: 2
+    RefIds:
+    - rid: 4825848250703282629
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 6548989403152
+        - id: 6548989403154
+        - id: 6549022957590
+        - id: 6549031346185
+        - id: 6549031346210
+        - id: 6549031346224
+        - id: 6549031346243
+        - id: 6549035540491
+        - id: 6549035540496
+        - id: 6549035540587
+        - id: 6549039734793
+        - id: 6548981014531
+        - id: 6548985208832
+        - id: 6548985208833
+        - id: 6548985208834
+        - id: 6548985208843
+        - id: 6548985208853
+        - id: 6548985208855
+        - id: 6548985208867
+        - id: 6548985208868
+        - id: 6548985208883
+        - id: 6548989403151
+        - id: 6548989403153
+        - id: 6548989403155
+        - id: 6548989403156
+        - id: 6548989403158
+        - id: 6548989403160
+        - id: 6548989403161
+        - id: 6548989403167
+        - id: 6548989403168
+        - id: 6548989403170
+        - id: 6548989403172
+        - id: 6548989403173
+        - id: 6549022957589
+        - id: 6549022957591
+        - id: 6549022957593
+        - id: 6549027151883
+        - id: 6549027151884
+        - id: 6549031346197
+        - id: 6549031346201
+        - id: 6549031346202
+        - id: 6549031346211
+        - id: 6549031346212
+        - id: 6549031346228
+        - id: 6549031346231
+        - id: 6549031346235
+        - id: 6549031346236
+        - id: 6549031346237
+        - id: 6549035540495
+        - id: 6549035540539
+        - id: 6549035540540
+        - id: 6549035540542
+        - id: 6549035540544
+        - id: 6549035540545
+        - id: 6549035540546
+        - id: 6549035540547
+        - id: 6549035540578
+        - id: 6549035540588
+        - id: 6549035540589
+        - id: 6549039734795
+        - id: 6549039734796
+        - id: 6549039734797
+        - id: 6549039734798
+        - id: 6549039734799
+        - id: 6549039734802

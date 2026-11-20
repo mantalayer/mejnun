@@ -262,18 +262,7 @@ namespace Mejnun.Editor
                 AssetDatabase.CreateAsset(asset, DealerQuestionsPath);
             }
 
-            asset.Configure(new[]
-            {
-                "Who would be most likely to forget why they walked into a room?",
-                "Who tells the worst jokes?",
-                "Who would be first to dance at a wedding?",
-                "Who has the most chaotic phone gallery?",
-                "Who would survive longest on a desert island?",
-                "Who is most likely to accidentally start a trend?",
-                "Who's birthday is closest to today?",
-                "Who showered most recently?"
-            });
-            EditorUtility.SetDirty(asset);
+            // The questions themselves live in the DealerQuestions String Table.
             return asset;
         }
 

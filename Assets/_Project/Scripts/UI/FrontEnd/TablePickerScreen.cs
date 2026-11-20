@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Mejnun.UI.FrontEnd
 {
-    public sealed class TablePickerScreen
+    public sealed class TablePickerScreen : IDisposable
     {
         private readonly VisualElement root;
         private readonly VisualElement popup;
@@ -30,6 +31,7 @@ namespace Mejnun.UI.FrontEnd
         private bool popupOpen;
         private MatchRequest setupRequest;
         private string feltPick;
+        private string lockedNoticeId;
 
         private enum PopupTailEdge
         {
@@ -67,6 +69,12 @@ namespace Mejnun.UI.FrontEnd
             popup.style.display = DisplayStyle.None;
             RestoreLastPicks();
             Refresh();
+            Loc.LanguageChanged += OnLanguageChanged;
+        }
+
+        public void Dispose()
+        {
+            Loc.LanguageChanged -= OnLanguageChanged;
         }
 
         public string GetDeckPick(int slot)
@@ -130,7 +138,7 @@ namespace Mejnun.UI.FrontEnd
         {
             var button = deckPreviewButtons[slot];
             button.Clear();
-            button.Add(new Label("Deck " + (slot + 1)));
+            button.Add(new Label(Loc.Format("picker.deck.slot", slot + 1)));
             var selected = FindSkin(deckPicks[slot]);
             if (selected.HasValue)
             {
@@ -140,17 +148,17 @@ namespace Mejnun.UI.FrontEnd
             else
             {
                 button.Add(BuildRandomDeckPreview());
-                button.Add(new Label("Random deck"));
+                button.Add(new Label(Loc.Get("picker.deck.random")));
             }
         }
 
         private void RenderFeltPreview()
         {
             feltPreviewButton.Clear();
-            feltPreviewButton.Add(new Label("Table felt"));
+            feltPreviewButton.Add(new Label(Loc.Get("picker.felt.slot")));
             var felt = FindFelt(feltPick);
             feltPreviewButton.Add(CosmeticPreviews.CreateFeltSwatch(felt));
-            feltPreviewButton.Add(new Label(felt == null ? "Random felt" : felt.DisplayName));
+            feltPreviewButton.Add(new Label(felt == null ? Loc.Get("picker.felt.random") : felt.DisplayName));
         }
 
         public void OpenDeckPopup(int slot)
@@ -158,7 +166,7 @@ namespace Mejnun.UI.FrontEnd
             ValidateSlot(slot);
             popupDeckSlot = slot;
             popupShowsFelt = false;
-            popupTitle.text = "Choose deck " + (slot + 1);
+            RenderPopupTitle();
             deckGrid.style.display = DisplayStyle.Flex;
             feltGrid.style.display = DisplayStyle.None;
             OpenPopup(deckPreviewButtons[slot]);
@@ -168,7 +176,7 @@ namespace Mejnun.UI.FrontEnd
         public void OpenFeltPopup()
         {
             popupShowsFelt = true;
-            popupTitle.text = "Choose table felt";
+            RenderPopupTitle();
             deckGrid.style.display = DisplayStyle.None;
             feltGrid.style.display = DisplayStyle.Flex;
             OpenPopup(feltPreviewButton);
@@ -178,6 +186,7 @@ namespace Mejnun.UI.FrontEnd
         private void OpenPopup(Button anchor)
         {
             popupAnchor = anchor;
+            lockedNoticeId = null;
             lockedNotice.style.display = DisplayStyle.None;
             popup.style.display = DisplayStyle.Flex;
             popupOpen = true;
@@ -193,7 +202,39 @@ namespace Mejnun.UI.FrontEnd
             popup.style.display = DisplayStyle.None;
             popupOpen = false;
             popupAnchor = null;
+            lockedNoticeId = null;
             lockedNotice.style.display = DisplayStyle.None;
+        }
+
+        private void RenderPopupTitle()
+        {
+            popupTitle.text = popupShowsFelt
+                ? Loc.Get("picker.popup.choose_felt")
+                : Loc.Format("picker.popup.choose_deck", popupDeckSlot + 1);
+        }
+
+        private void OnLanguageChanged()
+        {
+            Refresh();
+            if (!IsPopupOpen)
+            {
+                return;
+            }
+
+            RenderPopupTitle();
+            if (popupShowsFelt)
+            {
+                PopulateFeltChoices();
+            }
+            else
+            {
+                PopulateDeckChoices();
+            }
+
+            if (lockedNoticeId != null)
+            {
+                RenderLockedNotice(DescribeLockedRequirement(lockedNoticeId));
+            }
         }
 
         private void OnPopupHostPointerDown(PointerDownEvent evt)
@@ -410,7 +451,7 @@ namespace Mejnun.UI.FrontEnd
                 previews.AddDeckFan(preview, entry.Value, OnPreviewLoaded);
             }
 
-            AddTileText(button, random ? "Random deck" : entry.Value.DisplayName, owned
+            AddTileText(button, random ? Loc.Get("picker.deck.random") : entry.Value.DisplayName, owned
                 ? null
                 : entry.Value.Unlock.Describe(entry.Value.Unlock.Evaluate(progression.Profile)));
             if (!owned)
@@ -449,7 +490,7 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
-            var lockedLabel = new Label("Locked");
+            var lockedLabel = new Label(Loc.Get("common.locked"));
             lockedLabel.AddToClassList("cosmetic-choice-lock");
             tile.Add(lockedLabel);
             if (!string.IsNullOrWhiteSpace(lockedRequirement))
@@ -505,7 +546,7 @@ namespace Mejnun.UI.FrontEnd
             }
 
             button.Add(CosmeticPreviews.CreateFeltSwatch(felt));
-            AddTileText(button, random ? "Random felt" : felt.DisplayName, owned
+            AddTileText(button, random ? Loc.Get("picker.felt.random") : felt.DisplayName, owned
                 ? null
                 : felt.Unlock.Describe(felt.Unlock.Evaluate(progression.Profile)));
             if (!owned)
@@ -570,12 +611,30 @@ namespace Mejnun.UI.FrontEnd
 
         private void ShowLockedNotice(string id, string requirement)
         {
-            lockedNotice.text = string.IsNullOrWhiteSpace(requirement)
-                ? "Not unlocked yet."
-                : "Not unlocked yet — " + requirement;
+            lockedNoticeId = id;
+            RenderLockedNotice(requirement);
             lockedNotice.style.display = DisplayStyle.Flex;
             ShakeLockedChoice(deckGrid, id);
             ShakeLockedChoice(feltGrid, id);
+        }
+
+        private void RenderLockedNotice(string requirement)
+        {
+            lockedNotice.text = string.IsNullOrWhiteSpace(requirement)
+                ? Loc.Get("picker.locked_notice.plain")
+                : Loc.Format("picker.locked_notice.requirement", requirement);
+        }
+
+        private string DescribeLockedRequirement(string id)
+        {
+            var skin = FindSkin(id);
+            if (skin.HasValue)
+            {
+                return skin.Value.Unlock.Describe(skin.Value.Unlock.Evaluate(progression.Profile));
+            }
+
+            var felt = FindFelt(id);
+            return felt == null ? null : felt.Unlock.Describe(felt.Unlock.Evaluate(progression.Profile));
         }
 
         private void ShakeLockedChoice(VisualElement choices, string id)

@@ -61,8 +61,12 @@ namespace Mejnun.Game.Tests
             var loader = loaderObject.AddComponent<DeckSkinLoader>();
             loader.Configure(failingCatalog);
 
+            // Localization preloads its String Tables through Addressables, so
+            // whether this load is chained behind Addressables initialization
+            // (which adds a second "ChainOperation failed" error) depends on
+            // test order. Finish initialization first so only the load fails.
+            yield return Addressables.InitializeAsync();
             LogAssert.Expect(LogType.Error, new Regex("InvalidKeyException"));
-            LogAssert.Expect(LogType.Error, new Regex("OperationException : ChainOperation failed"));
             LogAssert.Expect(LogType.Warning, new Regex("Addressable deck skin could not be loaded: unavailable"));
             var completed = false;
             Assert.That(loader.Preload(new[] { "unavailable" }, () => completed = true), Is.True);

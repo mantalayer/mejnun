@@ -1,0 +1,130 @@
+# Localization
+
+How player-facing text works in Mejnun, the rules every change must follow, and the translation pipeline (Unity String Tables ⇄ Google Sheets ⇄ `GOOGLETRANSLATE`). The design is in `Docs/Mejnun-Plan.md` §7 and §7.1.
+
+## 1. The one rule
+
+**No player-visible text is a raw string.** Every word a player can read comes from a String Table entry:
+
+| Where the text is | How to write it |
+|---|---|
+| Static text in UXML (`text`, `label`, `tooltip`, `title`, `placeholder-text`) | A `LocalizedString` binding, never the attribute (see §3) |
+| Text set from C# | `Loc.Get("key")` or `Loc.Format("key", args…)` (see §4) |
+| Content lists (dealer questions) | Their own table; code picks keys with `Loc.KeysOf(Loc.DealerQuestionsTable)` |
+| Data assets (deck, felt and achievement names) | A key derived from the stable ID (`cosmetic.deck.<id>.name`), resolved where it is shown |
+| App name on the home screen / store | `UI/app.name` (written into iOS `Info.plist` and Android `strings.xml` at build time by the `AppInfo` metadata) |
+
+Not localized: log and exception messages, editor tools (`*/Editor/*`), USS class and element names, PlayerPrefs and save keys, Wwise event names, network payloads, and anything the player typed (nicknames). Card ranks and suits are images. Language names in the language picker are endonyms (`Loc.NativeName`), so they are intentionally not translated.
+
+**Never send localized text over the network or save it.** Send and store keys or IDs, and let each client resolve them in its own language.
+
+A deliberate exception (a glyph such as `×`, the "MEJNUN!" logo word) is marked `// loc-ignore` at the end of the C# line or with the `loc-ignore` USS class on the UXML element. Use this sparingly; reviewers should challenge every one.
+
+## 2. Tables and keys
+
+- `UI`: all interface text. `DealerQuestions`: the opening questions (`dq.001`, `dq.002`, …).
+- Keys are lowercase, dot-separated `area.screen.item`, with words joined by `_`: `menu.main.play`, `hud.button.end_turn`, `settings.audio.master_volume`, `achievement.ten_wins.name`.
+- Areas in use: `app`, `common`, `menu`, `setup`, `online`, `picker`, `gallery`, `settings`, `rules`, `credits`, `hud`, `flow`, `results`, `table`, `deck_unlock`, `tutorial`, `match`, `save`, `dealer`, `bot`, `net`, `achievement`, `cosmetic`, `unlock`, `profile`.
+- `common.*` holds only generic words used in many places (`common.ok`, `common.cancel`, `common.back`, `common.close`, `common.on`, `common.off`, `common.yes`, `common.no`, `common.continue`, `common.done`, `common.locked`, `common.loading`). Anything with screen-specific meaning gets its own key, even if the English is the same: translations often differ by context.
+- Never rename or reuse a key once it has shipped to the sheet. If the meaning changes, add a new key and delete the old one.
+- Add a **comment** to every entry whose context is not obvious (what the placeholders are, where the text appears, length limits). Comments go into the entry's `Comment` metadata and help reviewers.
+
+## 3. UXML
+
+```xml
+<ui:Button name="play-button" class="menu-button">
+    <Bindings>
+        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.play" />
+        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="menu.main.play_tooltip" />
+    </Bindings>
+</ui:Button>
+```
+
+- Use `property="label"` for `Toggle`, `Slider` and other `BaseField` labels.
+- If C# sets the element's text at run time, leave the UXML element without text **and without a binding**; the C# owns it (§4). A binding and a C# assignment on the same property fight each other.
+- `DropdownField` choices are filled from C# with `Loc.Get` values.
+- Bindings update automatically when the language changes.
+
+## 4. C#
+
+```csharp
+using Mejnun.Localization;
+
+title.text = Loc.Get("results.title.win");
+cardsLeft.text = Loc.Format("hud.cards_left", count);           // "{0:plural:{} card left|{} cards left}"
+banner.text = Loc.Format("hud.turn.player_turn", playerName);    // "{0}'s turn"
+question.text = Loc.GetFrom(Loc.DealerQuestionsTable, questionKey);
+```
+
+- Pass the key as a **string literal at the call site**, so the validator can check it exists. For keys built from data (`"achievement." + id + ".name"`), put the builder in one helper and cover it with a test that every ID has its keys.
+- Build whole sentences with placeholders. Never concatenate translated fragments (`Loc.Get("a") + name + Loc.Get("b")`); word order differs between languages.
+- Placeholders are positional: `{0}`, `{1}`. Plurals use Smart String plural syntax: `{0:plural:{} card|{} cards}` (Arabic has six forms; the reviewer writes them by hand).
+- Text set from code must refresh when the language changes: subscribe to `Loc.LanguageChanged` and re-run the presenter's refresh, and unsubscribe when the presenter is disposed.
+- Engine-free assemblies (`Mejnun.Core`, `Mejnun.AI`, `Mejnun.Net`) cannot use `Loc`. They expose keys or enums, and the UI layer resolves them.
+
+## 5. Adding a string
+
+1. Add the entry to the `UI` table with its English text and a comment:
+   - In Unity: **Window > Asset Management > Localization Tables**, select `UI`, and add the key with the `en` value (only English; leave other languages empty).
+   - Scripted, for agents and bulk changes: write a CSV with the header `table,key,en,comment` and run **Mejnun > Localization > Import English Source CSV…**, or in batch mode:
+     ```
+     Unity -batchmode -quit -projectPath . \
+       -executeMethod Mejnun.Localization.Editor.LocalizationSourceImporter.ImportFromCommandLine \
+       -locSource path/to/strings.csv
+     ```
+2. Reference it from UXML (§3) or C# (§4).
+3. Run **Mejnun > Localization > Validate** (or the EditMode tests). There must be no `RawString`, `UnknownKey` or `EmptySource` issues.
+4. Commit the changed table assets (`Assets/_Project/Localization/Tables/*`) with the code.
+
+Translations are not written by hand in Unity. They arrive through the sheet (§6) the next time someone syncs or builds.
+
+## 6. Translation pipeline
+
+```
+ Unity String Tables ──push Key + en──▶ Google Sheet ──GOOGLETRANSLATE──▶ locale columns
+        ▲                                                                     │
+        └──────────────── pull locale columns (never Key / en / status) ◀─────┘
+```
+
+- **Before every player build** `LocalizationPreBuild` validates all tables. If any translation is missing or broken, it runs the sync: push new and changed English, add `GOOGLETRANSLATE` formulas to new rows, wait for Google to evaluate them, then pull. It then validates again and writes `Logs/LocalizationReport.txt`. Problems are **warnings only** (English is shown for any gap); set `FailBuildOnIssues` in `LocalizationPipelineSettings` to make them block builds.
+- Run the same round trip at any time with **Mejnun > Localization > Sync with Google Sheets**, or in batch mode with `-executeMethod Mejnun.Localization.Editor.LocalizationSheetsSync.SyncBatch`.
+- Batch-mode builds only sync when `-locSync` is passed, because the first Google sign-in opens a browser.
+- **Sheet layout** (one tab per collection: `UI`, `DealerQuestions`): `Key | en | ar | ar status | fa | fa status | …`. New rows get `=IF($B2="","",GOOGLETRANSLATE($B2,"en","<code>"))` and the status `auto`.
+- **Review:** a reviewer replaces a formula with plain text and sets that locale's status to `reviewed`. Pushes never overwrite translations, formulas or statuses; when the English text of a reviewed row changes, the push sets its status to `needs-review`.
+- **Guardrails** (checked by the validator after every pull): every entry is non-empty in every locale; placeholders (`{0}`, `{0:plural:…}`) and brace balance match English; no `#VALUE!`, `#N/A` or `Loading...` cell values.
+- **Adding a language:** add the locale and its `GOOGLETRANSLATE` code to `LocalizationProjectSetup.TargetLocales`, then run **Mejnun > Localization > Set Up Project**. Setup creates the Locale and tables, and merges any missing locale columns into `LocalizationPipelineSettings`; the next sync adds its sheet columns and formulas. No other game code or manual settings-asset edit is needed.
+
+### One-time Google setup (not done yet)
+
+1. In Google Cloud, create a project, enable the **Google Sheets API**, and create an **OAuth client ID** of type *Desktop app*.
+2. In Unity: **Assets > Create > Localization > Google Sheets Service**, and enter the client ID and secret (keep this asset out of public repos; it is ignored by the build).
+3. Create the workbook, share it with the Google account you will sign in with, and copy its ID from the URL.
+4. Select `Assets/_Project/Localization/LocalizationPipelineSettings.asset`, assign the Sheets Service asset and paste the spreadsheet ID.
+5. Run **Mejnun > Localization > Sync with Google Sheets** once. A browser window opens for sign-in, and the token is cached for later syncs and builds.
+
+## 7. Language selection at run time
+
+Startup order (`LocalizationSettings` startup selectors):
+
+1. `-language=xx` on the command line (testing).
+2. `PlatformLocaleSelector`:
+   1. The player's choice from **Settings > General > Language** (`settings.language`; empty means *Automatic*).
+   2. The platform's languages through `IPlatformServices.Language`:
+      - **Steam:** `SteamApps.GetCurrentGameLanguage()` (the language picked for this game in the Steam client), then `SteamUtils.GetSteamUILanguage()`, then the OS list. Steam has no Persian, Armenian, Hindi or Swahili, so when the OS prefers `fa`, `hy`, `hi` or `sw`, the OS wins.
+      - **iOS:** `NSBundle.preferredLocalizations` + `NSLocale.preferredLanguages` (`Assets/_Project/Plugins/iOS/MejnunLocale.mm`), which includes the iOS per-app language setting.
+      - **Android:** `LocaleList.getDefault()` (includes the Android 13+ per-app language).
+      - **Desktop / Editor:** `CultureInfo.CurrentUICulture`, then `Application.systemLanguage`.
+   3. Tags are matched to shipped locales by `LocaleMatcher`. For example, `pt-PT` becomes `pt-PT`, `pt-AO` becomes `pt-PT`, bare `pt` becomes `pt-BR`, `zh-CN` becomes `zh-Hans`, `zh-TW` becomes `zh-Hant`, and `es-419` becomes `es`.
+3. English.
+
+Store-side localization is managed outside the game: the Steam store page, Steam achievement names and descriptions (Steamworks *Stats & Achievements > Localization*), App Store and Play listings and Game Center / Play Games achievement names. Use the `achievement.*` entries of the `UI` table as the source text for those consoles.
+
+## 8. Tools reference
+
+| Menu item | Code |
+|---|---|
+| Mejnun > Localization > Set Up Project | `LocalizationProjectSetup.Run` (idempotent: locales, tables, selectors, `AppInfo`) |
+| Mejnun > Localization > Validate | `LocalizationValidator.Validate` → `Logs/LocalizationReport.txt` |
+| Mejnun > Localization > Import English Source CSV… | `LocalizationSourceImporter.ImportCsv` |
+| Mejnun > Localization > Sync with Google Sheets | `LocalizationSheetsSync.Sync` |
+| (automatic, every player build) | `LocalizationPreBuild` |

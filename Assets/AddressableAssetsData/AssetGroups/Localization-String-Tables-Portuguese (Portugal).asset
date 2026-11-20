@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-Portuguese (Portugal)
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-String-Tables-Portuguese (Portugal)
+  m_GUID: c9ead019aab12429bb3384194d1cec29
+  m_SerializeEntries:
+  - m_GUID: a35f218ec00a84e0a96de61382e652de
+    m_Address: DealerQuestions_pt-PT
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-pt-PT
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: caf11d5da0bdc4d1cabcb0270ad077cb
+    m_Address: UI_pt-PT
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-pt-PT
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 3110b3842bbe745df8f674158e1e723f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ab4d03a98cec647cb81a64b321229e3a, type: 2}
+    - {fileID: 11400000, guid: 87c442c3355e54801b7aa361d08035a0, type: 2}
+    - {fileID: 11400000, guid: 1b4b43b1d0b5842b69f72db6705d83c6, type: 2}

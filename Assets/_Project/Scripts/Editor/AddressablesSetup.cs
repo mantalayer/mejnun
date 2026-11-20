@@ -68,7 +68,7 @@ namespace Mejnun.Editor
             catalog.Configure(retainedSkins);
             catalog.ConfigureAddressableSkins(new[]
             {
-                new AddressableDeckSkinEntry(skin.Id, skin.DisplayName, skin.Unlock,
+                new AddressableDeckSkinEntry(skin.Id, skin.SerializedDisplayName, skin.Unlock,
                     new AssetReferenceT<DeckSkin>(assetGuid), skin.Artist)
             });
 

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: DealerQuestions_pt-PT
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: pt-PT
+  m_SharedData: {fileID: 11400000, guid: 87a4643bee3d747fb9ab730fc39509cd, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 6547924049920
+    m_Localized: Quem teria maior probabilidade de esquecer por que entrou em uma
+      sala?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244224
+    m_Localized: Quem conta as piores piadas?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244225
+    m_Localized: "Quem seria o primeiro a dan\xE7ar em um casamento?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244226
+    m_Localized: "Quem tem a galeria de fotos mais ca\xF3tica no celular?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244227
+    m_Localized: Quem sobreviveria por mais tempo em uma ilha deserta?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244228
+    m_Localized: "Quem tem maior probabilidade de iniciar uma tend\xEAncia acidentalmente?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244229
+    m_Localized: "De quem \xE9 o anivers\xE1rio mais pr\xF3ximo de hoje?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244230
+    m_Localized: Quem tomou banho mais recentemente?
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

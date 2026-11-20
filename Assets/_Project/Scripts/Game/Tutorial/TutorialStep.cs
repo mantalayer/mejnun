@@ -68,18 +68,45 @@ namespace Mejnun.Game
         }
     }
 
+    /// <summary>
+    /// Player-facing tutorial text. Steps hold a lookup (a <c>Loc.Get</c> call) rather than the resolved string, so
+    /// reading the text again after a language change returns the new language.
+    /// </summary>
+    internal static class TutorialText
+    {
+        public static readonly Func<string> Empty = () => string.Empty;
+
+        public static Func<string> Fixed(string text)
+        {
+            var value = text ?? string.Empty;
+            return () => value;
+        }
+
+        public static string Read(Func<string> source)
+        {
+            return source == null ? null : source() ?? string.Empty;
+        }
+    }
+
     /// <summary>One row of cards drawn in a rule modal, marked valid (green) or invalid (red).</summary>
     public sealed class TutorialDiagramGroup
     {
+        private readonly Func<string> caption;
+
         public TutorialDiagramGroup(bool valid, string caption, params Card[] cards)
+            : this(valid, TutorialText.Fixed(caption), cards)
+        {
+        }
+
+        public TutorialDiagramGroup(bool valid, Func<string> caption, params Card[] cards)
         {
             Valid = valid;
-            Caption = caption ?? string.Empty;
+            this.caption = caption ?? TutorialText.Empty;
             Cards = cards == null ? new Card[0] : (Card[])cards.Clone();
         }
 
         public bool Valid { get; }
-        public string Caption { get; }
+        public string Caption => TutorialText.Read(caption);
         public IReadOnlyList<Card> Cards { get; }
     }
 
@@ -96,15 +123,23 @@ namespace Mejnun.Game
     /// <summary>A page of the paged "Good to know" modal.</summary>
     public sealed class TutorialPage
     {
+        private readonly Func<string> title;
+        private readonly Func<string> body;
+
         public TutorialPage(string title, string body, TutorialDiagram diagram = null)
+            : this(TutorialText.Fixed(title), TutorialText.Fixed(body), diagram)
         {
-            Title = title ?? string.Empty;
-            Body = body ?? string.Empty;
+        }
+
+        public TutorialPage(Func<string> title, Func<string> body, TutorialDiagram diagram = null)
+        {
+            this.title = title ?? TutorialText.Empty;
+            this.body = body ?? TutorialText.Empty;
             Diagram = diagram;
         }
 
-        public string Title { get; }
-        public string Body { get; }
+        public string Title => TutorialText.Read(title);
+        public string Body => TutorialText.Read(body);
         public TutorialDiagram Diagram { get; }
     }
 
@@ -120,6 +155,9 @@ namespace Mejnun.Game
         private IReadOnlyList<Card> focusCards = NoCards;
         private IReadOnlyList<CpuIntent> solution = NoIntents;
         private IReadOnlyList<TutorialPage> pages = NoPages;
+        private Func<string> title = TutorialText.Empty;
+        private Func<string> body = TutorialText.Empty;
+        private Func<string> partialBody;
 
         public TutorialStep(string id)
         {
@@ -129,15 +167,50 @@ namespace Mejnun.Game
             }
 
             Id = id;
-            Title = string.Empty;
-            Body = string.Empty;
         }
 
         public string Id { get; }
         public TutorialUiKind Ui { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public string PartialBody { get; set; }
+
+        /// <summary>The title in the current language; setting it stores a fixed text.</summary>
+        public string Title
+        {
+            get => TutorialText.Read(title);
+            set => title = TutorialText.Fixed(value);
+        }
+
+        public string Body
+        {
+            get => TutorialText.Read(body);
+            set => body = TutorialText.Fixed(value);
+        }
+
+        /// <summary>Shown instead of <see cref="Body"/> while the focus cards are partly placed; null when unused.</summary>
+        public string PartialBody
+        {
+            get => TutorialText.Read(partialBody);
+            set => partialBody = value == null ? null : TutorialText.Fixed(value);
+        }
+
+        /// <summary>Lookups for the localized text, resolved each time the text is read.</summary>
+        public Func<string> TitleSource
+        {
+            get => title;
+            set => title = value ?? TutorialText.Empty;
+        }
+
+        public Func<string> BodySource
+        {
+            get => body;
+            set => body = value ?? TutorialText.Empty;
+        }
+
+        public Func<string> PartialBodySource
+        {
+            get => partialBody;
+            set => partialBody = value;
+        }
+
         public TutorialDiagram Diagram { get; set; }
         public TutorialTarget Target { get; set; }
         public TutorialAction Allowed { get; set; }

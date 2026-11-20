@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -132,6 +133,9 @@ namespace Mejnun.UI
         private VisualElement markerLayer;
         private Action pendingConfirmAction;
         private Action<bool> pendingConfirmSetting;
+        private Func<string> pendingConfirmMessage;
+        private RuleError? lastInvalidMoveError;
+        private int announcedSeat = -1;
         private float nextBadgePulse;
         private bool badgePulse;
         private bool menuPaused;
@@ -180,6 +184,64 @@ namespace Mejnun.UI
             RegisterButtons();
             tutorialOverlay = new TutorialOverlay(root, tableView, tableController, RequestSkipTutorial,
                 RefreshCurrentGame);
+            ApplyDefaultText();
+        }
+
+        /// <summary>Text for the code-owned HUD labels before the first game sync (the UXML leaves them empty).</summary>
+        private void ApplyDefaultText()
+        {
+            if (turnLabel != null) turnLabel.text = TurnLabelText(0);
+            if (drawPileLabel != null) drawPileLabel.text = Loc.Format("hud.draw_pile.count", 0);
+            if (drawPassButton != null) drawPassButton.text = Loc.Get("hud.button.draw");
+            if (markSetButton != null)
+            {
+                markSetButton.text = tableController != null && tableController.MarkModeActive
+                    ? Loc.Get("hud.button.marking")
+                    : Loc.Get("hud.button.mark");
+            }
+
+            if (hintButton != null)
+            {
+                hintButton.text = tableController != null && tableController.HintsEnabled
+                    ? Loc.Get("hud.button.hint_on")
+                    : Loc.Get("hud.button.hint_off");
+            }
+
+            if (fastForwardButton != null)
+            {
+                fastForwardButton.text = matchFlow != null && matchFlow.FastForward
+                    ? Loc.Get("hud.button.fast_forward_stop")
+                    : Loc.Get("hud.button.fast_forward");
+            }
+        }
+
+        private void OnLanguageChanged()
+        {
+            ApplyDefaultText();
+            var game = tableController == null ? null : tableController.Game;
+            if (game != null)
+            {
+                Refresh(game.State, game.Turn);
+            }
+
+            if (turnPopup != null && announcedSeat >= 0)
+            {
+                turnPopup.text = TurnPopupText(announcedSeat);
+            }
+
+            if (invalidMovePopup != null && lastInvalidMoveError.HasValue)
+            {
+                invalidMovePopup.text = InvalidMoveMessage(lastInvalidMoveError.Value);
+            }
+
+            if (confirmMessage != null && pendingConfirmMessage != null)
+            {
+                confirmMessage.text = pendingConfirmMessage();
+            }
+
+            RefreshRoomCode();
+            UpdateTimerLabel();
+            tutorialOverlay?.RefreshLanguage();
         }
 
         private void Start()
@@ -379,6 +441,7 @@ namespace Mejnun.UI
             SceneFlow.RegisterTableExit(PlayTableExit);
             root?.RegisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
             GameSettings.Changed += OnSettingsChanged;
+            Loc.LanguageChanged += OnLanguageChanged;
             if (tableController != null)
             {
                 tableController.Synchronized += OnSynchronized;
@@ -426,6 +489,7 @@ namespace Mejnun.UI
             CompleteTableExit();
             root?.UnregisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
             GameSettings.Changed -= OnSettingsChanged;
+            Loc.LanguageChanged -= OnLanguageChanged;
             if (tableController != null)
             {
                 tableController.Synchronized -= OnSynchronized;
@@ -1148,7 +1212,9 @@ namespace Mejnun.UI
                 }
             }
 
-            fastForwardButton.text = matchFlow != null && matchFlow.FastForward ? "Continue" : "Fast forward";
+            fastForwardButton.text = matchFlow != null && matchFlow.FastForward
+                ? Loc.Get("hud.button.fast_forward_stop")
+                : Loc.Get("hud.button.fast_forward");
         }
 
         private void UpdateSetMarkers()
@@ -1448,7 +1514,7 @@ namespace Mejnun.UI
         {
             if (markSetButton != null)
             {
-                markSetButton.text = active ? "Marking…" : "Mark";
+                markSetButton.text = active ? Loc.Get("hud.button.marking") : Loc.Get("hud.button.mark");
             }
         }
 
@@ -1508,7 +1574,8 @@ namespace Mejnun.UI
             hasAnnouncedTurn = true;
             if (turnPopup != null)
             {
-                turnPopup.text = Possessive(GetPlayerName(state.CurrentSeat)) + " Turn";
+                announcedSeat = state.CurrentSeat;
+                turnPopup.text = TurnPopupText(state.CurrentSeat);
                 turnPopupHide = ShowPopup(turnPopup, turnPopupHide,
                     root != null && root.ClassListContains("phone-layout") ? 2600 : 1600);
             }
@@ -1541,7 +1608,7 @@ namespace Mejnun.UI
             }
 
             var panelPosition = RuntimePanelUtils.CameraTransformWorldToPanel(root.panel, world, tableView.ViewCamera);
-            goneDownTag.text = GetPlayerName(revealedDownSeat) + " · Gone Down";
+            goneDownTag.text = Loc.Format("hud.popup.gone_down_tag", GetPlayerName(revealedDownSeat));
             goneDownTag.style.left = panelPosition.x;
             goneDownTag.style.top = panelPosition.y - 36f;
             if (!goneDownTagShown)
@@ -1601,9 +1668,7 @@ namespace Mejnun.UI
             var interactive = tableController.InputEnabled;
             if (turnLabel != null)
             {
-                turnLabel.text = IsBotSeat(activeSeat)
-                    ? GetSeatLabel(activeSeat) + " is thinking…"
-                    : Possessive(GetSeatLabel(activeSeat)) + " turn";
+                turnLabel.text = TurnLabelText(activeSeat);
             }
 
             bottomBar?.EnableInClassList("active-turn",
@@ -1612,14 +1677,14 @@ namespace Mejnun.UI
 
             if (drawPileLabel != null)
             {
-                drawPileLabel.text = "Draw pile: " + state.DrawPile.Count;
+                drawPileLabel.text = Loc.Format("hud.draw_pile.count", state.DrawPile.Count);
             }
 
             UpdateDrawPileStack(state, game);
 
             if (drawPassButton != null)
             {
-                drawPassButton.text = state.DrawPile.Count == 0 ? "Pass" : "Draw";
+                drawPassButton.text = state.DrawPile.Count == 0 ? Loc.Get("hud.button.pass") : Loc.Get("hud.button.draw");
                 drawPassButton.SetEnabled(interactive && !tableController.HasPlacedHandCard);
             }
 
@@ -1659,13 +1724,17 @@ namespace Mejnun.UI
             if (sortRankButton != null) sortRankButton.SetEnabled(hasCards);
             if (hintButton != null)
             {
-                hintButton.text = tableController.HintsEnabled ? "Hint: on" : "Hint: off";
+                hintButton.text = tableController.HintsEnabled
+                    ? Loc.Get("hud.button.hint_on")
+                    : Loc.Get("hud.button.hint_off");
                 hintButton.SetEnabled(game.State.Phase == GamePhase.Playing);
             }
 
             if (markSetButton != null)
             {
-                markSetButton.text = tableController.MarkModeActive ? "Marking…" : "Mark";
+                markSetButton.text = tableController.MarkModeActive
+                    ? Loc.Get("hud.button.marking")
+                    : Loc.Get("hud.button.mark");
             }
 
             if (compactBoardButton != null)
@@ -1976,7 +2045,7 @@ namespace Mejnun.UI
                 return;
             }
 
-            timerLabel.text = "Time: " + Mathf.CeilToInt(matchFlow.TurnTimer.RemainingSeconds);
+            timerLabel.text = Loc.Format("hud.timer.remaining", Mathf.CeilToInt(matchFlow.TurnTimer.RemainingSeconds));
             timerLabel.style.display = DisplayStyle.Flex;
         }
 
@@ -1995,18 +2064,41 @@ namespace Mejnun.UI
 
         private string GetPlayerName(int seat)
         {
-            return matchFlow != null && matchFlow.SeatCount > 0 ? matchFlow.GetPlayerName(seat) : "Seat " + (seat + 1);
+            return matchFlow != null && matchFlow.SeatCount > 0
+                ? matchFlow.GetPlayerName(seat)
+                : Loc.Format("hud.seat.default_name", seat + 1);
         }
 
-        /// <summary>"You" becomes "Your" (tutorial player); any other name gets "'s".</summary>
-        private static string Possessive(string name)
+        /// <summary>The tutorial's human seat is addressed as "you" ("Your turn") rather than by name.</summary>
+        private bool IsTutorialPlayerSeat(int seat)
         {
-            return name == "You" ? "Your" : name + "'s";
+            return matchFlow != null && matchFlow.IsTutorial && !IsBotSeat(seat);
+        }
+
+        private string TurnLabelText(int seat)
+        {
+            if (IsBotSeat(seat))
+            {
+                return Loc.Format("hud.turn.label.thinking", GetSeatLabel(seat));
+            }
+
+            return IsTutorialPlayerSeat(seat)
+                ? Loc.Get("hud.turn.label.yours")
+                : Loc.Format("hud.turn.label.player", GetSeatLabel(seat));
+        }
+
+        private string TurnPopupText(int seat)
+        {
+            return IsTutorialPlayerSeat(seat)
+                ? Loc.Get("hud.turn.popup.yours")
+                : Loc.Format("hud.turn.popup.player", GetPlayerName(seat));
         }
 
         private string GetSeatLabel(int seat)
         {
-            return matchFlow != null && matchFlow.SeatCount > 0 ? matchFlow.GetSeatLabel(seat) : "Seat " + (seat + 1);
+            return matchFlow != null && matchFlow.SeatCount > 0
+                ? matchFlow.GetSeatLabel(seat)
+                : Loc.Format("hud.seat.default_name", seat + 1);
         }
 
         private void ToggleHints()
@@ -2022,7 +2114,9 @@ namespace Mejnun.UI
                 tableController.SetHintsEnabled(!tableController.HintsEnabled);
                 if (hintButton != null)
                 {
-                    hintButton.text = tableController.HintsEnabled ? "Hint: on" : "Hint: off";
+                    hintButton.text = tableController.HintsEnabled
+                        ? Loc.Get("hud.button.hint_on")
+                        : Loc.Get("hud.button.hint_off");
                 }
             }
         }
@@ -2077,6 +2171,7 @@ namespace Mejnun.UI
                 return;
             }
 
+            lastInvalidMoveError = error;
             invalidMovePopup.text = InvalidMoveMessage(error);
             invalidMoveHide = ShowPopup(invalidMovePopup, invalidMoveHide, 2400);
         }
@@ -2086,39 +2181,39 @@ namespace Mejnun.UI
             switch (error)
             {
                 case RuleError.NotYourTurn:
-                    return "It’s not your turn.";
+                    return Loc.Get("hud.invalid_move.not_your_turn");
                 case RuleError.WrongPhase:
-                    return "That move is not available right now.";
+                    return Loc.Get("hud.invalid_move.wrong_phase");
                 case RuleError.NotDownBoardAccess:
-                    return "Go down before using cards from the board.";
+                    return Loc.Get("hud.invalid_move.not_down_board_access");
                 case RuleError.BoardCardToHand:
-                    return "Cards on the board cannot be returned to your hand.";
+                    return Loc.Get("hud.invalid_move.board_card_to_hand");
                 case RuleError.CannotEndTurn:
-                    return "You must play a valid move before ending your turn.";
+                    return Loc.Get("hud.invalid_move.cannot_end_turn");
                 case RuleError.GoDownInvalid:
                 case RuleError.GoDownCardToHand:
-                    return "That set does not meet the requirements to go down.";
+                    return Loc.Get("hud.invalid_move.go_down_invalid");
                 case RuleError.DoubleInSet:
-                    return "A set cannot contain the same card twice.";
+                    return Loc.Get("hud.invalid_move.double_in_set");
                 case RuleError.SetTooLarge:
-                    return "That set contains too many cards.";
+                    return Loc.Get("hud.invalid_move.set_too_large");
                 case RuleError.InvalidCardForSet:
-                    return "That card cannot be added to this set.";
+                    return Loc.Get("hud.invalid_move.invalid_card_for_set");
                 case RuleError.InvalidTarget:
-                    return "Choose a valid place for that card.";
+                    return Loc.Get("hud.invalid_move.invalid_target");
                 case RuleError.DuplicateCard:
-                    return "That move includes a card more than once.";
+                    return Loc.Get("hud.invalid_move.duplicate_card");
                 case RuleError.EmptyMove:
-                    return "Select at least one card to move.";
+                    return Loc.Get("hud.invalid_move.empty_move");
                 case RuleError.UnknownCard:
                 case RuleError.UnknownMeld:
-                    return "That card or set is no longer available.";
+                    return Loc.Get("hud.invalid_move.unknown_card");
                 case RuleError.GameFinished:
-                    return "This game has already ended.";
+                    return Loc.Get("hud.invalid_move.game_finished");
                 case RuleError.TutorialBlocked:
-                    return "Try the highlighted cards.";
+                    return Loc.Get("hud.invalid_move.tutorial_blocked");
                 default:
-                    return "That move is not allowed by the game rules.";
+                    return Loc.Get("hud.invalid_move.not_allowed");
             }
         }
 
@@ -2142,7 +2237,7 @@ namespace Mejnun.UI
         {
             if (tableController != null && tableController.InputEnabled)
             {
-                RequestConfirmation("Return all your cards to your hand?",
+                RequestConfirmation(() => Loc.Get("hud.confirm.revert"),
                     () => GameSettings.ConfirmRevert, value => GameSettings.ConfirmRevert = value,
                     () => tableController.RevertTurn());
             }
@@ -2154,7 +2249,7 @@ namespace Mejnun.UI
             {
                 if (tableController.FixBoardWouldReturnCards())
                 {
-                    RequestConfirmation("Some invalid cards will return to your hand. Fix the board?",
+                    RequestConfirmation(() => Loc.Get("hud.confirm.fix_board"),
                         () => GameSettings.ConfirmFix, value => GameSettings.ConfirmFix = value,
                         () => tableController.FixBoard());
                 }
@@ -2165,7 +2260,7 @@ namespace Mejnun.UI
             }
         }
 
-        private void RequestConfirmation(string message, Func<bool> isEnabled, Action<bool> setEnabled,
+        private void RequestConfirmation(Func<string> message, Func<bool> isEnabled, Action<bool> setEnabled,
             Action action)
         {
             if (isEnabled == null || !isEnabled())
@@ -2176,7 +2271,8 @@ namespace Mejnun.UI
 
             pendingConfirmAction = action;
             pendingConfirmSetting = setEnabled;
-            if (confirmMessage != null) confirmMessage.text = message;
+            pendingConfirmMessage = message;
+            if (confirmMessage != null) confirmMessage.text = message?.Invoke() ?? string.Empty;
             if (confirmDontAsk != null)
             {
                 confirmDontAsk.SetValueWithoutNotify(false);
@@ -2208,6 +2304,7 @@ namespace Mejnun.UI
         {
             pendingConfirmAction = null;
             pendingConfirmSetting = null;
+            pendingConfirmMessage = null;
             SetVisible(confirmDialog, false);
             confirmPaused = false;
             BlurFocusedElement();
@@ -2240,7 +2337,9 @@ namespace Mejnun.UI
                 : null;
             if (roomCodeLabel != null)
             {
-                roomCodeLabel.text = string.IsNullOrWhiteSpace(roomCode) ? string.Empty : "Room code: " + roomCode;
+                roomCodeLabel.text = string.IsNullOrWhiteSpace(roomCode)
+                    ? string.Empty
+                    : Loc.Format("hud.pause.room_code", roomCode);
             }
 
             SetVisible(roomCodeLabel, !string.IsNullOrWhiteSpace(roomCode));
@@ -2258,7 +2357,7 @@ namespace Mejnun.UI
                 Resume();
             }
 
-            RequestConfirmation("Skip the tutorial? You can replay it any time from How to play.", () => true, null,
+            RequestConfirmation(() => Loc.Get("hud.confirm.skip_tutorial"), () => true, null,
                 () => matchFlow.SkipTutorial());
         }
 
@@ -2330,7 +2429,7 @@ namespace Mejnun.UI
         private void RequestLeave()
         {
             if (matchFlow == null || matchFlow.Game == null) return;
-            RequestConfirmation("Return to the main menu? This game will be saved so you can resume it later.",
+            RequestConfirmation(() => Loc.Get("hud.confirm.leave"),
                 () => GameSettings.ConfirmLeave, value => GameSettings.ConfirmLeave = value,
                 () =>
                 {
@@ -2341,7 +2440,7 @@ namespace Mejnun.UI
 
         private void RequestRestart()
         {
-            RequestConfirmation("Restart this game? The current round will be lost.",
+            RequestConfirmation(() => Loc.Get("hud.confirm.restart"),
                 () => GameSettings.ConfirmLeave, value => GameSettings.ConfirmLeave = value,
                 () =>
                 {
@@ -2416,7 +2515,9 @@ namespace Mejnun.UI
             tableController.SetMarkMode(!tableController.MarkModeActive);
             if (markSetButton != null)
             {
-                markSetButton.text = tableController.MarkModeActive ? "Marking…" : "Mark";
+                markSetButton.text = tableController.MarkModeActive
+                    ? Loc.Get("hud.button.marking")
+                    : Loc.Get("hud.button.mark");
             }
         }
 

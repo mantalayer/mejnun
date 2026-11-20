@@ -34,8 +34,9 @@ namespace Mejnun.Cosmetics
         }
 
         public string Id => id;
-        public string DisplayName => displayName;
+        public string DisplayName => DeckSkin.ResolveDisplayName(id, displayName);
         public string Artist => artist;
+        public string ArtistCredit => DeckSkin.FormatArtistCredit(artist);
         public UnlockRequirement Unlock => unlock ?? UnlockRequirement.Free;
         public AssetReferenceT<DeckSkin> Asset => asset;
     }

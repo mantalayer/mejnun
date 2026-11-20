@@ -4,6 +4,7 @@ using System.Globalization;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using Mejnun.Net.Unity;
 using Mejnun.UI;
 using Unity.Services.Multiplayer;
@@ -180,6 +181,10 @@ namespace Mejnun.UI.FrontEnd
         {
             mainMenu.Dispose();
             gallery.Dispose();
+            setup.Dispose();
+            tablePicker.Dispose();
+            onlineTablePicker.Dispose();
+            onlineScreen.Dispose();
             settings.Closed -= Back;
             settings.Dispose();
             onlineScreen.Requested -= HandleOnlineRequest;
@@ -503,7 +508,7 @@ namespace Mejnun.UI.FrontEnd
         {
             if (pendingOnlineSession == null)
             {
-                onlineScreen.SetStatus("Join or create a session first.");
+                onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.join_first"));
                 return;
             }
 
@@ -632,7 +637,7 @@ namespace Mejnun.UI.FrontEnd
                 {
                     playerName = string.Equals(player.Id, onlineService.AuthenticationId, StringComparison.Ordinal)
                         ? pendingOnlineName
-                        : "Player " + (index + 1);
+                        : Loc.Format("online.lobby.player_default", index + 1);
                 }
 
                 playerNames.Add(playerName);
@@ -713,7 +718,15 @@ namespace Mejnun.UI.FrontEnd
             ClearPendingOnlineSession();
             onlineScreen.HideLobby();
             onlineScreen.SetBusy(false);
-            onlineScreen.SetStatus(wasHost ? "The host cancelled the game." : "You left the lobby.");
+            if (wasHost)
+            {
+                onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.host_cancelled"));
+            }
+            else
+            {
+                onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.left_lobby"));
+            }
+
             try
             {
                 if (wasHost)
@@ -742,7 +755,7 @@ namespace Mejnun.UI.FrontEnd
             ClearPendingOnlineSession();
             onlineScreen.HideLobby();
             onlineScreen.SetBusy(false);
-            onlineScreen.SetStatus("The host cancelled the game.");
+            onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.host_cancelled"));
             try
             {
                 await onlineService.LeaveAsync();
@@ -778,7 +791,9 @@ namespace Mejnun.UI.FrontEnd
             seats[0] = SeatConfig.Human(displayName);
             for (var seat = 1; seat < seatCount; seat++)
             {
-                seats[seat] = SeatConfig.Human("Player " + (seat + 1));
+                // Placeholder until the network names arrive; MatchFlow gives
+                // unnamed seats their default name, so no text is stored here.
+                seats[seat] = SeatConfig.Human(string.Empty);
             }
 
             var timerSeconds = ReadOnlineTimer(session);

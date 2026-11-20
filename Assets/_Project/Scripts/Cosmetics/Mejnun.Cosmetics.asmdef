@@ -2,6 +2,8 @@
   "name": "Mejnun.Cosmetics",
   "rootNamespace": "Mejnun.Cosmetics",
   "references": [
+    "Mejnun.Localization",
+        "Unity.Localization",
     "Mejnun.Core",
     "Unity.Addressables",
     "Unity.ResourceManager"

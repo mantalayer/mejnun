@@ -2,6 +2,8 @@
   "name": "Mejnun.Game",
   "rootNamespace": "Mejnun.Game",
   "references": [
+    "Mejnun.Localization",
+        "Unity.Localization",
     "Mejnun.Core",
     "Mejnun.AI",
     "Mejnun.Cosmetics",

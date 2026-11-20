@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mejnun.AI;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
+using Mejnun.Localization;
 using UnityEngine;
 
 namespace Mejnun.Game
@@ -58,7 +59,12 @@ namespace Mejnun.Game
         public bool IsInitializingRound { get; private set; }
         public MatchFlowScreen Screen { get; private set; } = MatchFlowScreen.Idle;
         public int SeatCount => playerNames.Length;
-        public string DealerQuestion { get; private set; }
+
+        /// <summary>The DealerQuestions table key of this round's question; null uses the generic question.</summary>
+        public string DealerQuestionKey { get; private set; }
+
+        /// <summary>This round's question in the current language.</summary>
+        public string DealerQuestion => DealerQuestions.Resolve(DealerQuestionKey);
         public int CurrentSeat => Game == null ? -1 : Game.State.CurrentSeat;
         public ulong RoundSeed { get; private set; }
         public BotTurnDriver BotDriver => botDriver;
@@ -104,7 +110,7 @@ namespace Mejnun.Game
 
         public string HandoffMessage => CurrentSeat < 0
             ? string.Empty
-            : "Pass to " + GetPlayerName(CurrentSeat) + " — tap to reveal";
+            : Loc.Format("match.handoff.message", GetPlayerName(CurrentSeat));
 
         public string ResultTitle
         {
@@ -117,10 +123,12 @@ namespace Mejnun.Game
 
                 if (LastResult.Kind == GameEndKind.Stalemate)
                 {
-                    return "Stalemate";
+                    return Loc.Get("match.result.stalemate");
                 }
 
-                return LastResult.Winner.HasValue ? GetPlayerName(LastResult.Winner.Value) + " wins!" : "Game over";
+                return LastResult.Winner.HasValue
+                    ? Loc.Format("match.result.winner", GetPlayerName(LastResult.Winner.Value))
+                    : Loc.Get("match.result.game_over");
             }
         }
 
@@ -135,15 +143,15 @@ namespace Mejnun.Game
 
                 if (LastResult.Kind == GameEndKind.EmptyHand)
                 {
-                    return GetPlayerName(LastResult.Winner.Value) + " emptied their hand.";
+                    return Loc.Format("match.result.empty_hand", GetPlayerName(LastResult.Winner.Value));
                 }
 
                 if (LastResult.Kind == GameEndKind.FewestCards)
                 {
-                    return GetPlayerName(LastResult.Winner.Value) + " had the fewest cards when the draw pile ran out.";
+                    return Loc.Format("match.result.fewest_cards", GetPlayerName(LastResult.Winner.Value));
                 }
 
-                return "The fewest-card score was tied. Pick who goes first.";
+                return Loc.Get("match.result.tied");
             }
         }
 
@@ -358,11 +366,12 @@ namespace Mejnun.Game
                 return;
             }
 
-            var displayName = string.IsNullOrWhiteSpace(name) ? "Player " + (seat + 1) : name;
-            playerNames[seat] = displayName;
+            // Online names are nicknames; only an empty or default name becomes an ID.
+            var seatName = SeatNames.ToId(name, false, seat);
+            playerNames[seat] = seatName;
             seats[seat] = isBot
-                ? SeatConfig.Bot(displayName, BotDifficulty.Medium)
-                : SeatConfig.Human(displayName);
+                ? SeatConfig.Bot(seatName, BotDifficulty.Medium)
+                : SeatConfig.Human(seatName);
             if (isBot && seat == onlineLocalSeat)
             {
                 matchStatsTracker.Reset(TurnSeconds);
@@ -536,13 +545,7 @@ namespace Mejnun.Game
             for (var seat = 0; seat < seats.Length; seat++)
             {
                 var config = seatConfigs[seat];
-                var name = config.Name;
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    name = (config.IsBot ? "Bot " : "Player ") + (seat + 1);
-                }
-
-                playerNames[seat] = name.Trim();
+                playerNames[seat] = SeatNames.ToId(config.Name, config.IsBot, seat);
                 seats[seat] = new SeatConfig(playerNames[seat], config.IsBot, config.Difficulty, config.Style);
             }
 
@@ -578,8 +581,9 @@ namespace Mejnun.Game
             playerNames = new string[seats.Length];
             for (var seat = 0; seat < seats.Length; seat++)
             {
-                seats[seat] = data.Seats[seat];
-                playerNames[seat] = seats[seat].Name;
+                var saved = data.Seats[seat];
+                playerNames[seat] = SeatNames.ToId(saved.Name, saved.IsBot, seat);
+                seats[seat] = new SeatConfig(playerNames[seat], saved.IsBot, saved.Difficulty, saved.Style);
             }
 
             var humanCount = 0;
@@ -601,9 +605,7 @@ namespace Mejnun.Game
             TurnSeconds = data.TurnSeconds;
             turnTimer?.SetDuration(TurnSeconds);
             questionRandom = new System.Random(unchecked((int)(RoundSeed ^ (RoundSeed >> 32))));
-            DealerQuestion = dealerQuestions == null
-                ? "Who should go first?"
-                : dealerQuestions.GetRandomQuestion(questionRandom);
+            DealerQuestionKey = PickDealerQuestionKey();
             LastResult = null;
             LastProgression = null;
             resultRecorded = false;
@@ -659,7 +661,20 @@ namespace Mejnun.Game
         public string GetSeatLabel(int seat)
         {
             var name = GetPlayerName(seat);
-            return IsBotSeat(seat) ? name + " (" + seats[seat].Difficulty + " bot)" : name;
+            if (!IsBotSeat(seat))
+            {
+                return name;
+            }
+
+            switch (seats[seat].Difficulty)
+            {
+                case BotDifficulty.Easy:
+                    return Loc.Format("match.seat.bot_label.easy", name);
+                case BotDifficulty.Hard:
+                    return Loc.Format("match.seat.bot_label.hard", name);
+                default:
+                    return Loc.Format("match.seat.bot_label.medium", name);
+            }
         }
 
         public CommandResult ChooseDealer(int seat)
@@ -798,10 +813,18 @@ namespace Mejnun.Game
         {
             if (seat < 0 || seat >= playerNames.Length)
             {
-                return "Player " + (seat + 1);
+                return Loc.Format("match.seat.player", seat + 1);
             }
 
-            return playerNames[seat];
+            // Seats store IDs for generated names, so this resolves in the current language on every call.
+            return SeatNames.Display(playerNames[seat], seat);
+        }
+
+        private string PickDealerQuestionKey()
+        {
+            return dealerQuestions != null
+                ? dealerQuestions.GetRandomQuestionKey(questionRandom)
+                : DealerQuestions.PickKey(questionRandom);
         }
 
         private bool StartRound(int? dealer, ulong seed)
@@ -817,9 +840,7 @@ namespace Mejnun.Game
             RoundSeed = seed;
             Debug.Log("Mejnun round seed: " + RoundSeed);
             questionRandom = new System.Random(unchecked((int)(seed ^ (seed >> 32))));
-            DealerQuestion = dealerQuestions == null
-                ? "Who should go first?"
-                : dealerQuestions.GetRandomQuestion(questionRandom);
+            DealerQuestionKey = PickDealerQuestionKey();
             LastResult = null;
             LastProgression = null;
             resultRecorded = false;

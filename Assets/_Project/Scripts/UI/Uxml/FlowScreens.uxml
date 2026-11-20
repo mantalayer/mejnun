@@ -3,40 +3,88 @@
     <ui:Style src="../Uss/flow.uss" />
     <ui:VisualElement name="flow-root" class="flow-root">
         <ui:VisualElement name="dealer-question-screen" class="flow-screen">
-            <ui:Label class="flow-title" text="Who goes first?" />
-            <ui:Label name="dealer-question-label" class="flow-copy" text="Who should go first?" />
+            <ui:Label class="flow-title">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="flow.dealer.title" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label name="dealer-question-label" class="flow-copy" />
             <ui:VisualElement name="dealer-seat-options" class="seat-options" />
-            <ui:Button name="random-dealer-button" class="flow-button primary-flow-button" text="Random first player" />
+            <ui:Button name="random-dealer-button" class="flow-button primary-flow-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="flow.dealer.random" />
+                </Bindings>
+            </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="handoff-screen" class="flow-screen handoff-screen">
-            <ui:Label name="handoff-message" class="flow-title" text="Pass to Player 1 — tap to reveal" />
-            <ui:Button name="reveal-hand-button" class="flow-button primary-flow-button" text="Tap to reveal" />
+            <ui:Label name="handoff-message" class="flow-title" />
+            <ui:Button name="reveal-hand-button" class="flow-button primary-flow-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="flow.handoff.reveal" />
+                </Bindings>
+            </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="results-screen" class="flow-screen">
-            <ui:Label name="result-title" class="flow-title" text="Game over" />
+            <ui:Label name="result-title" class="flow-title" />
             <ui:ScrollView class="results-scroll">
-                <ui:Label name="mejnun-banner" class="mejnun-banner" text="MEJNUN!" style="display: none" />
+                <ui:Label name="mejnun-banner" class="mejnun-banner" style="display: none">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.banner.mejnun" />
+                    </Bindings>
+                </ui:Label>
                 <ui:Label name="result-message" class="flow-copy" text="" />
                 <ui:Label name="result-counts" class="flow-copy result-counts" text="" />
                 <ui:Label name="result-xp-gained" class="result-reward-label" text="" />
                 <ui:Label name="result-level-up" class="result-level-up" text="" style="display: none" />
                 <ui:Label name="result-level-label" class="flow-copy" text="" />
-                <ui:ProgressBar name="result-level-progress" title="Level progress" low-value="0" high-value="100" value="0" />
-                <ui:Label class="settings-section-title" text="Achievements" />
+                <ui:ProgressBar name="result-level-progress" low-value="0" high-value="100" value="0" />
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.section.achievements" />
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement name="result-new-achievements" class="result-chip-list" />
-                <ui:Label class="settings-section-title" text="New in Gallery" />
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.section.new_gallery" />
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement name="result-new-gallery-items" class="result-chip-list" />
-                <ui:Label class="settings-section-title" text="Not unlocked yet" />
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.section.locked" />
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement name="result-locked-items" class="result-chip-list" />
             </ui:ScrollView>
-            <ui:Button name="rematch-button" class="flow-button primary-flow-button" text="Rematch" />
-            <ui:Button name="results-menu-button" class="flow-button" text="Menu" />
+            <ui:Button name="rematch-button" class="flow-button primary-flow-button" />
+            <ui:Button name="results-menu-button" class="flow-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.button.menu" />
+                </Bindings>
+            </ui:Button>
             <ui:VisualElement name="rematch-confirm" class="rematch-confirm" style="display: none">
-                <ui:Label class="flow-copy" text="Start a new round?" />
-                <ui:Toggle name="rematch-dont-ask" label="Don't ask again" />
+                <ui:Label class="flow-copy">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.rematch_confirm.message" />
+                    </Bindings>
+                </ui:Label>
+                <ui:Toggle name="rematch-dont-ask">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="results.rematch_confirm.dont_ask" />
+                    </Bindings>
+                </ui:Toggle>
                 <ui:VisualElement class="dialog-actions">
-                    <ui:Button name="rematch-cancel-button" class="flow-button" text="Cancel" />
-                    <ui:Button name="rematch-accept-button" class="flow-button primary-flow-button" text="Rematch" />
+                    <ui:Button name="rematch-cancel-button" class="flow-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.cancel" />
+                        </Bindings>
+                    </ui:Button>
+                    <ui:Button name="rematch-accept-button" class="flow-button primary-flow-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="results.rematch_confirm.accept" />
+                        </Bindings>
+                    </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

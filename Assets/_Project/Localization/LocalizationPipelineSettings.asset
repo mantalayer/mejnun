@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b2560c35f764ec89e039b5a951bd68, type: 3}
+  m_Name: LocalizationPipelineSettings
+  m_EditorClassIdentifier: Mejnun.Localization.Editor::Mejnun.Localization.Editor.LocalizationPipelineSettings
+  SheetsServiceProvider: {fileID: 11400000, guid: 7e638290ed1c84a73af49ae894afc7c1, type: 2}
+  SpreadsheetId: 1KyBXzstUSV1dUmxQISUuLhfY1WbZ7Y5djeUdl5VbMsg
+  Tabs:
+  - Collection: UI
+    TabName: UI
+  - Collection: DealerQuestions
+    TabName: DealerQuestions
+  TargetLocales:
+  - LocaleCode: ar
+    GoogleLanguageCode: ar
+  - LocaleCode: fa
+    GoogleLanguageCode: fa
+  - LocaleCode: hy
+    GoogleLanguageCode: hy
+  - LocaleCode: es
+    GoogleLanguageCode: es
+  - LocaleCode: de
+    GoogleLanguageCode: de
+  - LocaleCode: it
+    GoogleLanguageCode: it
+  - LocaleCode: fr
+    GoogleLanguageCode: fr
+  - LocaleCode: ja
+    GoogleLanguageCode: ja
+  - LocaleCode: zh-Hans
+    GoogleLanguageCode: zh-CN
+  - LocaleCode: pt-BR
+    GoogleLanguageCode: pt
+  - LocaleCode: ko
+    GoogleLanguageCode: ko
+  - LocaleCode: zh-Hant
+    GoogleLanguageCode: zh-TW
+  - LocaleCode: vi
+    GoogleLanguageCode: vi
+  - LocaleCode: nl
+    GoogleLanguageCode: nl
+  - LocaleCode: pt-PT
+    GoogleLanguageCode: pt-PT
+  - LocaleCode: ru
+    GoogleLanguageCode: ru
+  - LocaleCode: hi
+    GoogleLanguageCode: hi
+  - LocaleCode: sw
+    GoogleLanguageCode: sw
+  - LocaleCode: th
+    GoogleLanguageCode: th
+  SyncBeforeBuild: 1
+  FailBuildOnIssues: 0
+  TranslationWaitSeconds: 600

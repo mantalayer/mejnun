@@ -4,6 +4,7 @@ using System.Text;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -66,29 +67,36 @@ namespace Mejnun.UI
 
         public void Refresh()
         {
+            RefreshText();
+            SetRematchConfirmation(false);
+        }
+
+        /// <summary>Re-renders every label without closing the rematch confirmation (used on language change).</summary>
+        public void RefreshText()
+        {
             title.text = matchFlow.ResultTitle;
             message.text = matchFlow.ResultMessage;
             mejnunBanner.style.display = matchFlow.LastResult != null &&
                                          matchFlow.LastResult.Kind == GameEndKind.EmptyHand
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
-            var result = new StringBuilder("Cards remaining\n");
+            var result = new StringBuilder(Loc.Get("results.counts.title")).Append('\n');
             if (matchFlow.Game != null)
             {
                 for (var seat = 0; seat < matchFlow.Game.State.Hands.Count; seat++)
                 {
-                    result.Append(matchFlow.GetPlayerName(seat)).Append(": ")
-                        .Append(matchFlow.Game.State.Hands[seat].Count);
+                    result.Append(Loc.Format("results.counts.row", matchFlow.GetPlayerName(seat),
+                        matchFlow.Game.State.Hands[seat].Count));
                     if (seat + 1 < matchFlow.Game.State.Hands.Count) result.Append('\n');
                 }
             }
 
             counts.text = result.ToString();
             var tutorial = matchFlow.IsTutorial;
-            rematchButton.text = tutorial ? "Play for real" : "Rematch";
+            rematchButton.text = tutorial ? Loc.Get("results.button.play_for_real") : Loc.Get("results.button.rematch");
             if (tutorial)
             {
-                message.text = "You finished the tutorial. You're ready for a real game!";
+                message.text = Loc.Get("results.message.tutorial_done");
             }
 
             levelLabel.style.display = tutorial ? DisplayStyle.None : DisplayStyle.Flex;
@@ -98,25 +106,23 @@ namespace Mejnun.UI
             {
                 lockedItems.Clear();
             }
-
-            SetRematchConfirmation(false);
         }
 
         private void RefreshProgression()
         {
             var report = matchFlow.LastProgression;
             pendingUnlockReport = report;
-            xpGained.text = report == null ? string.Empty : "+" + report.XpGained + " XP";
+            xpGained.text = report == null ? string.Empty : Loc.Format("results.xp_gained", report.XpGained);
             levelUp.style.display = report != null && report.LevelAfter > report.LevelBefore
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
             levelUp.text = report == null || report.LevelAfter <= report.LevelBefore
                 ? string.Empty
-                : "Level up! Level " + report.LevelAfter;
+                : Loc.Format("results.level_up", report.LevelAfter);
 
             var profile = ProgressionService.Instance.Profile;
             var progress = ProgressionRules.LevelProgress(profile.Xp);
-            levelLabel.text = "Level " + profile.Level + " · " + progress.into + " / " + progress.needed + " XP";
+            levelLabel.text = Loc.Format("results.level_progress", profile.Level, progress.into, progress.needed);
             levelProgress.lowValue = 0;
             levelProgress.highValue = progress.needed;
             levelProgress.value = progress.into;
@@ -134,7 +140,7 @@ namespace Mejnun.UI
 
                 for (var index = 0; index < report.NewlyUnlockedItems.Count; index++)
                 {
-                    AddGalleryChip(newGalleryItems, report.NewlyUnlockedItems[index], "New: ");
+                    AddGalleryChip(newGalleryItems, report.NewlyUnlockedItems[index], false);
                 }
 
             }
@@ -176,12 +182,16 @@ namespace Mejnun.UI
                 return;
             }
 
-            AddGalleryChip(lockedItems, itemId, "Not unlocked yet: ");
+            AddGalleryChip(lockedItems, itemId, true);
         }
 
-        private void AddGalleryChip(VisualElement container, string itemId, string prefix)
+        private void AddGalleryChip(VisualElement container, string itemId, bool locked)
         {
-            var button = new Button { text = prefix + DisplayName(itemId) };
+            var name = DisplayName(itemId);
+            var button = new Button
+            {
+                text = locked ? Loc.Format("results.chip.locked", name) : Loc.Format("results.chip.new", name)
+            };
             button.AddToClassList("result-chip");
             button.clicked += () => LeaveResults(() => matchFlow.ReturnToMenu(MenuDestination.Gallery(itemId)));
             container.Add(button);

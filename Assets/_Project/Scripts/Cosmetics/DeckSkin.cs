@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mejnun.Core;
+using Mejnun.Localization;
 using UnityEngine;
 
 namespace Mejnun.Cosmetics
@@ -40,8 +41,12 @@ namespace Mejnun.Cosmetics
         [SerializeField] private UnlockRequirement unlock = new UnlockRequirement();
 
         public string Id => id;
-        public string DisplayName => displayName;
+        public string DisplayName => ResolveDisplayName(id, displayName);
+        // The English name stored in the asset; editor tools copy this, never
+        // the localized DisplayName.
+        public string SerializedDisplayName => displayName;
         public string Artist => artist;
+        public string ArtistCredit => FormatArtistCredit(artist);
         public Sprite CardBack => cardBack;
         public IReadOnlyList<DeckSkinBack> AlternateBacks => alternateBacks;
         public string[] BackIds
@@ -183,6 +188,30 @@ namespace Mejnun.Cosmetics
         public void ConfigureUnlock(UnlockRequirement requirement)
         {
             unlock = requirement ?? UnlockRequirement.Free;
+        }
+
+        // The deck's name lives in the UI String Table under a key derived from
+        // its stable id. Skins without an entry (tests, new art) keep their
+        // serialized name.
+        public static string NameKey(string skinId)
+        {
+            return string.IsNullOrWhiteSpace(skinId)
+                ? string.Empty
+                : "cosmetic.deck." + skinId.Trim().ToLowerInvariant() + ".name";
+        }
+
+        public static string ResolveDisplayName(string skinId, string fallback)
+        {
+            var key = NameKey(skinId);
+            return key.Length > 0 && Loc.Has(key) ? Loc.Get(key) : fallback;
+        }
+
+        // The artist's name is a proper noun and is shown as written.
+        public static string FormatArtistCredit(string artistName)
+        {
+            return string.IsNullOrWhiteSpace(artistName)
+                ? string.Empty
+                : Loc.Format("cosmetic.deck.artist_credit", artistName);
         }
     }
 }

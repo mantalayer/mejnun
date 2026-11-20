@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
+using Mejnun.Localization;
 using Mejnun.UI.FrontEnd;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -73,13 +74,15 @@ namespace Mejnun.UI
             overlay = new VisualElement { name = "deck-unlock-overlay", pickingMode = PickingMode.Position };
             overlay.AddToClassList("deck-unlock-overlay");
             overlay.style.display = DisplayStyle.None;
-            caption = new Label("New deck unlocked") { name = "deck-unlock-caption" };
+            caption = new Label(Loc.Get("deck_unlock.caption"));
+            caption.name = "deck-unlock-caption";
             caption.AddToClassList("deck-unlock-caption");
             deckName = new Label { name = "deck-unlock-name" };
             deckName.AddToClassList("deck-unlock-name");
             artist = new Label { name = "deck-unlock-artist" };
             artist.AddToClassList("deck-unlock-artist");
-            hint = new Label("Tap to continue") { name = "deck-unlock-hint" };
+            hint = new Label(Loc.Get("deck_unlock.hint"));
+            hint.name = "deck-unlock-hint";
             hint.AddToClassList("deck-unlock-hint");
             stage = new VisualElement { name = "deck-unlock-stage", pickingMode = PickingMode.Ignore };
             stage.AddToClassList("deck-unlock-stage");
@@ -94,7 +97,20 @@ namespace Mejnun.UI
             overlay.Add(hint);
             documentRoot.Add(overlay);
             overlay.RegisterCallback<PointerDownEvent>(OnPointerDown);
+            overlay.RegisterCallback<AttachToPanelEvent>(_ => SubscribeLanguage());
+            overlay.RegisterCallback<DetachFromPanelEvent>(_ => Loc.LanguageChanged -= RefreshText);
+            if (overlay.panel != null)
+            {
+                SubscribeLanguage();
+            }
+
             overlay.schedule.Execute(Tick).Every(0);
+        }
+
+        private void SubscribeLanguage()
+        {
+            Loc.LanguageChanged -= RefreshText;
+            Loc.LanguageChanged += RefreshText;
         }
 
         public bool IsPlaying => isPlaying;
@@ -200,12 +216,29 @@ namespace Mejnun.UI
             Evaluate(0f);
         }
 
+        private void RefreshText()
+        {
+            caption.text = Loc.Get("deck_unlock.caption");
+            hint.text = Loc.Get("deck_unlock.hint");
+            if (isPlaying && currentIndex < items.Count)
+            {
+                RefreshDeckText(items[currentIndex]);
+            }
+        }
+
+        private void RefreshDeckText(DeckUnlockPresentationItem item)
+        {
+            deckName.text = item.DisplayName;
+            artist.text = string.IsNullOrWhiteSpace(item.Artist)
+                ? string.Empty
+                : Loc.Format("deck_unlock.artist", item.Artist);
+            artist.style.display = string.IsNullOrWhiteSpace(item.Artist) ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
         private void ShowCurrentDeck()
         {
             var item = items[currentIndex];
-            deckName.text = item.DisplayName;
-            artist.text = string.IsNullOrWhiteSpace(item.Artist) ? string.Empty : "by " + item.Artist;
-            artist.style.display = string.IsNullOrWhiteSpace(item.Artist) ? DisplayStyle.None : DisplayStyle.Flex;
+            RefreshDeckText(item);
 
             stage.Clear();
             stage.Add(outerGlow);

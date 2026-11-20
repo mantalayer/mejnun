@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: DealerQuestions_de
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: de
+  m_SharedData: {fileID: 11400000, guid: 87a4643bee3d747fb9ab730fc39509cd, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 6547924049920
+    m_Localized: "Wer w\xFCrde am ehesten vergessen, warum er einen Raum betreten
+      hat?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244224
+    m_Localized: "Wer erz\xE4hlt die schlechtesten Witze?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244225
+    m_Localized: "Wer w\xFCrde als Erster auf einer Hochzeit tanzen?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244226
+    m_Localized: Wer hat die chaotischste Fotogalerie auf seinem Handy?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244227
+    m_Localized: "Wer w\xFCrde auf einer einsamen Insel am l\xE4ngsten \xFCberleben?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244228
+    m_Localized: "Wer l\xF6st am ehesten versehentlich einen Trend aus?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244229
+    m_Localized: "Wessen Geburtstag liegt am n\xE4chsten an heute?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244230
+    m_Localized: Wer hat zuletzt geduscht?
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

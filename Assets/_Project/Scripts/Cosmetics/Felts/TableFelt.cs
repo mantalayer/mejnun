@@ -1,5 +1,6 @@
 using System;
 using Mejnun.Core;
+using Mejnun.Localization;
 using UnityEngine;
 
 namespace Mejnun.Cosmetics
@@ -27,7 +28,7 @@ namespace Mejnun.Cosmetics
         [SerializeField] private FeltBorderSettings borderSettings = new FeltBorderSettings();
 
         public string Id => id;
-        public string DisplayName => displayName;
+        public string DisplayName => ResolveDisplayName(id, displayName);
         public FeltRenderMode Mode => mode;
         public Sprite Tile => tile;
         public float TileWorldSize => tileWorldSize;
@@ -89,6 +90,21 @@ namespace Mejnun.Cosmetics
             float inset)
         {
             BorderSettings.Configure(enabled, thickness, referenceHeight, borderTint, inset);
+        }
+
+        // The felt's name lives in the UI String Table under a key derived from
+        // its stable id. Felts without an entry keep their serialized name.
+        public static string NameKey(string feltId)
+        {
+            return string.IsNullOrWhiteSpace(feltId)
+                ? string.Empty
+                : "cosmetic.felt." + feltId.Trim().ToLowerInvariant() + ".name";
+        }
+
+        public static string ResolveDisplayName(string feltId, string fallback)
+        {
+            var key = NameKey(feltId);
+            return key.Length > 0 && Loc.Has(key) ? Loc.Get(key) : fallback;
         }
     }
 }

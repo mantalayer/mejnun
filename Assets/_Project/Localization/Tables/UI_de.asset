@@ -1,0 +1,3905 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_de
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: de
+  m_SharedData: {fileID: 11400000, guid: d63316e15cef2427c94a329ac604c22b, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 4825848250703282616
+  m_TableData:
+  - m_Id: 1656690302979
+    m_Localized: An
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302982
+    m_Localized: NEIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014529
+    m_Localized: Sets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208837
+    m_Localized: Geh zuerst runter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208838
+    m_Localized: "Solange du nicht unten bist, kannst du nur Sets aus deiner eigenen
+      Hand spielen. Lege 7\u2665 8\u2665 9\u2665 auf den leeren Tisch."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208862
+    m_Localized: "R\xFCckg\xE4ngig machen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208864
+    m_Localized: Wiederholen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208870
+    m_Localized: "Lege 3\u2665 4\u2665 auf den leeren Tisch. Es sind nur zwei Karten,
+      also wird vorerst Rot angezeigt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208881
+    m_Localized: Ziehen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208882
+    m_Localized: "Tippe auf \u201EZiehen\u201C, um eine Karte zu nehmen und deinen
+      Zug zu beenden. Durch das Ziehen erh\xE4ltst du auch alle Karten zur\xFCck,
+      die du in diesem Zug gelegt hast."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208894
+    m_Localized: Hoch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403146
+    m_Localized: Hinweise zeigen die ausspielbaren Karten an. Zum Zoomen mit zwei
+      Fingern, zum Verschieben mit der Ziehgeste und zum Anpassen an die gesamte
+      Tabelle verwenden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403148
+    m_Localized: "Der Gewinner beginnt das n\xE4chste Spiel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403171
+    m_Localized: Ein Spieler ist nun der Gastgeber
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403173
+    m_Localized: "Warte auf Spieler ({0}/{1})\u2026\nRaumcode: {2}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403180
+    m_Localized: Der Gastgeber kann diese Sitzung fortsetzen, sobald alle bereit
+      sind.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403181
+    m_Localized: "Lebenslauf-\xDCbereinstimmung"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403186
+    m_Localized: James
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403190
+    m_Localized: Mohammed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403192
+    m_Localized: George
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403209
+    m_Localized: Diego
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403216
+    m_Localized: Louis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403219
+    m_Localized: Mael
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403234
+    m_Localized: Francesco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403242
+    m_Localized: Ravi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597462
+    m_Localized: Georgios
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597463
+    m_Localized: Dimitris
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597470
+    m_Localized: Yusuf
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597475
+    m_Localized: Ali
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597480
+    m_Localized: Arman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597483
+    m_Localized: Amir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597488
+    m_Localized: Ibrahim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597492
+    m_Localized: Karim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597515
+    m_Localized: Muchen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597527
+    m_Localized: Seo-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791744
+    m_Localized: Ha-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791750
+    m_Localized: Minh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791757
+    m_Localized: Quang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791761
+    m_Localized: Joaquin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791762
+    m_Localized: Nathaniel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791772
+    m_Localized: Bayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791785
+    m_Localized: Freya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791787
+    m_Localized: Florenz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791789
+    m_Localized: Weide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791795
+    m_Localized: Paula
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791796
+    m_Localized: Daniela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986050
+    m_Localized: Alma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986051
+    m_Localized: Rose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986066
+    m_Localized: Aurora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986068
+    m_Localized: Ludovica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986070
+    m_Localized: Chiara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986071
+    m_Localized: Helena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986073
+    m_Localized: Maite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986076
+    m_Localized: Manuela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986077
+    m_Localized: Heloisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986090
+    m_Localized: Maja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986094
+    m_Localized: Antonina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986095
+    m_Localized: Anastasia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986102
+    m_Localized: Ksenia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180355
+    m_Localized: Despina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180357
+    m_Localized: Elif
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180365
+    m_Localized: Sara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180370
+    m_Localized: Roya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180379
+    m_Localized: Reem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180389
+    m_Localized: Adaeze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180399
+    m_Localized: Yutong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180402
+    m_Localized: Xinyan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180407
+    m_Localized: Ema
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180417
+    m_Localized: Seo-ah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180420
+    m_Localized: Linh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180442
+    m_Localized: Indah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763272
+    m_Localized: Spiele 50 Spiele.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763276
+    m_Localized: Gewinne 50 Spiele.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763285
+    m_Localized: Kollektor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763299
+    m_Localized: Royal Road
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763308
+    m_Localized: "Eine Stra\xDFe teilen und den Turn mit einem g\xFCltigen Board
+      beenden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763311
+    m_Localized: Doppeltes Sehen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763313
+    m_Localized: Geduldig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763322
+    m_Localized: Gewinne ein Spiel, das mit einem 30-Sekunden-Timer gespielt wird.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957571
+    m_Localized: Gewinne drei Bot-Spiele in Folge.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957578
+    m_Localized: Partyveranstalter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957584
+    m_Localized: "Hei\xDFer Stuhl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957591
+    m_Localized: Verdiene {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549022957605
+    m_Localized: Blueeyedrat Classic Light 2color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957606
+    m_Localized: Blueeyedrat Classic Light 2color 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957620
+    m_Localized: Schwarz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151881
+    m_Localized: Einstellungen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346192
+    m_Localized: "Verbindung wird hergestellt\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346194
+    m_Localized: Der Veranstalter hat das Spiel abgesagt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346219
+    m_Localized: Blocker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346225
+    m_Localized: "Zuf\xE4lliges Deck"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346235
+    m_Localized: '{0} / {1} Decks im Besitz'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346244
+    m_Localized: Neu in der Galerie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346247
+    m_Localized: Einstellungen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346250
+    m_Localized: Hinweise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346252
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346255
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346262
+    m_Localized: "Fragen Sie, bevor Sie ung\xFCltige Karten wieder auf die Hand nehmen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346266
+    m_Localized: "Steuert, wie schnell die CPU-Spieler ihre Z\xFCge ausf\xFChren."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346268
+    m_Localized: Sehr langsam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346271
+    m_Localized: Schnell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346275
+    m_Localized: Schnellvorlauftaste anzeigen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346284
+    m_Localized: "Kartengr\xF6\xDFe"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346292
+    m_Localized: "Zeichne K\xE4stchen um die Mengen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346300
+    m_Localized: Hinweise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346302
+    m_Localized: "Hebt Spielkarten hervor, die bei einem rechtlichen Vorgehen hilfreich
+      sein k\xF6nnten."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346312
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540493
+    m_Localized: "Kontofunktionen folgen sp\xE4ter"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540498
+    m_Localized: "Mejnun wird mit zwei gemischten Standard-Kartenspielen \xE0 52
+      Karten gespielt: insgesamt 104 Karten, ohne Joker. Gleiche Karten aus beiden
+      Kartenspielen ergeben ein Paar. Gespielt wird mit 2\u20136 Spielern im Uhrzeigersinn
+      (nach links)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540509
+    m_Localized: "Ziehen (oder Passen, wenn der Stapel leer ist) ist immer verf\xFCgbar.
+      Dadurch wird das Spielbrett auf den Anfang deines Zuges zur\xFCckgesetzt, deine
+      gespielten Karten werden auf die Hand zur\xFCckgenommen, du ziehst gegebenenfalls
+      eine Karte und dein Zug endet. Zug beenden kannst du, wenn das Spielbrett g\xFCltig
+      ist und du eine Handkarte gespielt oder Karten abgelegt hast."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540510
+    m_Localized: "\u201ER\xFCckg\xE4ngig\u201C f\xFChrt deine Z\xFCge r\xFCckg\xE4ngig;
+      \u201EWiederherstellen\u201C wiederholt einen r\xFCckg\xE4ngig gemachten Zug
+      im selben Zug. Neue Z\xFCge und Aktionen am Zugende setzen \u201EWiederherstellen\u201C
+      zur\xFCck. \u201EBrett reparieren\u201C versucht, g\xFCltige Spielz\xFCge von
+      deiner Hand fernzuhalten, w\xE4hrend das Brett repariert wird; Karten, die
+      nicht verwendet werden k\xF6nnen, kehren auf deine Hand zur\xFCck. \u201EZur\xFCcksetzen\u201C
+      stellt den Zustand des Bretts zu Beginn des Zuges wieder her und gibt deine
+      gespielten Karten auf deine Hand zur\xFCck. Destruktive Aktionen fordern m\xF6glicherweise
+      eine Best\xE4tigung an."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540515
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540516
+    m_Localized: Spieldesign & -entwicklung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540517
+    m_Localized: Hergestellt mit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540521
+    m_Localized: "R\xFCckg\xE4ngig machen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540522
+    m_Localized: Wiederholen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540531
+    m_Localized: Ziehen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540541
+    m_Localized: Du bist dran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540547
+    m_Localized: 'Zeit: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540549
+    m_Localized: "Diese Option ist momentan nicht verf\xFCgbar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540553
+    m_Localized: "Diese Gruppe erf\xFCllt nicht die Voraussetzungen f\xFCr einen
+      Abstieg."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540555
+    m_Localized: "Dieses Set enth\xE4lt zu viele Karten."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540556
+    m_Localized: "Diese Karte kann diesem Set nicht hinzugef\xFCgt werden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540573
+    m_Localized: Spiel neu starten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540574
+    m_Localized: Einstellungen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540591
+    m_Localized: "Zuf\xE4lliger erster Spieler"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734784
+    m_Localized: Neu in der Galerie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734799
+    m_Localized: 'Noch nicht entsperrt: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549039734801
+    m_Localized: Zum Fortfahren tippen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1341120512
+    m_Localized: Mejnun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 695204831232
+    m_Localized: "Automatisch (Ger\xE4tesprache)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656669331456
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302976
+    m_Localized: Stornieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302977
+    m_Localized: "Zur\xFCck"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302978
+    m_Localized: "Schlie\xDFen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302980
+    m_Localized: Aus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302981
+    m_Localized: Ja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302983
+    m_Localized: Weitermachen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302984
+    m_Localized: Erledigt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302985
+    m_Localized: Gesperrt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302986
+    m_Localized: "Laden\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548909711360
+    m_Localized: Willkommen bei Mejnun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014528
+    m_Localized: "Mejnun wird mit zwei vollst\xE4ndigen Kartenspielen gespielt: 104
+      Karten. Jeder Spieler erh\xE4lt 11 Karten. Wer als Erster alle seine Karten
+      auf den Tisch legt, gewinnt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014530
+    m_Localized: "Die Karten werden in S\xE4tzen auf den Tisch gelegt. Ein Satz besteht
+      aus drei oder vier Karten desselben Wertes, aber unterschiedlichen Farben.
+      Eine Stra\xDFe besteht aus drei oder mehr Karten derselben Farbe in der richtigen
+      Reihenfolge."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014531
+    m_Localized: '{0} ist an der Reihe'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208832
+    m_Localized: '{0} geht zuerst. Beobachte, was sie tut.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208833
+    m_Localized: '{0} ist unten'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208834
+    m_Localized: "{0} legte einen Satz ab, der nur aus ihren H\xE4nden bestand. Das
+      nennt man Abw\xE4rtsgehen, und ein Satz gen\xFCgt."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208835
+    m_Localized: Du bist noch nicht unten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208836
+    m_Localized: Du kannst den Tisch erst benutzen, wenn du unten bist. Lege zuerst
+      einen Satz aus deiner Hand ab.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208839
+    m_Localized: "Spiel weiter \u2013 lege alle drei Karten aus deiner Hand ab, um
+      nach unten zu ziehen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208840
+    m_Localized: Du bist raus!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208841
+    m_Localized: "Jetzt steht Ihnen der gesamte Tisch zur Verf\xFCgung: Sie k\xF6nnen
+      beliebige Sets erg\xE4nzen, neu anordnen oder teilen. Und Sie k\xF6nnen diesen
+      Zug immer wieder spielen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208842
+    m_Localized: "Zu einem Set hinzuf\xFCgen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208843
+    m_Localized: "Setze nun dein A\u2660 auf {0}s J\u2660 Q\u2660 K\u2660."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208844
+    m_Localized: Asse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208845
+    m_Localized: "Ein Ass kann niedrig (A-2-3) oder hoch (Q-K-A) sein, aber eine
+      Stra\xDFe schlie\xDFt sich nie um (K-A-2)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208846
+    m_Localized: Gleiche Art
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208847
+    m_Localized: "Lege 5\u2663 5\u2666 5\u2660 auf den leeren Tisch."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208848
+    m_Localized: "Mach weiter \u2013 platziere alle drei Karten."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208849
+    m_Localized: Doppel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208850
+    m_Localized: "Bei zwei Kartenspielen hat jede Karte ein Duplikat: dieselbe Farbe
+      und denselben Wert, aber aus dem anderen Kartenspiel (die R\xFCckseite der
+      Karte sieht anders aus). Ein Duplikat darf niemals in dasselbe Set geh\xF6ren."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208851
+    m_Localized: Beende deinen Zug
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208852
+    m_Localized: "Du kannst deinen Zug beenden, wenn alle auf dem Tisch liegenden
+      Sets g\xFCltig sind und du mindestens eine Karte aus deiner Hand gespielt hast."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208853
+    m_Localized: Beobachte {0}.
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208854
+    m_Localized: Jedes Set ist erlaubt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208855
+    m_Localized: "{0} hat 10\u2665 J\u2665 zu deinen Herzen und 5\u2665 zu deinen
+      F\xFCnfen hinzugef\xFCgt. Sobald du unten bist, kannst du zu jeder beliebigen
+      Kombination auf dem Tisch etwas hinzuf\xFCgen."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208856
+    m_Localized: Teile eine Gerade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208857
+    m_Localized: "Halten Sie die 10\u2665 gedr\xFCckt und ziehen Sie sie auf den
+      leeren Tisch. Die 10\u2665 J\u2665 werden mitgeliefert."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208858
+    m_Localized: Noch kein Set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208859
+    m_Localized: "10\u2665 J\u2665 hat einen roten Rand: Es ist kein g\xFCltiges
+      Set. Das ist mitten im Zug kein Problem, aber du kannst deinen Zug erst beenden,
+      wenn alle Sets g\xFCltig sind."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208860
+    m_Localized: Benutze deinen Doppel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208861
+    m_Localized: "Lege deine 9\u2665 auf 10\u2665 J\u2665. Es ist das Doppelte der
+      9\u2665 im anderen Set, also ist es hier erlaubt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208863
+    m_Localized: "Einen Fehler gemacht? Mach einen Schritt zur\xFCck. Probier's aus."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208865
+    m_Localized: "\u201EWiederholen\u201C setzt den Zug zur\xFCck. \u201EZur\xFCcksetzen\u201C
+      setzt den gesamten Zug zur\xFCck, und \u201EBrett reparieren\u201C versucht,
+      das Spielbrett f\xFCr dich zu reparieren."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208866
+    m_Localized: "Jeder Satz ist wieder g\xFCltig. Beende deinen Zug."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208867
+    m_Localized: '{0} zeichnete'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208868
+    m_Localized: '{0} konnte nicht spielen, also zog sie eine Karte. Durch das Ziehen
+      einer Karte wird eine Karte vom Stapel genommen und der Zug endet.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208869
+    m_Localized: "Gr\xFCnde eine Gruppe"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208871
+    m_Localized: "Mach weiter \u2013 platziere beide Karten vollst\xE4ndig."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208872
+    m_Localized: Aus einem Set ausleihen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208873
+    m_Localized: "Ein Vierling funktioniert auch mit drei Karten. Ziehe die 5\u2665
+      aus den F\xFCnfen auf 3\u2665 4\u2665."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208874
+    m_Localized: "Alle S\xE4tze sind g\xFCltig. Beende deinen Zug."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208875
+    m_Localized: "Nur noch eine Karte \xFCbrig!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208876
+    m_Localized: "Wenn ein Spieler nur noch eine Karte hat, wackelt sein Stuhl und
+      ein Ausrufezeichen erscheint \u2013 jeder kann sehen, dass er kurz vor dem
+      Sieg steht."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208877
+    m_Localized: Neue Sets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208878
+    m_Localized: "Spieler, die unten sind, k\xF6nnen auch brandneue Sets aus ihrer
+      Hand beginnen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208879
+    m_Localized: Gesteckt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208880
+    m_Localized: "Dein A\u2665 passt nirgendwo auf den Tisch."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208883
+    m_Localized: "{0} h\xE4ngt auch fest."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548985208884
+    m_Localized: "Du hast die 2\u2665 gezogen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208885
+    m_Localized: "Setze die 2\u2665 auf 3\u2665 4\u2665 5\u2665."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208886
+    m_Localized: Ace low
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208887
+    m_Localized: "Jetzt passt das A\u2665 ganz nach unten: A-2-3-4-5\u2665. Spiele
+      deine letzte Karte!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208888
+    m_Localized: MEJNUN!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208889
+    m_Localized: Du hast deine Karten ausgespielt und gewonnen. Ein paar weitere
+      Dinge sind gut zu wissen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208890
+    m_Localized: Gleiche Art
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208891
+    m_Localized: Gerade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208892
+    m_Localized: "Gemischte Anz\xFCge"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208893
+    m_Localized: Niedrig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403136
+    m_Localized: Keine Verpackung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403137
+    m_Localized: Ein Doppel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403138
+    m_Localized: Gleiches Set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403139
+    m_Localized: Leerer Ziehstapel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403140
+    m_Localized: "Wenn der Nachziehstapel leer ist, wird aus \u201EZiehen\u201C ein
+      Pass. Passen alle Spieler nacheinander, gewinnt der Spieler mit den wenigsten
+      Karten. Bei Gleichstand endet das Spiel unentschieden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403141
+    m_Localized: Zeitgesteuerte Runden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403142
+    m_Localized: "Bei Spielen mit Zeitbegrenzung z\xE4hlt eine Uhr in jeder Runde
+      herunter. Wenn die Zeit abgelaufen ist \u2013 Hala! \u2013 endet der g\xFCltige
+      Zug; andernfalls werden die Karten zur\xFCckgelegt und man zieht neue."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403143
+    m_Localized: "Platine reparieren und zur\xFCcksetzen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403144
+    m_Localized: "\u201EFix board\u201C versucht, alle Spielz\xFCge g\xFCltig zu
+      machen und deine Z\xFCge beizubehalten. \u201ERevert\u201C stellt das gesamte
+      Spielfeld auf den Zustand zu Beginn deines Zuges zur\xFCck."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403145
+    m_Localized: Hinweise und die Tabelle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403147
+    m_Localized: "N\xE4chstes Spiel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403149
+    m_Localized: Layla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403150
+    m_Localized: Du
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403151
+    m_Localized: Spieler {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403152
+    m_Localized: Bot {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403153
+    m_Localized: '{0} (Einfacher Bot)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403154
+    m_Localized: '{0} (Mittlerer Bot)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403155
+    m_Localized: '{0} (Schwieriger Bot)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403156
+    m_Localized: "Weiter zu {0} \u2014 tippen zum Anzeigen"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403157
+    m_Localized: Patt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403158
+    m_Localized: '{0} gewinnt!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403159
+    m_Localized: Spiel vorbei
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403160
+    m_Localized: "{0} leerten ihre H\xE4nde."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403161
+    m_Localized: '{0} hatte die wenigsten Karten, als der Nachziehstapel aufgebraucht
+      war.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403162
+    m_Localized: "Die niedrigste Kartenanzahl war gleich. W\xE4hle, wer beginnt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403163
+    m_Localized: Wer sollte zuerst gehen?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403164
+    m_Localized: Spiel pausiert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403165
+    m_Localized: Das Spiel wurde fortgesetzt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403166
+    m_Localized: Host hat die Verbindung getrennt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403167
+    m_Localized: '{0} verbunden'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403168
+    m_Localized: '{0} getrennt'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403169
+    m_Localized: Alle Spieler sind beigetreten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403170
+    m_Localized: '{0} ist nun der Host'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403172
+    m_Localized: "Warten auf Spieler ({0}/{1})\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6548989403174
+    m_Localized: Ein Spieler hat die Verbindung getrennt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403175
+    m_Localized: "Warten Sie, bis sie es tun, lassen Sie einen Medium-Bot \xFCbernehmen
+      oder speichern und pausieren Sie."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403176
+    m_Localized: Warten / automatisch weiterleiten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403177
+    m_Localized: "Lasst die KI \xFCbernehmen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403178
+    m_Localized: Speichern und pausieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403179
+    m_Localized: Spiel gespeichert und pausiert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403182
+    m_Localized: Liam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403183
+    m_Localized: Noah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403184
+    m_Localized: Oliver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403185
+    m_Localized: Theodore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403187
+    m_Localized: Henry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403188
+    m_Localized: Elias
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403189
+    m_Localized: William
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403191
+    m_Localized: Arthur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403193
+    m_Localized: Thomas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403194
+    m_Localized: Oscar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403195
+    m_Localized: Jack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403196
+    m_Localized: Harry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403197
+    m_Localized: Alfie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403198
+    m_Localized: Mateo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403199
+    m_Localized: Hugo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403200
+    m_Localized: Martin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403201
+    m_Localized: "L\xF6we"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403202
+    m_Localized: Lucas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403203
+    m_Localized: Pablo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403204
+    m_Localized: Alejandro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403205
+    m_Localized: Manuel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403206
+    m_Localized: Santiago
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403207
+    m_Localized: Sebastian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403208
+    m_Localized: Emiliano
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403210
+    m_Localized: Leonardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403211
+    m_Localized: Daniel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403212
+    m_Localized: Mauricio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403213
+    m_Localized: Iker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403214
+    m_Localized: Gabriel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403215
+    m_Localized: Raffael
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403217
+    m_Localized: Jules
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403218
+    m_Localized: Adam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403220
+    m_Localized: Sacha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403221
+    m_Localized: Gabin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403222
+    m_Localized: Matteo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403223
+    m_Localized: Emil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403224
+    m_Localized: Elias
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403225
+    m_Localized: Finn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403226
+    m_Localized: Paul
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403227
+    m_Localized: Felix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403228
+    m_Localized: Jonas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403229
+    m_Localized: Ben
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403230
+    m_Localized: Lorenzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403231
+    m_Localized: Tommaso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403232
+    m_Localized: Edoardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403233
+    m_Localized: Andrea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403235
+    m_Localized: Alessandro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403236
+    m_Localized: Mattia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403237
+    m_Localized: Riccardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403238
+    m_Localized: Miguel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403239
+    m_Localized: Heitor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403240
+    m_Localized: Artur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403241
+    m_Localized: "G\xE4lisch"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403243
+    m_Localized: Bernardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403244
+    m_Localized: Davi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403245
+    m_Localized: Theo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403246
+    m_Localized: Nils
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403247
+    m_Localized: August
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597440
+    m_Localized: Axel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597441
+    m_Localized: Arvid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597442
+    m_Localized: Ludwig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597443
+    m_Localized: Olle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597444
+    m_Localized: Vincent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597445
+    m_Localized: Hjalmar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597446
+    m_Localized: Antoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597447
+    m_Localized: Januar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597448
+    m_Localized: Aleksander
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597449
+    m_Localized: Franciszek
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597450
+    m_Localized: Nikodem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597451
+    m_Localized: Szymon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597452
+    m_Localized: Filip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597453
+    m_Localized: Wojciech
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597454
+    m_Localized: Michail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597455
+    m_Localized: Artem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597456
+    m_Localized: Maxime
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597457
+    m_Localized: Ivan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597458
+    m_Localized: Dmitry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597459
+    m_Localized: Timofey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597460
+    m_Localized: Lev
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597461
+    m_Localized: Matvey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597464
+    m_Localized: Nikos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597465
+    m_Localized: Andreas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597466
+    m_Localized: Konstantinos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597467
+    m_Localized: Ioannis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597468
+    m_Localized: Panagiotis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597469
+    m_Localized: Christos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597471
+    m_Localized: Emir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597472
+    m_Localized: Kerem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597473
+    m_Localized: Eymen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597474
+    m_Localized: Mustafa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597476
+    m_Localized: Ahmet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597477
+    m_Localized: Omer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597478
+    m_Localized: Kian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597479
+    m_Localized: Omid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597481
+    m_Localized: Darius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597482
+    m_Localized: Reza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597484
+    m_Localized: Parsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597485
+    m_Localized: Hossein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597486
+    m_Localized: Zayn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597487
+    m_Localized: Omar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597489
+    m_Localized: Tariq
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597490
+    m_Localized: Hamza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597491
+    m_Localized: Khalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597493
+    m_Localized: Faisal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597494
+    m_Localized: Aarav
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597495
+    m_Localized: Arjun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597496
+    m_Localized: Vihaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597497
+    m_Localized: Aditya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597498
+    m_Localized: Reyansh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597499
+    m_Localized: Vivaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597500
+    m_Localized: Krishna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597501
+    m_Localized: Ishaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597502
+    m_Localized: Chukwuemeka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597503
+    m_Localized: Oluwaseun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597504
+    m_Localized: Babatunde
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597505
+    m_Localized: Olumide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597506
+    m_Localized: Chinedu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597507
+    m_Localized: Obinna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597508
+    m_Localized: Adebayo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597509
+    m_Localized: Ifeanyi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597510
+    m_Localized: Yichen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597511
+    m_Localized: Yuxuan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597512
+    m_Localized: Haoyu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597513
+    m_Localized: Zimo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597514
+    m_Localized: Haoran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597516
+    m_Localized: Zirui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597517
+    m_Localized: Junjie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597518
+    m_Localized: Haruto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597519
+    m_Localized: Minato
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597520
+    m_Localized: Ren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597521
+    m_Localized: Asahi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597522
+    m_Localized: Sota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597523
+    m_Localized: Yuto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597524
+    m_Localized: Riku
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597525
+    m_Localized: Itsuki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597526
+    m_Localized: Min-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791745
+    m_Localized: Do-yun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791746
+    m_Localized: Ji-ho
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791747
+    m_Localized: Eun-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791748
+    m_Localized: Si-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791749
+    m_Localized: Ye-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791751
+    m_Localized: Khoa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791752
+    m_Localized: Duy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791753
+    m_Localized: Tuan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791754
+    m_Localized: Huy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791755
+    m_Localized: Bao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791756
+    m_Localized: Phuc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791758
+    m_Localized: "Jos\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791759
+    m_Localized: Juan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791760
+    m_Localized: Carlo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791763
+    m_Localized: Ezechiel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791764
+    m_Localized: Jakob
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791765
+    m_Localized: Angelo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791766
+    m_Localized: Bima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791767
+    m_Localized: Rizky
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791768
+    m_Localized: Dimas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791769
+    m_Localized: Arya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791770
+    m_Localized: Budi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791771
+    m_Localized: Fajar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791773
+    m_Localized: Raka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791774
+    m_Localized: Olivia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791775
+    m_Localized: Emma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791776
+    m_Localized: Amelia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791777
+    m_Localized: Charlotte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791778
+    m_Localized: Ava
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791779
+    m_Localized: Isabella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791780
+    m_Localized: Evelyn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791781
+    m_Localized: Harper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791782
+    m_Localized: Isla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791783
+    m_Localized: Lilie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791784
+    m_Localized: Mohn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791786
+    m_Localized: Efeu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791788
+    m_Localized: Anmut
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791790
+    m_Localized: Lucia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791791
+    m_Localized: Sofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791792
+    m_Localized: Martina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791793
+    m_Localized: Valeria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791794
+    m_Localized: Julia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791797
+    m_Localized: Alba
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791798
+    m_Localized: Regina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791799
+    m_Localized: Camila
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791800
+    m_Localized: Valentina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791801
+    m_Localized: Ximena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791802
+    m_Localized: Renata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791803
+    m_Localized: Romina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791804
+    m_Localized: Mariana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791805
+    m_Localized: Natalia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791806
+    m_Localized: Louise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986048
+    m_Localized: Jade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986049
+    m_Localized: Ambre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986052
+    m_Localized: Anna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986053
+    m_Localized: Lina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986054
+    m_Localized: Agathe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986055
+    m_Localized: Sophia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986056
+    m_Localized: Emilia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986057
+    m_Localized: Hannah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986058
+    m_Localized: Mia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986059
+    m_Localized: Clara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986060
+    m_Localized: Lea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986061
+    m_Localized: Ella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986062
+    m_Localized: Marie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986063
+    m_Localized: Giulia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986064
+    m_Localized: Ginevra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986065
+    m_Localized: Vittoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986067
+    m_Localized: Beatrice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986069
+    m_Localized: Francesca
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986072
+    m_Localized: Cecilia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986074
+    m_Localized: Alice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986075
+    m_Localized: Laura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986078
+    m_Localized: Liz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986079
+    m_Localized: Elsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986080
+    m_Localized: Vera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986081
+    m_Localized: Selma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986082
+    m_Localized: Nora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986083
+    m_Localized: Astrid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986084
+    m_Localized: Alva
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986085
+    m_Localized: Ebba
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986086
+    m_Localized: Saga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986087
+    m_Localized: Zofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986088
+    m_Localized: Zuzanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986089
+    m_Localized: Hanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986091
+    m_Localized: Lena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986092
+    m_Localized: Oliwia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986093
+    m_Localized: Pola
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986096
+    m_Localized: Polina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986097
+    m_Localized: Victoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986098
+    m_Localized: Ekaterina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986099
+    m_Localized: Alisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986100
+    m_Localized: Varvara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986101
+    m_Localized: Darya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986103
+    m_Localized: Eleni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986104
+    m_Localized: Katerina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986105
+    m_Localized: Dimitra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986106
+    m_Localized: Georgia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180352
+    m_Localized: Maria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180353
+    m_Localized: Vasiliki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180354
+    m_Localized: Ioanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180356
+    m_Localized: Zeynep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180358
+    m_Localized: Definieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180359
+    m_Localized: Asli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180360
+    m_Localized: Eylul
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180361
+    m_Localized: Azra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180362
+    m_Localized: Nehir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180363
+    m_Localized: Ecrin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180364
+    m_Localized: Leyla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180366
+    m_Localized: Negin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180367
+    m_Localized: Parisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180368
+    m_Localized: Zahra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180369
+    m_Localized: Shirin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180371
+    m_Localized: Mahsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180372
+    m_Localized: Aisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180373
+    m_Localized: Noor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180374
+    m_Localized: Maryam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180375
+    m_Localized: Fatima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180376
+    m_Localized: Layan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180377
+    m_Localized: Salma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180378
+    m_Localized: Jana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180380
+    m_Localized: Aadhya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180381
+    m_Localized: Saanvi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180382
+    m_Localized: Ananya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180383
+    m_Localized: Diya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180384
+    m_Localized: Myra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180385
+    m_Localized: Kiara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180386
+    m_Localized: Anika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180387
+    m_Localized: Avni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180388
+    m_Localized: Amina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180390
+    m_Localized: Ngozi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180391
+    m_Localized: Chioma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180392
+    m_Localized: Nneka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180393
+    m_Localized: Folake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180394
+    m_Localized: Temitope
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180395
+    m_Localized: Ifeoma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180396
+    m_Localized: Yinuo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180397
+    m_Localized: Xinyi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180398
+    m_Localized: Zihan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180400
+    m_Localized: Ruoxi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180401
+    m_Localized: Yuxi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180403
+    m_Localized: Mengyao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180404
+    m_Localized: Tsumugi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180405
+    m_Localized: Himari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180406
+    m_Localized: Rin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180408
+    m_Localized: Sakura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180409
+    m_Localized: Yui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180410
+    m_Localized: Mio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180411
+    m_Localized: Hina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180412
+    m_Localized: Seo-yeon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180413
+    m_Localized: Ji-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180414
+    m_Localized: Min-seo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180415
+    m_Localized: Ha-eun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180416
+    m_Localized: Ji-an
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180418
+    m_Localized: Ha-yoon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180419
+    m_Localized: Su-ah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180421
+    m_Localized: Mai
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180422
+    m_Localized: Thao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180423
+    m_Localized: Ngoc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180424
+    m_Localized: Anh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180425
+    m_Localized: Trang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180426
+    m_Localized: Huong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180427
+    m_Localized: Lan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180428
+    m_Localized: Engel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180429
+    m_Localized: Althea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180430
+    m_Localized: Samantha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180431
+    m_Localized: Nathalie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180432
+    m_Localized: Prinzessin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180433
+    m_Localized: Janelle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180434
+    m_Localized: Kristine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180435
+    m_Localized: Jasmin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180436
+    m_Localized: Putri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180437
+    m_Localized: Dewi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180438
+    m_Localized: Siti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180439
+    m_Localized: Ayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180440
+    m_Localized: Sari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180441
+    m_Localized: Intan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180443
+    m_Localized: Wulan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568960
+    m_Localized: Erstes Spiel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568961
+    m_Localized: "Schlie\xDFe dein erstes Spiel ab."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568962
+    m_Localized: Erster Sieg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568963
+    m_Localized: Gewinne dein erstes Spiel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568964
+    m_Localized: Erste MEJNUN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763264
+    m_Localized: Gewinne, indem du deine Hand leerst.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763265
+    m_Localized: Zehn Siege
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763266
+    m_Localized: Gewinne 10 Spiele.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763267
+    m_Localized: Besiege einen schwierigen Bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763268
+    m_Localized: Besiege einen schwierigen Bot.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763269
+    m_Localized: "Vollst\xE4ndige Tabelle"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763270
+    m_Localized: Spielt ein Spiel mit sechs Sitzen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763271
+    m_Localized: "Regul\xE4r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763273
+    m_Localized: Veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763274
+    m_Localized: Spiele 250 Spiele.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763275
+    m_Localized: "Gew\xFCrzt"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763277
+    m_Localized: Meister von MEJNUN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763278
+    m_Localized: Gewinne 200 Spiele.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763279
+    m_Localized: Level 10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763280
+    m_Localized: Erreiche Level 10.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763281
+    m_Localized: Level 25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763282
+    m_Localized: Erreiche Level 25.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763283
+    m_Localized: Level 50
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763284
+    m_Localized: Erreiche Level 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763286
+    m_Localized: "Schalte alle kostenlosen oder verdienbaren Deckfl\xE4chen und Filze
+      frei."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763287
+    m_Localized: "MEJNUN \xD710"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763288
+    m_Localized: Gewinne 10 Spiele, indem du deine Handkarten leerst.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763289
+    m_Localized: Saubere Reinigung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763290
+    m_Localized: Gehe in derselben Runde nach unten und leere deine Handkarten, wobei
+      Hinweise und Fix Board deaktiviert sind.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763291
+    m_Localized: Blitz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763292
+    m_Localized: "Gewinne innerhalb deiner ersten f\xFCnf Z\xFCge."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763293
+    m_Localized: Letzter Atemzug
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763294
+    m_Localized: "Gewinne, indem du deine Hand leerst, w\xE4hrend der Nachziehstapel
+      leer ist."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763295
+    m_Localized: "Komm zur\xFCck"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763296
+    m_Localized: "Gewinnen, wenn man 20 oder mehr Karten h\xE4lt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763297
+    m_Localized: Bis zum Schluss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763298
+    m_Localized: Gewinne die Endwertung des Stapels mit genau einer Karte Vorsprung.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763300
+    m_Localized: "Bilde eine vollst\xE4ndige Stra\xDFe mit 13 Karten vom Ass bis
+      zum K\xF6nig."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763301
+    m_Localized: Ace High
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763302
+    m_Localized: "Vervollst\xE4ndige eine Stra\xDFe Dame-K\xF6nig-Ass."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763303
+    m_Localized: "Gro\xDFer Eingang"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763304
+    m_Localized: "Nimm mindestens drei S\xE4tze auf einmal."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763305
+    m_Localized: Architekt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763306
+    m_Localized: Lege in einem Zug mindestens acht Handkarten ab.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763307
+    m_Localized: Chirurg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763309
+    m_Localized: Geborgte Zeit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763310
+    m_Localized: Nimm eine Karte aus einem Set mit vier gleichartigen Karten und
+      benutze sie.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763312
+    m_Localized: Beende deinen Zug, indem du beide Exemplare einer Karte in getrennten
+      Sets platzierst.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763314
+    m_Localized: "Gewinnen, ohne die Funktionen \u201ER\xFCckg\xE4ngig\u201C, \u201EZur\xFCcksetzen\u201C
+      oder \u201EBoard reparieren\u201C zu verwenden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763315
+    m_Localized: "Keine St\xFCtzr\xE4der"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763316
+    m_Localized: Gewinne auch ohne Hinweise.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763317
+    m_Localized: Halas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763318
+    m_Localized: Lassen Sie Ihre Abschlagszeit ablaufen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763319
+    m_Localized: Cool unter Druck
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763320
+    m_Localized: "Beende einen g\xFCltigen Abbiegevorgang mit weniger als drei verbleibenden
+      Sekunden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763321
+    m_Localized: "Geschwindigkeitsd\xE4mon"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957568
+    m_Localized: "Riesent\xF6ter"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957569
+    m_Localized: "Gewinne gegen f\xFCnf starke Bots an einem vollen Tisch."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957570
+    m_Localized: Hattrick, Hat-Trick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957572
+    m_Localized: Unaufhaltsam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957573
+    m_Localized: "Gewinne f\xFCnf Spiele in Folge."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957574
+    m_Localized: Online gehen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957575
+    m_Localized: Beende ein Online-Spiel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957576
+    m_Localized: Publikumsliebling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957577
+    m_Localized: Gewinne ein Online-Spiel mit mindestens vier menschlichen Spielern.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957579
+    m_Localized: Veranstalte 10 Online-Spiele.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957580
+    m_Localized: Gib es weiter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957581
+    m_Localized: "Schlie\xDFe ein Pass-and-Play-Spiel mit mindestens vier Personen
+      ab."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957582
+    m_Localized: Sogar Steven
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957583
+    m_Localized: Ein Spiel unentschieden beenden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957585
+    m_Localized: "Werde 10 Mal von der Frage als Erster ausgew\xE4hlt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957586
+    m_Localized: eine Leistung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957587
+    m_Localized: Eine Leistung.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957588
+    m_Localized: "Jetzt erh\xE4ltlich"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957589
+    m_Localized: Erreiche Level {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549022957590
+    m_Localized: Gewinne {0:plural:{} Spiel|{} Spiele}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549022957592
+    m_Localized: Kauf erforderlich
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957593
+    m_Localized: von {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549022957594
+    m_Localized: Klassiker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957595
+    m_Localized: Klassisches Elfenbein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957596
+    m_Localized: Pixel Pastell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957597
+    m_Localized: Blueeyedrat Classic Contrast 2color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957598
+    m_Localized: Blueeyedrat Classic Contrast 2color 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957599
+    m_Localized: Blueeyedrat Classic Contrast 4color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957600
+    m_Localized: Blueeyedrat Classic Contrast 4color 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957601
+    m_Localized: Blueeyedrat Classic Contrast 4color 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957602
+    m_Localized: "Blau\xE4ugige Ratte Klassisch Dunkel 1 Farbe 0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957603
+    m_Localized: Blueeyedrat Classic Dark 2color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957604
+    m_Localized: Blueeyedrat Classic Light 1 Farbe 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957607
+    m_Localized: Blueeyedrat Classic Light 4color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957608
+    m_Localized: Blueeyedrat Classic Light 4color 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957609
+    m_Localized: Blueeyedrat Classic Light 4color 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957610
+    m_Localized: Blueeyedrat Classic Sepia 1 Farbe 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957611
+    m_Localized: Blueeyedrat Classic Sepia 2color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957612
+    m_Localized: Blueeyedrat Classic Sepia 2color 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957613
+    m_Localized: Karten-PNGs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957614
+    m_Localized: Hack Deck
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957615
+    m_Localized: Papierkarten 1 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957616
+    m_Localized: Reigns
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957617
+    m_Localized: "Sofu gro\xDF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957618
+    m_Localized: Sofu Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957619
+    m_Localized: Sofu Klein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957621
+    m_Localized: Blau
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957622
+    m_Localized: Burgund
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957623
+    m_Localized: "Gr\xFCn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151872
+    m_Localized: Lila
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151873
+    m_Localized: "T\xFCrkis"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151874
+    m_Localized: Ein Kartenspiel mit Sets, Strategie und einer Prise Chaos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151875
+    m_Localized: Spiele alleine gegen die KI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151876
+    m_Localized: Passen und spielen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151877
+    m_Localized: Spielanleitung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151878
+    m_Localized: Wieder aufnehmen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151879
+    m_Localized: Online spielen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151880
+    m_Localized: Galerie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151882
+    m_Localized: "Aufh\xF6ren"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151883
+    m_Localized: "Stufe {0} \xB7 {1} / {2} XP"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549027151884
+    m_Localized: v{0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549027151885
+    m_Localized: Neu bei Mejnun?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346176
+    m_Localized: Ein kurzes, angeleitetes Spiel vermittelt Ihnen spielerisch alle
+      Regeln.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346177
+    m_Localized: Spiele das Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346178
+    m_Localized: Ich kenne die Regeln.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346179
+    m_Localized: Online spielen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346180
+    m_Localized: Melden Sie sich anonym an und treten Sie mit einem Sitzungscode
+      bei oder finden Sie schnell einen passenden Spieler.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346181
+    m_Localized: Spitzname
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346182
+    m_Localized: Spieler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346183
+    m_Localized: Timer einschalten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346184
+    m_Localized: Aus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346185
+    m_Localized: '{0:plural:{} Sekunde|{} Sekunden}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346186
+    m_Localized: Tischkosmetik
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346187
+    m_Localized: "W\xE4hlt zwei Kartenspiele und einen Tischfilz aus. Die Kartenauswahl
+      eines Spielers wird f\xFCr das Spiel bestimmt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346188
+    m_Localized: Sitzung erstellen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346189
+    m_Localized: Sitzungscode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346190
+    m_Localized: Beitritt per Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346191
+    m_Localized: Schnellspiel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346193
+    m_Localized: Treten Sie zuerst einer Sitzung bei oder erstellen Sie eine.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346195
+    m_Localized: Sie haben die Lobby verlassen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346196
+    m_Localized: "Sitzungscode nicht verf\xFCgbar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346197
+    m_Localized: "Warten auf Spieler ({0}/{1})\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346198
+    m_Localized: Jetzt starten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346199
+    m_Localized: Verlassen Sie die Lobby.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346200
+    m_Localized: Es sind noch keine Spieler verbunden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346201
+    m_Localized: "\u2022 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346202
+    m_Localized: Spieler {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346203
+    m_Localized: Spielaufbau
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346204
+    m_Localized: Modus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346205
+    m_Localized: Einzelspieler gegen KI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346206
+    m_Localized: Passen und spielen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346207
+    m_Localized: Sitze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346208
+    m_Localized: Timer einschalten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346209
+    m_Localized: Aus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346210
+    m_Localized: '{0:plural:{} Sekunde|{} Sekunden}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346211
+    m_Localized: Sitzplatz {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346212
+    m_Localized: Spieler {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346213
+    m_Localized: Menschlich
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346214
+    m_Localized: Einfacher Bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346215
+    m_Localized: Mittlerer Bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346216
+    m_Localized: Harter Bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346217
+    m_Localized: Ausgewogen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346218
+    m_Localized: "Zur\xFCckhalten"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346220
+    m_Localized: Mindestens ein Platz muss von einem menschlichen Spieler besetzt
+      sein.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346221
+    m_Localized: Tischkosmetik
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346222
+    m_Localized: "W\xE4hlen Sie zwei Kartenspiele und einen Tischfilz. Klicken Sie
+      auf eine Vorschau, um sie anzusehen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346223
+    m_Localized: Spiel starten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346224
+    m_Localized: Deck {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346226
+    m_Localized: Tischfilz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346227
+    m_Localized: "Zuf\xE4lliges Gef\xFChl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346228
+    m_Localized: "W\xE4hle Deck {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346229
+    m_Localized: "W\xE4hlen Sie Tischfilz"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346230
+    m_Localized: Noch nicht freigeschaltet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346231
+    m_Localized: "Noch nicht entsperrt \u2014 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346232
+    m_Localized: Galerie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346233
+    m_Localized: Decks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346234
+    m_Localized: "Board-Hintergr\xFCnde"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346236
+    m_Localized: "{0} / {1} Board-Hintergr\xFCnde im Besitz"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346237
+    m_Localized: "\U0001F512 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346238
+    m_Localized: Neu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346239
+    m_Localized: "W\xE4hlen Sie ein Kosmetikprodukt aus."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346240
+    m_Localized: "Durchst\xF6bern Sie Decks und Board-Hintergr\xFCnde."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346241
+    m_Localized: Dieser Artikel ist nicht mehr im Katalog.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346242
+    m_Localized: Im Besitz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346243
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549031346245
+    m_Localized: "Vorschau nicht verf\xFCgbar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346246
+    m_Localized: Vorschau wird geladen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346248
+    m_Localized: Gameplay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346249
+    m_Localized: Tisch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346251
+    m_Localized: "Zug\xE4nglichkeit"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346253
+    m_Localized: Allgemein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346254
+    m_Localized: Regeln
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346256
+    m_Localized: "Spielablauf & Best\xE4tigungen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346257
+    m_Localized: "Best\xE4tigung der Board-R\xFCcksetzung"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346258
+    m_Localized: Bitten Sie, bevor Sie alle Karten wieder auf die Hand nehmen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346259
+    m_Localized: "Best\xE4tigen Sie das Ziehen einer Karte"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346260
+    m_Localized: "Fragen Sie vor dem Ziehen oder Weitergeben, wenn m\xF6glich."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346261
+    m_Localized: "Best\xE4tigen Sie die Reparatur der Platine."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346263
+    m_Localized: "Best\xE4tigen Sie das Verlassen oder den Neustart."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346264
+    m_Localized: Bitte fragen Sie, bevor Sie das Spiel verlassen oder neu starten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346265
+    m_Localized: CPU-Bewegungsgeschwindigkeit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346267
+    m_Localized: Gletscher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346269
+    m_Localized: Langsam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346270
+    m_Localized: Normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346272
+    m_Localized: Sehr schnell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346273
+    m_Localized: Jeder kann die erste Kurve hinunterfahren.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346274
+    m_Localized: Erlaubt jedem Spieler, in seinem ersten Zug zu fallen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346276
+    m_Localized: Zeigen Sie eine Steuerung zur Beschleunigung der CPU-Runden an.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346277
+    m_Localized: Tisch & Hand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346278
+    m_Localized: "Hervorhebung beim \xDCberfahren mit der Maus"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346279
+    m_Localized: Umrandet und hebt die Karte unter dem Mauszeiger leicht an.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346280
+    m_Localized: Bogenbetrag
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346281
+    m_Localized: "Passt die Kr\xFCmmung Ihrer Hand an."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346282
+    m_Localized: Kartenlegung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346283
+    m_Localized: "Ver\xE4ndert den Abstand zwischen den Karten in deiner Hand."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346285
+    m_Localized: "\xC4ndert die Gr\xF6\xDFe deiner Handkarten."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346286
+    m_Localized: "Gegnerische Kartengr\xF6\xDFe"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346287
+    m_Localized: "Ver\xE4ndert die Gr\xF6\xDFe der Karten, die andere Spieler auf
+      der Hand haben."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346288
+    m_Localized: Zoomempfindlichkeit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346289
+    m_Localized: Steuert, wie schnell die Tabelle beim Scrollen zoomt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346290
+    m_Localized: Hand heben
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346291
+    m_Localized: "Passt an, wie weit Karten beim Ausw\xE4hlen oder \xDCberfahren
+      mit der Maus angehoben werden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346293
+    m_Localized: Beschreibt jeden Satz in der Tabelle.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346294
+    m_Localized: Sets am Raster ausrichten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346295
+    m_Localized: "Die Gedecke werden in einem ordentlichen Raster angeordnet, anstatt
+      organisch \xFCber den Tisch verteilt zu sein."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346296
+    m_Localized: Spielbrett-Karten-Auslegung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346297
+    m_Localized: "Ver\xE4ndert den Abstand zwischen den Karten in Spielbrettsets."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346298
+    m_Localized: Kartenchaos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346299
+    m_Localized: "F\xFCgt der Kartenplatzierung eine kleine, nat\xFCrliche Variation
+      hinzu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346301
+    m_Localized: "Hinweis: N\xFCtzliche Spielbrettkarten"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346303
+    m_Localized: Wackelnde Karten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346304
+    m_Localized: Verwendet eine kurze Animation, um die Aufmerksamkeit auf angedeutete
+      Karten zu lenken.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346305
+    m_Localized: "Zug\xE4nglichkeit"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346306
+    m_Localized: Bewegung reduzieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346307
+    m_Localized: "Reduziert unn\xF6tige Bewegungen und Animationen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346308
+    m_Localized: Haptik
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346309
+    m_Localized: "Erm\xF6glicht Vibrationsfeedback auf unterst\xFCtzten Ger\xE4ten."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346310
+    m_Localized: "UI-Gr\xF6\xDFe"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346311
+    m_Localized: "Passt die Benutzeroberfl\xE4che und die Bedienelemente an mobile
+      Ger\xE4te an."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346313
+    m_Localized: "Gesamtlautst\xE4rke"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346314
+    m_Localized: "Legt die Gesamtlautst\xE4rke des Spiels fest."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346315
+    m_Localized: "Musiklautst\xE4rke"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346316
+    m_Localized: "Stellt die Lautst\xE4rke der Hintergrundmusik ein."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540480
+    m_Localized: Effektvolumen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540481
+    m_Localized: "Legt die Lautst\xE4rke der Karten- und Schnittstelleneffekte fest."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540482
+    m_Localized: "Lautst\xE4rke"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540483
+    m_Localized: "Stellt die Sprachlautst\xE4rke ein."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540484
+    m_Localized: Sprache
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540485
+    m_Localized: Sprache
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540486
+    m_Localized: "W\xE4hlt die Benutzerschnittstellensprache aus."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540487
+    m_Localized: Online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540488
+    m_Localized: "Schnelle Spiele mit Bots f\xFCllen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540489
+    m_Localized: "Legt fest, wie lange Schnellspiele warten, bevor CPU-Spieler hinzugef\xFCgt
+      werden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540490
+    m_Localized: Aus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540491
+    m_Localized: '{0:plural:{} Sekunde|{} Sekunden}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540492
+    m_Localized: Konto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540494
+    m_Localized: "Die Kontofunktionen sind noch nicht verf\xFCgbar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540495
+    m_Localized: '{0}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540496
+    m_Localized: "{0}\xD7"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540497
+    m_Localized: Komponenten & Spieler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540499
+    m_Localized: Wer beginnt und was wird gespielt?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540500
+    m_Localized: "Der Computer gibt die Regeln. Der Gewinner der vorherigen Partie
+      beginnt, sofern er noch im Spiel ist. Andernfalls bestimmen die Spieler per
+      Frage, wer beginnt: Sie k\xF6nnen lokal oder gegen die KI einen Platz antippen
+      oder online abstimmen. Online-Abstimmungen dauern 20 Sekunden; bei Stimmengleichstand
+      entscheidet das Los."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540501
+    m_Localized: "Der Geber teilt jedem Spieler elf Karten aus, eine nach der anderen,
+      im Uhrzeigersinn beginnend mit dem ersten Spieler. Die restlichen Karten bilden
+      den verdeckten Nachziehstapel, und der gew\xE4hlte erste Spieler beginnt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540502
+    m_Localized: "Ziel- und g\xFCltige Mengen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540503
+    m_Localized: "Wer als Erster alle Karten loswird, gewinnt. Ein Spiel besteht
+      aus einer Runde; der Gewinner beginnt das n\xE4chste Spiel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540504
+    m_Localized: "Gleichartige S\xE4tze bestehen aus 3\u20134 Karten desselben Rangs,
+      wobei jede Farbe unterschiedlich ist. Stra\xDFen bestehen aus 3\u201313 aufeinanderfolgenden
+      Karten derselben Farbe, wobei kein Rang wiederholt wird. Ein Ass kann niedrig
+      (A-2-3) oder hoch (Q-K-A) sein, aber niemals beides; K-A-2 ist nicht erlaubt.
+      Jeder Satz auf dem Board muss g\xFCltig sein; S\xE4tze aus einer oder zwei
+      Karten sind ung\xFCltig."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540505
+    m_Localized: "Es geht abw\xE4rts"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540506
+    m_Localized: "Bevor du Karten legst, kannst du neue Sets nur mit Handkarten bilden;
+      bereits vorhandene Sets auf dem Spielbrett kannst du weder verwenden noch ver\xE4ndern.
+      Du kannst ein oder mehrere Sets spielen, ohne Mindestpunktzahl. Sobald du mindestens
+      ein g\xFCltiges Set nur mit Handkarten gebildet hast, legst du Karten ab und
+      kannst das gesamte Spielbrett f\xFCr den Rest des Zuges nutzen. Karten, die
+      zum Legen verwendet wurden, bleiben f\xFCr diesen Zug auf dem Spielbrett. Mit
+      \u201ER\xFCckg\xE4ngig\u201C oder \u201EZur\xFCcksetzen\u201C kannst du das
+      Legen r\xFCckg\xE4ngig machen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540507
+    m_Localized: "Wenn du am Boden liegst, kannst du das Spielbrett neu anordnen
+      und es auch vor\xFCbergehend ung\xFCltig machen. Um deinen Zug zu beenden,
+      muss das Spielbrett g\xFCltig sein und du musst mindestens eine Karte aus deiner
+      Hand gespielt haben."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540508
+    m_Localized: Zugaktionen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540511
+    m_Localized: Zeitgesteuerte Runden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540512
+    m_Localized: "Der Spielleiter kann 30, 60, 90 oder 120 Sekunden pro Zug w\xE4hlen
+      oder den Timer in Offline-Spielen deaktivieren. Online-Spiele sind immer zeitlich
+      begrenzt. L\xE4uft die Zeit ab, bleibt das Spielbrett g\xFCltig und du ziehst
+      eine Karte; ist das Spielbrett ung\xFCltig und liegt keine Handkarte mehr auf
+      dem Brett, ziehst du ebenfalls eine Karte. Hast du Handkarten gespielt und
+      das Spielbrett ist g\xFCltig, endet dein Zug ohne Ziehen einer Karte. Ist das
+      Spielbrett ung\xFCltig, werden deine Z\xFCge r\xFCckg\xE4ngig gemacht, bis
+      es wieder g\xFCltig ist; du ziehst nur dann eine Karte, wenn keine Handkarte
+      mehr auf dem Spielbrett liegt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540513
+    m_Localized: Leerer Nachziehstapel & Pattsituationen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540514
+    m_Localized: "Ist der Nachziehstapel leer, wird aus \u201EZiehen\u201C ein Pass:
+      Es wird keine Karte gezogen und das Spielbrett wird zur\xFCckgesetzt. Passen
+      alle aktiven Spieler nacheinander, ohne eine Karte zu spielen, gewinnt der
+      Spieler mit den wenigsten Karten, falls er der einzige mit dieser Anzahl ist.
+      Haben beide Spieler die wenigsten Karten, endet das Spiel unentschieden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540518
+    m_Localized: Unity 6, Universal Render Pipeline, Input System, Audiokinetic Wwise,
+      Unity Gaming Services und Steamworks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540519
+    m_Localized: "Danke f\xFCrs Spielen!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540520
+    m_Localized: Ende der Runde
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540523
+    m_Localized: "Zur\xFCcksetzen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540524
+    m_Localized: Repariere die Platine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540525
+    m_Localized: 'Sortieren: Rang'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540526
+    m_Localized: 'Sortieren: Anzug'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540527
+    m_Localized: "Kamera zur\xFCcksetzen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540528
+    m_Localized: "Aufger\xE4umtes Brett"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540529
+    m_Localized: Markieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540530
+    m_Localized: "Markierung\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540532
+    m_Localized: Passieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540533
+    m_Localized: 'Hinweis: an'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540534
+    m_Localized: 'Hinweis: aus'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540535
+    m_Localized: Schnellvorlauf
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540536
+    m_Localized: Weitermachen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540537
+    m_Localized: Halas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540538
+    m_Localized: Abgegangen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540539
+    m_Localized: "{0} \xB7 Abgest\xFCrzt"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540540
+    m_Localized: "{0} denkt nach\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540542
+    m_Localized: '{0} ist an der Reihe'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540543
+    m_Localized: Jetzt bist du dran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540544
+    m_Localized: '{0}s Zug'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540545
+    m_Localized: Sitzplatz {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540546
+    m_Localized: 'Ziehstapel: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540548
+    m_Localized: Du bist noch nicht an der Reihe.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540550
+    m_Localized: Gehe nach unten, bevor du Karten vom Spielbrett benutzt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540551
+    m_Localized: "Karten auf dem Spielbrett k\xF6nnen nicht auf die Hand zur\xFCckgenommen
+      werden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540552
+    m_Localized: "Du musst einen g\xFCltigen Zug ausf\xFChren, bevor du deinen Zug
+      beendest."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540554
+    m_Localized: Ein Set darf nicht zweimal dieselbe Karte enthalten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540557
+    m_Localized: "W\xE4hlen Sie einen g\xFCltigen Platz f\xFCr diese Karte."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540558
+    m_Localized: Dieser Zug beinhaltet eine Karte mehr als einmal.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540559
+    m_Localized: "W\xE4hle mindestens eine Karte zum Verschieben aus."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540560
+    m_Localized: "Diese Karte bzw. dieses Set ist nicht mehr erh\xE4ltlich."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540561
+    m_Localized: Dieses Spiel ist bereits beendet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540562
+    m_Localized: Probieren Sie die markierten Karten aus.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540563
+    m_Localized: Dieser Zug ist laut Spielregeln nicht erlaubt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540564
+    m_Localized: Frag nicht noch einmal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540565
+    m_Localized: "Best\xE4tigen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540566
+    m_Localized: Nimm alle deine Karten wieder auf die Hand?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540567
+    m_Localized: "Einige ung\xFCltige Karten kehren auf deine Hand zur\xFCck. Kannst
+      du das Spielbrett reparieren?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540568
+    m_Localized: "Das Tutorial \xFCberspringen? Kein Problem! Du kannst es jederzeit
+      unter \u201ESpielanleitung\u201C erneut ansehen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540569
+    m_Localized: "Zur\xFCck zum Hauptmen\xFC? Das Spiel wird gespeichert, sodass
+      Sie es sp\xE4ter fortsetzen k\xF6nnen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540570
+    m_Localized: Das Spiel neu starten? Die aktuelle Runde geht verloren.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540571
+    m_Localized: Angehalten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540572
+    m_Localized: Wieder aufnehmen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540575
+    m_Localized: "Tutorial \xFCberspringen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540576
+    m_Localized: '? Helfen'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540577
+    m_Localized: "Hauptmen\xFC"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540578
+    m_Localized: 'Zimmercode: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540579
+    m_Localized: PC-Tastenkombinationen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540580
+    m_Localized: "Strg/Cmd+Z R\xFCckg\xE4ngig\nStrg/Cmd+Umschalt+Z oder Strg+Y Wiederherstellen\nLeertaste
+      Zug beenden\nD Unentschieden/Weiter\nR Zur\xFCcksetzen\nF Brett reparieren\nH
+      Tipp\nF1 Dieses Blatt\nEsc oder P Pause"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540581
+    m_Localized: Probieren Sie die markierten Karten aus.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540582
+    m_Localized: "Tutorial \xFCberspringen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540583
+    m_Localized: "N\xE4chste"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540584
+    m_Localized: Habe es
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540585
+    m_Localized: "N\xE4chste"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540586
+    m_Localized: Erledigt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540587
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540588
+    m_Localized: "\u2713 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540589
+    m_Localized: "\u2717 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549035540590
+    m_Localized: "Wer f\xE4ngt an?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540592
+    m_Localized: Zum Anzeigen tippen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540593
+    m_Localized: MEJNUN!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540594
+    m_Localized: Erfolge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734785
+    m_Localized: Noch nicht freigeschaltet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734786
+    m_Localized: Speisekarte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734787
+    m_Localized: Revanche
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734788
+    m_Localized: Spiel um echtes Geld
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734789
+    m_Localized: Eine neue Runde starten?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734790
+    m_Localized: Frag nicht noch einmal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734791
+    m_Localized: Revanche
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734792
+    m_Localized: verbleibende Karten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734793
+    m_Localized: '{0}: {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549039734794
+    m_Localized: "Du hast das Tutorial abgeschlossen. Jetzt bist du bereit f\xFCr
+      ein richtiges Spiel!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734795
+    m_Localized: +{0} XP
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549039734796
+    m_Localized: Aufsteigen! Level {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549039734797
+    m_Localized: "Stufe {0} \xB7 {1} / {2} XP"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549039734798
+    m_Localized: 'Neu: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 6549039734800
+    m_Localized: Neues Deck freigeschaltet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734802
+    m_Localized: von {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  references:
+    version: 2
+    RefIds:
+    - rid: 4825848250703282616
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 6548989403173
+        - id: 6549022957591
+        - id: 6549031346235
+        - id: 6549035540547
+        - id: 6549039734799
+        - id: 6548981014531
+        - id: 6548985208832
+        - id: 6548985208833
+        - id: 6548985208834
+        - id: 6548985208843
+        - id: 6548985208853
+        - id: 6548985208855
+        - id: 6548985208867
+        - id: 6548985208868
+        - id: 6548985208883
+        - id: 6548989403151
+        - id: 6548989403152
+        - id: 6548989403153
+        - id: 6548989403154
+        - id: 6548989403155
+        - id: 6548989403156
+        - id: 6548989403158
+        - id: 6548989403160
+        - id: 6548989403161
+        - id: 6548989403167
+        - id: 6548989403168
+        - id: 6548989403170
+        - id: 6548989403172
+        - id: 6549022957589
+        - id: 6549022957590
+        - id: 6549022957593
+        - id: 6549027151883
+        - id: 6549027151884
+        - id: 6549031346185
+        - id: 6549031346197
+        - id: 6549031346201
+        - id: 6549031346202
+        - id: 6549031346210
+        - id: 6549031346211
+        - id: 6549031346212
+        - id: 6549031346224
+        - id: 6549031346228
+        - id: 6549031346231
+        - id: 6549031346236
+        - id: 6549031346237
+        - id: 6549031346243
+        - id: 6549035540491
+        - id: 6549035540495
+        - id: 6549035540496
+        - id: 6549035540539
+        - id: 6549035540540
+        - id: 6549035540542
+        - id: 6549035540544
+        - id: 6549035540545
+        - id: 6549035540546
+        - id: 6549035540578
+        - id: 6549035540587
+        - id: 6549035540588
+        - id: 6549035540589
+        - id: 6549039734793
+        - id: 6549039734795
+        - id: 6549039734796
+        - id: 6549039734797
+        - id: 6549039734798
+        - id: 6549039734802

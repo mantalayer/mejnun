@@ -12,12 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36d810ccc35f4802a45d08ca00d857b, type: 3}
   m_Name: DealerQuestions
   m_EditorClassIdentifier: Mejnun.Game::Mejnun.Game.DealerQuestions
-  questions:
-  - Who would be most likely to forget why they walked into a room?
-  - Who tells the worst jokes?
-  - Who would be first to dance at a wedding?
-  - Who has the most chaotic phone gallery?
-  - Who would survive longest on a desert island?
-  - Who is most likely to accidentally start a trend?
-  - Who's birthday is closest to today?
-  - Who showered most recently?

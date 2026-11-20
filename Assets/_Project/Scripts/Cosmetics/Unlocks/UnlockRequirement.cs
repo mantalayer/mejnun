@@ -1,4 +1,5 @@
 using System;
+using Mejnun.Localization;
 using UnityEngine;
 
 namespace Mejnun.Cosmetics
@@ -88,15 +89,15 @@ namespace Mejnun.Cosmetics
             switch (kind)
             {
                 case UnlockKind.Free:
-                    return "Available now";
+                    return Loc.Get("unlock.requirement.free");
                 case UnlockKind.Level:
-                    return "Reach level " + target;
+                    return Loc.Format("unlock.requirement.level", target);
                 case UnlockKind.Wins:
-                    return "Win " + target + (target == 1 ? " game" : " games");
+                    return Loc.Format("unlock.requirement.wins", target);
                 case UnlockKind.Achievement:
-                    return "Earn " + AchievementIds.DisplayName(achievementId);
+                    return Loc.Format("unlock.requirement.achievement", AchievementIds.DisplayName(achievementId));
                 case UnlockKind.Purchase:
-                    return "Purchase required";
+                    return Loc.Get("unlock.requirement.purchase");
                 default:
                     return string.Empty;
             }
