@@ -2066,7 +2066,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180375
-    m_Localized: Fatina
+    m_Localized: Fatima
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180376
@@ -3405,7 +3405,7 @@ MonoBehaviour:
     m_Localized: "Le combinazioni dello stesso tipo contengono 3-4 carte dello stesso
       valore, con ogni seme diverso. Le scale contengono da 3 a 13 carte consecutive
       dello stesso seme, senza ripetizione di valore. Un asso pu\xF2 essere basso
-      (A-2-3) o alto (Q-K-A), ma mai entrambi; K-A-2 non \xE8 consentito. Ogni combinazione
+      (A-2-3) o alto (Q-K-A), ma mai entrambi; K-A-2 non \xE8 ammesso. Ogni combinazione
       sul tavolo deve essere valida; le combinazioni di una o due carte non sono
       valide."
     m_Metadata:
@@ -3459,7 +3459,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540513
-    m_Localized: Mazzo di sorteggio vuoto e stalli
+    m_Localized: Mazzo vuoto e stalli
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540514
@@ -3828,6 +3828,212 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282613
+  - m_Id: 32528051200000
+    m_Localized: Carte a quattro colori
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: Mostra i quadri in blu e i fiori in verde sulle carte compatibili.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: Disposizione per mancini
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: Replica la disposizione dei comandi dell'HUD per i giocatori mancini.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: Risparmio batteria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: Limita il rendering su dispositivi mobili a 30 fotogrammi al secondo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 74273040359424
+    m_Localized: Grande!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: Eccezionale!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: Fantastico!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Bello!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: Sai come farmi sentire bella.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: Ecco di cosa parlo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: "Ho bisogno di pi\xF9 cose del genere nella mia vita."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: Mi piace. Lo adoro.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Uuuu!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Hot dog!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Beh, che meraviglia!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: E come!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Cha!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: Dolce come!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: Dolce!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Un sacco!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Accidenti!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Cattivo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: "Non l\xEC!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: A cosa stavi pensando?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: Come hai potuto?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: Dritto in prigione...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: "Questo \xE8 illegale..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: Non ti capisco...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: Ragioni come un criceto...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: "Qualcuno ha la sindrome del luned\xEC..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: Che botta...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: Che botta!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Piccolo oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Vergogna...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: ERRORE! RILEVATA INTELLIGENZA INFERIORE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: "Il mio gatto sa giocare meglio di cos\xEC."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Eh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Beh, non me l'aspettavo...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Ummm...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: Beh, poteva andare meglio...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: Nascondere le mani dell'avversario tra un turno e l'altro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: Sposta parzialmente le mani dell'avversario fuori dallo schermo
+      fino al suo prossimo turno.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: larghezza dell'area di panoramica laterale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: Controlla la distanza dai bordi sinistro, destro e superiore da
+      cui inizia lo scorrimento del cursore sulla scacchiera; impostare su 0 per
+      disabilitare.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Giocare
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3901,3 +4107,4 @@ MonoBehaviour:
         - id: 6549039734797
         - id: 6549039734798
         - id: 6549039734802
+        - id: 999999999999999

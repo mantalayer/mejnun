@@ -3510,7 +3510,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540524
-    m_Localized: carte de fixation
+    m_Localized: Tableau de fixation
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540525
@@ -3827,6 +3827,213 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282630
+  - m_Id: 32528051200000
+    m_Localized: Cartes en quatre couleurs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: "Afficher les diamants en bleu et les tr\xE8fles en vert sur les
+      th\xE8mes de cartes compatibles."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: Configuration pour gauchers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: Inverser la disposition des commandes de l'interface pour les gauchers.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: "\xE9conomiseur de batterie"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: "Limiter le rendu mobile \xE0 30 images par seconde."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 74273040359424
+    m_Localized: Super!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: "G\xE9nial!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: "G\xE9nial !"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Super !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: Tu sais comment me faire sentir jolie.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: C'est exactement ce que je disais !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: "J'ai besoin de plus de \xE7a dans ma vie."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: "J'aime \xE7a. J'adore \xE7a."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Ouah !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Hot-dog !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Eh bien, vous pouvez me traiter de tous les noms !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: Et comment !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Cha !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: Super bon !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: Doux!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Hella !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Eh ben dis donc !
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Mauvais!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: "Pas l\xE0 !"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: "\xC0 quoi pensiez-vous ?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: Comment as-tu pu ?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: Directement en prison...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: "C'est ill\xE9gal..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: Je ne te comprends pas...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: Tu penses comme un hamster...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: Quelqu'un a le blues du lundi...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Ouf...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: "A\xEFe..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: "A\xEFe a\xEFe a\xEFe..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Petit ouf...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Honte...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: "ERREUR ! RENSEIGNEMENTS INF\xC9RIEURS D\xC9TECT\xC9S"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: "Mon chat joue mieux que \xE7a."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Hein...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Eh bien, je ne m'y attendais pas...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Euh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: "\xC7a aurait pu mieux se passer..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: Cacher les mains de l'adversaire entre les tours
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: "D\xE9place partiellement les mains de l'adversaire hors de l'\xE9cran
+      jusqu'\xE0 son prochain tour."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: largeur de la zone du bord du bac
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: "Contr\xF4le la distance \xE0 partir de laquelle un glissement commence
+      \xE0 d\xE9placer le plateau par rapport aux bords gauche, droit et sup\xE9rieur\_;
+      d\xE9finissez la valeur sur 0 pour d\xE9sactiver."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Jouer
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3900,3 +4107,4 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734799
         - id: 6549039734802
+        - id: 999999999999999

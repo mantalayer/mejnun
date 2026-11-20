@@ -33,18 +33,20 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
-        public void CycleCard_AdvancesAndRemovesTheMarkAndClearRemovesAllMarks()
+        public void CycleCard_AdvancesInOrderAndRemovesTheMarkAndClearRemovesAllMarks()
         {
             var cards = new[] { Card.FromId(0), Card.FromId(1), Card.FromId(2) };
             var markers = new SetMarkers();
             markers.CycleCard(cards[0].Id);
             Assert.That(markers.CardMarks.Count, Is.EqualTo(1));
-            Assert.That(markers.CardMarks[0].Symbol, Is.EqualTo("★"));
+            Assert.That(markers.CardMarks[0].Symbol, Is.EqualTo("●"));
 
             markers.CycleCard(cards[0].Id);
-            Assert.That(markers.CardMarks[0].Symbol, Is.EqualTo("●"));
+            Assert.That(markers.CardMarks[0].Symbol, Is.EqualTo("▲"));
             markers.CycleCard(cards[0].Id);
+            Assert.That(markers.CardMarks[0].Symbol, Is.EqualTo("■"));
             markers.CycleCard(cards[0].Id);
+            Assert.That(markers.CardMarks[0].Symbol, Is.EqualTo("★"));
             markers.CycleCard(cards[0].Id);
             Assert.That(markers.CardMarks, Is.Empty);
 
@@ -53,6 +55,51 @@ namespace Mejnun.Game.Tests
             markers.Clear();
             Assert.That(markers.CardMarks, Is.Empty);
             Assert.That(markers.Marks, Is.Empty);
+        }
+
+        [Test]
+        public void RemoveCard_RemovesTheMarkAndReportsWhetherItExisted()
+        {
+            var cardId = Card.FromId(0).Id;
+            var markers = new SetMarkers();
+            markers.CycleCard(cardId);
+
+            Assert.That(markers.RemoveCard(Card.FromId(1).Id), Is.False);
+            Assert.That(markers.RemoveCard(cardId), Is.True);
+            Assert.That(markers.CardMarks, Is.Empty);
+            Assert.That(markers.RemoveCard(cardId), Is.False);
+        }
+
+        [Test]
+        public void RestoreCardRestoresPreviousSymbolOrRemovesTheMark()
+        {
+            var cardId = Card.FromId(0).Id;
+            var markers = new SetMarkers();
+            markers.CycleCard(cardId);
+            var previousSymbol = markers.GetCardSymbol(cardId);
+            markers.CycleCard(cardId);
+
+            markers.RestoreCard(cardId, previousSymbol);
+
+            Assert.That(markers.GetCardSymbol(cardId), Is.EqualTo(previousSymbol));
+
+            markers.RestoreCard(cardId, null);
+
+            Assert.That(markers.GetCardSymbol(cardId), Is.Null);
+            Assert.That(markers.CardMarks, Is.Empty);
+        }
+
+        [Test]
+        public void RemoveSet_RemovesTheMarkAndReportsWhetherItExisted()
+        {
+            var meldId = 4;
+            var markers = new SetMarkers();
+            markers.Cycle(meldId, new[] { new Meld(meldId, new[] { Card.FromId(0), Card.FromId(1) }) });
+
+            Assert.That(markers.Remove(meldId + 1), Is.False);
+            Assert.That(markers.Remove(meldId), Is.True);
+            Assert.That(markers.Marks, Is.Empty);
+            Assert.That(markers.Remove(meldId), Is.False);
         }
     }
 }

@@ -54,8 +54,20 @@ namespace Mejnun.Game
         private bool autoFixing;
         private bool markModeActive;
         private byte? hoveredCardId;
+        private TapEffect lastTapEffect;
+        private byte lastTapCardId;
+        private string previousTapCardMarkSymbol;
         [SerializeField, Min(0f)] private float timeoutFixStepSeconds = 0.6f;
         private readonly SetMarkers setMarkers = new SetMarkers();
+
+        private enum TapEffect
+        {
+            None,
+            SelectionToggle,
+            CardMark,
+            SuccessfulMove,
+            RemoteTurnBlocked
+        }
 
         public MejnunGame Game => game;
         public int UndoGroupCount => undoGroups.Count;
@@ -313,6 +325,7 @@ namespace Mejnun.Game
             }
 
             markModeActive = active;
+            ClearLastTapEffect();
             MarkModeChanged?.Invoke(markModeActive);
         }
 
@@ -327,6 +340,16 @@ namespace Mejnun.Game
         public void CycleMarkedCard(byte cardId)
         {
             setMarkers.CycleCard(cardId);
+        }
+
+        public bool RemoveMarkedSet(int meldId)
+        {
+            return setMarkers.Remove(meldId);
+        }
+
+        public bool RemoveMarkedCard(byte cardId)
+        {
+            return setMarkers.RemoveCard(cardId);
         }
 
         public void ClearSelection()
@@ -1228,6 +1251,22 @@ namespace Mejnun.Game
                 return;
             }
 
+            if (pointerGesture.Kind == PointerGestureKind.Tap)
+            {
+                ClearLastTapEffect();
+            }
+            else if (pointerGesture.Kind != PointerGestureKind.DoubleTap)
+            {
+                ClearLastTapEffect();
+            }
+
+            if (pointerGesture.Kind == PointerGestureKind.DoubleTap &&
+                lastTapEffect == TapEffect.SuccessfulMove)
+            {
+                ClearLastTapEffect();
+                return;
+            }
+
             var dragHit = GestureHit.None;
             if (pointerGesture.Kind == PointerGestureKind.DragStarted)
             {
@@ -1244,9 +1283,21 @@ namespace Mejnun.Game
             if (IsRemoteTurnBlocked() && (pointerGesture.Kind == PointerGestureKind.Tap ||
                                           pointerGesture.Kind == PointerGestureKind.DoubleTap))
             {
+                if (pointerGesture.Kind == PointerGestureKind.DoubleTap &&
+                    lastTapEffect == TapEffect.RemoteTurnBlocked)
+                {
+                    ClearLastTapEffect();
+                    return;
+                }
+
                 var blockedHit = tableView.HitTest(pointerGesture.Position);
                 if (blockedHit.Kind != GestureHitKind.HandCard && blockedHit.Kind != GestureHitKind.HandArea)
                 {
+                    if (pointerGesture.Kind == PointerGestureKind.Tap)
+                    {
+                        lastTapEffect = TapEffect.RemoteTurnBlocked;
+                    }
+
                     NotifyInvalid(RuleError.NotYourTurn);
                     return;
                 }
@@ -1262,28 +1313,70 @@ namespace Mejnun.Game
                 }
             }
 
-            if (markModeActive && (pointerGesture.Kind == PointerGestureKind.Tap ||
+            if (markModeActive && (pointerGesture.Kind == PointerGestureKind.LongPress ||
+                                   pointerGesture.Kind == PointerGestureKind.Tap ||
                                    pointerGesture.Kind == PointerGestureKind.DoubleTap))
             {
                 var markHit = tableView.HitTest(pointerGesture.Position);
-                if (markHit.Kind == GestureHitKind.HandCard)
+                if (pointerGesture.Kind == PointerGestureKind.LongPress)
                 {
+                    var removed = false;
+                    if (markHit.Kind == GestureHitKind.HandCard)
+                    {
+                        removed = RemoveMarkedCard(markHit.CardId);
+                    }
+                    else if (markHit.Kind == GestureHitKind.BoardCard)
+                    {
+                        removed = RemoveMarkedCard(markHit.CardId) || RemoveMarkedSet(markHit.MeldId);
+                    }
+                    else if (markHit.Kind == GestureHitKind.MeldGap || markHit.Kind == GestureHitKind.MeldGrip)
+                    {
+                        removed = RemoveMarkedSet(markHit.MeldId);
+                    }
+
+                    if (removed)
+                    {
+                        Haptics.LongPress();
+                    }
+                }
+                else if (markHit.Kind == GestureHitKind.HandCard)
+                {
+                    if (pointerGesture.Kind == PointerGestureKind.Tap)
+                    {
+                        lastTapEffect = TapEffect.CardMark;
+                        lastTapCardId = markHit.CardId;
+                        previousTapCardMarkSymbol = setMarkers.GetCardSymbol(markHit.CardId);
+                    }
+
                     CycleMarkedCard(markHit.CardId);
                 }
                 else if (markHit.Kind == GestureHitKind.BoardCard)
                 {
                     if (pointerGesture.Kind == PointerGestureKind.DoubleTap)
                     {
+                        if (lastTapEffect == TapEffect.CardMark)
+                        {
+                            setMarkers.RestoreCard(lastTapCardId, previousTapCardMarkSymbol);
+                        }
+
                         CycleMarkedSet(markHit.MeldId);
                     }
                     else
                     {
+                        lastTapEffect = TapEffect.CardMark;
+                        lastTapCardId = markHit.CardId;
+                        previousTapCardMarkSymbol = setMarkers.GetCardSymbol(markHit.CardId);
                         CycleMarkedCard(markHit.CardId);
                     }
                 }
                 else if (markHit.Kind == GestureHitKind.MeldGap || markHit.Kind == GestureHitKind.MeldGrip)
                 {
                     CycleMarkedSet(markHit.MeldId);
+                }
+
+                if (pointerGesture.Kind == PointerGestureKind.DoubleTap)
+                {
+                    ClearLastTapEffect();
                 }
 
                 return;
@@ -1349,6 +1442,11 @@ namespace Mejnun.Game
                     return;
                 }
 
+                if (pointerGesture.Kind == PointerGestureKind.DoubleTap)
+                {
+                    ClearLastTapEffect();
+                }
+
                 dragActive = false;
                 handScrollActive = false;
                 meldReorderActive = false;
@@ -1367,13 +1465,35 @@ namespace Mejnun.Game
                     var hit = tableView.HitTest(pointerGesture.Position);
                     var source = hit.Kind == GestureHitKind.HandCard ? hit : GestureHit.None;
                     var target = hit.Kind == GestureHitKind.HandCard ? GestureHit.None : hit;
-                    ExecuteGesture(new GestureInput(GestureType.Tap, source, target));
+                    if (source.Kind == GestureHitKind.HandCard)
+                    {
+                        lastTapEffect = TapEffect.SelectionToggle;
+                        lastTapCardId = source.CardId;
+                        ExecuteGesture(new GestureInput(GestureType.Tap, source, target));
+                    }
+                    else
+                    {
+                        var selectedCount = gestureInterpreter.SelectedCardIds.Count;
+                        var result = ExecuteGesture(new GestureInput(GestureType.Tap, source, target));
+                        if (selectedCount > 0 && result.Ok && gestureInterpreter.SelectedCardIds.Count == 0)
+                        {
+                            lastTapEffect = TapEffect.SuccessfulMove;
+                        }
+                    }
+
                     break;
                 }
                 case PointerGestureKind.DoubleTap:
                 {
                     var hit = tableView.HitTest(pointerGesture.Position);
+                    if (lastTapEffect == TapEffect.SelectionToggle)
+                    {
+                        gestureInterpreter.ToggleCardSelection(lastTapCardId);
+                        RefreshSelection();
+                    }
+
                     ExecuteGesture(new GestureInput(GestureType.DoubleTap, hit, GestureHit.None));
+                    ClearLastTapEffect();
                     break;
                 }
                 case PointerGestureKind.LongPress:
@@ -1518,16 +1638,35 @@ namespace Mejnun.Game
             }
         }
 
+        private void ClearLastTapEffect()
+        {
+            lastTapEffect = TapEffect.None;
+            lastTapCardId = 0;
+            previousTapCardMarkSymbol = null;
+        }
+
         private void HandleHandPointerGesture(PointerGesture pointerGesture)
         {
             switch (pointerGesture.Kind)
             {
                 case PointerGestureKind.Tap:
+                case PointerGestureKind.DoubleTap:
                 {
                     var hit = tableView.HitTest(pointerGesture.Position);
                     if (hit.Kind == GestureHitKind.HandCard)
                     {
+                        if (pointerGesture.Kind == PointerGestureKind.Tap)
+                        {
+                            lastTapEffect = TapEffect.SelectionToggle;
+                            lastTapCardId = hit.CardId;
+                        }
+
                         ExecuteHandGesture(new GestureInput(GestureType.Tap, hit, GestureHit.None));
+                    }
+
+                    if (pointerGesture.Kind == PointerGestureKind.DoubleTap)
+                    {
+                        ClearLastTapEffect();
                     }
 
                     break;

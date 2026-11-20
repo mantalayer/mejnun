@@ -320,7 +320,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180396
-    m_Localized: Yinuo
+    m_Localized: yinuo
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180400
@@ -3811,6 +3811,215 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282625
+  - m_Id: 32528051200000
+    m_Localized: Tarjetas de cuatro colores
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: "Muestra los diamantes en azul y los tr\xE9boles en verde en las
+      apariencias de cartas compatibles."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: "Dise\xF1o para zurdos"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: "Refleja la ubicaci\xF3n de los controles de la interfaz para jugadores
+      zurdos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: "Ahorro de bater\xEDa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: "Limita la renderizaci\xF3n en dispositivos m\xF3viles a 30 fotogramas
+      por segundo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 74273040359424
+    m_Localized: "\xA1Excelente!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: "\xA1Impresionante!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: "\xA1Genial!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: "\xA1Genial!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: "Sabes c\xF3mo hacerme sentir guapa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: "\xA1De eso estoy hablando!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: "Necesito m\xE1s de eso en mi vida."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: Me gusta. Me encanta.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: "\xA1Woo!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: "\xA1Hot dog!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: "\xA1Pues que me den por culo y me llamen galleta!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: "\xA1Y vaya si lo es!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: "\xA1Cha!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: "\xA1Qu\xE9 dulce!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: "\xA1Dulce!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: "\xA1Yallah!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: "\xA1Genial!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: "\xA1Caramba!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: "\xA1Malo!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: "\xA1Ah\xED no!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: "\xBFEn qu\xE9 estabas pensando?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: "\xBFC\xF3mo pudiste?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: "Directo a la c\xE1rcel..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: Eso es ilegal...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: No lo comprendo...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: "Piensas como un h\xE1mster..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: "Alguien tiene un mal d\xEDa los lunes..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Uf...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: "\xA1Uf!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: El mayor uf...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: "Un peque\xF1o uf..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: "L\xE1stima..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: "\xA1ERROR! INTELIGENCIA INFERIOR DETECTADA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: Mi gato juega mejor que eso.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Eh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Bueno, no me lo esperaba...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Ummm...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: "Bueno, eso podr\xEDa haber salido mejor..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: Oculta las manos del oponente entre turnos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: "Mueve las manos del oponente parcialmente fuera de la pantalla
+      hasta su pr\xF3ximo turno."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: "Ancho del \xE1rea de la bandeja del borde"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: "Controla a qu\xE9 distancia de los bordes izquierdo, derecho y
+      superior comienza el desplazamiento del tablero al arrastrar; si se establece
+      en 0, se desactiva."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Jugar
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3884,3 +4093,4 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734799
         - id: 6549039734802
+        - id: 999999999999999

@@ -380,7 +380,7 @@ namespace Mejnun.Game
 
             liftAmount = suppressLift || GameSettings.ReducedMotion
                 ? liftTarget
-                : Mathf.MoveTowards(liftAmount, liftTarget, Time.unscaledDeltaTime * 2f);
+                : Mathf.MoveTowards(liftAmount, liftTarget, Time.unscaledDeltaTime * 8f);
             WriteLiftedPosition();
         }
 

@@ -260,7 +260,6 @@ namespace Mejnun.Game
         {
             if (pointerGesture.Kind == PointerGestureKind.Pinch)
             {
-                PanByScreenDelta(pointerGesture.Delta, pointerGesture.Position, true);
                 ZoomAtScreenPoint(pointerGesture.Scale, pointerGesture.Position, true);
             }
         }

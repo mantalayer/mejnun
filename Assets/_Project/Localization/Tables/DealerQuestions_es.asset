@@ -53,6 +53,219 @@ MonoBehaviour:
     m_Localized: "\xBFQui\xE9n se duch\xF3 m\xE1s recientemente?"
     m_Metadata:
       m_Items: []
+  - m_Id: 74276106395648
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s probabilidades de organizar un espect\xE1culo
+      de transformismo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561472
+    m_Localized: "\xBFQui\xE9n tiene el pelo m\xE1s rizado (y por lo tanto, m\xE1s
+      bonito)?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561473
+    m_Localized: "\xBFQui\xE9n es el m\xE1s quisquilloso para comer?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561474
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s probabilidades de darle una bofetada
+      a alguien por haberle dado una bofetada?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561475
+    m_Localized: "\xBFQui\xE9n puede levantar pesas, hermano?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561476
+    m_Localized: "\xBFQui\xE9n puede mantener mejor el ritmo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561477
+    m_Localized: "\xBFQui\xE9n puede contar la mayor cantidad de d\xEDgitos de pi?
+      Mmm, pie..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561478
+    m_Localized: "Si estuvieras atrapado en una isla desierta con solo una ardilla
+      y dos palillos de dientes... \xBFQui\xE9n atrapar\xEDa a la ardilla, o algo
+      as\xED?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561479
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s experiencia contando frijoles?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561480
+    m_Localized: "\xBFQui\xE9n es el que m\xE1s chismorrea?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561481
+    m_Localized: "\xBFQui\xE9n tiene los eructos m\xE1s apestosos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561482
+    m_Localized: "\xBFQui\xE9n es el mejor adivinando el peso de las personas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561483
+    m_Localized: "\xBFQui\xE9n puede construir el mejor trabuquete?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561484
+    m_Localized: "\xBFQui\xE9n es el mejor cocinero?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561485
+    m_Localized: "\xBFQui\xE9n quema m\xE1s comida al cocinar?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561486
+    m_Localized: "\xBFQui\xE9n tiene la circunferencia de la cabeza m\xE1s grande?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561487
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s probabilidades de olvidarse el m\xF3vil
+      en la nevera?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561488
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s probabilidades de dejar el mando a distancia
+      en el congelador?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561489
+    m_Localized: "\xBFQui\xE9n toca m\xE1s instrumentos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561490
+    m_Localized: "\xBFQui\xE9n toca peor un instrumento?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561491
+    m_Localized: "\xBFQui\xE9n tardar\xEDa m\xE1s tiempo en construir un mueble?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561492
+    m_Localized: "\xBFQui\xE9n es el m\xE1s obsesionado con los gatos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561493
+    m_Localized: "\xBFQui\xE9n es el m\xE1s obsesionado con los perros?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561494
+    m_Localized: "\xBFQui\xE9n huele m\xE1s a bayas de sa\xFAco?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561495
+    m_Localized: "\xBFA qui\xE9n le gusta el azul?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561496
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s probabilidades de luchar contra un oso
+      (y ganar)?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561497
+    m_Localized: "\xBFQui\xE9n pierde m\xE1s en Las Vegas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561498
+    m_Localized: "\xBFQui\xE9n sabe qu\xE9 es una ducha multiusos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561499
+    m_Localized: "\xBFQui\xE9n es la persona que pasa m\xE1s tiempo conectada a internet?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561500
+    m_Localized: "\xA1R\xE1pido, estoy pensando en un n\xFAmero entre 81 y 976! \xBFQui\xE9n
+      adivin\xF3 222?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561501
+    m_Localized: "\xBFQui\xE9nes son m\xE1s propensos a enfurecerse mientras juegan
+      videojuegos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561502
+    m_Localized: "\xBFQui\xE9n es el m\xE1s competitivo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561503
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s ganas de ir primero?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561504
+    m_Localized: "\xBFQui\xE9n tiene menos ganas de ir primero?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561505
+    m_Localized: "\xA1Pelea! \xBFQui\xE9n gan\xF3?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561506
+    m_Localized: "\xBFQui\xE9n no quiere ir?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561507
+    m_Localized: "\xBFA qui\xE9n no le gusta el color morado?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561508
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s canas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561509
+    m_Localized: "\xBFQui\xE9n tiene menos pelo? Estoy contando el vello corporal."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561510
+    m_Localized: "\xBFQui\xE9n lav\xF3 los platos al final?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561511
+    m_Localized: "\xBFQui\xE9n tiene la mayor colecci\xF3n de juegos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561512
+    m_Localized: "\xBFQui\xE9n puede explicar mejor la teor\xEDa cu\xE1ntica?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561513
+    m_Localized: "\xBFQui\xE9n tiene la mejor visi\xF3n?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561514
+    m_Localized: "\xBFQui\xE9n habla m\xE1s idiomas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561515
+    m_Localized: "\xBFQui\xE9n tiene m\xE1s gatos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561516
+    m_Localized: "\xBFQui\xE9n puede poner a punto un carburador?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561517
+    m_Localized: "\xBFQui\xE9n ha visitado m\xE1s pa\xEDses?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561518
+    m_Localized: "\xBFQui\xE9n puede correr m\xE1s lejos? \xA1Pru\xE9balo antes del
+      partido!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561519
+    m_Localized: "\xBFQui\xE9n desviar\xEDa el tranv\xEDa para que solo pasaran cinco
+      personas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561520
+    m_Localized: "Inv\xE9tate una pregunta, pero no digas que yo te lo dije..."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -3807,6 +3807,211 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282629
+  - m_Id: 32528051200000
+    m_Localized: Kadi za rangi nne
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: Onyesha almasi kwa rangi ya bluu na virungu kwa rangi ya kijani
+      kwenye ngozi za kadi zinazolingana.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: Mpangilio wa mkono wa kushoto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: Onyesha uwekaji wa udhibiti wa HUD kwa ajili ya kucheza kwa mkono
+      wa kushoto.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: Kiokoa betri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: Punguza uonyeshaji wa simu hadi fremu 30 kwa sekunde.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0} angalia{1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 74273040359424
+    m_Localized: Kubwa!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: Ajabu!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: Mbaya!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Mbaya!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: Unajua jinsi ya kunifanya nijisikie vizuri.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: Hilo ndilo ninalozungumzia!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: Ninahitaji zaidi ya hayo maishani mwangu.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: Naipenda. Naipenda.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Duuu!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Mbwa wa moto!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Naam, paka siagi kwenye buns zangu na uniite biskuti!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: Na vipi!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Cha!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: Tamu kama!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: Tamu!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Habari!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Hecka!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Mbaya!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: Sio hapo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: Ulikuwa unafikiria nini?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: Ungewezaje?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: Moja kwa moja hadi gerezani...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: Hiyo ni kinyume cha sheria...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: Sijakuelewa...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: Unafikiri kama hamster...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: Mtu ana kesi ya Jumatatu...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Loo...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: Mkubwa sana...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: Kubwa zaidi...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Ndogo oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Aibu...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: KOSA! AKILI YA DUNIA IMEGUNDWA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: Paka wangu anaweza kucheza vizuri zaidi kuliko hapo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Huh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Sikutarajia hilo...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Ummm...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: Naam, hilo lingeweza kuwa bora zaidi...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: Ficha mikono ya mpinzani kati ya zamu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: Husogeza mikono ya mpinzani kwa sehemu nje ya skrini hadi zamu yao
+      inayofuata.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: Upana wa eneo la ukingo wa sufuria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: Hudhibiti umbali kutoka kingo za kushoto, kulia, na juu ambapo kuburuta
+      huanza kuzungusha ubao; weka hadi 0 ili kuzima.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Cheza
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3880,3 +4085,4 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734799
         - id: 6549039734802
+        - id: 999999999999999

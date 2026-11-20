@@ -148,7 +148,7 @@ namespace Mejnun.Game
             var result = new GestureResult(new CommandBatch());
             if (input.Type == GestureType.Tap && input.Source.Kind == GestureHitKind.HandCard)
             {
-                ToggleSelection(input.Source.CardId);
+                ToggleCardSelection(input.Source.CardId);
                 result.SelectionChanged = true;
                 return result;
             }
@@ -248,7 +248,7 @@ namespace Mejnun.Game
         {
             if (input.Source.Kind == GestureHitKind.HandCard)
             {
-                ToggleSelection(input.Source.CardId);
+                ToggleCardSelection(input.Source.CardId);
                 result.SelectionChanged = true;
                 return;
             }
@@ -716,7 +716,7 @@ namespace Mejnun.Game
             return ids.ToArray();
         }
 
-        private void ToggleSelection(byte cardId)
+        public void ToggleCardSelection(byte cardId)
         {
             var index = selectedCardIds.IndexOf(cardId);
             if (index >= 0)

@@ -138,6 +138,7 @@ namespace Mejnun.UI
         private int lastSafeAreaHeight;
         private float lastSafeAreaPanelWidth;
         private float lastSafeAreaPanelHeight;
+        private bool lastSafeAreaMirrored;
         private bool lastTallPhoneLayout;
         private bool hasPhoneLayoutSignature;
         private const float ActiveTurnPulsePeriod = 1.6f;
@@ -311,8 +312,8 @@ namespace Mejnun.UI
             }
 
             var bounds = root.worldBound;
-            AddNearestEdgeOffset(offsets, turnPanel, bounds);
-            AddNearestEdgeOffset(offsets, pauseButton, bounds);
+            AddTopEdgeOffset(offsets, turnPanel);
+            AddTopEdgeOffset(offsets, pauseButton);
             AddBottomEdgeOffset(offsets, root.Q<VisualElement>(className: "bottom-area"));
             AddNearestEdgeOffset(offsets, fastForwardDock, bounds);
             AddNearestEdgeOffset(offsets, leftOpponents, bounds);
@@ -374,6 +375,16 @@ namespace Mejnun.UI
             }
 
             return true;
+        }
+
+        private static void AddTopEdgeOffset(List<TableEdgeOffset> offsets, VisualElement element)
+        {
+            if (element == null || element.panel == null)
+            {
+                return;
+            }
+
+            AddEdgeOffset(offsets, element, TableEdge.Top);
         }
 
         private static void AddBottomEdgeOffset(List<TableEdgeOffset> offsets, VisualElement element)
@@ -774,11 +785,13 @@ namespace Mejnun.UI
                     if (turnPanel != null)
                     {
                         turnPanel.style.left = StyleKeyword.Null;
+                        turnPanel.style.right = StyleKeyword.Null;
                         turnPanel.style.top = StyleKeyword.Null;
                     }
 
                     if (pauseButton != null)
                     {
+                        pauseButton.style.left = StyleKeyword.Null;
                         pauseButton.style.right = StyleKeyword.Null;
                         pauseButton.style.top = StyleKeyword.Null;
                     }
@@ -810,7 +823,9 @@ namespace Mejnun.UI
 
             var safeArea = Screen.safeArea;
             var bounds = root.worldBound;
-            if (hasSafeAreaSignature && lastSafeArea == safeArea && lastSafeAreaWidth == Screen.width &&
+            var mirrored = root.ClassListContains("rtl") != root.ClassListContains("left-handed");
+            if (hasSafeAreaSignature && lastSafeAreaMirrored == mirrored && lastSafeArea == safeArea &&
+                lastSafeAreaWidth == Screen.width &&
                 lastSafeAreaHeight == Screen.height && Mathf.Approximately(lastSafeAreaPanelWidth, bounds.width) &&
                 Mathf.Approximately(lastSafeAreaPanelHeight, bounds.height))
             {
@@ -830,13 +845,15 @@ namespace Mejnun.UI
             root.style.paddingBottom = bottomInset + cornerMargin;
             if (turnPanel != null)
             {
-                turnPanel.style.left = leftInset + cornerMargin;
+                turnPanel.style.left = mirrored ? StyleKeyword.Null : leftInset + cornerMargin;
+                turnPanel.style.right = mirrored ? rightInset + cornerMargin : StyleKeyword.Null;
                 turnPanel.style.top = topInset + cornerMargin;
             }
 
             if (pauseButton != null)
             {
-                pauseButton.style.right = rightInset + cornerMargin;
+                pauseButton.style.right = mirrored ? StyleKeyword.Null : rightInset + cornerMargin;
+                pauseButton.style.left = mirrored ? leftInset + cornerMargin : StyleKeyword.Null;
                 pauseButton.style.top = topInset + cornerMargin;
             }
 
@@ -844,8 +861,8 @@ namespace Mejnun.UI
             {
                 opponentsStrip.style.left = leftInset + cornerMargin;
                 opponentsStrip.style.right = rightInset + cornerMargin;
-                opponentsStrip.style.top = topInset + bounds.height * 0.2f;
-                opponentsStrip.style.bottom = bottomInset + bounds.height * 0.24f;
+                opponentsStrip.style.top = topInset + bounds.height * 0.15f;
+                opponentsStrip.style.bottom = bottomInset + bounds.height * 0.35f;
             }
 
             if (topOpponents != null)
@@ -858,6 +875,7 @@ namespace Mejnun.UI
             lastSafeAreaHeight = Screen.height;
             lastSafeAreaPanelWidth = bounds.width;
             lastSafeAreaPanelHeight = bounds.height;
+            lastSafeAreaMirrored = mirrored;
             hasSafeAreaSignature = true;
             phoneSafeAreaApplied = true;
         }
@@ -2021,6 +2039,11 @@ namespace Mejnun.UI
                 {
                     var botBadge = new BotBadgeIcon();
                     botBadge.AddToClassList("opponent-bot-badge");
+                    if (opponentSide == OpponentSide.Right)
+                    {
+                        botBadge.AddToClassList("opponent-bot-badge-left");
+                    }
+
                     opponent.Add(botBadge);
                 }
                 var cards = new VisualElement();

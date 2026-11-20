@@ -51,6 +51,211 @@ MonoBehaviour:
     m_Localized: Quem tomou banho mais recentemente?
     m_Metadata:
       m_Items: []
+  - m_Id: 74276106395648
+    m_Localized: Quem tem maior probabilidade de fazer um show de drag?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561472
+    m_Localized: Quem tem o cabelo mais encaracolado (e, portanto, o mais bonito)?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561473
+    m_Localized: "Quem \xE9 a pessoa mais exigente com a comida?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561474
+    m_Localized: "Quem tem maior probabilidade de dar um tapa em algu\xE9m por ter
+      dado um tapa?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561475
+    m_Localized: Quem consegue levantar peso, cara?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561476
+    m_Localized: Quem consegue manter o ritmo melhor?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561477
+    m_Localized: "Quem consegue contar o maior n\xFAmero de d\xEDgitos de pi? Hum,
+      torta..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561478
+    m_Localized: "Se voc\xEA estivesse preso em uma ilha deserta com apenas um esquilo
+      e dois palitos de dente... Quem pegaria o esquilo, ou algo assim?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561479
+    m_Localized: "Quem tem mais experi\xEAncia em contar feij\xF5es?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561480
+    m_Localized: Quem fofoca mais?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561481
+    m_Localized: Quem tem os arrotos mais fedorentos?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561482
+    m_Localized: "Quem \xE9 o melhor em adivinhar o peso das pessoas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561483
+    m_Localized: Quem consegue construir o melhor trabuco?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561484
+    m_Localized: "Quem \xE9 o melhor cozinheiro?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561485
+    m_Localized: Quem queima mais comida enquanto cozinha?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561486
+    m_Localized: "Quem tem a maior circunfer\xEAncia craniana?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561487
+    m_Localized: Quem tem maior probabilidade de esquecer o celular na geladeira?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561488
+    m_Localized: Quem tem maior probabilidade de deixar o controle remoto no congelador?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561489
+    m_Localized: Quem toca mais instrumentos?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561490
+    m_Localized: Quem toca pior um instrumento?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561491
+    m_Localized: "Quem levaria mais tempo para construir um m\xF3vel?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561492
+    m_Localized: "Quem \xE9 o mais obcecado por gatos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561493
+    m_Localized: "Quem \xE9 o mais obcecado por cachorros?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561494
+    m_Localized: Quem tem o cheiro de sabugueiro mais forte?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561495
+    m_Localized: Quem tem azul como cor favorita?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561496
+    m_Localized: Quem tem maior probabilidade de lutar contra um urso (e vencer)?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561497
+    m_Localized: Quem perde mais em Las Vegas?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561498
+    m_Localized: "Quem sabe o que \xE9 um chuveiro completo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561499
+    m_Localized: "Quem \xE9 a pessoa que passa mais tempo online?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561500
+    m_Localized: "R\xE1pido, estou pensando em um n\xFAmero entre 81 e 976! Quem
+      chutou 222?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561501
+    m_Localized: Quem tem maior probabilidade de se irritar durante os jogos?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561502
+    m_Localized: "Quem \xE9 o mais competitivo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561503
+    m_Localized: Quem quer ir primeiro?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561504
+    m_Localized: "Quem quer ir primeiro \xE9 o que menos quer ir?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561505
+    m_Localized: Luta! Quem venceu?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561506
+    m_Localized: "Quem n\xE3o quer ir de jeito nenhum?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561507
+    m_Localized: "Quem n\xE3o gosta da cor roxa?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561508
+    m_Localized: Quem tem mais cabelos grisalhos?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561509
+    m_Localized: Quem tem menos pelos? Estou contando os pelos do corpo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561510
+    m_Localized: "Quem lavou a lou\xE7a por \xFAltimo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561511
+    m_Localized: "Quem tem a maior cole\xE7\xE3o de jogos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561512
+    m_Localized: "Quem melhor pode explicar a teoria qu\xE2ntica?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561513
+    m_Localized: "Quem tem a melhor vis\xE3o?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561514
+    m_Localized: "Quem fala mais l\xEDnguas?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561515
+    m_Localized: Quem tem mais gatos?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561516
+    m_Localized: Quem sabe regular um carburador?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561517
+    m_Localized: "Quem j\xE1 visitou o maior n\xFAmero de pa\xEDses?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561518
+    m_Localized: "Quem consegue correr mais longe? Fa\xE7a o teste antes do jogo!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561519
+    m_Localized: Quem desviaria o bonde para cinco pessoas?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74276131561520
+    m_Localized: "Invente uma pergunta, mas n\xE3o diga que eu mandei voc\xEA fazer
+      isso..."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

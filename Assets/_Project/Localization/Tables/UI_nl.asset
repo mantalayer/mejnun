@@ -953,7 +953,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403148
-    m_Localized: De winnaar begint als eerste in de volgende wedstrijd.
+    m_Localized: De winnaar begint als eerste aan de volgende wedstrijd.
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403149
@@ -3186,8 +3186,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346291
-    m_Localized: Hiermee pas je aan hoe ver kaarten omhoog komen wanneer ze geselecteerd
-      of met de muis eroverheen bewogen worden.
+    m_Localized: Hiermee kunt u aanpassen hoe ver kaarten omhoog komen wanneer ze
+      worden geselecteerd of wanneer u er met de muis overheen beweegt.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346292
@@ -3815,6 +3815,212 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282621
+  - m_Id: 32528051200000
+    m_Localized: Vierkleurige kaarten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: Geef ruiten in blauw en klaveren in groen weer op compatibele kaartskins.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: Indeling voor linkshandigen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: Pas de plaatsing van de HUD-bedieningselementen aan voor linkshandig
+      spelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: Batterijbesparing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: Beperk de weergave op mobiele apparaten tot 30 frames per seconde.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 74273040359424
+    m_Localized: Geweldig!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: Geweldig!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: Geweldig!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Geweldig!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: Jij weet hoe je me mooi kunt laten voelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: Dat is precies wat ik bedoel!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: Ik heb daar meer van nodig in mijn leven.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: Ik vind het leuk. Ik ben er dol op.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Hoera!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Hotdog!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Nou, je kunt me gerust een koekje noemen!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: En hoe!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Cha!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: Heerlijk!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: Zoet!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Hella!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Jeetje!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Slecht!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: Niet daar!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: Wat dacht je nou?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: Hoe kon je dat doen?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: Meteen de gevangenis in...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: Dat is illegaal...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: Ik begrijp je niet...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: Je denkt als een hamster...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: Iemand heeft last van een maandagdip...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Oef...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: Oeps...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: Oeps, wat een enorme blunder...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Een klein oei...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Schaamte...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: FOUT! ONVOLDOENDE INTELLIGENTIE GEDETECTEERD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: Mijn kat kan beter spelen dan dat.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: "H\xE8..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Nou, dat had ik niet verwacht...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Ehm...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: Dat had beter gekund...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: Verberg de handen van je tegenstander tussen de beurten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: Verplaatst de handen van de tegenstander gedeeltelijk buiten beeld
+      tot hun volgende beurt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: Rand van het pannenoppervlak breedte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: Hiermee bepaalt u hoe ver vanaf de linker-, rechter- en bovenrand
+      het pannen van het bord begint; stel in op 0 om dit uit te schakelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Toneelstuk
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3888,3 +4094,4 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734799
         - id: 6549039734802
+        - id: 999999999999999
