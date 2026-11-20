@@ -93,6 +93,7 @@
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.popup.gone_down" />
                 </Bindings>
             </ui:Label>
+            <ui:Label name="good-move-popup" class="good-move-popup" picking-mode="Ignore" />
             <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
             <ui:Label name="invalid-move-popup" class="invalid-move-popup" picking-mode="Ignore" />
             <ui:VisualElement name="marker-layer" class="marker-layer" picking-mode="Ignore" />

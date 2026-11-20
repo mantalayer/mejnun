@@ -39,6 +39,9 @@ namespace Mejnun.Localization.Editor
         [Tooltip("The workbook ID from its URL: docs.google.com/spreadsheets/d/<ID>/edit")]
         public string SpreadsheetId = string.Empty;
 
+        [Tooltip("Workbook ID used only for importing popup lines and dealer questions.")]
+        public string PopupSpreadsheetId = "1kEKMuh_SyPiWCqKREpXMf1fXh6f3QmqY0rXrHE-U9j4";
+
         public List<SheetTab> Tabs = new()
         {
             new SheetTab { Collection = Loc.UiTable, TabName = Loc.UiTable },
@@ -76,6 +79,30 @@ namespace Mejnun.Localization.Editor
             if (string.IsNullOrWhiteSpace(SpreadsheetId))
             {
                 reason = "no spreadsheet ID is set";
+                return false;
+            }
+
+            reason = null;
+            return true;
+        }
+
+        public bool IsPopupSheetConfigured(out string reason)
+        {
+            if (SheetsServiceProvider == null)
+            {
+                reason = "no Sheets Service Provider is assigned";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(SheetsServiceProvider.ClientId) || string.IsNullOrEmpty(SheetsServiceProvider.ClientSecret))
+            {
+                reason = $"'{SheetsServiceProvider.name}' has no OAuth client ID/secret";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(PopupSpreadsheetId))
+            {
+                reason = "no popup/questions spreadsheet ID is set";
                 return false;
             }
 

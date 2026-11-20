@@ -16,14 +16,14 @@ MonoBehaviour:
   displayName: Burgundy
   mode: 0
   tile: {fileID: 21300000, guid: 340486cf846144576a4466baf3022af7, type: 3}
-  tileWorldSize: 1
+  tileWorldSize: 10
   border: {fileID: 21300000, guid: 02f87863007af472caabe443c8b98caa, type: 3}
   image: {fileID: 0}
   tint: {r: 1, g: 1, b: 1, a: 1}
   clearColor: {r: 0.19, g: 0.035, b: 0.08, a: 1}
   unlock:
-    kind: 0
-    target: 0
+    kind: 1
+    target: 2
     achievementId: 
   borderSettings:
     borderEnabled: 0

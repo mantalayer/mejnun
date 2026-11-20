@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections.Generic;
 using Mejnun.Game;
 using Mejnun.Localization.Editor;
 using Mejnun.Platform;
@@ -307,6 +308,90 @@ namespace Mejnun.Localization.Tests
             Assert.That(rows[0].English, Is.EqualTo("Hello, \"friend\""));
             Assert.That(rows[0].Comment, Is.EqualTo("note"));
             Assert.That(rows[1].English, Is.EqualTo("Line 1\nLine 2"));
+        }
+
+        [Test]
+        public void PopupSheetPlanWritesKeysMatchesExistingTextAndRetiresRemovedRows()
+        {
+            var existing = new[]
+            {
+                new LocalizationSheetImporter.ExistingLine
+                    { Key = "flavor.good.002", English = "Already here" },
+                new LocalizationSheetImporter.ExistingLine
+                    { Key = "flavor.good.006", English = "Removed line" },
+                new LocalizationSheetImporter.ExistingLine
+                    { Key = "flavor.good.009", English = "Retired line", Retired = true }
+            };
+            var sheetValues = new List<IList<object>>
+            {
+                new List<object> { "Deciding Questions" },
+                new List<object> { "Already here" },
+                new List<object> { "Fresh, bright" }
+            };
+            var rows = LocalizationSheetImporter.ReadSheetRows(sheetValues, out var hasHeader,
+                out var addKeyHeader);
+            var plan = LocalizationSheetImporter.PlanTab(rows, existing, "flavor.good.");
+
+            Assert.That(hasHeader, Is.True);
+            Assert.That(addKeyHeader, Is.True);
+            Assert.That(plan.Lines, Has.Count.EqualTo(2));
+            Assert.That(plan.KeyCells[2], Is.EqualTo("flavor.good.002"));
+            Assert.That(plan.KeyCells[3], Is.EqualTo("flavor.good.010"));
+            Assert.That(plan.RetiredKeys, Is.EquivalentTo(new[] { "flavor.good.006" }));
+            Assert.That(plan.RetiredKeys, Does.Not.Contain("flavor.good.009"));
+        }
+
+        [Test]
+        public void PopupSheetPlanKeepsKeysWhenRowsAreReordered()
+        {
+            var existing = new[]
+            {
+                new LocalizationSheetImporter.ExistingLine
+                    { Key = "flavor.good.002", English = "Already here" },
+                new LocalizationSheetImporter.ExistingLine
+                    { Key = "flavor.good.010", English = "Fresh, bright" }
+            };
+            var rows = new[]
+            {
+                new LocalizationSheetImporter.SheetRow
+                    { Row = 2, English = "Fresh, bright", Key = "flavor.good.010" },
+                new LocalizationSheetImporter.SheetRow
+                    { Row = 3, English = "Already here", Key = "flavor.good.002" }
+            };
+
+            var plan = LocalizationSheetImporter.PlanTab(rows, existing, "flavor.good.");
+
+            Assert.That(plan.KeyCells[2], Is.EqualTo("flavor.good.010"));
+            Assert.That(plan.KeyCells[3], Is.EqualTo("flavor.good.002"));
+            Assert.That(plan.RetiredKeys, Is.Empty);
+        }
+
+        [Test]
+        public void PopupSheetPlanUpdatesByKeyAndClearsDuplicateRows()
+        {
+            var existing = new[]
+            {
+                new LocalizationSheetImporter.ExistingLine
+                    { Key = "flavor.good.002", English = "A typo in the old line" }
+            };
+            var rows = new[]
+            {
+                new LocalizationSheetImporter.SheetRow
+                    { Row = 2, English = "A corrected line", Key = "flavor.good.002" },
+                new LocalizationSheetImporter.SheetRow
+                    { Row = 3, English = "Fresh line", Key = "flavor.good.011" },
+                new LocalizationSheetImporter.SheetRow
+                    { Row = 4, English = "Fresh line", Key = "flavor.good.012" }
+            };
+
+            var plan = LocalizationSheetImporter.PlanTab(rows, existing, "flavor.good.");
+
+            Assert.That(plan.Lines, Has.Count.EqualTo(2));
+            Assert.That(plan.Lines[0].Key, Is.EqualTo("flavor.good.002"));
+            Assert.That(plan.Lines[0].English, Is.EqualTo("A corrected line"));
+            Assert.That(plan.Lines[1].Key, Is.EqualTo("flavor.good.011"));
+            Assert.That(plan.KeyCells[4], Is.Empty);
+            Assert.That(plan.RetiredKeys, Is.Empty);
         }
 
         [Test]

@@ -223,9 +223,8 @@ namespace Mejnun.Game.Tests
                 .Find(label => label.text == "Leyla");
             Assert.That(botName, Is.Not.Null);
             Assert.That(botName.text, Does.Not.Contain("bot").IgnoreCase);
-            var botBadge = botName.parent.Q<Label>(className: "opponent-bot-badge");
+            var botBadge = botName.parent.Q<BotBadgeIcon>(className: "opponent-bot-badge");
             Assert.That(botBadge, Is.Not.Null);
-            Assert.That(botBadge.text, Is.EqualTo("🤖"));
         }
 
         [UnityTest]

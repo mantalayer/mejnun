@@ -441,6 +441,7 @@ namespace Mejnun.Game
             boardCollectFlights.Clear();
             boardStoredTargets.Clear();
             boardCleared = true;
+            tableCamera?.FitBoard();
             if (CurrentState == null)
             {
                 return 0f;

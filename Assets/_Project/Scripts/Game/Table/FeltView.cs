@@ -83,33 +83,35 @@ namespace Mejnun.Game
             }
 
             var camera = tableCamera.Camera;
-            var worldHeight = camera.orthographicSize * 2f;
-            var worldWidth = worldHeight * camera.aspect;
+            var anchorPosition = tableCamera.FeltAnchorPosition;
+            var anchorWorldHeight = tableCamera.FeltAnchorSize * 2f;
+            var anchorWorldWidth = anchorWorldHeight * camera.aspect;
             var cameraPosition = camera.transform.position;
-            var viewportSize = new Vector2(worldWidth, worldHeight);
+            var viewWorldHeight = camera.orthographicSize * 2f;
+            var viewWorldWidth = viewWorldHeight * camera.aspect;
+            var viewportSize = new Vector2(anchorWorldWidth, anchorWorldHeight);
             var screenHeight = Mathf.Max(camera.pixelHeight, 1f);
 
             if (tiledRenderer != null && tiledRenderer.enabled && tiledRenderer.sprite != null)
             {
                 var spriteWidth = Mathf.Max(tiledRenderer.sprite.bounds.size.x, 0.0001f);
                 var spriteHeight = Mathf.Max(tiledRenderer.sprite.bounds.size.y, 0.0001f);
-                var tileSize = TableFeltLayout.TileSize(activeFelt, worldHeight);
+                var tileSize = TableFeltLayout.TileSize(activeFelt, anchorWorldHeight);
                 var scaleX = tileSize.x / spriteWidth;
                 var scaleY = tileSize.y / spriteHeight;
                 tiledRenderer.transform.localScale = new Vector3(scaleX, scaleY, 1f);
                 var tileWidth = Mathf.Max(tileSize.x, 0.0001f);
                 var tileHeight = Mathf.Max(tileSize.y, 0.0001f);
-                var tileCountX = Mathf.Max(2, Mathf.CeilToInt(worldWidth / tileWidth));
-                var tileCountY = Mathf.Max(2, Mathf.CeilToInt(worldHeight / tileHeight));
-                if ((tileCountX & 1) != 0)
-                {
-                    tileCountX++;
-                }
-
-                if ((tileCountY & 1) != 0)
-                {
-                    tileCountY++;
-                }
+                var anchorLeft = anchorPosition.x - anchorWorldWidth * 0.5f;
+                var anchorTop = anchorPosition.y + anchorWorldHeight * 0.5f;
+                var viewLeft = cameraPosition.x - viewWorldWidth * 0.5f;
+                var viewRight = cameraPosition.x + viewWorldWidth * 0.5f;
+                var viewTop = cameraPosition.y + viewWorldHeight * 0.5f;
+                var viewBottom = cameraPosition.y - viewWorldHeight * 0.5f;
+                var gridLeft = anchorLeft + Mathf.Floor((viewLeft - anchorLeft) / tileWidth) * tileWidth;
+                var gridTop = anchorTop - Mathf.Floor((anchorTop - viewTop) / tileHeight) * tileHeight;
+                var tileCountX = Mathf.Max(2, Mathf.CeilToInt((viewRight - gridLeft) / tileWidth) + 1);
+                var tileCountY = Mathf.Max(2, Mathf.CeilToInt((gridTop - viewBottom) / tileHeight) + 1);
 
                 tiledRenderer.size = new Vector2(tileCountX * spriteWidth, tileCountY * spriteHeight);
                 var pivot = tiledRenderer.sprite.pivot;
@@ -119,12 +121,12 @@ namespace Mejnun.Game
                 var totalWidth = tileCountX * tileWidth;
                 var totalHeight = tileCountY * tileHeight;
                 tiledRenderer.transform.SetPositionAndRotation(new Vector3(
-                    cameraPosition.x - worldWidth * 0.5f + totalWidth * pivotX,
-                    cameraPosition.y + worldHeight * 0.5f - totalHeight * (1f - pivotY),
+                    gridLeft + totalWidth * pivotX,
+                    gridTop - totalHeight * (1f - pivotY),
                     0f), Quaternion.identity);
             }
 
-            var fixedPosition = cameraPosition + camera.transform.forward * (camera.nearClipPlane + 0.1f);
+            var fixedPosition = anchorPosition + camera.transform.forward * (camera.nearClipPlane + 0.1f);
             if (borderRenderer != null && borderRenderer.enabled && borderRenderer.sprite != null)
             {
                 var settings = activeFelt.BorderSettings;
@@ -134,9 +136,9 @@ namespace Mejnun.Game
                 var sourceSliceWorld = slicePixels > 0f
                     ? slicePixels / pixelsPerUnit
                     : Mathf.Max(borderRenderer.sprite.bounds.size.x * 0.1f, 0.0001f);
-                var targetThicknessWorld = TableFeltLayout.BorderThickness(settings, worldHeight);
+                var targetThicknessWorld = TableFeltLayout.BorderThickness(settings, anchorWorldHeight);
                 var scale = targetThicknessWorld / sourceSliceWorld;
-                var insetWorld = TableFeltLayout.Inset(settings, worldHeight, screenHeight);
+                var insetWorld = TableFeltLayout.Inset(settings, anchorWorldHeight, screenHeight);
                 borderRenderer.transform.SetPositionAndRotation(fixedPosition, camera.transform.rotation);
                 borderRenderer.transform.localScale = new Vector3(scale, scale, 1f);
                 borderRenderer.size = new Vector2(
@@ -147,12 +149,12 @@ namespace Mejnun.Game
             if (imageRenderer != null && imageRenderer.enabled && imageRenderer.sprite != null)
             {
                 var imageSize = imageRenderer.sprite.bounds.size;
-                var scale = Mathf.Max(worldWidth / Mathf.Max(imageSize.x, 0.0001f),
-                    worldHeight / Mathf.Max(imageSize.y, 0.0001f));
+                var scale = Mathf.Max(anchorWorldWidth / Mathf.Max(imageSize.x, 0.0001f),
+                    anchorWorldHeight / Mathf.Max(imageSize.y, 0.0001f));
                 var imageCenterOffset = imageRenderer.sprite.bounds.center * scale;
                 imageRenderer.transform.SetPositionAndRotation(new Vector3(
-                    cameraPosition.x - imageCenterOffset.x,
-                    cameraPosition.y - imageCenterOffset.y,
+                    anchorPosition.x - imageCenterOffset.x,
+                    anchorPosition.y - imageCenterOffset.y,
                     fixedPosition.z),
                     Quaternion.identity);
                 imageRenderer.transform.localScale = new Vector3(scale, scale, 1f);

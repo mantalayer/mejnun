@@ -4290,6 +4290,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262618953
+  - m_Id: 999999999999999
+    m_Key: hud.invalid_move.flavor
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338054
   - m_Id: 6549035540564
     m_Key: hud.confirm.dont_ask
     m_Metadata:
@@ -4570,6 +4575,196 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848251886338053
+  - m_Id: 74273040359424
+    m_Key: flavor.good.000
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836278
+  - m_Id: 74273250074624
+    m_Key: flavor.good.001
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836279
+  - m_Id: 74273250074625
+    m_Key: flavor.good.002
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836280
+  - m_Id: 74273250074626
+    m_Key: flavor.good.003
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836281
+  - m_Id: 74273250074627
+    m_Key: flavor.good.004
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836282
+  - m_Id: 74273250074628
+    m_Key: flavor.good.005
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836283
+  - m_Id: 74273250074629
+    m_Key: flavor.good.006
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836284
+  - m_Id: 74273250074630
+    m_Key: flavor.good.007
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836285
+  - m_Id: 74273250074631
+    m_Key: flavor.good.008
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836286
+  - m_Id: 74273250074632
+    m_Key: flavor.good.009
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836287
+  - m_Id: 74273250074633
+    m_Key: flavor.good.010
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836288
+  - m_Id: 74273250074634
+    m_Key: flavor.good.011
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836289
+  - m_Id: 74273250074635
+    m_Key: flavor.good.012
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836290
+  - m_Id: 74273250074636
+    m_Key: flavor.good.013
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836291
+  - m_Id: 74273250074637
+    m_Key: flavor.good.014
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836292
+  - m_Id: 74273250074638
+    m_Key: flavor.good.015
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836293
+  - m_Id: 74273250074639
+    m_Key: flavor.good.016
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836294
+  - m_Id: 74273250074640
+    m_Key: flavor.good.017
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836295
+  - m_Id: 74274328010752
+    m_Key: flavor.bad.000
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836296
+  - m_Id: 74274328010753
+    m_Key: flavor.bad.001
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836297
+  - m_Id: 74274328010754
+    m_Key: flavor.bad.002
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836298
+  - m_Id: 74274328010755
+    m_Key: flavor.bad.003
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836299
+  - m_Id: 74274328010756
+    m_Key: flavor.bad.004
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836300
+  - m_Id: 74274328010757
+    m_Key: flavor.bad.005
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836301
+  - m_Id: 74274328010758
+    m_Key: flavor.bad.006
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836302
+  - m_Id: 74274328010759
+    m_Key: flavor.bad.007
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836303
+  - m_Id: 74274328010760
+    m_Key: flavor.bad.008
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836304
+  - m_Id: 74274328010761
+    m_Key: flavor.bad.009
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836305
+  - m_Id: 74274328010762
+    m_Key: flavor.bad.010
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836306
+  - m_Id: 74274328010763
+    m_Key: flavor.bad.011
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836307
+  - m_Id: 74274328010764
+    m_Key: flavor.bad.012
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836308
+  - m_Id: 74274328010765
+    m_Key: flavor.bad.013
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836309
+  - m_Id: 74274328010766
+    m_Key: flavor.bad.014
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836310
+  - m_Id: 74274328010767
+    m_Key: flavor.bad.015
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836311
+  - m_Id: 74274328010768
+    m_Key: flavor.bad.016
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836312
+  - m_Id: 74274328010769
+    m_Key: flavor.bad.017
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836313
+  - m_Id: 74274328010770
+    m_Key: flavor.bad.018
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836314
+  - m_Id: 74274328010771
+    m_Key: flavor.bad.019
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836315
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -8854,3 +9049,160 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Explains the mobile battery saver option.
+    - rid: 4825848251886338054
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor above the rule explanation. {0} = flavor line;
+          {1} = localized rule explanation.
+    - rid: 4825848254492836278
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836279
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836280
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836281
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836282
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836283
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836284
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836285
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836286
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836287
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836288
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836289
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836290
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836291
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836292
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836293
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836294
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836295
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Good-move flavor popup shown briefly during a game.
+    - rid: 4825848254492836296
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836297
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836298
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836299
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836300
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836301
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836302
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836303
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836304
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836305
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836306
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836307
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836308
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836309
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836310
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836311
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836312
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836313
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836314
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836315
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Bad-move flavor shown above the localized rule explanation.
