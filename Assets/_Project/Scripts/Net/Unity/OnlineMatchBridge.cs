@@ -198,6 +198,7 @@ namespace Mejnun.Net.Unity
                 launch.Session.SessionHostChanged += OnSessionHostChanged;
                 launch.Service.MigrationHandler.DataRestored += OnMigrationDataRestored;
                 localSeat = launch.IsHost ? 0 : -1;
+                matchFlow.OnlineIsHost = launch.IsHost;
                 matchFlow.OnlineSessionCode = !string.IsNullOrWhiteSpace(launch.Session.Code)
                     ? launch.Session.Code
                     : launch.SessionCode;
@@ -487,6 +488,11 @@ namespace Mejnun.Net.Unity
             }
             else
             {
+                if (matchFlow != null)
+                {
+                    matchFlow.OnlineIsHost = false;
+                }
+
                 transport?.PrepareForHostMigration();
             }
         }
@@ -497,6 +503,8 @@ namespace Mejnun.Net.Unity
             {
                 return;
             }
+
+            matchFlow.OnlineIsHost = launch.Session != null && launch.Session.IsHost;
 
             var displayName = launch.AuthenticationId == authenticationId
                 ? launch.DisplayName
@@ -554,6 +562,7 @@ namespace Mejnun.Net.Unity
 
             launch.Service.MigrationHandler.AuthoritativeSession = hostSession;
             hostSession.StateChanged += OnHostStateChanged;
+            matchFlow.OnlineIsHost = true;
             matchFlow.SetOnlineAuthority(true, localSeat);
             matchFlow.Controller.SetCommandRelay(this);
             matchFlow.ApplyOnlineGame(hostSession.Game);

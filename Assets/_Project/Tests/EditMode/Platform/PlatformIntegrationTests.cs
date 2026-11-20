@@ -1,4 +1,5 @@
 using System;
+using Mejnun.Cosmetics;
 using Mejnun.Game;
 using Mejnun.Platform;
 using NUnit.Framework;
@@ -71,15 +72,24 @@ namespace Mejnun.Platform.Tests
         [Test]
         public void AchievementBridgeMapsLocalIdsAndIgnoresUnknownIds()
         {
-            AssertMapping("first_game", AchievementId.FirstGame);
-            AssertMapping("first_win", AchievementId.FirstWin);
-            AssertMapping("first_mejnun", AchievementId.FirstMejnun);
-            AssertMapping("ten_wins", AchievementId.TenWins);
-            AssertMapping("beat_hard_bot", AchievementId.BeatHardBot);
-            AssertMapping("full_table", AchievementId.FullTable);
+            for (var index = 0; index < AchievementIds.All.Length; index++)
+            {
+                Assert.That(PlatformAchievementBridge.TryMapAchievement(AchievementIds.All[index],
+                    out AchievementId actual), Is.True, AchievementIds.All[index]);
+                Assert.That((int)actual, Is.EqualTo(index + 1), AchievementIds.All[index]);
+            }
 
             Assert.That(PlatformAchievementBridge.TryMapAchievement("unknown", out _), Is.False);
             Assert.DoesNotThrow(() => PlatformAchievementBridge.UnlockAchievements(new[] { "unknown", null }));
+        }
+
+        [Test]
+        public void StatIdsHaveStableExplicitValues()
+        {
+            Assert.That((int)StatId.GamesPlayed, Is.EqualTo(1));
+            Assert.That((int)StatId.GamesWon, Is.EqualTo(2));
+            Assert.That((int)StatId.MejnunWins, Is.EqualTo(3));
+            Assert.That((int)StatId.HotSeatQuestions, Is.EqualTo(35));
         }
 
         private static void AssertMapping(string localId, AchievementId expected)

@@ -76,11 +76,25 @@ namespace Mejnun.Game
             var levelBefore = Profile.Level;
             var xpGained = ProgressionRules.XpFor(summary);
             Profile.RecordMatch(summary);
-            var newAchievements = AchievementTracker.Evaluate(Profile, summary);
+            summary.Details.CurrentWinStreak = Profile.Stats.CurrentWinStreak;
+            summary.Details.BestWinStreak = Profile.Stats.BestWinStreak;
+            var newAchievements = new List<string>(AchievementTracker.Evaluate(Profile, summary));
             for (var index = 0; index < newAchievements.Count; index++)
             {
                 Profile.AddAchievement(newAchievements[index]);
             }
+
+            var collectorAchievements = AchievementTracker.Evaluate(Profile, summary, IsCollectorUnlocked());
+            for (var index = 0; index < collectorAchievements.Count; index++)
+            {
+                var achievement = collectorAchievements[index];
+                if (!newAchievements.Contains(achievement))
+                {
+                    newAchievements.Add(achievement);
+                    Profile.AddAchievement(achievement);
+                }
+            }
+
             PlatformAchievementBridge.RecordMatch(summary, newAchievements);
 
             var newlyUnlocked = new List<string>();
@@ -224,6 +238,34 @@ namespace Mejnun.Game
             {
                 newlyUnlocked.Add(id);
             }
+        }
+
+        private bool IsCollectorUnlocked()
+        {
+            if (unlockEvaluator == null)
+            {
+                return false;
+            }
+
+            var itemIds = unlockEvaluator.AllItemIds();
+            var hasEarnableItem = false;
+            for (var index = 0; index < itemIds.Count; index++)
+            {
+                var itemId = itemIds[index];
+                var requirement = unlockEvaluator.GetRequirement(itemId);
+                if (requirement == null || requirement.Kind == UnlockKind.Purchase)
+                {
+                    continue;
+                }
+
+                hasEarnableItem = true;
+                if (!unlockEvaluator.IsOwned(itemId, requirement))
+                {
+                    return false;
+                }
+            }
+
+            return hasEarnableItem;
         }
     }
 }

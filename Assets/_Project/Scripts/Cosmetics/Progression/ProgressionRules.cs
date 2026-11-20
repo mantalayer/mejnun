@@ -6,7 +6,7 @@ namespace Mejnun.Cosmetics
     {
         public static int XpFor(MatchSummary summary)
         {
-            var baseXp = summary.CanAwardWin && summary.LocalWin
+            var baseXp = summary.CanAwardWin && summary.LocalWin && !summary.Stalemate
                 ? 60 + (summary.MejnunWin ? 20 : 0)
                 : summary.Stalemate ? 15 : 10;
             var difficultyMultiplier = summary.CpuDifficulty == 0 ? 1.0 :

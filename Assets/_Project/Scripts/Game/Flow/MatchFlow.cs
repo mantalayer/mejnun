@@ -46,6 +46,9 @@ namespace Mejnun.Game
         private float elapsedMatchSeconds;
         private MatchRequest activeRequest;
         private readonly CardTracker cardTracker = new CardTracker();
+        private readonly MatchStatsTracker matchStatsTracker = new MatchStatsTracker();
+        private bool chosenFirstByQuestion;
+        private bool allBotsHard;
 
         public MejnunGame Game { get; private set; }
         public TableController Controller => tableController;
@@ -67,6 +70,7 @@ namespace Mejnun.Game
         public TurnTimer TurnTimer => turnTimer;
         public int TurnSeconds { get; private set; }
         public bool IsOnline => remoteAuthority && Mode == MatchMode.Online;
+        public bool OnlineIsHost { get; set; }
         public IReadOnlyList<SeatConfig> Seats => seats;
         public MatchRequest ActiveRequest => activeRequest;
         public bool FastForward
@@ -206,6 +210,12 @@ namespace Mejnun.Game
                 tableController.Synchronized += OnSynchronized;
                 tableController.GameWon += OnGameWon;
                 tableController.GameStalemate += OnGameStalemate;
+                tableController.AssistUsed += OnAssistUsed;
+            }
+
+            if (turnTimer != null)
+            {
+                turnTimer.TimedOut += OnTurnTimedOut;
             }
 
             if (tutorialDirector != null)
@@ -250,6 +260,15 @@ namespace Mejnun.Game
             {
                 elapsedMatchSeconds += Time.unscaledDeltaTime;
             }
+
+            if (TurnSeconds > 0 && turnTimer != null)
+            {
+                var trackingSeat = StatsTrackingSeat();
+                if (trackingSeat >= 0 && Game != null && Game.State.CurrentSeat == trackingSeat)
+                {
+                    matchStatsTracker.NoteRemainingSeconds(turnTimer.RemainingSeconds);
+                }
+            }
         }
 
         private void OnDisable()
@@ -259,6 +278,12 @@ namespace Mejnun.Game
                 tableController.Synchronized -= OnSynchronized;
                 tableController.GameWon -= OnGameWon;
                 tableController.GameStalemate -= OnGameStalemate;
+                tableController.AssistUsed -= OnAssistUsed;
+            }
+
+            if (turnTimer != null)
+            {
+                turnTimer.TimedOut -= OnTurnTimedOut;
             }
 
             if (tutorialDirector != null)
@@ -338,6 +363,11 @@ namespace Mejnun.Game
             seats[seat] = isBot
                 ? SeatConfig.Bot(displayName, BotDifficulty.Medium)
                 : SeatConfig.Human(displayName);
+            if (isBot && seat == onlineLocalSeat)
+            {
+                matchStatsTracker.Reset(TurnSeconds);
+            }
+
             tableView?.SetCpuSeatPredicate(IsBotSeat);
             OnlineSeatsChanged?.Invoke();
         }
@@ -532,6 +562,7 @@ namespace Mejnun.Game
 
             activeRequest = request ?? new MatchRequest(seats, TurnSeconds,
                 humanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo, seed: seed);
+            allBotsHard = AreAllOpponentsHardBots();
 
             return StartRound(request?.Dealer, seed ?? CreateSeed(seats.Length));
         }
@@ -562,6 +593,7 @@ namespace Mejnun.Game
 
             activeRequest = new MatchRequest(seats, data.TurnSeconds,
                 humanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo, resume: true, seed: data.RoundSeed);
+            allBotsHard = AreAllOpponentsHardBots();
 
             GameSettings.FastForward = false;
             Game = SnapshotSerializer.Read(data.Snapshot);
@@ -575,11 +607,13 @@ namespace Mejnun.Game
             LastResult = null;
             LastProgression = null;
             resultRecorded = false;
+            chosenFirstByQuestion = false;
             handoffSeat = -1;
             revealedSeat = -1;
             lastSavedGame = null;
             lastSavedTurnNumber = -1;
             cardTracker.Reset();
+            matchStatsTracker.Reset(TurnSeconds);
             if (botDriver != null)
             {
                 botDriver.Configure(tableController, seats, cardTracker);
@@ -646,7 +680,13 @@ namespace Mejnun.Game
             }
 
             var dealerSeat = (seat - 1 + SeatCount) % SeatCount;
-            return ChooseDealer(dealerSeat);
+            var result = ChooseDealer(dealerSeat);
+            if (result.Ok && seat == StatsTrackingSeat())
+            {
+                chosenFirstByQuestion = true;
+            }
+
+            return result;
         }
 
         public CommandResult ChooseRandomDealer()
@@ -783,10 +823,13 @@ namespace Mejnun.Game
             LastResult = null;
             LastProgression = null;
             resultRecorded = false;
+            chosenFirstByQuestion = false;
             pendingTutorialResult = null;
             handoffSeat = -1;
             revealedSeat = -1;
             cardTracker.Reset();
+            allBotsHard = AreAllOpponentsHardBots();
+            matchStatsTracker.Reset(TurnSeconds);
             if (botDriver != null)
             {
                 botDriver.Stop();
@@ -929,6 +972,12 @@ namespace Mejnun.Game
         private void OnSynchronized(GameState state, TurnSession turn)
         {
             cardTracker.Observe(state);
+            var trackingSeat = StatsTrackingSeat();
+            if (trackingSeat >= 0)
+            {
+                matchStatsTracker.Observe(state, trackingSeat, tableController != null && tableController.HintsEnabled);
+            }
+
             if (Mode == MatchMode.Online)
             {
                 if (state.Phase == GamePhase.Finished && state.Result != null && Screen != MatchFlowScreen.Results)
@@ -1029,6 +1078,62 @@ namespace Mejnun.Game
             return -1;
         }
 
+        private int StatsTrackingSeat()
+        {
+            if (Mode == MatchMode.Online)
+            {
+                return onlineLocalSeat >= 0 && onlineLocalSeat < seats.Length && !seats[onlineLocalSeat].IsBot
+                    ? onlineLocalSeat
+                    : -1;
+            }
+
+            return SoleHumanSeat();
+        }
+
+        private bool AreAllOpponentsHardBots()
+        {
+            var localSeat = SoleHumanSeat();
+            if (SeatCount != 6 || localSeat < 0)
+            {
+                return false;
+            }
+
+            for (var seat = 0; seat < seats.Length; seat++)
+            {
+                if (seat != localSeat && (!seats[seat].IsBot || seats[seat].Difficulty != BotDifficulty.Hard))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void OnAssistUsed(TableAssistKind assistKind)
+        {
+            switch (assistKind)
+            {
+                case TableAssistKind.Undo:
+                    matchStatsTracker.RecordUndo();
+                    break;
+                case TableAssistKind.Revert:
+                    matchStatsTracker.RecordRevert();
+                    break;
+                case TableAssistKind.FixBoard:
+                    matchStatsTracker.RecordFixBoard();
+                    break;
+            }
+        }
+
+        private void OnTurnTimedOut()
+        {
+            var trackingSeat = StatsTrackingSeat();
+            if (Game != null && trackingSeat >= 0 && Game.State.CurrentSeat == trackingSeat)
+            {
+                matchStatsTracker.RecordTimeout();
+            }
+        }
+
         private void OnGameWon(GameResult result)
         {
             if (IsTutorial && tutorialDirector != null && tutorialDirector.IsRunning)
@@ -1096,16 +1201,25 @@ namespace Mejnun.Game
                 resultRecorded = true;
             }
 
+            var resultMode = activeRequest == null
+                ? (HumanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo)
+                : activeRequest.Mode;
+            var onlineSeatIsHuman = resultMode != MatchMode.Online ||
+                                    (onlineLocalSeat >= 0 && onlineLocalSeat < seats.Length &&
+                                     !seats[onlineLocalSeat].IsBot);
+            if (!onlineSeatIsHuman)
+            {
+                resultRecorded = true;
+            }
+
             if (!resultRecorded && seats.Length >= 2 && HumanCount >= 1)
             {
                 resultRecorded = true;
-                var mode = activeRequest == null
-                    ? (HumanCount >= 2 ? MatchMode.PassAndPlay : MatchMode.Solo)
-                    : activeRequest.Mode;
+                var mode = resultMode;
                 var localWin = result.Winner.HasValue && result.Winner.Value >= 0 &&
                                result.Winner.Value < seats.Length &&
                                (mode == MatchMode.Online
-                                   ? result.Winner.Value == onlineLocalSeat
+                                   ? result.Winner.Value == onlineLocalSeat && onlineSeatIsHuman
                                    : !seats[result.Winner.Value].IsBot);
                 var beatHardBot = false;
                 var hasBot = false;
@@ -1138,10 +1252,26 @@ namespace Mejnun.Game
                     }
                 }
 
+                var trackingSeat = StatsTrackingSeat();
+                if (Game != null && trackingSeat >= 0)
+                {
+                    matchStatsTracker.Observe(Game.State, trackingSeat,
+                        tableController != null && tableController.HintsEnabled);
+                }
+
+                var details = trackingSeat >= 0
+                    ? matchStatsTracker.Finish(result, Game == null ? null : Game.State)
+                    : new MatchDetails();
+                details.FastestWinSeconds = localWin ? Mathf.FloorToInt(elapsedMatchSeconds) : 0;
+                details.TurnSeconds = TurnSeconds;
+                details.IsHost = mode == MatchMode.Online && OnlineIsHost;
+                details.ChosenFirstByQuestion = chosenFirstByQuestion;
+                details.AllBotsHard = allBotsHard;
+
                 var summary = new MatchSummary(mode, seats.Length, HumanCount, localWin,
                     localWin && result.Kind == GameEndKind.EmptyHand,
                     result.Kind == GameEndKind.Stalemate, beatHardBot, cpuDifficulty,
-                    Mathf.FloorToInt(elapsedMatchSeconds));
+                    Mathf.FloorToInt(elapsedMatchSeconds), details);
                 LastProgression = ProgressionService.Instance.RecordMatch(summary);
             }
 

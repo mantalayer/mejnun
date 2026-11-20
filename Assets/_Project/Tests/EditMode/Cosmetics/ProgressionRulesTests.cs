@@ -61,6 +61,109 @@ namespace Mejnun.Cosmetics.Tests
         }
 
         [Test]
+        public void StalematesPreserveWinStreaksAndLossesResetThem()
+        {
+            var profile = new PlayerProfile();
+            profile.RecordMatch(Solo(true, false, false));
+            profile.RecordMatch(Solo(false, false, true));
+
+            Assert.That(profile.Stats.CurrentWinStreak, Is.EqualTo(1));
+            Assert.That(profile.Stats.BestWinStreak, Is.EqualTo(1));
+
+            profile.RecordMatch(Solo(false, false, false));
+            Assert.That(profile.Stats.CurrentWinStreak, Is.Zero);
+            Assert.That(profile.Stats.BestWinStreak, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void FastestWinAndLargestHandRecordsAreUpdatedOnlyByEligibleWins()
+        {
+            var profile = new PlayerProfile();
+            var firstWin = new MatchSummary(MatchMode.Solo, 2, 1, true, false, false, false, 2, 80,
+                new MatchDetails { FastestWinTurns = 5, LargestHand = 21 });
+            profile.RecordMatch(firstWin);
+            profile.RecordMatch(new MatchSummary(MatchMode.Solo, 2, 1, false, false, false, false, 2, 20,
+                new MatchDetails { FastestWinTurns = 2, LargestHand = 30 }));
+            profile.RecordMatch(new MatchSummary(MatchMode.Solo, 2, 1, true, false, false, false, 2, 40,
+                new MatchDetails { FastestWinTurns = 3, LargestHand = 25 }));
+
+            Assert.That(profile.Stats.FastestWinTurns, Is.EqualTo(3));
+            Assert.That(profile.Stats.FastestWinSeconds, Is.EqualTo(40));
+            Assert.That(profile.Stats.LargestHandAtWin, Is.EqualTo(25));
+        }
+
+        [Test]
+        public void ProgressionAchievementsUseMilestonesAndCanBeEarnedOnlyOnce()
+        {
+            var profile = new PlayerProfile();
+            profile.AddXp(100000);
+            MatchSummary summary = Solo(false, false, false);
+            for (var index = 0; index < 250; index++)
+            {
+                var won = index < 200;
+                summary = Solo(won, false, false);
+                profile.RecordMatch(summary);
+            }
+
+            var newlyEarned = AchievementTracker.Evaluate(profile, summary);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.Regular);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.Veteran);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.Seasoned);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.MasterOfMejnun);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.LevelTen);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.LevelTwentyFive);
+            CollectionAssert.Contains(newlyEarned, AchievementIds.LevelFifty);
+
+            for (var index = 0; index < newlyEarned.Count; index++)
+            {
+                profile.AddAchievement(newlyEarned[index]);
+            }
+
+            Assert.That(AchievementTracker.Evaluate(profile, summary), Is.Empty);
+        }
+
+        [Test]
+        public void MultiHumanPassAndPlayDoesNotAwardWinAchievementsOrStreaks()
+        {
+            var profile = new PlayerProfile();
+            var summary = new MatchSummary(MatchMode.PassAndPlay, 4, 2, true, true, false, false);
+
+            profile.RecordMatch(summary);
+            var achievements = AchievementTracker.Evaluate(profile, summary);
+
+            Assert.That(profile.Stats.Played, Is.EqualTo(1));
+            Assert.That(profile.Stats.Wins, Is.Zero);
+            Assert.That(profile.Stats.MejnunWins, Is.Zero);
+            Assert.That(profile.Stats.CurrentWinStreak, Is.Zero);
+            Assert.That(achievements, Does.Not.Contain(AchievementIds.FirstWin));
+            Assert.That(achievements, Does.Not.Contain(AchievementIds.FirstMejnun));
+        }
+
+        [Test]
+        public void SkillAchievementsRequireHintsAndFixBoardToBeOff()
+        {
+            var assistedProfile = new PlayerProfile();
+            var assistedSummary = new MatchSummary(MatchMode.Solo, 2, 1, true, true, false, false, 2, 0,
+                new MatchDetails { CleanSweep = true, FixBoardsUsed = 1 });
+            assistedProfile.RecordMatch(assistedSummary);
+            var assistedAchievements = AchievementTracker.Evaluate(assistedProfile, assistedSummary);
+
+            Assert.That(assistedAchievements, Does.Not.Contain(AchievementIds.CleanSweep));
+            Assert.That(assistedAchievements, Does.Not.Contain(AchievementIds.Patient));
+            Assert.That(assistedAchievements, Does.Contain(AchievementIds.NoTrainingWheels));
+
+            var hintedProfile = new PlayerProfile();
+            var hintedSummary = new MatchSummary(MatchMode.Solo, 2, 1, true, true, false, false, 2, 0,
+                new MatchDetails { CleanSweep = true, HintsUsed = true });
+            hintedProfile.RecordMatch(hintedSummary);
+            var hintedAchievements = AchievementTracker.Evaluate(hintedProfile, hintedSummary);
+
+            Assert.That(hintedAchievements, Does.Not.Contain(AchievementIds.CleanSweep));
+            Assert.That(hintedAchievements, Does.Not.Contain(AchievementIds.NoTrainingWheels));
+            Assert.That(hintedAchievements, Does.Not.Contain(AchievementIds.Patient));
+        }
+
+        [Test]
         public void LevelCurveHandlesBoundaries()
         {
             Assert.That(ProgressionRules.LevelForXp(0), Is.EqualTo(1));
@@ -84,7 +187,9 @@ namespace Mejnun.Cosmetics.Tests
                 AchievementIds.FirstGame,
                 AchievementIds.FirstWin,
                 AchievementIds.FirstMejnun,
-                AchievementIds.BeatHardBot
+                AchievementIds.BeatHardBot,
+                AchievementIds.Patient,
+                AchievementIds.NoTrainingWheels
             }, achievements);
 
             for (var index = 0; index < achievements.Count; index++)
