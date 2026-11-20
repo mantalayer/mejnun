@@ -41,7 +41,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282630
   - m_Id: 6548985208845
-    m_Localized: "Un as peut \xEAtre faible (A-2-3) ou fort (Q-K-A), mais une suite
+    m_Localized: "Un as peut \xEAtre faible (A-2-3) ou fort (Q-K-A), mais une quinte
       ne se referme jamais (K-A-2)."
     m_Metadata:
       m_Items: []
@@ -512,8 +512,8 @@ MonoBehaviour:
       rang, de couleurs diff\xE9rentes. Les suites contiennent de 3 \xE0 13 cartes
       cons\xE9cutives de la m\xEAme couleur, sans r\xE9p\xE9tition de rang. Un as
       peut \xEAtre faible (A-2-3) ou fort (Q-K-A), mais jamais les deux\_; la combinaison
-      K-A-2 n'est pas autoris\xE9e. Chaque brelan doit \xEAtre valide\_; les brelans
-      d'une ou deux cartes ne sont pas valides."
+      K-A-2 n'est pas autoris\xE9e. Chaque combinaison de cartes doit \xEAtre valide\_;
+      les combinaisons d'une ou deux cartes ne sont pas valides."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540510

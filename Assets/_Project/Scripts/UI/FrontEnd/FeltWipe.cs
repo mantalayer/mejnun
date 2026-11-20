@@ -39,6 +39,7 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
+            FrameRateGovernor.NotifyActivity();
             width = host.resolvedStyle.width;
             height = host.resolvedStyle.height;
             wipeVertically = DeviceProfile.IsPhoneLayout;
@@ -86,6 +87,7 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
+            FrameRateGovernor.NotifyActivity();
             var progress = Mathf.Clamp01((Time.unscaledTime - startTime) / Duration);
             ApplyProgress(progress * progress * (3f - 2f * progress));
             if (progress >= 1f)

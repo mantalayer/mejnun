@@ -56,7 +56,6 @@ namespace Mejnun.Game
         private byte? hoveredCardId;
         private TapEffect lastTapEffect;
         private byte lastTapCardId;
-        private string previousTapCardMarkSymbol;
         [SerializeField, Min(0f)] private float timeoutFixStepSeconds = 0.6f;
         private readonly SetMarkers setMarkers = new SetMarkers();
 
@@ -64,7 +63,6 @@ namespace Mejnun.Game
         {
             None,
             SelectionToggle,
-            CardMark,
             SuccessfulMove,
             RemoteTurnBlocked
         }
@@ -334,12 +332,14 @@ namespace Mejnun.Game
             if (game != null)
             {
                 setMarkers.Cycle(meldId, game.State.Board);
+                FeedbackCues.Raise(FeedbackCue.Mark);
             }
         }
 
         public void CycleMarkedCard(byte cardId)
         {
             setMarkers.CycleCard(cardId);
+            FeedbackCues.Raise(FeedbackCue.Mark);
         }
 
         public bool RemoveMarkedSet(int meldId)
@@ -1341,33 +1341,11 @@ namespace Mejnun.Game
                 }
                 else if (markHit.Kind == GestureHitKind.HandCard)
                 {
-                    if (pointerGesture.Kind == PointerGestureKind.Tap)
-                    {
-                        lastTapEffect = TapEffect.CardMark;
-                        lastTapCardId = markHit.CardId;
-                        previousTapCardMarkSymbol = setMarkers.GetCardSymbol(markHit.CardId);
-                    }
-
                     CycleMarkedCard(markHit.CardId);
                 }
                 else if (markHit.Kind == GestureHitKind.BoardCard)
                 {
-                    if (pointerGesture.Kind == PointerGestureKind.DoubleTap)
-                    {
-                        if (lastTapEffect == TapEffect.CardMark)
-                        {
-                            setMarkers.RestoreCard(lastTapCardId, previousTapCardMarkSymbol);
-                        }
-
-                        CycleMarkedSet(markHit.MeldId);
-                    }
-                    else
-                    {
-                        lastTapEffect = TapEffect.CardMark;
-                        lastTapCardId = markHit.CardId;
-                        previousTapCardMarkSymbol = setMarkers.GetCardSymbol(markHit.CardId);
-                        CycleMarkedCard(markHit.CardId);
-                    }
+                    CycleMarkedCard(markHit.CardId);
                 }
                 else if (markHit.Kind == GestureHitKind.MeldGap || markHit.Kind == GestureHitKind.MeldGrip)
                 {
@@ -1642,7 +1620,6 @@ namespace Mejnun.Game
         {
             lastTapEffect = TapEffect.None;
             lastTapCardId = 0;
-            previousTapCardMarkSymbol = null;
         }
 
         private void HandleHandPointerGesture(PointerGesture pointerGesture)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mejnun.Game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -59,6 +60,7 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
+            FrameRateGovernor.NotifyActivity();
             var state = new TransitionState(element, completed);
             Running.Add(element, state);
             var parentExtent = element.parent == null
@@ -97,6 +99,7 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
+            FrameRateGovernor.NotifyActivity();
             var progress = Mathf.Clamp01((Time.unscaledTime - state.StartTime) / Duration);
             var eased = progress * progress * (3f - 2f * progress);
             var offset = Mathf.Lerp(state.StartOffset, state.EndOffset, eased);

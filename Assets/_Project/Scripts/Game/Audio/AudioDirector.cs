@@ -352,6 +352,9 @@ namespace Mejnun.Game
                 case FeedbackCue.Invalid:
                     audioService.Post(AudioIds.PlayCardInvalid);
                     break;
+                case FeedbackCue.Mark:
+                    audioService.Post(AudioIds.PlayCardMark);
+                    break;
                 case FeedbackCue.MarkedSetBroken:
                     audioService.Post(AudioIds.PlayMeldInvalid);
                     break;

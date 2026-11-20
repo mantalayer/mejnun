@@ -145,6 +145,7 @@ namespace Mejnun.UI
             var startedAt = Time.unscaledTime;
             root.style.translate = new Translate(new Length(0f, LengthUnit.Pixel),
                 new Length(fromY, LengthUnit.Pixel));
+            FrameRateGovernor.NotifyActivity();
             transition = root.schedule.Execute(() =>
             {
                 if (root.panel == null)
@@ -154,6 +155,7 @@ namespace Mejnun.UI
                     return;
                 }
 
+                FrameRateGovernor.NotifyActivity();
                 var progress = Mathf.Clamp01((Time.unscaledTime - startedAt) / TransitionDuration);
                 var eased = progress * progress * (3f - 2f * progress);
                 root.style.translate = new Translate(new Length(0f, LengthUnit.Pixel),

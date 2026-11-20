@@ -286,6 +286,15 @@
     align-items: center;
 }
 
+/* The dock is sized to the draw pile panel; the button fills it instead of growing it. */
+.fast-forward-dock .hud-button {
+    height: auto;
+    min-height: 0;
+    align-self: stretch;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .bottom-area {
     flex-direction: row;
     justify-content: center;
@@ -941,7 +950,6 @@
 
 .phone-layout .fast-forward-dock .hud-button {
     min-width: 132px;
-    min-height: 52px;
     font-size: 16px;
 }
 
