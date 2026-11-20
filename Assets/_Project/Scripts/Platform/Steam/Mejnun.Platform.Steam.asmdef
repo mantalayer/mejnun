@@ -1,0 +1,24 @@
+{
+    "name": "Mejnun.Platform.Steam",
+    "rootNamespace": "Mejnun.Platform.Steam",
+    "references": [
+        "Mejnun.Platform",
+        "com.rlabrecque.steamworks.net"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "macOSStandalone",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "MEJNUN_STEAM",
+        "!DISABLESTEAMWORKS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

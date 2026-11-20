@@ -4,7 +4,8 @@
   "references": [
     "Mejnun.Core",
     "Mejnun.AI",
-    "Mejnun.Game"
+    "Mejnun.Game",
+    "Mejnun.Platform"
   ],
   "includePlatforms": [
     "Editor"

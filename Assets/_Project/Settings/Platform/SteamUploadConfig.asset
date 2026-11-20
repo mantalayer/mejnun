@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 191fc24a34db24acc8cb92120836452e, type: 3}
+  m_Name: SteamUploadConfig
+  m_EditorClassIdentifier: Mejnun.Platform.Editor::Mejnun.Platform.Editor.SteamUploadConfig
+  m_apps:
+  - m_name: Full
+    m_appId: 0
+    m_isDemo: 0
+    m_branch: beta
+    m_depots:
+    - m_depotId: 0
+      m_builds:
+      - m_enabled: 1
+        m_buildProfile: {fileID: 0}
+        m_target: 19
+        m_subfolder: windows
+    - m_depotId: 0
+      m_builds:
+      - m_enabled: 1
+        m_buildProfile: {fileID: 0}
+        m_target: 2
+        m_subfolder: macos

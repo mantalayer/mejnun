@@ -6,6 +6,7 @@
     "Mejnun.AI",
     "Mejnun.Cosmetics",
     "Mejnun.Audio",
+    "Mejnun.Platform",
     "Unity.InputSystem"
   ],
   "includePlatforms": [],
