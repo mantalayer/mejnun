@@ -8,6 +8,35 @@ namespace Mejnun.Game.Tests
     public sealed class UndoGroupTests
     {
         [Test]
+        public void CycleMarkedCardRaisesMarkFeedbackWithoutMarkingItsSet()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out var straight);
+            var seat = game.State.CurrentSeat;
+            Assert.That(game.Apply(GameCommand.MoveCards(seat, straight, CardTarget.NewMeld(0))).Ok, Is.True);
+            var cardId = game.State.Board[0].Cards[1].Id;
+            var controllerObject = new GameObject("Table Controller Test");
+            FeedbackCue? raisedCue = null;
+            System.Action<FeedbackCue> onCueRaised = cue => raisedCue = cue;
+            FeedbackCues.Raised += onCueRaised;
+            try
+            {
+                var controller = controllerObject.AddComponent<TableController>();
+                controller.Initialize(game);
+
+                controller.CycleMarkedCard(cardId);
+
+                Assert.That(raisedCue, Is.EqualTo(FeedbackCue.Mark));
+                Assert.That(controller.MarkedCards.Count, Is.EqualTo(1));
+                Assert.That(controller.MarkedSets, Is.Empty);
+            }
+            finally
+            {
+                FeedbackCues.Raised -= onCueRaised;
+                Object.DestroyImmediate(controllerObject);
+            }
+        }
+
+        [Test]
         public void OneUndoRestoresAWholeTwoCommandGesture()
         {
             var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out var straight);

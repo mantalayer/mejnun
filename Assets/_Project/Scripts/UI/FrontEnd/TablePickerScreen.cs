@@ -647,6 +647,7 @@ namespace Mejnun.UI.FrontEnd
 
             var offsets = new[] { -8f, 8f, -6f, 6f, -3f, 3f, 0f };
             var startedAt = Time.unscaledTime;
+            FrameRateGovernor.NotifyActivity();
             IVisualElementScheduledItem scheduled = null;
             scheduled = target.schedule.Execute(() =>
             {
@@ -658,6 +659,7 @@ namespace Mejnun.UI.FrontEnd
                     return;
                 }
 
+                FrameRateGovernor.NotifyActivity();
                 target.style.translate = new Translate(new Length(offsets[frame], LengthUnit.Pixel),
                     new Length(0f, LengthUnit.Pixel));
             }).Every(0);

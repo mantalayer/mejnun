@@ -1262,19 +1262,22 @@ namespace Mejnun.UI
                 fastForwardDock.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
                 if (root != null && bottomBar != null && bottomBar.worldBound.height > 0f)
                 {
+                    StyleLength dockHeight = statusPanel != null && statusPanel.worldBound.height > 0f
+                        ? new StyleLength(statusPanel.worldBound.height)
+                        : new StyleLength(StyleKeyword.Auto);
                     if (phoneLayout)
                     {
                         fastForwardDock.style.left = StyleKeyword.Auto;
                         fastForwardDock.style.right = 12f;
                         fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;
-                        fastForwardDock.style.height = StyleKeyword.Auto;
+                        fastForwardDock.style.height = dockHeight;
                     }
                     else
                     {
                         fastForwardDock.style.left = bottomBar.worldBound.xMax - root.worldBound.xMin + 8f;
                         fastForwardDock.style.right = StyleKeyword.Auto;
                         fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMax;
-                        fastForwardDock.style.height = bottomBar.worldBound.height;
+                        fastForwardDock.style.height = dockHeight;
                     }
                 }
             }
@@ -2209,6 +2212,7 @@ namespace Mejnun.UI
         private void AnimateOpponentHandOffset(VisualElement opponent, Vector2 tuckedOffset,
             OpponentHandTuckState tuckState)
         {
+            FrameRateGovernor.NotifyActivity();
             IVisualElementScheduledItem animation = null;
             SetOpponentHandOffset(opponent, tuckedOffset * GetOpponentHandTuckAmount(tuckState));
             animation = opponent.schedule.Execute(() =>
@@ -2220,6 +2224,7 @@ namespace Mejnun.UI
                     return;
                 }
 
+                FrameRateGovernor.NotifyActivity();
                 var amount = GetOpponentHandTuckAmount(tuckState);
                 SetOpponentHandOffset(opponent, tuckedOffset * amount);
                 if (Mathf.Approximately(amount, tuckState.To))

@@ -119,6 +119,46 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
+        public IEnumerator RefittingCameraDoesNotRescaleFelt()
+        {
+            SceneManager.LoadScene("Table", LoadSceneMode.Single);
+            yield return null;
+
+            var feltView = Object.FindAnyObjectByType<FeltView>();
+            var tableCamera = Object.FindAnyObjectByType<TableCamera>();
+            Assert.That(feltView, Is.Not.Null);
+            Assert.That(tableCamera, Is.Not.Null);
+
+            var tile = feltView.GetComponentsInChildren<SpriteRenderer>(true)
+                .Single(renderer => renderer.name == "Tiled Felt");
+            var camera = tableCamera.Camera;
+            var anchorPosition = tableCamera.FeltAnchorPosition;
+            var anchorSize = tableCamera.FeltAnchorSize;
+            var tileScale = tile.transform.localScale;
+
+            tableCamera.Zoom(100f, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+            var zoomedSize = camera.orthographicSize;
+            tableCamera.FitBounds(new Bounds(Vector3.zero, new Vector3(100f, 100f)), 1f);
+            yield return new WaitForSecondsRealtime(0.5f);
+            feltView.RefreshLayout();
+
+            Assert.That(camera.orthographicSize, Is.GreaterThan(zoomedSize));
+            Assert.That(tableCamera.FeltAnchorPosition, Is.EqualTo(anchorPosition));
+            Assert.That(tableCamera.FeltAnchorSize, Is.EqualTo(anchorSize));
+            Assert.That(tile.transform.localScale, Is.EqualTo(tileScale));
+
+            var fittedSize = camera.orthographicSize;
+            tableCamera.FitBoard();
+            yield return new WaitForSecondsRealtime(0.5f);
+            feltView.RefreshLayout();
+
+            Assert.That(camera.orthographicSize, Is.Not.EqualTo(fittedSize));
+            Assert.That(tableCamera.FeltAnchorPosition, Is.EqualTo(anchorPosition));
+            Assert.That(tableCamera.FeltAnchorSize, Is.EqualTo(anchorSize));
+            Assert.That(tile.transform.localScale, Is.EqualTo(tileScale));
+        }
+
+        [UnityTest]
         public IEnumerator RequestedFeltRemainsVisibleDuringDealerSelection()
         {
             SceneManager.LoadScene("Table", LoadSceneMode.Single);

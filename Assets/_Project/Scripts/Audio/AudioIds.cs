@@ -3,6 +3,7 @@ namespace Mejnun.Audio
     public static class AudioIds
     {
         public const string PlayUiClick = "Play_UI_Click";
+        public const string PlayCardMark = PlayUiClick;
         public const string PlayCardPickup = "Play_Card_Pickup";
         public const string PlayCardLongPress = "Play_Card_LongPress";
         public const string PlayCardDrop = "Play_Card_Drop";

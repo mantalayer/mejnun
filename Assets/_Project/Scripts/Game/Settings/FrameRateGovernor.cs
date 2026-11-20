@@ -25,8 +25,14 @@ namespace Mejnun.Game
 
         public static void NotifyActivity()
         {
-            if (instance != null)
-                instance.lastActivityTime = Time.unscaledTime;
+            if (instance == null)
+                return;
+
+            var now = Time.unscaledTime;
+            var wasIdle = now - instance.lastActivityTime >= IdleDelaySeconds;
+            instance.lastActivityTime = now;
+            if (wasIdle)
+                instance.ApplyFrameRate();
         }
 
         public static int ResolveTargetFrameRate(int refreshRate, bool batterySaver, bool idle)

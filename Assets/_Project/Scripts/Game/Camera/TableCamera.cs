@@ -26,8 +26,6 @@ namespace Mejnun.Game
         private float bottomInsetFloor;
         private Vector3 fitStartPosition;
         private float fitStartSize;
-        private Vector3 fitStartFeltAnchorPosition;
-        private float fitStartFeltAnchorSize;
         private float fitStartTime;
         private Vector3 fitTargetPosition;
         private float fitTargetSize;
@@ -35,6 +33,7 @@ namespace Mejnun.Game
         private float feltAnchorSize;
         private bool fitting;
         private bool hasFittedBounds;
+        private bool hasFeltAnchor;
 
         public Camera Camera => tableCamera;
         public float BottomInsetFraction => bottomInsetFraction;
@@ -107,8 +106,6 @@ namespace Mejnun.Game
             FrameRateGovernor.NotifyActivity();
             tableCamera.transform.position = Vector3.LerpUnclamped(fitStartPosition, fitTargetPosition, eased);
             tableCamera.orthographicSize = Mathf.LerpUnclamped(fitStartSize, fitTargetSize, eased);
-            feltAnchorPosition = Vector3.LerpUnclamped(fitStartFeltAnchorPosition, fitTargetPosition, eased);
-            feltAnchorSize = Mathf.LerpUnclamped(fitStartFeltAnchorSize, fitTargetSize, eased);
             baseOrthographicSize = tableCamera.orthographicSize;
         }
 
@@ -208,8 +205,6 @@ namespace Mejnun.Game
             {
                 fitStartPosition = tableCamera.transform.position;
                 fitStartSize = tableCamera.orthographicSize;
-                fitStartFeltAnchorPosition = feltAnchorPosition;
-                fitStartFeltAnchorSize = feltAnchorSize;
                 fitStartTime = Time.unscaledTime;
             }
 
@@ -346,8 +341,13 @@ namespace Mejnun.Game
         {
             tableCamera.transform.position = fitTargetPosition;
             tableCamera.orthographicSize = fitTargetSize;
-            feltAnchorPosition = fitTargetPosition;
-            feltAnchorSize = fitTargetSize;
+            if (!hasFeltAnchor)
+            {
+                feltAnchorPosition = fitTargetPosition;
+                feltAnchorSize = fitTargetSize;
+                hasFeltAnchor = true;
+            }
+
             baseOrthographicSize = fitTargetSize;
             fitting = false;
         }

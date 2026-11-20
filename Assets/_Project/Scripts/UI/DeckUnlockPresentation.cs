@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
+using Mejnun.Game;
 using Mejnun.Localization;
 using Mejnun.UI.FrontEnd;
 using UnityEngine;
@@ -141,6 +142,7 @@ namespace Mejnun.UI
 
             currentIndex = 0;
             isPlaying = true;
+            FrameRateGovernor.NotifyActivity();
             overlay.style.display = DisplayStyle.Flex;
             ShowCurrentDeck();
             Evaluate(0f);
@@ -181,6 +183,7 @@ namespace Mejnun.UI
                 return;
             }
 
+            FrameRateGovernor.NotifyActivity();
             var deltaSeconds = Mathf.Clamp(timer.deltaTime / 1000f, 0f, MaxTickSeconds);
             Evaluate(elapsed + deltaSeconds);
         }

@@ -6,6 +6,7 @@ namespace Mejnun.Game
         LongPress,
         Drop,
         Invalid,
-        MarkedSetBroken
+        MarkedSetBroken,
+        Mark
     }
 }
