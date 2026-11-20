@@ -37,6 +37,7 @@ namespace Mejnun.Cosmetics
         [SerializeField] private List<DeckSkinBack> alternateBacks = new List<DeckSkinBack>();
         [SerializeField] private Sprite blank;
         [SerializeField] private bool pixelArt = true;
+        [SerializeField] private bool fourColourInk = true;
         [SerializeField] private float pixelsPerUnit = 100f;
         [SerializeField] private UnlockRequirement unlock = new UnlockRequirement();
 
@@ -70,6 +71,7 @@ namespace Mejnun.Cosmetics
 
         public Sprite Blank => blank;
         public bool PixelArt => pixelArt;
+        public bool FourColourInk => fourColourInk;
         public float PixelsPerUnit => pixelsPerUnit;
         public UnlockRequirement Unlock => unlock ?? UnlockRequirement.Free;
 

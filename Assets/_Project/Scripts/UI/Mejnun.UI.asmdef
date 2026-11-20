@@ -10,7 +10,9 @@
     "Mejnun.Cosmetics",
     "Mejnun.Net.Unity",
     "Unity.Services.Multiplayer",
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "Unity.Addressables",
+    "Unity.ResourceManager"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

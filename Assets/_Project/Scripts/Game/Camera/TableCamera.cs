@@ -96,6 +96,7 @@ namespace Mejnun.Game
 
             var remaining = 1f - progress;
             var eased = 1f - remaining * remaining * remaining;
+            FrameRateGovernor.NotifyActivity();
             tableCamera.transform.position = Vector3.LerpUnclamped(fitStartPosition, fitTargetPosition, eased);
             tableCamera.orthographicSize = Mathf.LerpUnclamped(fitStartSize, fitTargetSize, eased);
             baseOrthographicSize = tableCamera.orthographicSize;
@@ -284,6 +285,7 @@ namespace Mejnun.Game
 
             if (markManual)
             {
+                FrameRateGovernor.NotifyActivity();
                 fitting = false;
             }
 
@@ -316,6 +318,7 @@ namespace Mejnun.Game
 
             if (markManual)
             {
+                FrameRateGovernor.NotifyActivity();
                 fitting = false;
             }
 

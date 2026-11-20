@@ -13,6 +13,9 @@ namespace Mejnun.Game
         private const string CardHoverHighlightKey = "settings.cards.hoverHighlight";
         private const string ReducedMotionKey = "settings.reducedMotion";
         private const string HapticsKey = "settings.haptics";
+        private const string FourColourDeckKey = "settings.accessibility.fourColourDeck";
+        private const string LeftHandedKey = "settings.accessibility.leftHanded";
+        private const string BatterySaverKey = "settings.accessibility.batterySaver";
         private const string HandArcAmountKey = "settings.hand.arcAmount";
         private const string HandSpreadKey = "settings.hand.spread";
         private const string HandCardScaleKey = "settings.hand.cardScale";
@@ -100,6 +103,24 @@ namespace Mejnun.Game
         {
             get => Get(HapticsKey, true);
             set => Set(HapticsKey, value);
+        }
+
+        public static bool FourColourDeck
+        {
+            get => Get(FourColourDeckKey, false);
+            set => Set(FourColourDeckKey, value);
+        }
+
+        public static bool LeftHanded
+        {
+            get => Get(LeftHandedKey, false);
+            set => Set(LeftHandedKey, value);
+        }
+
+        public static bool BatterySaver
+        {
+            get => Get(BatterySaverKey, false);
+            set => Set(BatterySaverKey, value);
         }
 
         public static float HandArcAmount
@@ -265,6 +286,9 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(CardHoverHighlightKey);
             PlayerPrefs.DeleteKey(ReducedMotionKey);
             PlayerPrefs.DeleteKey(HapticsKey);
+            PlayerPrefs.DeleteKey(FourColourDeckKey);
+            PlayerPrefs.DeleteKey(LeftHandedKey);
+            PlayerPrefs.DeleteKey(BatterySaverKey);
             PlayerPrefs.DeleteKey(HandArcAmountKey);
             PlayerPrefs.DeleteKey(HandSpreadKey);
             PlayerPrefs.DeleteKey(HandCardScaleKey);

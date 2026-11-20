@@ -314,7 +314,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957571
-    m_Localized: Vinci tre partite contro i bot di fila.
+    m_Localized: Vinci tre partite di fila contro i bot.
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957578
@@ -713,7 +713,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208858
-    m_Localized: Non ancora un set
+    m_Localized: "Non \xE8 ancora un set"
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208859
@@ -1017,7 +1017,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403177
-    m_Localized: Lascia che l'IA prenda il controllo
+    m_Localized: Lasciamo che l'IA prenda il controllo
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403178
@@ -2350,7 +2350,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763270
-    m_Localized: Organizza una partita con sei posti.
+    m_Localized: Gioca una partita con sei posti.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763271
@@ -3739,7 +3739,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282613
   - m_Id: 6549035540590
-    m_Localized: Chi inizia per primo?
+    m_Localized: Chi inizia?
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540591

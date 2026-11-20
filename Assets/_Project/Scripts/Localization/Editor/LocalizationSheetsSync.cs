@@ -106,6 +106,7 @@ namespace Mejnun.Localization.Editor
                 var sheet = WaitForTranslations(service, settings, tab, deadline, ref result);
                 Progress($"Pulling {collectionName}", 0.8f);
                 Pull(settings, sheet, collection, ref result);
+                HandwrittenTranslationApplier.ApplyCollection(collectionName);
             }
 
             AssetDatabase.SaveAssets();
@@ -215,6 +216,9 @@ namespace Mejnun.Localization.Editor
             updates.Add(new ValueRange { Range = $"'{tab}'!A1", Values = new List<IList<object>> { header.Cast<object>().ToList() } });
 
             var rowByKey = new Dictionary<string, int>();
+            var handwritten = new Dictionary<(string Key, string Locale), HandwrittenTranslationApplier.Translation>();
+            foreach (var translation in HandwrittenTranslationApplier.ForTable(collection.TableCollectionName))
+                handwritten[(translation.Key, translation.Locale)] = translation;
             for (int row = 1; row < formulas.Rows.Count; row++)
             {
                 string key = formulas.Cell(row, KeyHeader).Trim();
@@ -239,9 +243,17 @@ namespace Mejnun.Localization.Editor
                     SetText(updates, tab, row, 1, source);
                     foreach (var locale in settings.TargetLocales)
                     {
-                        SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode], Formula(row + 1, locale.GoogleLanguageCode));
-                        SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode + StatusSuffix], StatusAuto);
-                        result.FormulasAdded++;
+                        if (handwritten.TryGetValue((shared.Key, locale.LocaleCode), out var translation))
+                        {
+                            SetText(updates, tab, row, formulas.Columns[locale.LocaleCode], translation.Text);
+                            SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode + StatusSuffix], StatusReviewed);
+                        }
+                        else
+                        {
+                            SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode], Formula(row + 1, locale.GoogleLanguageCode));
+                            SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode + StatusSuffix], StatusAuto);
+                            result.FormulasAdded++;
+                        }
                     }
 
                     continue;
@@ -260,6 +272,15 @@ namespace Mejnun.Localization.Editor
                     string cell = formulas.Cell(row, locale.LocaleCode);
                     if (sourceChanged && status == StatusReviewed)
                         SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode + StatusSuffix], StatusNeedsReview);
+
+                    if (handwritten.TryGetValue((shared.Key, locale.LocaleCode), out var translation))
+                    {
+                        if (cell != translation.Text)
+                            SetText(updates, tab, row, formulas.Columns[locale.LocaleCode], translation.Text);
+                        if (status != (sourceChanged ? StatusNeedsReview : StatusReviewed))
+                            SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode + StatusSuffix], sourceChanged ? StatusNeedsReview : StatusReviewed);
+                        continue;
+                    }
 
                     // Fill only empty cells (a new language column, or a row
                     // added by hand). Plain-text reviewer edits are kept.

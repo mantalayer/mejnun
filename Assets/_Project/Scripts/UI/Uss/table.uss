@@ -117,6 +117,84 @@
     align-items: flex-start;
 }
 
+.rtl .turn-panel {
+    left: auto;
+    right: 12px;
+    align-items: flex-end;
+}
+
+.rtl .hamburger-button {
+    left: 12px;
+    right: auto;
+}
+
+.rtl .fast-forward-dock {
+    left: 12px;
+    right: auto;
+}
+
+.rtl .bottom-area,
+.rtl .bottom-bar,
+.rtl .status-panel,
+.rtl .settings-tabs,
+.rtl .settings-row,
+.rtl .gallery-tabs,
+.rtl .gallery-detail-row,
+.rtl .dialog-actions,
+.rtl .seat-row {
+    flex-direction: row-reverse;
+}
+
+.rtl .status-panel {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+.rtl .turn-panel .status-label {
+    -unity-text-align: middle-right;
+}
+
+.rtl .settings-row .setting-label,
+.rtl .dialog-title,
+.rtl .gallery-detail-row .setting-label {
+    -unity-text-align: middle-right;
+}
+
+.left-handed .turn-panel {
+    left: auto;
+    right: 12px;
+    align-items: flex-end;
+}
+
+.left-handed .hamburger-button,
+.left-handed .fast-forward-dock {
+    left: 12px;
+    right: auto;
+}
+
+.left-handed .bottom-bar,
+.left-handed .status-panel {
+    flex-direction: row-reverse;
+}
+
+.left-handed.rtl .turn-panel {
+    left: 12px;
+    right: auto;
+    align-items: flex-start;
+}
+
+.left-handed.rtl .hamburger-button,
+.left-handed.rtl .fast-forward-dock {
+    left: auto;
+    right: 12px;
+}
+
+.left-handed.rtl .bottom-bar,
+.left-handed.rtl .status-panel {
+    flex-direction: row;
+}
+
+
 .turn-panel .status-label {
     white-space: normal;
 }
@@ -1096,4 +1174,46 @@
     width: 30px;
     height: 44px;
     font-size: 13px;
+}
+
+/* Right-to-left text. UI Toolkit never derives text alignment from languageDirection, so every
+   left-aligned paragraph or label class is mirrored here. Centred text keeps its centring below. */
+.rtl .settings-section-title,
+.rtl .settings-body-text,
+.rtl .settings-credit-role,
+.rtl .settings-tooltip,
+.rtl .dialog-message,
+.rtl .shortcut-copy,
+.rtl .room-code-label,
+.rtl .coach-title,
+.rtl .coach-body,
+.rtl .coach-nudge {
+    -unity-text-align: upper-right;
+}
+
+.rtl .rule-body,
+.rtl .confirm-dialog .dialog-message {
+    -unity-text-align: middle-center;
+}
+
+.rtl .settings-scroll .unity-toggle {
+    flex-direction: row-reverse;
+}
+
+.rtl .settings-scroll .unity-toggle > .unity-base-field__label {
+    -unity-text-align: middle-right;
+}
+
+.rtl .setting-value {
+    margin-left: 0;
+    margin-right: 6px;
+}
+
+.rtl .coach-actions {
+    flex-direction: row-reverse;
+}
+
+/* Keep the scrollbar on the trailing (left) edge so it never sits against the start of a line. */
+.rtl .settings-scroll .unity-scroll-view__content-and-vertical-scroll-container {
+    flex-direction: row-reverse;
 }

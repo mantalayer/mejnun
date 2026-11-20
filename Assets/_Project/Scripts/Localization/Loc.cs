@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -42,6 +43,27 @@ namespace Mejnun.Localization
         public static string GetFrom(string table, string key) => Resolve(table, key, null);
 
         public static string FormatFrom(string table, string key, params object[] args) => Resolve(table, key, args);
+
+        public static string Number(int value) => LocalizeDigits(CurrentLocaleCode, value.ToString(CultureInfo.InvariantCulture));
+
+        public static string LocalizeDigits(string localeCode, string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            char zero = localeCode == "ar" ? '\u0660' : localeCode == "fa" ? '\u06f0' : '\0';
+            if (zero == '\0')
+                return text;
+
+            var characters = text.ToCharArray();
+            for (int index = 0; index < characters.Length; index++)
+            {
+                if (characters[index] >= '0' && characters[index] <= '9')
+                    characters[index] = (char)(zero + characters[index] - '0');
+            }
+
+            return new string(characters);
+        }
 
         // Keys of every entry in a table, for content tables such as
         // DealerQuestions where code picks entries rather than naming them.
@@ -161,13 +183,62 @@ namespace Mejnun.Localization
 
             try
             {
-                return LocalizationSettings.StringDatabase.GetLocalizedString(table, key, CurrentLocale,
-                    FallbackBehavior.UseProjectSettings, args ?? Array.Empty<object>());
+                var protectedArgs = ProtectStringArguments(args, out var replacements);
+                string localized = LocalizationSettings.StringDatabase.GetLocalizedString(table, key, CurrentLocale,
+                    FallbackBehavior.UseProjectSettings, protectedArgs);
+                localized = LocalizeDigits(CurrentLocaleCode, localized);
+                foreach (var replacement in replacements)
+                    localized = localized.Replace(replacement.Token, replacement.Value);
+                return localized;
             }
             catch (Exception exception)
             {
                 Debug.LogWarning($"[Loc] Could not resolve '{table}/{key}': {exception.Message}");
                 return key;
+            }
+        }
+
+        private static object[] ProtectStringArguments(object[] args, out List<StringArgumentToken> replacements)
+        {
+            replacements = new List<StringArgumentToken>();
+            if (args == null || args.Length == 0)
+                return Array.Empty<object>();
+
+            var protectedArgs = (object[])args.Clone();
+            for (int index = 0; index < protectedArgs.Length; index++)
+            {
+                if (protectedArgs[index] is not string value)
+                    continue;
+
+                string token = "\ue000" + TokenLetters(index) + "\ue001";
+                replacements.Add(new StringArgumentToken(token, value));
+                protectedArgs[index] = token;
+            }
+
+            return protectedArgs;
+        }
+
+        private static string TokenLetters(int value)
+        {
+            var letters = new StringBuilder();
+            do
+            {
+                letters.Insert(0, (char)('A' + value % 26));
+                value = value / 26 - 1;
+            } while (value >= 0);
+
+            return letters.ToString();
+        }
+
+        private readonly struct StringArgumentToken
+        {
+            public readonly string Token;
+            public readonly string Value;
+
+            public StringArgumentToken(string token, string value)
+            {
+                Token = token;
+                Value = value;
             }
         }
 

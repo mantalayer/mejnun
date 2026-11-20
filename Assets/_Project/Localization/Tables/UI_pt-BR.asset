@@ -419,7 +419,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346227
-    m_Localized: "Aleat\xF3rio"
+    m_Localized: "feltro aleat\xF3rio"
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346241
@@ -889,8 +889,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548989403144
     m_Localized: "A op\xE7\xE3o \"Fix board\" tenta validar todas as partidas, mantendo
-      suas jogadas. A op\xE7\xE3o \"Revert board\" restaura a mesa ao estado em que
-      estava no in\xEDcio do seu turno."
+      suas jogadas. A op\xE7\xE3o \"Revert board\" restaura toda a mesa ao estado
+      em que estava no in\xEDcio do seu turno."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403145
@@ -2561,7 +2561,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957577
-    m_Localized: Ganhe um jogo online com pelo menos quatro jogadores humanos.
+    m_Localized: Ganhe uma partida online com pelo menos quatro jogadores humanos.
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957578
@@ -3500,7 +3500,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540524
-    m_Localized: Fixar placa
+    m_Localized: "Placa de fixa\xE7\xE3o"
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540525
@@ -3607,7 +3607,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540550
-    m_Localized: "Des\xE7a at\xE9 a mesa antes de usar as cartas do tabuleiro."
+    m_Localized: "Antes de usar as cartas do tabuleiro, des\xE7a at\xE9 a mesa."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540551

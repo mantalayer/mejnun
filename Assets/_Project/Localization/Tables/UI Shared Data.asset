@@ -4540,6 +4540,36 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262619003
+  - m_Id: 32528051200000
+    m_Key: settings.accessibility.four_colour_deck
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338048
+  - m_Id: 32528638402560
+    m_Key: settings.accessibility.four_colour_deck.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338049
+  - m_Id: 32528638402561
+    m_Key: settings.accessibility.left_handed
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338050
+  - m_Id: 32528638402562
+    m_Key: settings.accessibility.left_handed.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338051
+  - m_Id: 32528638402563
+    m_Key: settings.accessibility.battery_saver
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338052
+  - m_Id: 32528638402564
+    m_Key: settings.accessibility.battery_saver.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848251886338053
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -8798,3 +8828,29 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Artist credit under the unlocked deck name. {0} = artist name
+    - rid: 4825848251886338048
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Use blue diamonds and green clubs to distinguish red and black
+          suits.
+    - rid: 4825848251886338049
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the four-colour card accessibility option.
+    - rid: 4825848251886338050
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Move the HUD controls to the opposite side for left-handed
+          play.
+    - rid: 4825848251886338051
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the left-handed HUD layout option.
+    - rid: 4825848251886338052
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reduce the frame rate while idle to use less battery.
+    - rid: 4825848251886338053
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the mobile battery saver option.

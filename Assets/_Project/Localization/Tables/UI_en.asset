@@ -3792,6 +3792,30 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262618112
+  - m_Id: 32528051200000
+    m_Localized: Four-colour cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: Show diamonds in blue and clubs in green on compatible card skins.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: Left-handed layout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: Mirror the HUD control placement for left-handed play.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: Battery saver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: Limit mobile rendering to 30 frames per second.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

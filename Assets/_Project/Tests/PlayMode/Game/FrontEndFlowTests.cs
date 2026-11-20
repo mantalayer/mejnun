@@ -8,6 +8,7 @@ using Mejnun.UI;
 using Mejnun.UI.FrontEnd;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -199,6 +200,67 @@ namespace Mejnun.Game.Tests
 
             Assert.That(background.resolvedStyle.backgroundImage.sprite, Is.EqualTo(felt.Tile));
             Assert.That(background.resolvedStyle.backgroundColor, Is.EqualTo(felt.ClearColor));
+        }
+
+        [UnityTest]
+        public IEnumerator RulesParagraphsAlignRightInRightToLeftLocales()
+        {
+            var english = LocalizationSettings.SelectedLocale;
+            SceneManager.LoadScene(SceneFlow.MainMenuScene, LoadSceneMode.Single);
+            yield return null;
+
+            var presenter = Object.FindAnyObjectByType<FrontEndPresenter>();
+            var root = presenter.GetComponent<UIDocument>().rootVisualElement;
+            presenter.Flow.OpenSettings();
+            var rulesPage = root.Q<ScrollView>("settings-page-rules");
+            Assert.That(rulesPage, Is.Not.Null);
+            rulesPage.style.display = DisplayStyle.Flex;
+            var body = rulesPage.Q<Label>(className: "settings-body-text");
+            var title = rulesPage.Q<Label>(className: "settings-section-title");
+            var tooltip = root.Q<Label>("settings-tooltip");
+            var scrollContainer = rulesPage.Q(className: "unity-scroll-view__content-and-vertical-scroll-container");
+            var tutorialCopy = root.Q<Label>(className: "tutorial-prompt-copy");
+            yield return null;
+
+            Assert.That(root.ClassListContains("rtl"), Is.False);
+            Assert.That(body.resolvedStyle.unityTextAlign, Is.EqualTo(TextAnchor.UpperLeft));
+            Assert.That(scrollContainer.resolvedStyle.flexDirection, Is.EqualTo(FlexDirection.Row));
+
+            try
+            {
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("ar");
+                yield return WaitForLocale();
+
+                Assert.That(root.ClassListContains("rtl"), Is.True);
+                Assert.That(root.languageDirection, Is.EqualTo(LanguageDirection.RTL));
+                Assert.That(body.resolvedStyle.unityTextAlign, Is.EqualTo(TextAnchor.UpperRight));
+                Assert.That(title.resolvedStyle.unityTextAlign, Is.EqualTo(TextAnchor.UpperRight));
+                Assert.That(tooltip.resolvedStyle.unityTextAlign, Is.EqualTo(TextAnchor.UpperRight));
+                Assert.That(scrollContainer.resolvedStyle.flexDirection, Is.EqualTo(FlexDirection.RowReverse));
+                Assert.That(tutorialCopy.resolvedStyle.unityTextAlign, Is.EqualTo(TextAnchor.MiddleCenter));
+
+                LocalizationSettings.SelectedLocale = english;
+                yield return WaitForLocale();
+                Assert.That(root.ClassListContains("rtl"), Is.False);
+                Assert.That(body.resolvedStyle.unityTextAlign, Is.EqualTo(TextAnchor.UpperLeft));
+            }
+            finally
+            {
+                LocalizationSettings.SelectedLocale = english;
+            }
+        }
+
+        // SelectedLocaleChanged fires only after the new locale's tables have preloaded.
+        private static IEnumerator WaitForLocale()
+        {
+            var frames = 0;
+            while (!LocalizationSettings.InitializationOperation.IsDone && frames++ < 600)
+            {
+                yield return null;
+            }
+
+            yield return null;
+            yield return null;
         }
 
         private static IEnumerator WaitForScene(string sceneName)

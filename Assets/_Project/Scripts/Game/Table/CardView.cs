@@ -3,6 +3,29 @@ using UnityEngine;
 
 namespace Mejnun.Game
 {
+    public enum CardInkMode
+    {
+        None,
+        RedToBlue,
+        BlackToGreen
+    }
+
+    public static class CardInkSettings
+    {
+        public static CardInkMode ModeForSuit(Suit suit)
+        {
+            switch (suit)
+            {
+                case Suit.Clubs:
+                    return CardInkMode.BlackToGreen;
+                case Suit.Diamonds:
+                    return CardInkMode.RedToBlue;
+                default:
+                    return CardInkMode.None;
+            }
+        }
+    }
+
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class CardView : MonoBehaviour
     {
@@ -11,8 +34,13 @@ namespace Mejnun.Game
         [SerializeField] private float tweenDuration = 0.18f;
 
         private SpriteRenderer spriteRenderer;
+        private Material originalMaterial;
+        private static Material fourColourMaterial;
+        private static readonly int InkModeId = Shader.PropertyToID("_InkMode");
+        private MaterialPropertyBlock inkProperties;
         private Sprite faceSprite;
         private Sprite backSprite;
+        private Suit suit;
         private Vector3 tweenStart;
         private Vector3 tweenTarget;
         private Vector3 tweenScaleStart;
@@ -30,6 +58,7 @@ namespace Mejnun.Game
         private bool lastCardWarning;
         private bool tutorialFocus;
         private bool dimmed;
+        private bool supportsFourColourInk = true;
         private SpriteRenderer cardHighlight;
         private SpriteRenderer focusGlow;
         private SpriteRenderer hintGlow;
@@ -64,17 +93,21 @@ namespace Mejnun.Game
         private void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
+            originalMaterial = spriteRenderer.sharedMaterial;
         }
 
         private void OnEnable()
         {
             CardShadowSettings.Changed += ApplyShadowSettings;
+            GameSettings.Changed += OnSettingsChanged;
             ApplyShadowSettings();
+            ApplyFourColourInk();
         }
 
         private void OnDisable()
         {
             CardShadowSettings.Changed -= ApplyShadowSettings;
+            GameSettings.Changed -= OnSettingsChanged;
         }
 
         public void ConfigureCamera(TableCamera camera, float ppu)
@@ -83,12 +116,15 @@ namespace Mejnun.Game
             pixelsPerUnit = ppu > 0f ? ppu : 100f;
         }
 
-        public void SetCard(Card card, Sprite face, Sprite back, bool showFace, bool isSelected)
+        public void SetCard(Card card, Sprite face, Sprite back, bool showFace, bool isSelected,
+            bool useFourColourInk = true)
         {
             CardId = card.Id;
             Deck = card.Deck;
+            suit = card.Suit;
             faceSprite = face;
             backSprite = back;
+            supportsFourColourInk = useFourColourInk;
             faceUp = showFace;
             SetSelected(isSelected);
             UpdateSprite();
@@ -324,6 +360,7 @@ namespace Mejnun.Game
 
             if (moving)
             {
+                FrameRateGovernor.NotifyActivity();
                 tweenElapsed += Time.unscaledDeltaTime;
                 var amount = Mathf.Clamp01(tweenElapsed / currentTweenDuration);
                 liftBasePosition = Snap(Vector3.Lerp(tweenStart, tweenTarget, amount));
@@ -387,9 +424,55 @@ namespace Mejnun.Game
             }
 
             RefreshShadow();
+            ApplyFourColourInk();
             ApplyTint();
             RefreshCardHighlight();
             RefreshHintGlow();
+        }
+
+        private void OnDestroy()
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.sharedMaterial = originalMaterial;
+        }
+
+        private void OnSettingsChanged(string key)
+        {
+            if (key == "settings.accessibility.fourColourDeck")
+                ApplyFourColourInk();
+        }
+
+        private void ApplyFourColourInk()
+        {
+            if (spriteRenderer == null)
+                return;
+
+            if (originalMaterial == null)
+                originalMaterial = spriteRenderer.sharedMaterial;
+
+            var mode = faceUp && supportsFourColourInk && GameSettings.FourColourDeck
+                ? CardInkSettings.ModeForSuit(suit)
+                : CardInkMode.None;
+            if (mode == CardInkMode.None)
+            {
+                spriteRenderer.sharedMaterial = originalMaterial;
+                spriteRenderer.SetPropertyBlock(null);
+                return;
+            }
+
+            if (fourColourMaterial == null)
+            {
+                var shader = Resources.Load<Shader>("CardInk");
+                if (shader == null)
+                    return;
+                fourColourMaterial = new Material(shader);
+            }
+
+            spriteRenderer.sharedMaterial = fourColourMaterial;
+            inkProperties ??= new MaterialPropertyBlock();
+            spriteRenderer.GetPropertyBlock(inkProperties);
+            inkProperties.SetFloat(InkModeId, (float)mode);
+            spriteRenderer.SetPropertyBlock(inkProperties);
         }
 
         private void RefreshShadow()

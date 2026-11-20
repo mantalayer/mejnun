@@ -1,4 +1,5 @@
 using System.Linq;
+using Mejnun.Game;
 using Mejnun.Localization.Editor;
 using Mejnun.Platform;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using UnityEditor.Localization;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 using UnityEngine.UIElements;
 
 namespace Mejnun.Localization.Tests
@@ -185,6 +187,92 @@ namespace Mejnun.Localization.Tests
         }
 
         [Test]
+        public void ArabicPluralGuardrailRequiresSixAlternatives()
+        {
+            Assert.That(LocalizationValidator.HasSixArabicPluralForms("{0:plural:{} صفر|{} واحد|{} اثنان|{} قليل|{} كثير|{} آخر}"), Is.True);
+            Assert.That(LocalizationValidator.HasSixArabicPluralForms("{0:plural:{} واحد|{} جمع}"), Is.False);
+            Assert.That(LocalizationValidator.HasSixArabicPluralForms("No plural"), Is.True);
+        }
+
+        [TestCase("ar", "١٢٣")]
+        [TestCase("fa", "۱۲۳")]
+        [TestCase("en", "123")]
+        public void LocaleDigitConversionUsesTheExpectedNumerals(string locale, string expected)
+        {
+            Assert.That(Loc.LocalizeDigits(locale, "123"), Is.EqualTo(expected));
+            Assert.That(Loc.LocalizeDigits(locale, ""), Is.Empty);
+        }
+
+        [Test]
+        public void FormattedStringArgumentsKeepTheirOriginalDigits()
+        {
+            var previous = LocalizationSettings.SelectedLocale;
+            try
+            {
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("ar");
+                string text = Loc.Format("unlock.requirement.achievement", "123");
+                Assert.That(text, Does.Contain("123"));
+                Assert.That(text, Does.Not.Contain("١٢٣"));
+                Assert.That(Loc.Format("settings.value.percent", 123), Does.Contain("١٢٣"));
+            }
+            finally
+            {
+                LocalizationSettings.SelectedLocale = previous;
+            }
+        }
+
+        [TestCase("ar", "١٢٣")]
+        [TestCase("fa", "۱۲۳")]
+        [TestCase("en", "123")]
+        public void NumberUsesTheSelectedLocaleDigits(string locale, string expected)
+        {
+            var previous = LocalizationSettings.SelectedLocale;
+            try
+            {
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(locale);
+                Assert.That(Loc.Number(123), Is.EqualTo(expected));
+            }
+            finally
+            {
+                LocalizationSettings.SelectedLocale = previous;
+            }
+        }
+
+        [Test]
+        public void HandwrittenOverridesMatchTheirStringTableEntries()
+        {
+            foreach (var translation in HandwrittenTranslationApplier.ReadTranslations())
+            {
+                var collection = LocalizationEditorSettings.GetStringTableCollection(translation.Table);
+                var shared = collection?.SharedData.GetEntry(translation.Key);
+                var table = collection?.GetTable(translation.Locale) as StringTable;
+                Assert.That(shared, Is.Not.Null, translation.Key);
+                Assert.That(table?.GetEntry(shared.Id)?.Value, Is.EqualTo(translation.Text), translation.Key + " [" + translation.Locale + "]");
+            }
+        }
+
+        [Test]
+        public void CardInkModeIsSelectedOnlyForRedAndBlackSuits()
+        {
+            Assert.That(CardInkSettings.ModeForSuit(Mejnun.Core.Suit.Diamonds), Is.EqualTo(CardInkMode.RedToBlue));
+            Assert.That(CardInkSettings.ModeForSuit(Mejnun.Core.Suit.Clubs), Is.EqualTo(CardInkMode.BlackToGreen));
+            Assert.That(CardInkSettings.ModeForSuit(Mejnun.Core.Suit.Hearts), Is.EqualTo(CardInkMode.None));
+            Assert.That(CardInkSettings.ModeForSuit(Mejnun.Core.Suit.Spades), Is.EqualTo(CardInkMode.None));
+        }
+
+        [Test]
+        public void FrameRateGovernorCapsIdleBatteryAndHighRefreshRates()
+        {
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(120, false, false), Is.EqualTo(60));
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(50, false, false), Is.EqualTo(50));
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(60, false, true), Is.EqualTo(30));
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(60, true, false), Is.EqualTo(30));
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(24, false, false), Is.EqualTo(24));
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(24, false, true), Is.EqualTo(24));
+            Assert.That(FrameRateGovernor.ResolveTargetFrameRate(0, false, false), Is.EqualTo(60));
+        }
+
+        [Test]
         public void SourceScannerFlagsRawStringsButNotLocCalls()
         {
             var findings = new System.Collections.Generic.List<LocalizationSourceScanner.Finding>();
@@ -219,6 +307,16 @@ namespace Mejnun.Localization.Tests
             Assert.That(rows[0].English, Is.EqualTo("Hello, \"friend\""));
             Assert.That(rows[0].Comment, Is.EqualTo("note"));
             Assert.That(rows[1].English, Is.EqualTo("Line 1\nLine 2"));
+        }
+
+        [Test]
+        public void HandwrittenTranslationCsvKeepsSmartStringBracesAndLocale()
+        {
+            var translation = HandwrittenTranslationApplier.ReadTranslations()
+                .Single(item => item.Key == "unlock.requirement.wins" && item.Locale == "ar");
+            Assert.That(translation.Table, Is.EqualTo("UI"));
+            Assert.That(translation.Text, Does.Contain("{0:plural:"));
+            Assert.That(LocalizationValidator.HasSixArabicPluralForms(translation.Text), Is.True);
         }
     }
 }

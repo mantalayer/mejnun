@@ -1,0 +1,7 @@
+table,key,locale,text,comment
+UI,unlock.requirement.wins,ar,"اربح {0:plural:{} ألعاب|{} لعبة|{} لعبتين|{} ألعاب|{} لعبة|{} لعبة}",Handwritten Arabic zero one two few many other forms for the win count.
+UI,online.timer.seconds,ar,"{0:plural:{} ثوانٍ|{} ثانية|{} ثانيتين|{} ثوانٍ|{} ثانية|{} ثانية}",Handwritten Arabic zero one two few many other forms for timer seconds.
+UI,setup.timer.seconds,ar,"{0:plural:{} ثوانٍ|{} ثانية|{} ثانيتين|{} ثوانٍ|{} ثانية|{} ثانية}",Handwritten Arabic zero one two few many other forms for timer seconds.
+UI,settings.online.bot_fill.seconds,ar,"{0:plural:{} ثوانٍ|{} ثانية|{} ثانيتين|{} ثوانٍ|{} ثانية|{} ثانية}",Handwritten Arabic zero one two few many other forms for bot-fill seconds.
+UI,unlock.requirement.achievement,hi,अर्जित करें {0},Fix the missing positional placeholder in the Hindi achievement requirement.
+UI,unlock.requirement.achievement,fa,کسب {0},Natural Persian imperative for earning the named achievement.

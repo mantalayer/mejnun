@@ -274,6 +274,24 @@
                     <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.haptics.tooltip" />
                 </Bindings>
             </ui:Toggle>
+            <ui:Toggle name="four-colour-deck-toggle">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.four_colour_deck" />
+                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.four_colour_deck.tooltip" />
+                </Bindings>
+            </ui:Toggle>
+            <ui:Toggle name="left-handed-toggle">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.left_handed" />
+                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.left_handed.tooltip" />
+                </Bindings>
+            </ui:Toggle>
+            <ui:Toggle name="battery-saver-toggle">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.battery_saver" />
+                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.battery_saver.tooltip" />
+                </Bindings>
+            </ui:Toggle>
             <ui:VisualElement name="ui-scale-row" class="settings-row">
                 <ui:Label class="setting-label">
                     <Bindings>

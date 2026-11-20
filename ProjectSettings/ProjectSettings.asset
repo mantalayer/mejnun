@@ -949,7 +949,7 @@ PlayerSettings:
   qualitySettingsNames: []
   projectName: mejnun
   organizationId: brennananderson
-  cloudEnabled: 0
+  cloudEnabled: 1
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
