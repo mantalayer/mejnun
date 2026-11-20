@@ -8,6 +8,13 @@ using UnityEngine.InputSystem;
 
 namespace Mejnun.Game
 {
+    public enum TableAssistKind
+    {
+        Undo,
+        Revert,
+        FixBoard
+    }
+
     public sealed class TableController : MonoBehaviour
     {
         [SerializeField] private TableView tableView;
@@ -84,6 +91,7 @@ namespace Mejnun.Game
         public event Action<GameResult> GameStalemate;
         public event Action<MarkedSet> MarkedSetBroken;
         public event Action<bool> MarkModeChanged;
+        public event Action<TableAssistKind> AssistUsed;
 
         private void Awake()
         {
@@ -642,6 +650,7 @@ namespace Mejnun.Game
                 gestureInterpreter.ClearSelection();
                 redoGroups.Push(redoCommands);
                 SynchronizeViews();
+                AssistUsed?.Invoke(TableAssistKind.Undo);
                 return CommandResult.Success();
             }
 
@@ -669,6 +678,7 @@ namespace Mejnun.Game
             gestureInterpreter.ClearSelection();
             redoGroups.Push(redoCommands);
             SynchronizeViews();
+            AssistUsed?.Invoke(TableAssistKind.Undo);
             return CommandResult.Success();
         }
 
@@ -743,7 +753,13 @@ namespace Mejnun.Game
                 return CommandResult.Failure(RuleError.WrongPhase);
             }
 
-            return ApplyCommand(GameCommand.Revert(game.State.CurrentSeat));
+            var result = ApplyCommand(GameCommand.Revert(game.State.CurrentSeat));
+            if (result.Ok)
+            {
+                AssistUsed?.Invoke(TableAssistKind.Revert);
+            }
+
+            return result;
         }
 
         public CommandResult FixBoard()
@@ -762,7 +778,13 @@ namespace Mejnun.Game
 
             if (commands.Count == 1 && commands[0].Type == CommandType.Revert)
             {
-                return ApplyCommand(commands[0], CommandOrigin.FixBoard);
+                var result = ApplyCommand(commands[0], CommandOrigin.FixBoard);
+                if (result.Ok)
+                {
+                    AssistUsed?.Invoke(TableAssistKind.FixBoard);
+                }
+
+                return result;
             }
 
             var batch = new CommandBatch();
@@ -771,7 +793,13 @@ namespace Mejnun.Game
                 batch.Add(commands[index]);
             }
 
-            return ExecuteBatch(batch, CommandOrigin.FixBoard);
+            var batchResult = ExecuteBatch(batch, CommandOrigin.FixBoard);
+            if (batchResult.Ok)
+            {
+                AssistUsed?.Invoke(TableAssistKind.FixBoard);
+            }
+
+            return batchResult;
         }
 
         public bool FixBoardWouldReturnCards()

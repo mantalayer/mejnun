@@ -27,9 +27,145 @@ MonoBehaviour:
     SteamApiName: BEAT_HARD_BOT
   - Id: 6
     SteamApiName: FULL_TABLE
+  - Id: 7
+    SteamApiName: REGULAR
+  - Id: 8
+    SteamApiName: VETERAN
+  - Id: 9
+    SteamApiName: SEASONED
+  - Id: 10
+    SteamApiName: MASTER_OF_MEJNUN
+  - Id: 11
+    SteamApiName: LEVEL_TEN
+  - Id: 12
+    SteamApiName: LEVEL_TWENTY_FIVE
+  - Id: 13
+    SteamApiName: LEVEL_FIFTY
+  - Id: 14
+    SteamApiName: COLLECTOR
+  - Id: 15
+    SteamApiName: MEJNUN_TEN
+  - Id: 16
+    SteamApiName: CLEAN_SWEEP
+  - Id: 17
+    SteamApiName: LIGHTNING
+  - Id: 18
+    SteamApiName: LAST_GASP
+  - Id: 19
+    SteamApiName: COMEBACK
+  - Id: 20
+    SteamApiName: DOWN_TO_THE_WIRE
+  - Id: 21
+    SteamApiName: ROYAL_ROAD
+  - Id: 22
+    SteamApiName: ACE_HIGH
+  - Id: 23
+    SteamApiName: BIG_ENTRANCE
+  - Id: 24
+    SteamApiName: ARCHITECT
+  - Id: 25
+    SteamApiName: SURGEON
+  - Id: 26
+    SteamApiName: BORROWED_TIME
+  - Id: 27
+    SteamApiName: SEEING_DOUBLE
+  - Id: 28
+    SteamApiName: PATIENT
+  - Id: 29
+    SteamApiName: NO_TRAINING_WHEELS
+  - Id: 30
+    SteamApiName: HALAS
+  - Id: 31
+    SteamApiName: COOL_UNDER_PRESSURE
+  - Id: 32
+    SteamApiName: SPEED_DEMON
+  - Id: 33
+    SteamApiName: GIANT_SLAYER
+  - Id: 34
+    SteamApiName: HAT_TRICK
+  - Id: 35
+    SteamApiName: UNSTOPPABLE
+  - Id: 36
+    SteamApiName: GOING_ONLINE
+  - Id: 37
+    SteamApiName: CROWD_PLEASER
+  - Id: 38
+    SteamApiName: PARTY_HOST
+  - Id: 39
+    SteamApiName: PASS_IT_ON
+  - Id: 40
+    SteamApiName: EVEN_STEVEN
+  - Id: 41
+    SteamApiName: HOT_SEAT
   m_stats:
   - Id: 1
     SteamApiName: GAMES_PLAYED
   - Id: 2
     SteamApiName: GAMES_WON
+  - Id: 3
+    SteamApiName: MEJNUN_WINS
+  - Id: 4
+    SteamApiName: COUNT_WINS
+  - Id: 5
+    SteamApiName: STALEMATES
+  - Id: 6
+    SteamApiName: GAMES_PLAYED_SOLO
+  - Id: 7
+    SteamApiName: GAMES_PLAYED_ONLINE
+  - Id: 8
+    SteamApiName: GAMES_PLAYED_PASS_AND_PLAY
+  - Id: 9
+    SteamApiName: WINS_VS_EASY
+  - Id: 10
+    SteamApiName: WINS_VS_MEDIUM
+  - Id: 11
+    SteamApiName: WINS_VS_HARD
+  - Id: 12
+    SteamApiName: ONLINE_WINS
+  - Id: 13
+    SteamApiName: CURRENT_WIN_STREAK
+  - Id: 14
+    SteamApiName: BEST_WIN_STREAK
+  - Id: 15
+    SteamApiName: CARDS_PLAYED_FROM_HAND
+  - Id: 16
+    SteamApiName: SETS_CREATED
+  - Id: 17
+    SteamApiName: STRAIGHTS_CREATED
+  - Id: 18
+    SteamApiName: SAME_KINDS_CREATED
+  - Id: 19
+    SteamApiName: LONGEST_STRAIGHT
+  - Id: 20
+    SteamApiName: MOST_CARDS_IN_ONE_TURN
+  - Id: 21
+    SteamApiName: GO_DOWNS
+  - Id: 22
+    SteamApiName: AVG_TURNS_TO_GODOWN
+  - Id: 23
+    SteamApiName: TURNS_PLAYED
+  - Id: 24
+    SteamApiName: DRAWS
+  - Id: 25
+    SteamApiName: PASSES
+  - Id: 26
+    SteamApiName: TIMEOUTS
+  - Id: 27
+    SteamApiName: UNDOS_USED
+  - Id: 28
+    SteamApiName: REVERTS_USED
+  - Id: 29
+    SteamApiName: FIX_BOARDS_USED
+  - Id: 30
+    SteamApiName: FASTEST_WIN_TURNS
+  - Id: 31
+    SteamApiName: FASTEST_WIN_SECONDS
+  - Id: 32
+    SteamApiName: LARGEST_HAND_AT_WIN
+  - Id: 33
+    SteamApiName: TOTAL_PLAY_SECONDS
+  - Id: 34
+    SteamApiName: ONLINE_GAMES_HOSTED
+  - Id: 35
+    SteamApiName: HOT_SEAT_QUESTIONS
   m_dlc: []

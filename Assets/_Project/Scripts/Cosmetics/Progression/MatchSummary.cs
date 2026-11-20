@@ -13,7 +13,8 @@ namespace Mejnun.Cosmetics
     public readonly struct MatchSummary
     {
         public MatchSummary(MatchMode mode, int seatCount, int humanCount, bool localWin, bool mejnunWin,
-            bool stalemate, bool beatHardBot, int cpuDifficulty = 2, int durationSeconds = 0)
+            bool stalemate, bool beatHardBot, int cpuDifficulty = 2, int durationSeconds = 0,
+            MatchDetails details = null)
         {
             if (!Enum.IsDefined(typeof(MatchMode), mode))
             {
@@ -53,6 +54,7 @@ namespace Mejnun.Cosmetics
             BeatHardBot = localWin && mode == MatchMode.Solo && beatHardBot;
             CpuDifficulty = cpuDifficulty;
             DurationSeconds = durationSeconds;
+            Details = details ?? new MatchDetails();
         }
 
         public MatchMode Mode { get; }
@@ -64,6 +66,7 @@ namespace Mejnun.Cosmetics
         public bool BeatHardBot { get; }
         public int CpuDifficulty { get; }
         public int DurationSeconds { get; }
+        public MatchDetails Details { get; }
         public bool CanAwardWin => Mode == MatchMode.Solo || Mode == MatchMode.Online || HumanCount < 2;
     }
 }

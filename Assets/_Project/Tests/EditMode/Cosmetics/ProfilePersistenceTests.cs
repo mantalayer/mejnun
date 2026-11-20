@@ -106,7 +106,9 @@ namespace Mejnun.Cosmetics.Tests
                 AchievementIds.FirstGame,
                 AchievementIds.FirstWin,
                 AchievementIds.FirstMejnun,
-                AchievementIds.BeatHardBot
+                AchievementIds.BeatHardBot,
+                AchievementIds.Patient,
+                AchievementIds.NoTrainingWheels
             }, report.NewAchievements);
             Assert.That(restored.Xp, Is.EqualTo(216));
             Assert.That(restored.Stats.Wins, Is.EqualTo(1));

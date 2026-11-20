@@ -159,7 +159,7 @@ namespace Mejnun.Cosmetics.Tests
 
                 var preview = root.Q<VisualElement>("gallery-preview");
                 var backImages = preview.Query<Image>(className: "gallery-card-back").ToList();
-                Assert.That(backImages, Has.Length.EqualTo(1));
+                Assert.That(backImages.Count, Is.EqualTo(1));
                 Assert.That(backImages[0].sprite, Is.SameAs(mainBackSprite));
                 Assert.That(preview.Query<Image>().ToList().Any(image => image.sprite == alternateBackSprite),
                     Is.False);
