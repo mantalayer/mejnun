@@ -1,0 +1,7 @@
+table,key,en,comment
+UI,settings.accessibility.four_colour_deck,Four-colour cards,Use blue diamonds and green clubs to distinguish red and black suits.
+UI,settings.accessibility.four_colour_deck.tooltip,Show diamonds in blue and clubs in green on compatible card skins.,Explains the four-colour card accessibility option.
+UI,settings.accessibility.left_handed,Left-handed layout,Move the HUD controls to the opposite side for left-handed play.
+UI,settings.accessibility.left_handed.tooltip,Mirror the HUD control placement for left-handed play.,Explains the left-handed HUD layout option.
+UI,settings.accessibility.battery_saver,Battery saver,Reduce the frame rate while idle to use less battery.
+UI,settings.accessibility.battery_saver.tooltip,Limit mobile rendering to 30 frames per second.,Explains the mobile battery saver option.

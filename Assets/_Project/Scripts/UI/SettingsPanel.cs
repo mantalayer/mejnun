@@ -45,6 +45,10 @@ namespace Mejnun.UI
                 uiScaleRow.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
+            var batterySaverToggle = root.Q<Toggle>("battery-saver-toggle");
+            if (batterySaverToggle != null)
+                batterySaverToggle.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
+
             root.Q<Button>("settings-close-button")?.RegisterCallback<ClickEvent>(_ => Closed?.Invoke());
             BindSettingsTab("gameplay");
             BindSettingsTab("table");
@@ -78,6 +82,12 @@ namespace Mejnun.UI
                 value => GameSettings.ReducedMotion = value);
             BindToggle("haptics-toggle", () => GameSettings.HapticsEnabled,
                 value => GameSettings.HapticsEnabled = value);
+            BindToggle("four-colour-deck-toggle", () => GameSettings.FourColourDeck,
+                value => GameSettings.FourColourDeck = value, RefreshTable);
+            BindToggle("left-handed-toggle", () => GameSettings.LeftHanded,
+                value => GameSettings.LeftHanded = value);
+            BindToggle("battery-saver-toggle", () => GameSettings.BatterySaver,
+                value => GameSettings.BatterySaver = value);
             BindToggle("overlap-sets-toggle", () => !GameSettings.OverlapSets,
                 value => GameSettings.OverlapSets = !value, RefreshTable);
             BindToggle("organic-board-toggle", () => !GameSettings.OrganicBoard,
@@ -412,6 +422,9 @@ namespace Mejnun.UI
             SetToggle("hover-highlight-toggle", GameSettings.CardHoverHighlight);
             SetToggle("reduced-motion-toggle", GameSettings.ReducedMotion);
             SetToggle("haptics-toggle", GameSettings.HapticsEnabled);
+            SetToggle("four-colour-deck-toggle", GameSettings.FourColourDeck);
+            SetToggle("left-handed-toggle", GameSettings.LeftHanded);
+            SetToggle("battery-saver-toggle", GameSettings.BatterySaver);
             SetToggle("overlap-sets-toggle", !GameSettings.OverlapSets);
             SetToggle("organic-board-toggle", !GameSettings.OrganicBoard);
             SetSlider("ui-scale-slider", GameSettings.UiScale);

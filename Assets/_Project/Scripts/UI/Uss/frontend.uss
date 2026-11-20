@@ -649,3 +649,46 @@
 .landscape-layout .setup-screen {
     max-width: 1100px;
 }
+
+:root {
+    -unity-text-generator: advanced;
+}
+
+.rtl .settings-tabs,
+.rtl .settings-row,
+.rtl .gallery-tabs,
+.rtl .gallery-detail-row,
+.rtl .dialog-actions,
+.rtl .frontend-actions,
+.rtl .seat-row {
+    flex-direction: row-reverse;
+}
+
+.rtl .settings-row .setting-label,
+.rtl .dialog-title,
+.rtl .gallery-detail-row .setting-label {
+    -unity-text-align: middle-right;
+}
+
+.rtl .frontend-subtitle,
+.rtl .frontend-copy,
+.rtl .frontend-page-title,
+.rtl .cosmetic-picker-copy,
+.rtl .cosmetic-locked-notice,
+.rtl .gallery-item-name,
+.rtl .gallery-item-lock,
+.rtl .gallery-item-new,
+.rtl .gallery-item-artist,
+.rtl .gallery-progress-label {
+    -unity-text-align: upper-right;
+}
+
+.rtl .tutorial-prompt-copy {
+    -unity-text-align: middle-center;
+}
+
+.rtl .frontend-screen .unity-scroll-view__content-and-vertical-scroll-container,
+.rtl .gallery-items .unity-scroll-view__content-and-vertical-scroll-container,
+.rtl .cosmetic-selector-grid .unity-scroll-view__content-and-vertical-scroll-container {
+    flex-direction: row-reverse;
+}

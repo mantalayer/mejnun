@@ -76,7 +76,7 @@ question.text = Loc.GetFrom(Loc.DealerQuestionsTable, questionKey);
 3. Run **Mejnun > Localization > Validate** (or the EditMode tests). There must be no `RawString`, `UnknownKey` or `EmptySource` issues.
 4. Commit the changed table assets (`Assets/_Project/Localization/Tables/*`) with the code.
 
-Translations are not written by hand in Unity. They arrive through the sheet (§6) the next time someone syncs or builds.
+Translations normally arrive through the sheet (§6) the next time someone syncs or builds. Reviewed exceptions are kept in `HandwrittenTranslations.csv` and reapplied after each pull; do not edit translated table assets by hand.
 
 ## 6. Translation pipeline
 
@@ -90,17 +90,27 @@ Translations are not written by hand in Unity. They arrive through the sheet (§
 - Run the same round trip at any time with **Mejnun > Localization > Sync with Google Sheets**, or in batch mode with `-executeMethod Mejnun.Localization.Editor.LocalizationSheetsSync.SyncBatch`.
 - Batch-mode builds only sync when `-locSync` is passed, because the first Google sign-in opens a browser.
 - **Sheet layout** (one tab per collection: `UI`, `DealerQuestions`): `Key | en | ar | ar status | fa | fa status | …`. New rows get `=IF($B2="","",GOOGLETRANSLATE($B2,"en","<code>"))` and the status `auto`.
-- **Review:** a reviewer replaces a formula with plain text and sets that locale's status to `reviewed`. Pushes never overwrite translations, formulas or statuses; when the English text of a reviewed row changes, the push sets its status to `needs-review`.
-- **Guardrails** (checked by the validator after every pull): every entry is non-empty in every locale; placeholders (`{0}`, `{0:plural:…}`) and brace balance match English; no `#VALUE!`, `#N/A` or `Loading...` cell values.
+- **Review:** a reviewer replaces a formula with plain text and sets that locale's status to `reviewed`. Pushes preserve reviewer-entered translations, formulas and statuses; explicit `HandwrittenTranslations.csv` overrides are pushed as plain text with `reviewed` status. When English text changes, reviewed rows become `needs-review`.
+- **Guardrails** (checked by the validator after every pull): placeholders (`{0}`, `{0:plural:…}`) and brace balance match English; Arabic plural blocks have six alternatives; no `#VALUE!`, `#N/A` or `Loading...` cell values. Missing translations are warnings until the sheet formulas finish and are pulled.
 - **Adding a language:** add the locale and its `GOOGLETRANSLATE` code to `LocalizationProjectSetup.TargetLocales`, then run **Mejnun > Localization > Set Up Project**. Setup creates the Locale and tables, and merges any missing locale columns into `LocalizationPipelineSettings`; the next sync adds its sheet columns and formulas. No other game code or manual settings-asset edit is needed.
 
-### One-time Google setup (not done yet)
+### One-time Google setup
 
 1. In Google Cloud, create a project, enable the **Google Sheets API**, and create an **OAuth client ID** of type *Desktop app*.
 2. In Unity: **Assets > Create > Localization > Google Sheets Service**, and enter the client ID and secret (keep this asset out of public repos; it is ignored by the build).
 3. Create the workbook, share it with the Google account you will sign in with, and copy its ID from the URL.
 4. Select `Assets/_Project/Localization/LocalizationPipelineSettings.asset`, assign the Sheets Service asset and paste the spreadsheet ID.
 5. Run **Mejnun > Localization > Sync with Google Sheets** once. A browser window opens for sign-in, and the token is cached for later syncs and builds.
+
+### Fonts, right-to-left layout and digits
+
+- Run **Mejnun > Localization > Set Up Fonts** after adding or replacing font files. It creates dynamic multi-atlas TextCore font assets and the shared `PanelTextSettings` used by both UI panel settings.
+- The base chain is Noto Sans, Vazirmatn, Noto Sans Armenian, Noto Sans Devanagari and Noto Sans Thai. Each font's `OFL.txt` is kept beside its source file. Japanese, Korean, Simplified Chinese and Traditional Chinese fonts are separate Addressables groups (`Fonts-ja`, `Fonts-ko`, `Fonts-zh-Hans`, `Fonts-zh-Hant`) and are loaded with the active locale first by `FontChainLoader`.
+- Shared UI roots select the advanced Text Generator and the Noto Sans default. `UiDirection` follows `Loc.LanguageChanged` and applies `.rtl`/`LanguageDirection.RTL` for Arabic and Persian; corresponding USS rules reverse menus, HUD controls, dialogs and settings rows. Current back/continue actions are localized text buttons (there are no separate directional icon assets to mirror). The table, cards and player hand stay left-to-right (decision Q-D).
+- `LanguageDirection.RTL` orders the characters of a line but never changes alignment: `-unity-text-align` defaults to upper-left in every language. Each left-aligned text class therefore needs a matching `.rtl` rule (`upper-right` for paragraphs, `middle-right` for single-line labels) in `table.uss`, `frontend.uss` or `flow.uss`. Centred text needs nothing, but add an explicit `.rtl` centring rule when a centred element shares a class with paragraph text (`rule-body`, `tutorial-prompt-copy`). Scroll views with paragraphs also reverse `unity-scroll-view__content-and-vertical-scroll-container` so the scrollbar sits on the left. When you add a text class, add it to the `.rtl` list; `FrontEndFlowTests.RulesParagraphsAlignRightInRightToLeftLocales` covers the rules page.
+- `Loc.Format` and `Loc.Number` convert ASCII digits to Eastern Arabic digits for `ar` and Persian digits for `fa`. String arguments are protected while formatting so nicknames and codes retain their original digits.
+- Handwritten exceptions belong in `Assets/_Project/Localization/HandwrittenTranslations.csv`, not directly in translated String Table cells. They are applied after pulls and pushed as plain text with `reviewed` status. Use six Arabic plural alternatives in `zero|one|two|few|many|other` order; `LocalizationValidator` reports Arabic plural blocks that do not contain six alternatives.
+- Verify fonts and RTL rendering in a running player for all scripts and specifically review Arabic and Persian layouts, including narrow/mobile screens. The source fonts and runtime fallback behavior cannot be validated by the String Table validator alone.
 
 ## 7. Language selection at run time
 
@@ -117,7 +127,7 @@ Startup order (`LocalizationSettings` startup selectors):
    3. Tags are matched to shipped locales by `LocaleMatcher`. For example, `pt-PT` becomes `pt-PT`, `pt-AO` becomes `pt-PT`, bare `pt` becomes `pt-BR`, `zh-CN` becomes `zh-Hans`, `zh-TW` becomes `zh-Hant`, and `es-419` becomes `es`.
 3. English.
 
-Store-side localization is managed outside the game: the Steam store page, Steam achievement names and descriptions (Steamworks *Stats & Achievements > Localization*), App Store and Play listings and Game Center / Play Games achievement names. Use the `achievement.*` entries of the `UI` table as the source text for those consoles.
+Store-side localization is managed outside the game: the Steam store page, Steam achievement names and descriptions (Steamworks *Stats & Achievements > Localization*), App Store and Play listings and Game Center / Play Games achievement names. Use the `achievement.*` entries of the `UI` table as the source text for those consoles. Localized store listings remain a separate deferred M9 item; there is no `StoreListings` sheet tab yet.
 
 ## 8. Tools reference
 
@@ -127,4 +137,6 @@ Store-side localization is managed outside the game: the Steam store page, Steam
 | Mejnun > Localization > Validate | `LocalizationValidator.Validate` → `Logs/LocalizationReport.txt` |
 | Mejnun > Localization > Import English Source CSV… | `LocalizationSourceImporter.ImportCsv` |
 | Mejnun > Localization > Sync with Google Sheets | `LocalizationSheetsSync.Sync` |
+| Mejnun > Localization > Apply Handwritten Translations | `HandwrittenTranslationApplier.ApplyAll` |
+| Mejnun > Localization > Set Up Fonts | `FontChainSetup.SetUpFonts` |
 | (automatic, every player build) | `LocalizationPreBuild` |

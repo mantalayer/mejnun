@@ -150,6 +150,7 @@ namespace Mejnun.UI
         private bool lastInputRefreshHandEnabled;
         private bool hasInputRefreshSignature;
         private readonly SoftKeyboardBackGuard keyboardBackGuard = new SoftKeyboardBackGuard();
+        private UiDirection uiDirection;
 
         private void Awake()
         {
@@ -438,6 +439,8 @@ namespace Mejnun.UI
 
         private void OnEnable()
         {
+            uiDirection = UiDirection.Attach(root);
+            ApplyHandedness();
             SceneFlow.RegisterTableExit(PlayTableExit);
             root?.RegisterCallback<PointerDownEvent>(OnHudPointerDown, TrickleDown.TrickleDown);
             GameSettings.Changed += OnSettingsChanged;
@@ -473,6 +476,8 @@ namespace Mejnun.UI
 
         private void OnDisable()
         {
+            uiDirection?.Dispose();
+            uiDirection = null;
             SceneFlow.UnregisterTableExit(PlayTableExit);
             HideOnlineWaitingImmediately();
             for (var index = 0; index < tableEdgeAnimations.Count; index++)
@@ -919,10 +924,18 @@ namespace Mejnun.UI
 
         private void OnSettingsChanged(string key)
         {
+            if (key == "settings.accessibility.leftHanded")
+                ApplyHandedness();
+
             if (key == GameSettings.OpponentCardScaleKey && tableController?.Game != null)
             {
                 RefreshSeats(tableController.Game.State);
             }
+        }
+
+        private void ApplyHandedness()
+        {
+            root?.EnableInClassList("left-handed", GameSettings.LeftHanded);
         }
 
         private void OnOnlineNotice(string message)

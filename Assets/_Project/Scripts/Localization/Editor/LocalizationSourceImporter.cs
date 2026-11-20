@@ -189,7 +189,7 @@ namespace Mejnun.Localization.Editor
 
         private static string Field(List<string> record, int index) => index < record.Count ? record[index] : string.Empty;
 
-        private static List<List<string>> ParseRecords(string text)
+        internal static List<List<string>> ParseRecords(string text)
         {
             var records = new List<List<string>>();
             var record = new List<string>();

@@ -282,3 +282,26 @@
     font-size: 16px;
     -unity-text-align: middle-center;
 }
+:root {
+    -unity-text-generator: advanced;
+}
+
+.rtl .dialog-actions,
+.rtl .handoff-actions,
+.rtl .results-actions,
+.rtl .dealer-question-actions {
+    flex-direction: row-reverse;
+}
+
+.rtl .flow-title,
+.rtl .flow-copy,
+.rtl .flow-error,
+.rtl .result-reward-label,
+.rtl .result-level-up,
+.rtl .settings-section-title {
+    -unity-text-align: upper-right;
+}
+
+.rtl .results-scroll .unity-scroll-view__content-and-vertical-scroll-container {
+    flex-direction: row-reverse;
+}

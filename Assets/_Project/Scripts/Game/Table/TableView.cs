@@ -2440,7 +2440,7 @@ namespace Mejnun.Game
             {
                 view.SetLayoutPose(Quaternion.identity, 1f);
             }
-            view.SetCard(card, face, back, !handConcealed, isSelected);
+            view.SetCard(card, face, back, !handConcealed, isSelected, skin == null || skin.FourColourInk);
             var displaySeat = DisplaySeat(state);
             var hasSingleHandCard = isHandCard && displaySeat >= 0 && displaySeat < state.Hands.Count &&
                                     state.Hands[displaySeat].Count == 1;

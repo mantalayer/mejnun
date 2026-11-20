@@ -41,7 +41,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282630
   - m_Id: 6548985208845
-    m_Localized: "Un as peut \xEAtre faible (A-2-3) ou fort (Q-K-A), mais une quinte
+    m_Localized: "Un as peut \xEAtre faible (A-2-3) ou fort (Q-K-A), mais une suite
       ne se referme jamais (K-A-2)."
     m_Metadata:
       m_Items: []
@@ -80,8 +80,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548989403142
     m_Localized: "Dans les jeux chronom\xE9tr\xE9s, un chronom\xE8tre d\xE9compte
-      chaque tour. Quand le temps est \xE9coul\xE9 \u2014 Hale ! \u2014 le tour valide
-      se termine ; sinon, vos cartes retournent dans le jeu et vous piochez."
+      chaque tour. Quand le temps est \xE9coul\xE9 \u2014 Hale ! \u2014, le tour
+      valide se termine ; sinon, vos cartes retournent dans le jeu et vous piochez."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403152
@@ -512,8 +512,8 @@ MonoBehaviour:
       rang, de couleurs diff\xE9rentes. Les suites contiennent de 3 \xE0 13 cartes
       cons\xE9cutives de la m\xEAme couleur, sans r\xE9p\xE9tition de rang. Un as
       peut \xEAtre faible (A-2-3) ou fort (Q-K-A), mais jamais les deux\_; la combinaison
-      K-A-2 n'est pas autoris\xE9e. Chaque combinaison de cartes doit \xEAtre valide\_;
-      les combinaisons d'une ou deux cartes ne sont pas valides."
+      K-A-2 n'est pas autoris\xE9e. Chaque brelan doit \xEAtre valide\_; les brelans
+      d'une ou deux cartes ne sont pas valides."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540510
@@ -773,7 +773,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548985208857
     m_Localized: "Appuyez longuement sur le 10\u2665 et faites-le glisser vers la
-      table vide. Le 10\u2665 J\u2665 sera inclus."
+      zone vide du tableau. Le 10\u2665 J\u2665 sera inclus."
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208858
@@ -1564,7 +1564,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548993597512
-    m_Localized: Haoyu
+    m_Localized: Hao Yu
     m_Metadata:
       m_Items: []
   - m_Id: 6548993597513
@@ -2468,7 +2468,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763289
-    m_Localized: Balayage complet
+    m_Localized: Nettoyage complet
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763290
@@ -2537,7 +2537,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763308
-    m_Localized: "S\xE9parez une suite et terminez le tour avec une donne valide."
+    m_Localized: "S\xE9parez une quinte et terminez le tour avec une donne valide."
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763309
@@ -2895,7 +2895,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346190
-    m_Localized: Se connecter par code
+    m_Localized: Rejoignez-nous par code
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346192
@@ -3243,8 +3243,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346295
-    m_Localized: "Disposez les couverts en une grille bien ordonn\xE9e au lieu de
-      les r\xE9partir de fa\xE7on organique sur la table."
+    m_Localized: "Disposez les couverts en une grille bien ordonn\xE9e plut\xF4t
+      que de fa\xE7on organique sur la table."
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346296
@@ -3256,7 +3256,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346298
-    m_Localized: "D\xE9sordre des cartes"
+    m_Localized: "d\xE9sordre des cartes"
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346299
@@ -3392,8 +3392,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6549035540498
     m_Localized: "Mejnun utilise deux jeux de 52 cartes standard m\xE9lang\xE9s\_:
-      104 cartes au total, sans joker. Les cartes identiques des deux jeux sont des
-      doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
+      104 cartes au total, sans joker. Les cartes identiques des deux jeux forment
+      des doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
       d'une montre (vers la gauche)."
     m_Metadata:
       m_Items: []

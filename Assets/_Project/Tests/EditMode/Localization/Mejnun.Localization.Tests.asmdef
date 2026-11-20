@@ -4,6 +4,7 @@
   "references": [
     "Mejnun.Localization",
     "Mejnun.Localization.Editor",
+    "Mejnun.Core",
     "Mejnun.Platform",
     "Mejnun.Cosmetics",
     "Mejnun.Game",

@@ -23,6 +23,7 @@ namespace Mejnun.UI
         private bool dealerExitPending;
         private bool waitingForResultCollection;
         private Action tableExitCompleted;
+        private UiDirection uiDirection;
 
         private void Awake()
         {
@@ -47,6 +48,7 @@ namespace Mejnun.UI
 
         private void OnEnable()
         {
+            uiDirection = UiDirection.Attach(uiDocument == null ? null : uiDocument.rootVisualElement);
             SceneFlow.RegisterTableExit(PlayTableExit);
             Loc.LanguageChanged += OnLanguageChanged;
             if (matchFlow != null)
@@ -57,6 +59,8 @@ namespace Mejnun.UI
 
         private void OnDisable()
         {
+            uiDirection?.Dispose();
+            uiDirection = null;
             SceneFlow.UnregisterTableExit(PlayTableExit);
             Loc.LanguageChanged -= OnLanguageChanged;
             StopWaitingForResultCollection();

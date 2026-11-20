@@ -129,3 +129,8 @@
     border-top-color: rgb(125, 172, 127);
     border-bottom-color: rgb(125, 172, 127);
 }
+
+:root {
+    -unity-text-generator: advanced;
+    -unity-font-definition: url("../../../UI/Resources/Fonts/NotoSans.asset");
+}

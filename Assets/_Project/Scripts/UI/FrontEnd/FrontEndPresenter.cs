@@ -17,6 +17,7 @@ namespace Mejnun.UI.FrontEnd
         private ProgressionService progressionService;
         private DeckUnlockPlayer deckUnlockPlayer;
         private VisualElement safeAreaRoot;
+        private UiDirection uiDirection;
         private Rect lastSafeArea;
         private int lastWidth;
         private int lastHeight;
@@ -54,6 +55,7 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var root = uiDocument.rootVisualElement;
+            uiDirection = UiDirection.Attach(root);
             UiScaleUtility.Apply(uiDocument);
             deckUnlockPlayer = new DeckUnlockPlayer(root, deckSkinLoader);
             progressionService = ProgressionService.Instance;
@@ -134,6 +136,7 @@ namespace Mejnun.UI.FrontEnd
 
             deckUnlockPlayer?.Cancel();
             flow?.Dispose();
+            uiDirection?.Dispose();
         }
 
         private void OnMatchRecorded(ProgressionReport report)

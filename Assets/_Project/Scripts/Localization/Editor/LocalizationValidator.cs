@@ -28,6 +28,7 @@ namespace Mejnun.Localization.Editor
             MissingTranslation,
             PlaceholderMismatch,
             SheetError,
+            ArabicPluralMismatch,
         }
 
         public struct Issue
@@ -122,6 +123,38 @@ namespace Mejnun.Localization.Editor
             return true;
         }
 
+        public static bool HasSixArabicPluralForms(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return true;
+
+            foreach (Match match in Regex.Matches(text, @"\{\d+:plural:"))
+            {
+                int depth = 0;
+                int alternatives = 1;
+                for (int index = match.Index; index < text.Length; index++)
+                {
+                    if (text[index] == '{')
+                        depth++;
+                    else if (text[index] == '}')
+                    {
+                        depth--;
+                        if (depth == 0)
+                            break;
+                    }
+                    else if (text[index] == '|' && depth == 1)
+                    {
+                        alternatives++;
+                    }
+                }
+
+                if (alternatives != 6 || depth != 0)
+                    return false;
+            }
+
+            return true;
+        }
+
         private static int Count(string text, char c)
         {
             int count = 0;
@@ -175,6 +208,10 @@ namespace Mejnun.Localization.Editor
                             report.Issues.Add(new Issue { Kind = IssueKind.SheetError, Table = collectionName, Key = shared.Key, Locale = code, Detail = $"'{translation}'" });
                         else if (!PlaceholdersMatch(source, translation, out string detail))
                             report.Issues.Add(new Issue { Kind = IssueKind.PlaceholderMismatch, Table = collectionName, Key = shared.Key, Locale = code, Detail = detail });
+
+                        if (code == "ar" && source.Contains(":plural:") && !string.IsNullOrWhiteSpace(translation) &&
+                            !HasSixArabicPluralForms(translation))
+                            report.Issues.Add(new Issue { Kind = IssueKind.ArabicPluralMismatch, Table = collectionName, Key = shared.Key, Locale = code, Detail = "Arabic plurals require six alternatives in zero|one|two|few|many|other order" });
                     }
                 }
             }
@@ -217,6 +254,11 @@ namespace Mejnun.Localization.Editor
             var report = Validate();
             LogReport(report, string.Empty);
             EditorUtility.RevealInFinder(ReportPath);
+        }
+
+        public static void ValidateFromCommandLine()
+        {
+            LogReport(Validate(), "Command-line validation: ");
         }
     }
 }
