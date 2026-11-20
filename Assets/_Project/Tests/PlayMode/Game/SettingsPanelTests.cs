@@ -37,6 +37,46 @@ namespace Mejnun.Game.Tests
             }
         }
 
+        [TestCase("rules")]
+        [TestCase("credits")]
+        public void ShowingInformationPageHidesOthersAndSelectsItsTab(string selectedPage)
+        {
+            var root = new VisualElement();
+            var gameplayTab = new Button { name = "settings-tab-gameplay" };
+            var rulesTab = new Button { name = "settings-tab-rules" };
+            var creditsTab = new Button { name = "settings-tab-credits" };
+            var gameplayPage = new VisualElement { name = "settings-page-gameplay" };
+            var rulesPage = new VisualElement { name = "settings-page-rules" };
+            var creditsPage = new VisualElement { name = "settings-page-credits" };
+            root.Add(gameplayTab);
+            root.Add(rulesTab);
+            root.Add(creditsTab);
+            root.Add(gameplayPage);
+            root.Add(rulesPage);
+            root.Add(creditsPage);
+            var panel = new SettingsPanel();
+
+            try
+            {
+                panel.Initialize(root);
+                panel.ShowPage(selectedPage);
+
+                Assert.That(root.Q<VisualElement>("settings-page-" + selectedPage).style.display,
+                    Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(gameplayPage.style.display, Is.EqualTo(DisplayStyle.None));
+                Assert.That(rulesPage.style.display,
+                    Is.EqualTo(selectedPage == "rules" ? DisplayStyle.Flex : DisplayStyle.None));
+                Assert.That(creditsPage.style.display,
+                    Is.EqualTo(selectedPage == "credits" ? DisplayStyle.Flex : DisplayStyle.None));
+                Assert.That(root.Q<Button>("settings-tab-" + selectedPage).ClassListContains("selected-tab"),
+                    Is.True);
+            }
+            finally
+            {
+                panel.Dispose();
+            }
+        }
+
         [Test]
         public void UiScaleClampsToSupportedRange()
         {

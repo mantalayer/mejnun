@@ -10,6 +10,8 @@ namespace Mejnun.UI
         private static readonly string[] CpuSpeedLabels =
             { "Glacial", "Very slow", "Slow", "Normal", "Fast", "Very fast" };
         private static readonly string[] BotFillLabels = { "Off", "30 seconds", "60 seconds" };
+        private static readonly string[] SettingsPageKeys =
+            { "gameplay", "table", "hints", "accessibility", "audio", "general", "rules", "credits" };
         private VisualElement root;
         private Label tooltipLabel;
         private TableView tableView;
@@ -49,7 +51,9 @@ namespace Mejnun.UI
             BindSettingsTab("accessibility");
             BindSettingsTab("audio");
             BindSettingsTab("general");
-            ShowSettingsPage("gameplay");
+            BindSettingsTab("rules");
+            BindSettingsTab("credits");
+            ShowPage("gameplay");
 
             BindToggle("confirm-revert-toggle", () => GameSettings.ConfirmRevert,
                 value => GameSettings.ConfirmRevert = value);
@@ -264,23 +268,27 @@ namespace Mejnun.UI
             var tab = root.Q<Button>("settings-tab-" + key);
             if (tab != null)
             {
-                tab.clicked += () => ShowSettingsPage(key);
+                tab.clicked += () => ShowPage(key);
             }
         }
 
-        private void ShowSettingsPage(string selectedKey)
+        public void ShowPage(string selectedKey)
         {
-            var keys = new[] { "gameplay", "table", "hints", "accessibility", "audio", "general" };
-            for (var index = 0; index < keys.Length; index++)
+            if (root == null)
             {
-                var selected = string.Equals(keys[index], selectedKey, StringComparison.Ordinal);
-                var page = root.Q<VisualElement>("settings-page-" + keys[index]);
+                return;
+            }
+
+            for (var index = 0; index < SettingsPageKeys.Length; index++)
+            {
+                var selected = string.Equals(SettingsPageKeys[index], selectedKey, StringComparison.Ordinal);
+                var page = root.Q<VisualElement>("settings-page-" + SettingsPageKeys[index]);
                 if (page != null)
                 {
                     page.style.display = selected ? DisplayStyle.Flex : DisplayStyle.None;
                 }
 
-                var tab = root.Q<Button>("settings-tab-" + keys[index]);
+                var tab = root.Q<Button>("settings-tab-" + SettingsPageKeys[index]);
                 if (tab != null)
                 {
                     tab.EnableInClassList("selected-tab", selected);
