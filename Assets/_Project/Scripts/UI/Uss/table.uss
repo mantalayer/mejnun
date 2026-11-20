@@ -225,6 +225,22 @@
     flex-direction: row;
 }
 
+.phone-layout .bottom-bar {
+    flex-direction: row-reverse;
+}
+
+.phone-layout.rtl .bottom-bar {
+    flex-direction: row;
+}
+
+.phone-layout.left-handed .bottom-bar {
+    flex-direction: row;
+}
+
+.phone-layout.left-handed.rtl .bottom-bar {
+    flex-direction: row-reverse;
+}
+
 
 .turn-panel .status-label {
     white-space: normal;
@@ -452,6 +468,11 @@
     width: 22px;
     height: 22px;
     flex-shrink: 0;
+}
+
+.opponent-bot-badge.opponent-bot-badge-left {
+    right: auto;
+    left: -9px;
 }
 
 .opponent-cards {

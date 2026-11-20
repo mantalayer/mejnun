@@ -6,7 +6,7 @@ namespace Mejnun.Game
 {
     public sealed class SetMarkers
     {
-        private static readonly string[] Symbols = { "★", "●", "▲", "◆" };
+        private static readonly string[] Symbols = { "●", "▲", "■", "★" };
         private readonly List<MarkedSet> marks = new List<MarkedSet>();
         private readonly List<MarkedCard> cardMarks = new List<MarkedCard>();
 
@@ -40,6 +40,41 @@ namespace Mejnun.Game
             }
         }
 
+        public string GetCardSymbol(byte cardId)
+        {
+            var existing = FindCardMark(cardId);
+            return existing == null ? null : existing.Symbol;
+        }
+
+        public void RestoreCard(byte cardId, string symbol)
+        {
+            var existing = FindCardMark(cardId);
+            if (symbol == null)
+            {
+                if (existing != null)
+                {
+                    cardMarks.Remove(existing);
+                }
+
+                return;
+            }
+
+            if (existing == null)
+            {
+                cardMarks.Add(new MarkedCard(symbol, cardId));
+            }
+            else
+            {
+                existing.Symbol = symbol;
+            }
+        }
+
+        public bool RemoveCard(byte cardId)
+        {
+            var existing = FindCardMark(cardId);
+            return existing != null && cardMarks.Remove(existing);
+        }
+
         public void Cycle(int meldId, IReadOnlyList<Meld> board)
         {
             var meld = FindMeld(board, meldId);
@@ -70,6 +105,12 @@ namespace Mejnun.Game
             {
                 existing.Symbol = Symbols[symbolIndex + 1];
             }
+        }
+
+        public bool Remove(int meldId)
+        {
+            var existing = FindMark(meldId);
+            return existing != null && marks.Remove(existing);
         }
 
         public void Update(IReadOnlyList<Meld> board)

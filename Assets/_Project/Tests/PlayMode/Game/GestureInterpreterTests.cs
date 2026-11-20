@@ -70,6 +70,24 @@ namespace Mejnun.Game.Tests
             Assert.That(interpreter.SelectedCardIds, Is.Empty);
         }
 
+        [Test]
+        public void ToggleCardSelectionRevertsAnImmediateTap()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);
+            var hand = game.State.Hands[game.State.CurrentSeat];
+            var cardId = hand[0].Id;
+            var interpreter = new GestureInterpreter();
+            var tap = interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap,
+                GestureHit.HandCard(cardId, 0), GestureHit.None), hand.Count);
+
+            Assert.That(tap.SelectionChanged, Is.True);
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { cardId }));
+
+            interpreter.ToggleCardSelection(cardId);
+
+            Assert.That(interpreter.SelectedCardIds, Is.Empty);
+        }
+
         [TestCase(1, 3)]
         [TestCase(3, 1)]
         public void SelectHandRangeKeepsCardsInHandOrder(int anchorIndex, int currentIndex)
@@ -226,6 +244,28 @@ namespace Mejnun.Game.Tests
             Assert.That(game.Apply(result.Batch.Commands[0]).Ok, Is.True);
             Assert.That(game.State.Board.Count, Is.EqualTo(1));
             Assert.That(MeldValidator.IsBoardValid(game.State.Board), Is.True);
+        }
+
+        [Test]
+        public void DoubleTapAfterRevertingImmediateTapPlacesSelectedCardsAsANewMeld()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(3, out var straight);
+            var hand = game.State.Hands[game.State.CurrentSeat];
+            var interpreter = new GestureInterpreter();
+            interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap,
+                GestureHit.HandCard(straight[0], hand.IndexOf(Card.FromId(straight[0]))), GestureHit.None), hand.Count);
+            interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap,
+                GestureHit.HandCard(straight[1], hand.IndexOf(Card.FromId(straight[1]))), GestureHit.None), hand.Count);
+            var finalCard = GestureHit.HandCard(straight[2], hand.IndexOf(Card.FromId(straight[2])));
+            interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap, finalCard, GestureHit.None), hand.Count);
+            interpreter.ToggleCardSelection(straight[2]);
+
+            var result = interpreter.Interpret(new GestureInput(GestureType.DoubleTap, finalCard, GestureHit.None),
+                game.State, game.Turn);
+
+            Assert.That(result.Batch.Count, Is.EqualTo(1));
+            Assert.That(result.ClearSelectionOnSuccess, Is.True);
+            Assert.That(result.Batch.Commands[0].CardIds, Is.EquivalentTo(straight));
         }
 
         [Test]

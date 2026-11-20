@@ -3832,6 +3832,214 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282616
+  - m_Id: 32528051200000
+    m_Localized: Vierfarbige Karten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: "Auf kompatiblen Kartenskins werden Karo- und Kreuz-Symbole in Blau
+      bzw. Gr\xFCn angezeigt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: "Linksh\xE4nder-Layout"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: "Spiegeln Sie die HUD-Steuerungselemente f\xFCr Linksh\xE4nder."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: Batteriesparmodus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: "Die Darstellung auf Mobilger\xE4ten ist auf 30 Bilder pro Sekunde
+      begrenzt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 74273040359424
+    m_Localized: "Gro\xDFartig!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: Eindrucksvoll!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: Super!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Super!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: "Du wei\xDFt, wie du mir das Gef\xFChl gibst, h\xFCbsch zu sein."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: Genau das meine ich!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: Ich brauche mehr davon in meinem Leben.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: Ich mag es. Ich liebe es.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Whoo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Hotdog!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Na sowas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: Und wie!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Cha!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: Einfach klasse!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: "S\xFC\xDF!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Hella!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Hecka!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Schlecht!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: Nicht da!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: Was hast du dir dabei gedacht?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: Wie konntest du nur?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: "Direkt ins Gef\xE4ngnis..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: Das ist illegal...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: Ich verstehe Sie nicht...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: Du denkst wie ein Hamster...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: Da hat wohl jemand Montagsblues...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Uff...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: Autsch...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: "Gr\xF6\xDFter Autsch..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Kleiner Autsch...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Scham...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: FEHLER! UNTERLEGENDE INTELLIGENZ ENTDECKT.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: Meine Katze kann besser spielen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Hm...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Das hatte ich nicht erwartet...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: "\xC4hm..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: "Das h\xE4tte besser laufen k\xF6nnen..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: "Verstecke die H\xE4nde des Gegners zwischen den Z\xFCgen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: "Die H\xE4nde des Gegners werden teilweise aus dem Bildschirm bewegt,
+      bis dieser wieder an der Reihe ist."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: Breite des Randpfannenbereichs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: "Steuert, ab welchem \u200B\u200BAbstand vom linken, rechten und
+      oberen Rand eine Ziehbewegung das Verschieben des Spielfelds beginnt; auf 0
+      setzen, um die Funktion zu deaktivieren."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Spielen
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3905,3 +4113,4 @@ MonoBehaviour:
         - id: 6549039734797
         - id: 6549039734798
         - id: 6549039734802
+        - id: 999999999999999

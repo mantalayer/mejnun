@@ -11,9 +11,6 @@ namespace Mejnun.Game
     {
         [Min(1f)] public float DragThresholdPixels = 10f;
         [Min(1f)] public float PinchThresholdPixels = 24f;
-        [Min(1f)] public float PanLockPixels = 16f;
-        [Min(0.1f)] public float PanSettleSeconds = 0.25f;
-        [Min(0f)] public float PanStillPixelsPerSecond = 4f;
         [Min(0.1f)] public float LongPressSeconds = 0.35f;
         [Min(0.1f)] public float DoubleTapSeconds = 0.3f;
         [Min(1f)] public float DoubleTapDistancePixels = 40f;
@@ -197,11 +194,11 @@ namespace Mejnun.Game
                 {
                     firstPinchTouchId = firstTouchId;
                     secondPinchTouchId = secondTouchId;
-                    twoFingerGesture.Begin(center, distance, Time.unscaledTime);
+                    twoFingerGesture.Begin(center, distance);
                 }
                 else
                 {
-                    var update = twoFingerGesture.Update(center, distance, Time.unscaledTime, settings);
+                    var update = twoFingerGesture.Update(center, distance, settings);
                     Emit(PointerGestureKind.Pinch, center, update.Delta, false, update.Scale);
                 }
 
@@ -306,12 +303,14 @@ namespace Mejnun.Game
                 Time.unscaledTime - pressStartedAt >= settings.LongPressSeconds)
             {
                 longPressStarted = true;
+                pendingTap = false;
                 Emit(PointerGestureKind.LongPress, position, delta, true, 1f);
             }
 
             if (!dragging && distance >= settings.DragThresholdPixels)
             {
                 dragging = true;
+                pendingTap = false;
                 Emit(PointerGestureKind.DragStarted, position, delta, longPressStarted, 1f);
             }
             else if (dragging && delta.sqrMagnitude > 0f)
@@ -348,6 +347,7 @@ namespace Mejnun.Game
 
         private void CancelPointer()
         {
+            pendingTap = false;
             if (pointerDown && (dragging || longPressStarted))
             {
                 Emit(PointerGestureKind.Cancelled, lastPosition, Vector2.zero, longPressStarted, 1f);
@@ -369,14 +369,10 @@ namespace Mejnun.Game
                 return;
             }
 
-            if (pendingTap)
-            {
-                Emit(PointerGestureKind.Tap, pendingTapPosition, Vector2.zero, false, 1f);
-            }
-
             pendingTap = true;
             pendingTapPosition = position;
             pendingTapAt = Time.unscaledTime;
+            Emit(PointerGestureKind.Tap, position, Vector2.zero, false, 1f);
         }
 
         private void FlushPendingTap()
@@ -384,7 +380,6 @@ namespace Mejnun.Game
             if (pendingTap && Time.unscaledTime - pendingTapAt > settings.DoubleTapSeconds)
             {
                 pendingTap = false;
-                Emit(PointerGestureKind.Tap, pendingTapPosition, Vector2.zero, false, 1f);
             }
         }
 

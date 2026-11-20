@@ -9,51 +9,50 @@ namespace Mejnun.Game.Tests
         private readonly GestureSettings settings = new GestureSettings();
 
         [Test]
-        public void PanWithChangingFingerSpreadNeverZooms()
+        public void MovingFingerCenterDoesNotPanOrZoom()
         {
             var gesture = new TwoFingerGesture();
-            gesture.Begin(Vector2.zero, 100f, 0f);
+            gesture.Begin(Vector2.zero, 100f);
 
-            var update = gesture.Update(new Vector2(20f, 0f), 130f, 0.1f, settings);
-            Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Panning));
+            var update = gesture.Update(new Vector2(20f, 0f), 100f, settings);
+            Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Undecided));
             Assert.That(update.Scale, Is.EqualTo(1f));
+            Assert.That(update.Delta, Is.EqualTo(Vector2.zero));
 
-            update = gesture.Update(new Vector2(35f, 0f), 155f, 0.2f, settings);
-            Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Panning));
+            update = gesture.Update(new Vector2(40f, 0f), 100f, settings);
+            Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Undecided));
             Assert.That(update.Scale, Is.EqualTo(1f));
+            Assert.That(update.Delta, Is.EqualTo(Vector2.zero));
         }
 
         [Test]
         public void PureSpreadChangeZooms()
         {
             var gesture = new TwoFingerGesture();
-            gesture.Begin(Vector2.zero, 100f, 0f);
+            gesture.Begin(Vector2.zero, 100f);
 
-            var update = gesture.Update(Vector2.zero, 130f, 0.1f, settings);
+            var update = gesture.Update(Vector2.zero, 130f, settings);
             Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Zooming));
             Assert.That(update.Scale, Is.EqualTo(1f));
+            Assert.That(update.Delta, Is.EqualTo(Vector2.zero));
 
-            update = gesture.Update(Vector2.zero, 150f, 0.2f, settings);
+            update = gesture.Update(Vector2.zero, 150f, settings);
             Assert.That(update.Scale, Is.EqualTo(150f / 130f).Within(0.001f));
+            Assert.That(update.Delta, Is.EqualTo(Vector2.zero));
         }
 
         [Test]
-        public void PanCanZoomAfterCenterSettlesAndPinchBegins()
+        public void DeltaIsAlwaysZero()
         {
             var gesture = new TwoFingerGesture();
-            gesture.Begin(Vector2.zero, 100f, 0f);
+            gesture.Begin(Vector2.zero, 100f);
 
-            var update = gesture.Update(new Vector2(20f, 0f), 130f, 0.1f, settings);
-            Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Panning));
+            var update = gesture.Update(new Vector2(50f, 20f), 130f, settings);
+            Assert.That(update.Delta, Is.EqualTo(Vector2.zero));
 
-            gesture.Update(new Vector2(20f, 0f), 130f, 0.2f, settings);
-            update = gesture.Update(new Vector2(20f, 0f), 130f, 0.46f, settings);
-            Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Undecided));
-
-            update = gesture.Update(new Vector2(20f, 0f), 155f, 0.5f, settings);
+            update = gesture.Update(new Vector2(75f, 40f), 155f, settings);
             Assert.That(update.Mode, Is.EqualTo(TwoFingerGestureMode.Zooming));
-            update = gesture.Update(new Vector2(20f, 0f), 160f, 0.6f, settings);
-            Assert.That(update.Scale, Is.EqualTo(160f / 155f).Within(0.001f));
+            Assert.That(update.Delta, Is.EqualTo(Vector2.zero));
         }
     }
 }

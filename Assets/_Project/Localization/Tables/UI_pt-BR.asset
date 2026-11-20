@@ -3817,6 +3817,214 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282627
+  - m_Id: 32528051200000
+    m_Localized: "Cart\xF5es de quatro cores"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402560
+    m_Localized: "Exiba os diamantes em azul e os paus em verde nos temas de cartas
+      compat\xEDveis."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402561
+    m_Localized: Layout para canhotos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402562
+    m_Localized: "Inverta a posi\xE7\xE3o dos controles do HUD para jogadores canhotos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402563
+    m_Localized: Economizador de bateria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32528638402564
+    m_Localized: "Limitar a renderiza\xE7\xE3o em dispositivos m\xF3veis a 30 quadros
+      por segundo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 74273040359424
+    m_Localized: "\xD3timo!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: "Incr\xEDvel!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: Que legal!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Que legal!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: "Voc\xEA sabe como me fazer sentir bonita."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: "\xC9 disso que estou falando!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: Preciso de mais disso na minha vida.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: Eu gosto. Eu adoro.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Uau!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Cachorro-quente!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Ora, que maravilha!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: E como!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Tchau!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: "Que del\xEDcia!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: Doce!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Nossa!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Nossa!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Ruim!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: "N\xE3o est\xE1 l\xE1!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: "Em que voc\xEA estava pensando?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: "Como voc\xEA p\xF4de?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: Direto para a cadeia...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: "Isso \xE9 ilegal..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: "N\xE3o entendo voc\xEA..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: "Voc\xEA pensa como um hamster..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: "Algu\xE9m est\xE1 sofrendo com a s\xEDndrome da segunda-feira..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Ufa...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: Nossa...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: Que horror...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Pequeno oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Vergonha...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: "ERRO! INTELIG\xCANCIA INFERIOR DETECTADA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: Meu gato brinca melhor do que isso.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Huh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: "Bem, eu n\xE3o esperava por isso..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Hum...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: Bem, isso poderia ter corrido melhor...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010772
+    m_Localized: "Esconda as m\xE3os do oponente entre as jogadas."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010773
+    m_Localized: "Move as m\xE3os do oponente parcialmente para fora da tela at\xE9
+      a pr\xF3xima vez dele."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010774
+    m_Localized: "largura da \xE1rea da borda do painel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010775
+    m_Localized: "Controla a dist\xE2ncia das bordas esquerda, direita e superior
+      para que o arrastar inicie a panor\xE2mica do tabuleiro; defina como 0 para
+      desativar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010776
+    m_Localized: Jogar
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3890,3 +4098,4 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734799
         - id: 6549039734802
+        - id: 999999999999999
