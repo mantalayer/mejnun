@@ -306,6 +306,8 @@
     width: 288px;
     flex-shrink: 0;
     margin-right: 8px;
+    align-self: stretch;
+    justify-content: center;
 }
 
 .opponents-top {

@@ -121,6 +121,40 @@
     font-size: 13px;
 }
 
+.flow-root .settings-section-title {
+    color: rgb(248, 248, 240);
+    font-size: 19px;
+    -unity-font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.result-chip-list Label {
+    color: rgb(232, 238, 228);
+    font-size: 14px;
+    margin: 3px;
+    padding: 4px 8px;
+    background-color: rgb(49, 91, 62);
+    border-radius: 6px;
+}
+
+#result-level-progress .unity-progress-bar__background {
+    background-color: rgb(16, 28, 21);
+}
+
+#result-level-progress .unity-progress-bar__progress {
+    background-color: rgb(77, 132, 86);
+}
+
+#result-level-progress .unity-progress-bar__title {
+    color: rgb(244, 246, 239);
+    -unity-font-style: bold;
+}
+
+.flow-root .unity-toggle__label {
+    color: rgb(225, 232, 222);
+}
+
 .rematch-confirm {
     align-items: center;
     padding: 10px;

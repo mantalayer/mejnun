@@ -1262,11 +1262,12 @@ namespace Mejnun.UI
                 fastForwardDock.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
                 if (root != null && bottomBar != null && bottomBar.worldBound.height > 0f)
                 {
-                    StyleLength dockHeight = statusPanel != null && statusPanel.worldBound.height > 0f
-                        ? new StyleLength(statusPanel.worldBound.height)
-                        : new StyleLength(StyleKeyword.Auto);
+                    StyleLength dockHeight = new StyleLength(bottomBar.worldBound.height);
                     if (phoneLayout)
                     {
+                        dockHeight = statusPanel != null && statusPanel.worldBound.height > 0f
+                            ? new StyleLength(statusPanel.worldBound.height)
+                            : new StyleLength(StyleKeyword.Auto);
                         fastForwardDock.style.left = StyleKeyword.Auto;
                         fastForwardDock.style.right = 12f;
                         fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;

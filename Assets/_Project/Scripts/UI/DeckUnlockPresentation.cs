@@ -277,18 +277,19 @@ namespace Mejnun.UI
             }
 
             const float aspect = 0.72f;
-            var gridWidth = Mathf.Min(width * 0.9f / 13f, height * 0.82f / 4f * aspect);
+            var gridWidth = Mathf.Min(width * 0.9f / 13f, height * 0.76f / 4f * aspect);
             var gridHeight = gridWidth / aspect;
             var gridGapX = gridWidth * 0.08f;
             var gridGapY = gridHeight * 0.08f;
             var gridTotalWidth = gridWidth * 13 + gridGapX * 12;
             var gridTotalHeight = gridHeight * 4 + gridGapY * 3;
             var gridLeft = (width - gridTotalWidth) * 0.5f;
-            var gridTop = (height - gridTotalHeight) * 0.5f;
+            var verticalOffset = height * 0.04f;
+            var gridTop = (height - gridTotalHeight) * 0.5f + verticalOffset;
             var deckWidth = Mathf.Min(width * 0.26f, height * 0.42f * aspect);
             var deckHeight = deckWidth / aspect;
             var deckLeft = (width - deckWidth) * 0.5f;
-            var deckTop = (height - deckHeight) * 0.5f;
+            var deckTop = (height - deckHeight) * 0.5f + verticalOffset;
 
             for (var index = 0; index < cards.Count; index++)
             {
