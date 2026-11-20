@@ -196,3 +196,7 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+# Google Sheets OAuth client (contains the client secret; each machine keeps its own copy)
+/Assets/_Project/Localization/Google Sheets Service.asset
+/Assets/_Project/Localization/Google Sheets Service.asset.meta

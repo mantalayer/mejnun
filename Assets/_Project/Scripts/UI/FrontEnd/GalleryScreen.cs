@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -48,6 +49,7 @@ namespace Mejnun.UI.FrontEnd
             decksTab.clicked += () => SelectTab(false);
             feltsTab.clicked += () => SelectTab(true);
             progression.Changed += OnProgressionChanged;
+            Loc.LanguageChanged += OnLanguageChanged;
         }
 
         public string SelectedItemId => selectedItemId;
@@ -88,6 +90,7 @@ namespace Mejnun.UI.FrontEnd
         public void Dispose()
         {
             progression.Changed -= OnProgressionChanged;
+            Loc.LanguageChanged -= OnLanguageChanged;
         }
 
         private void SelectTab(bool felts)
@@ -107,7 +110,7 @@ namespace Mejnun.UI.FrontEnd
             {
                 var felts = catalog?.Felts?.Felts;
                 var owned = evaluator.OwnedFeltIds().Length;
-                countLabel.text = owned + " / " + (felts == null ? 0 : felts.Count) + " board backgrounds owned";
+                countLabel.text = Loc.Format("gallery.count.felts", owned, felts == null ? 0 : felts.Count);
                 if (felts != null)
                 {
                     for (var index = 0; index < felts.Count; index++)
@@ -124,7 +127,7 @@ namespace Mejnun.UI.FrontEnd
             {
                 var skins = catalog?.Decks?.GetEntries();
                 var owned = evaluator.OwnedFaceIds().Length;
-                countLabel.text = owned + " / " + (skins == null ? 0 : skins.Count) + " decks owned";
+                countLabel.text = Loc.Format("gallery.count.decks", owned, skins == null ? 0 : skins.Count);
                 if (skins != null)
                 {
                     for (var index = 0; index < skins.Count; index++)
@@ -177,16 +180,16 @@ namespace Mejnun.UI.FrontEnd
                 tile.AddToClassList("selected-choice");
             }
 
-            tile.Add(new Label(displayName) { name = "gallery-item-name" });
+            AddNamedLabel(tile, "gallery-item-name", displayName);
             if (!string.IsNullOrWhiteSpace(artist))
             {
-                tile.Add(new Label("by " + artist) { name = "gallery-item-artist" });
+                AddNamedLabel(tile, "gallery-item-artist", DeckSkin.FormatArtistCredit(artist));
             }
 
             if (!owned)
             {
-                tile.Add(new Label("🔒  " + evaluator.GetRequirement(id).Describe(progress))
-                    { name = "gallery-item-lock" });
+                AddNamedLabel(tile, "gallery-item-lock",
+                    Loc.Format("gallery.tile.locked_requirement", evaluator.GetRequirement(id).Describe(progress)));
                 if (progress.IsCountable && progress.Required > 0)
                 {
                     var progressBar = new ProgressBar
@@ -202,10 +205,17 @@ namespace Mejnun.UI.FrontEnd
 
             if (IsNew(id, evaluator))
             {
-                tile.Add(new Label("New") { name = "gallery-item-new", text = "New" });
+                AddNamedLabel(tile, "gallery-item-new", Loc.Get("gallery.tile.new"));
             }
 
             return tile;
+        }
+
+        private static void AddNamedLabel(VisualElement parent, string elementName, string text)
+        {
+            var label = new Label(text);
+            label.name = elementName;
+            parent.Add(label);
         }
 
         private void SelectItem(string itemId)
@@ -222,8 +232,8 @@ namespace Mejnun.UI.FrontEnd
             selectedNewBadge.style.display = DisplayStyle.None;
             if (string.IsNullOrWhiteSpace(selectedItemId))
             {
-                selectedTitle.text = "Select a cosmetic";
-                selectedRequirement.text = "Browse decks and board backgrounds.";
+                selectedTitle.text = Loc.Get("gallery.details.empty_title");
+                selectedRequirement.text = Loc.Get("gallery.details.empty_body");
                 return;
             }
 
@@ -255,33 +265,39 @@ namespace Mejnun.UI.FrontEnd
             }
 
             selectedTitle.text = selectedItemId;
-            selectedRequirement.text = "This item is no longer in the catalog.";
+            selectedRequirement.text = Loc.Get("gallery.details.missing_item");
         }
 
         private void RenderRequirement(string id, UnlockRequirement requirement, UnlockEvaluator evaluator)
         {
             var owned = evaluator.IsOwned(id, requirement);
             var progress = requirement.Evaluate(progression.Profile);
-            selectedRequirement.text = owned ? "Owned" : requirement.Describe(progress);
+            selectedRequirement.text = owned ? Loc.Get("gallery.details.owned") : requirement.Describe(progress);
             if (!owned && progress.IsCountable && progress.Required > 0)
             {
                 selectedProgress.lowValue = 0;
                 selectedProgress.highValue = progress.Required;
                 selectedProgress.value = Mathf.Clamp(progress.Current, 0, progress.Required);
-                selectedProgress.title = progress.Current + " / " + progress.Required;
+                selectedProgress.title = Loc.Format("gallery.details.progress", progress.Current, progress.Required);
                 selectedProgress.style.display = DisplayStyle.Flex;
-                selectedProgressLabel.text = progress.Current + " / " + progress.Required;
+                selectedProgressLabel.text = Loc.Format("gallery.details.progress", progress.Current,
+                    progress.Required);
                 selectedProgressLabel.style.display = DisplayStyle.Flex;
             }
 
             if (IsNew(id, evaluator))
             {
-                selectedNewBadge.text = "New in Gallery";
+                selectedNewBadge.text = Loc.Get("gallery.details.new_badge");
                 selectedNewBadge.style.display = DisplayStyle.Flex;
             }
         }
 
         private void OnProgressionChanged()
+        {
+            Refresh();
+        }
+
+        private void OnLanguageChanged()
         {
             Refresh();
         }

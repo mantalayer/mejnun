@@ -1,0 +1,3890 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_nl
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: nl
+  m_SharedData: {fileID: 11400000, guid: d63316e15cef2427c94a329ac604c22b, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 4825848250703282621
+  m_TableData:
+  - m_Id: 1341120512
+    m_Localized: Mejnun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302984
+    m_Localized: Klaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208835
+    m_Localized: Je bent nog niet verslagen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208843
+    m_Localized: "Plaats nu je A\u2660 op de J\u2660 Q\u2660 K\u2660 van {0}."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208844
+    m_Localized: Azen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208845
+    m_Localized: Een aas kan laag zijn (A-2-3) of hoog (Q-K-A), maar een straight
+      draait nooit rond (K-A-2).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208846
+    m_Localized: Hetzelfde soort
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208860
+    m_Localized: Gebruik je dubbel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208865
+    m_Localized: Met 'Redo' wordt de zet teruggedraaid. 'Revert' wordt de hele beurt
+      gereset en 'Fix board' probeert het speelveld voor je te herstellen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208878
+    m_Localized: Spelers die in het nadeel zijn, kunnen ook gloednieuwe sets vanuit
+      hun hand beginnen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208884
+    m_Localized: "Je hebt de 2\u2665 getekend."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208885
+    m_Localized: "Plaats de 2\u2665 op 3\u2665 4\u2665 5\u2665."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208886
+    m_Localized: Aas laag
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208890
+    m_Localized: Hetzelfde soort
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403138
+    m_Localized: Dezelfde set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403140
+    m_Localized: Als de trekstapel op is, wordt Trekken Passen. Als iedereen achter
+      elkaar past, wint de speler met de minste kaarten. Een gelijkspel is een Patstelling.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403142
+    m_Localized: "Bij spellen met een tijdslimiet telt een klok elke beurt af. Wanneer
+      de tijd om is \u2014 Halas! \u2014 eindigt een geldige beurt, anders gaan je
+      kaarten terug en mag je een nieuwe kaart trekken."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403150
+    m_Localized: Jij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403156
+    m_Localized: "Doorgeven aan {0} \u2014 tik om te onthullen"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403158
+    m_Localized: '{0} wint!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403168
+    m_Localized: '{0} losgekoppeld'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403169
+    m_Localized: Alle spelers deden mee
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403174
+    m_Localized: Een speler heeft de verbinding verbroken.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403183
+    m_Localized: Noach
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403187
+    m_Localized: Henry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403191
+    m_Localized: Arthur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403201
+    m_Localized: Leeuw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403207
+    m_Localized: Sebastian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403210
+    m_Localized: Leonardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403212
+    m_Localized: Mauricio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403213
+    m_Localized: Iker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403220
+    m_Localized: Sacha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403230
+    m_Localized: Lorenzo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403231
+    m_Localized: Tommaso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403239
+    m_Localized: Heitor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403244
+    m_Localized: Davi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597444
+    m_Localized: Vincent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597445
+    m_Localized: Hjalmar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597448
+    m_Localized: Aleksander
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597449
+    m_Localized: Franciszek
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597451
+    m_Localized: Szymon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597459
+    m_Localized: Timofey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597479
+    m_Localized: Omid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597482
+    m_Localized: Reza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597485
+    m_Localized: Hossein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597493
+    m_Localized: Faisal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597505
+    m_Localized: Olumide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597514
+    m_Localized: Haoran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597517
+    m_Localized: Junjie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597522
+    m_Localized: Sota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791748
+    m_Localized: Si-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791769
+    m_Localized: Arya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791775
+    m_Localized: Emma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791780
+    m_Localized: Evelyn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791782
+    m_Localized: Isla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791799
+    m_Localized: Camila
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791803
+    m_Localized: Romina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791804
+    m_Localized: Mariana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791805
+    m_Localized: Natalia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791806
+    m_Localized: Louise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986052
+    m_Localized: Anna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986056
+    m_Localized: Emilia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986057
+    m_Localized: Hannah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986074
+    m_Localized: Alice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986078
+    m_Localized: Liz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986083
+    m_Localized: Astrid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986091
+    m_Localized: Lena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986101
+    m_Localized: Darya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986104
+    m_Localized: Katerina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180359
+    m_Localized: Asli
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180388
+    m_Localized: Amina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180390
+    m_Localized: Ngozi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180396
+    m_Localized: Yinuo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180400
+    m_Localized: Ruoxi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180401
+    m_Localized: Yuxi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180404
+    m_Localized: Tsumugi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180418
+    m_Localized: Ha-yoon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180419
+    m_Localized: Su-ah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180427
+    m_Localized: Lan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180437
+    m_Localized: Dewi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180438
+    m_Localized: Siti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763264
+    m_Localized: Win door al je kaarten weg te spelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763267
+    m_Localized: Versla een moeilijke tegenstander
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763274
+    m_Localized: Speel 250 wedstrijden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763290
+    m_Localized: Ga naar beneden en leeg je hand in dezelfde beurt, met hints en
+      Fix Board uitgeschakeld.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763301
+    m_Localized: Ace High
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763303
+    m_Localized: Grote ingang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763318
+    m_Localized: Zorg dat je aan de beurt bent.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957572
+    m_Localized: Onstuitbaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957573
+    m_Localized: Win vijf wedstrijden op rij.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957575
+    m_Localized: Voltooi een online game.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957582
+    m_Localized: Zelfs Steven
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957588
+    m_Localized: Nu beschikbaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957592
+    m_Localized: Aankoop vereist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957594
+    m_Localized: Klassiek
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957601
+    m_Localized: Blueeyedrat Classic Contrast 4-kleuren 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957603
+    m_Localized: Blueeyedrat Classic Dark 2color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957611
+    m_Localized: Blueeyedrat Classic Sepia 2-kleuren 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957613
+    m_Localized: Kaart PNG's
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151873
+    m_Localized: Teal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151874
+    m_Localized: Een kaartspel met sets, strategie en een vleugje chaos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151879
+    m_Localized: Speel online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346177
+    m_Localized: Speel de tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346179
+    m_Localized: Speel online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346181
+    m_Localized: Bijnaam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346199
+    m_Localized: Verlaat de lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346205
+    m_Localized: Solo tegen AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346227
+    m_Localized: Willekeurig gevoel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346231
+    m_Localized: "Nog niet ontgrendeld \u2014 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346237
+    m_Localized: "\U0001F512 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346241
+    m_Localized: Dit artikel is niet meer in de catalogus opgenomen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346249
+    m_Localized: Tafel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346251
+    m_Localized: Toegankelijkheid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346253
+    m_Localized: Algemeen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346254
+    m_Localized: Regels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346260
+    m_Localized: Vraag het gerust voordat je een kaart trekt of doorgeeft, indien
+      mogelijk.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346263
+    m_Localized: Bevestig dat je weggaat of opnieuw begint.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346267
+    m_Localized: Gletsjer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346279
+    m_Localized: Omlijnt de kaart en tilt deze iets omhoog onder de muisaanwijzer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346280
+    m_Localized: Booghoeveelheid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346298
+    m_Localized: Kaartrommeligheid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346304
+    m_Localized: Gebruikt een korte animatie om de aandacht te vestigen op de kaarten
+      die een hint geven.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346305
+    m_Localized: Toegankelijkheid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346309
+    m_Localized: Schakelt trilfeedback in op ondersteunde apparaten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540488
+    m_Localized: Vul snelle matches in met bots.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540508
+    m_Localized: Draai acties
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540552
+    m_Localized: "Je moet een geldige zet doen voordat je je beurt be\xEBindigt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540559
+    m_Localized: "Kies minstens \xE9\xE9n kaart om te verplaatsen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540561
+    m_Localized: Dit spel is al afgelopen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540563
+    m_Localized: "Die zet is niet toegestaan \u200B\u200Bvolgens de spelregels."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540576
+    m_Localized: '? Hulp'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540581
+    m_Localized: Probeer de gemarkeerde kaarten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540583
+    m_Localized: Volgende
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540584
+    m_Localized: Begrepen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540585
+    m_Localized: Volgende
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540586
+    m_Localized: Klaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540589
+    m_Localized: "\u2717 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734786
+    m_Localized: Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734787
+    m_Localized: Herkansing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734788
+    m_Localized: Speel voor het echte werk.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734791
+    m_Localized: Herkansing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734792
+    m_Localized: resterende kaarten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 695204831232
+    m_Localized: Automatisch (apparaattaal)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656669331456
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302976
+    m_Localized: Annuleren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302977
+    m_Localized: Rug
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302978
+    m_Localized: Dichtbij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302979
+    m_Localized: Op
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302980
+    m_Localized: Uit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302981
+    m_Localized: Ja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302982
+    m_Localized: Nee
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302983
+    m_Localized: Doorgaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302985
+    m_Localized: Vergrendeld
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1656690302986
+    m_Localized: "Laden\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548909711360
+    m_Localized: Welkom bij Mejnun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014528
+    m_Localized: 'Mejnun wordt gespeeld met twee volledige decks: 104 kaarten. Iedereen
+      krijgt er 11 gedeeld. Wie als eerste al zijn kaarten op tafel heeft liggen,
+      wint.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014529
+    m_Localized: Sets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014530
+    m_Localized: Kaarten worden in sets op tafel gelegd. Een set van dezelfde soort
+      bestaat uit 3 of 4 kaarten van dezelfde waarde, allemaal van verschillende
+      kleuren. Een straight bestaat uit 3 of meer kaarten van dezelfde kleur, in
+      de juiste volgorde.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548981014531
+    m_Localized: '{0}''s beurt'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208832
+    m_Localized: '{0} gaat als eerste. Kijk wat ze doet.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208833
+    m_Localized: '{0} is omlaag'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208834
+    m_Localized: "{0} legde een set neer die alleen uit haar hand bestond. Dat heet
+      'Naar beneden gaan', en \xE9\xE9n set is genoeg."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208836
+    m_Localized: Je kunt de tafel pas gebruiken als je neerligt. Leg eerst een set
+      kaarten uit je eigen hand neer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208837
+    m_Localized: Ga eerst naar beneden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208838
+    m_Localized: "Totdat je in de onderste helft zit, mag je alleen sets uit je eigen
+      hand spelen. Leg 7\u2665 8\u2665 9\u2665 op de lege tafel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208839
+    m_Localized: "Ga door\u2014leg alle drie de kaarten uit je hand neer om omlaag
+      te gaan."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208840
+    m_Localized: Je bent er klaar voor!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208841
+    m_Localized: 'Nu heb je de hele tafel tot je beschikking: voeg kaarten toe aan
+      elke set, herschik ze, splits ze. En je kunt dezezelfde beurt blijven spelen.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208842
+    m_Localized: Voeg toe aan een set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208847
+    m_Localized: "Leg 5\u2663 5\u2666 5\u2660 op de lege tafel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208848
+    m_Localized: Ga zo door en leg alle drie de kaarten neer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208849
+    m_Localized: Dubbels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208850
+    m_Localized: 'Bij twee kaartspellen heeft elke kaart een dubbelganger: dezelfde
+      kleur en waarde, uit het andere kaartspel (de achterkant van de kaart ziet
+      er anders uit). Een dubbelganger kan nooit in dezelfde set voorkomen.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208851
+    m_Localized: "Be\xEBindig je beurt"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208852
+    m_Localized: "Je kunt je beurt be\xEBindigen wanneer alle sets op tafel geldig
+      zijn en je minstens \xE9\xE9n kaart uit je hand hebt gespeeld."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208853
+    m_Localized: Bekijk {0}.
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208854
+    m_Localized: Elke set is geschikt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208855
+    m_Localized: "{0} heeft 10\u2665 J\u2665 aan je harten toegevoegd en 5\u2665
+      aan je vijven. Zodra je omlaag bent, kun je aan elke set op tafel toevoegen."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208856
+    m_Localized: Splits een rechte lijn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208857
+    m_Localized: "Houd de 10\u2665 lang ingedrukt en sleep deze naar de lege tafel.
+      De 10\u2665 J\u2665 verschijnt dan mee."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208858
+    m_Localized: Nog geen set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208859
+    m_Localized: "10\u2665 J\u2665 heeft een rode rand: het is geen geldige set.
+      Dat is prima midden in een beurt, maar je kunt je beurt pas be\xEBindigen als
+      elke set geldig is."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208861
+    m_Localized: "Plaats je 9\u2665 op 10\u2665 J\u2665. Het is het dubbele van de
+      9\u2665 in de andere set, dus het is hier toegestaan."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208862
+    m_Localized: Ongedaan maken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208863
+    m_Localized: "Een fout gemaakt? Ga \xE9\xE9n stap terug met de functie 'Ongedaan
+      maken'. Probeer het eens."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208864
+    m_Localized: Opnieuw doen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208866
+    m_Localized: "Elke set is opnieuw geldig. Be\xEBindig je beurt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208867
+    m_Localized: '{0} tekende'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208868
+    m_Localized: "{0} kon niet spelen, dus trok ze een kaart. Door een kaart te trekken,
+      pak je \xE9\xE9n kaart van de stapel en eindigt je beurt."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208869
+    m_Localized: Start een groep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208870
+    m_Localized: "Leg 3\u2665 4\u2665 op de lege tafel. Het zijn maar twee kaarten,
+      dus die tonen voorlopig rood."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208871
+    m_Localized: Ga zo door en leg beide kaarten neer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208872
+    m_Localized: Leen uit een set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208873
+    m_Localized: "Een viertal werkt nog steeds met drie. Sleep de 5\u2665 uit de
+      vijven naar 3\u2665 4\u2665."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208874
+    m_Localized: "Alle sets zijn geldig. Be\xEBindig je beurt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208875
+    m_Localized: "Nog \xE9\xE9n kaart over!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208876
+    m_Localized: "Als een speler nog maar \xE9\xE9n kaart over heeft, schudt zijn
+      stoel en verschijnt er een uitroepteken \u2014 iedereen kan zien dat hij op
+      het punt staat te winnen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208877
+    m_Localized: Nieuwe sets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208879
+    m_Localized: Vast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208880
+    m_Localized: "Jouw A\u2665 past nergens op de tafel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208881
+    m_Localized: Tekenen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208882
+    m_Localized: "Tik op 'Trekken' om een \u200B\u200Bkaart te nemen en je beurt
+      te be\xEBindigen. Door een kaart te trekken, krijg je ook alle kaarten terug
+      die je deze beurt hebt neergelegd."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208883
+    m_Localized: '{0} zit ook vast.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548985208887
+    m_Localized: "Nu past de A\u2665 aan de onderkant: A-2-3-4-5\u2665. Speel je
+      laatste kaart!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208888
+    m_Localized: MEJNUN!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208889
+    m_Localized: Je hebt al je kaarten uit je hand gespeeld en gewonnen. Nog een
+      paar dingen die handig zijn om te weten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208891
+    m_Localized: Direct
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208892
+    m_Localized: Gemengde pakken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208893
+    m_Localized: Laag
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548985208894
+    m_Localized: Hoog
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403136
+    m_Localized: Geen verpakking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403137
+    m_Localized: Een dubbele
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403139
+    m_Localized: Lege ladestapel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403141
+    m_Localized: Getimede beurten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403143
+    m_Localized: Repareer het bord en zet het terug
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403144
+    m_Localized: Fix board probeert elke set geldig te maken, terwijl je zetten behouden
+      blijven. Revert zet de hele tafel terug naar de staat waarin deze zich aan
+      het begin van je beurt bevond.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403145
+    m_Localized: Hints en de tabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403146
+    m_Localized: De hints geven een overzicht van de kaarten die je kunt spelen.
+      Gebruik de knijpbeweging om in te zoomen, sleep om te verschuiven en gebruik
+      'Passend maken' om de hele tafel te bekijken.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403147
+    m_Localized: Volgende wedstrijd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403148
+    m_Localized: De winnaar begint als eerste in de volgende wedstrijd.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403149
+    m_Localized: Layla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403151
+    m_Localized: Speler {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403152
+    m_Localized: Bot {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403153
+    m_Localized: '{0} (Easy bot)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403154
+    m_Localized: '{0} (Medium bot)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403155
+    m_Localized: '{0} (Hard bot)'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403157
+    m_Localized: Patstelling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403159
+    m_Localized: Spel voorbij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403160
+    m_Localized: '{0} maakten hun hand leeg.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403161
+    m_Localized: '{0} had de minste kaarten toen de trekstapel op was.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403162
+    m_Localized: De laagste score was gelijk. Kies wie er als eerste aan de beurt
+      is.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403163
+    m_Localized: Wie moet er als eerste aan de beurt zijn?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403164
+    m_Localized: Wedstrijd gepauzeerd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403165
+    m_Localized: De wedstrijd werd hervat.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403166
+    m_Localized: Host heeft de verbinding verbroken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403167
+    m_Localized: '{0} is lid geworden'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403170
+    m_Localized: '{0} is nu de host'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403171
+    m_Localized: Een speler is nu de host.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403172
+    m_Localized: "Wachten op spelers ({0}/{1})\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403173
+    m_Localized: "Wachten op spelers ({0}/{1})\u2026\nKamercode: {2}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6548989403175
+    m_Localized: Wacht tot ze klaar zijn, laat een Medium-bot het overnemen, of sla
+      op en pauzeer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403176
+    m_Localized: Wachten / automatisch doorsturen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403177
+    m_Localized: Laat AI het overnemen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403178
+    m_Localized: Opslaan en pauzeren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403179
+    m_Localized: Wedstrijd opgeslagen en gepauzeerd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403180
+    m_Localized: De host kan deze sessie hervatten wanneer iedereen er klaar voor
+      is.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403181
+    m_Localized: CV-match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403182
+    m_Localized: Liam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403184
+    m_Localized: Oliver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403185
+    m_Localized: Theodore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403186
+    m_Localized: Jakobus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403188
+    m_Localized: Elia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403189
+    m_Localized: Willem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403190
+    m_Localized: Mohammed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403192
+    m_Localized: George
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403193
+    m_Localized: Thomas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403194
+    m_Localized: Oscar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403195
+    m_Localized: Jack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403196
+    m_Localized: Harry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403197
+    m_Localized: Alfie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403198
+    m_Localized: Mateo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403199
+    m_Localized: Hugo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403200
+    m_Localized: Martin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403202
+    m_Localized: Lucas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403203
+    m_Localized: Pablo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403204
+    m_Localized: Alejandro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403205
+    m_Localized: Manuel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403206
+    m_Localized: Santiago
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403208
+    m_Localized: Emiliano
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403209
+    m_Localized: Diego
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403211
+    m_Localized: "Dani\xEBl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403214
+    m_Localized: "Gabri\xEBl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403215
+    m_Localized: "Rafa\xEBl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403216
+    m_Localized: Louis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403217
+    m_Localized: Jules
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403218
+    m_Localized: Adam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403219
+    m_Localized: Mael
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403221
+    m_Localized: Gabin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403222
+    m_Localized: Matteo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403223
+    m_Localized: Emil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403224
+    m_Localized: Elias
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403225
+    m_Localized: Finn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403226
+    m_Localized: Paulus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403227
+    m_Localized: Felix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403228
+    m_Localized: Jonas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403229
+    m_Localized: Ben
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403232
+    m_Localized: Edoardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403233
+    m_Localized: Andrea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403234
+    m_Localized: Francesco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403235
+    m_Localized: Alessandro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403236
+    m_Localized: Mattia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403237
+    m_Localized: Riccardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403238
+    m_Localized: Miguel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403240
+    m_Localized: Artur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403241
+    m_Localized: Gael
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403242
+    m_Localized: Ravi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403243
+    m_Localized: Bernardo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403245
+    m_Localized: Theo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403246
+    m_Localized: Nils
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548989403247
+    m_Localized: augustus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597440
+    m_Localized: As
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597441
+    m_Localized: Arvid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597442
+    m_Localized: Ludvig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597443
+    m_Localized: Olle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597446
+    m_Localized: Antoni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597447
+    m_Localized: Jan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597450
+    m_Localized: Nikodem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597452
+    m_Localized: Filip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597453
+    m_Localized: Wojciech
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597454
+    m_Localized: "Micha\xEBl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597455
+    m_Localized: Artem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597456
+    m_Localized: Maxim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597457
+    m_Localized: Ivan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597458
+    m_Localized: Dmitry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597460
+    m_Localized: Lev
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597461
+    m_Localized: Matvey
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597462
+    m_Localized: Georgios
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597463
+    m_Localized: Dimitris
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597464
+    m_Localized: Nikos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597465
+    m_Localized: Andreas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597466
+    m_Localized: Konstantinos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597467
+    m_Localized: Ioannis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597468
+    m_Localized: Panagiotis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597469
+    m_Localized: Christos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597470
+    m_Localized: Yusuf
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597471
+    m_Localized: Emir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597472
+    m_Localized: Kerem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597473
+    m_Localized: Eymen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597474
+    m_Localized: Mustafa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597475
+    m_Localized: Ali
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597476
+    m_Localized: Ahmet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597477
+    m_Localized: Omer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597478
+    m_Localized: Kian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597480
+    m_Localized: Arman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597481
+    m_Localized: Darius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597483
+    m_Localized: Amir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597484
+    m_Localized: Parsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597486
+    m_Localized: Zayn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597487
+    m_Localized: Omar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597488
+    m_Localized: Ibrahim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597489
+    m_Localized: Tariq
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597490
+    m_Localized: Hamza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597491
+    m_Localized: Khalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597492
+    m_Localized: Karim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597494
+    m_Localized: Aarav
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597495
+    m_Localized: Arjun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597496
+    m_Localized: Vihaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597497
+    m_Localized: Aditya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597498
+    m_Localized: Reyansh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597499
+    m_Localized: Vivaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597500
+    m_Localized: Krishna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597501
+    m_Localized: Ishaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597502
+    m_Localized: Chukwuemeka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597503
+    m_Localized: Oluwaseun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597504
+    m_Localized: Babatunde
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597506
+    m_Localized: Chinedu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597507
+    m_Localized: Obinna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597508
+    m_Localized: Adebayo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597509
+    m_Localized: Ifeanyi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597510
+    m_Localized: Yichen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597511
+    m_Localized: Yuxuan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597512
+    m_Localized: Haoyu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597513
+    m_Localized: Zimo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597515
+    m_Localized: Muchen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597516
+    m_Localized: Zirui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597518
+    m_Localized: Haruto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597519
+    m_Localized: Minato
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597520
+    m_Localized: Ren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597521
+    m_Localized: Asahi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597523
+    m_Localized: Yuto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597524
+    m_Localized: Riku
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597525
+    m_Localized: Itsuki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597526
+    m_Localized: Min-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548993597527
+    m_Localized: Seo-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791744
+    m_Localized: Ha-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791745
+    m_Localized: Do-yun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791746
+    m_Localized: Ji-ho
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791747
+    m_Localized: Eun-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791749
+    m_Localized: Ye-jun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791750
+    m_Localized: Minh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791751
+    m_Localized: Khoa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791752
+    m_Localized: Duy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791753
+    m_Localized: Tuan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791754
+    m_Localized: Huy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791755
+    m_Localized: Bao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791756
+    m_Localized: Phuc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791757
+    m_Localized: Quang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791758
+    m_Localized: Jose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791759
+    m_Localized: Juan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791760
+    m_Localized: Carlo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791761
+    m_Localized: Joaquin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791762
+    m_Localized: Nathaniel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791763
+    m_Localized: "Ezechi\xEBl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791764
+    m_Localized: Jakob
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791765
+    m_Localized: Angelo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791766
+    m_Localized: Bima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791767
+    m_Localized: Rizky
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791768
+    m_Localized: Dimas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791770
+    m_Localized: Budi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791771
+    m_Localized: Fajar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791772
+    m_Localized: Bayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791773
+    m_Localized: Raka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791774
+    m_Localized: Olivia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791776
+    m_Localized: Amelia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791777
+    m_Localized: Charlotte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791778
+    m_Localized: Ava
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791779
+    m_Localized: Isabella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791781
+    m_Localized: Harper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791783
+    m_Localized: Lelie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791784
+    m_Localized: Papaver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791785
+    m_Localized: Freya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791786
+    m_Localized: Klimop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791787
+    m_Localized: Florence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791788
+    m_Localized: Elegantie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791789
+    m_Localized: Wilg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791790
+    m_Localized: Lucia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791791
+    m_Localized: Sofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791792
+    m_Localized: Martina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791793
+    m_Localized: Valeria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791794
+    m_Localized: Julia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791795
+    m_Localized: Paula
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791796
+    m_Localized: Daniela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791797
+    m_Localized: Alba
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791798
+    m_Localized: Regina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791800
+    m_Localized: Valentina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791801
+    m_Localized: Ximena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6548997791802
+    m_Localized: Renata
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986048
+    m_Localized: Jade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986049
+    m_Localized: Amber
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986050
+    m_Localized: Alma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986051
+    m_Localized: Roos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986053
+    m_Localized: Lina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986054
+    m_Localized: Agathe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986055
+    m_Localized: Sophia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986058
+    m_Localized: Mia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986059
+    m_Localized: Clara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986060
+    m_Localized: Lea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986061
+    m_Localized: Ella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986062
+    m_Localized: Marie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986063
+    m_Localized: Giulia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986064
+    m_Localized: Ginevra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986065
+    m_Localized: Vittoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986066
+    m_Localized: Aurora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986067
+    m_Localized: Beatrice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986068
+    m_Localized: Ludovica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986069
+    m_Localized: Francesca
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986070
+    m_Localized: Chiara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986071
+    m_Localized: Helena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986072
+    m_Localized: Cecilia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986073
+    m_Localized: Maite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986075
+    m_Localized: Laura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986076
+    m_Localized: Manuela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986077
+    m_Localized: Heloisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986079
+    m_Localized: Elsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986080
+    m_Localized: Vera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986081
+    m_Localized: Selma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986082
+    m_Localized: Nora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986084
+    m_Localized: Alva
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986085
+    m_Localized: Ebba
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986086
+    m_Localized: Saga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986087
+    m_Localized: Zofia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986088
+    m_Localized: Zuzanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986089
+    m_Localized: Hanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986090
+    m_Localized: Maja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986092
+    m_Localized: Oliwia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986093
+    m_Localized: Pola
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986094
+    m_Localized: Antonina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986095
+    m_Localized: Anastasia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986096
+    m_Localized: Polina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986097
+    m_Localized: Victoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986098
+    m_Localized: Ekaterina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986099
+    m_Localized: Alisa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986100
+    m_Localized: Varvara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986102
+    m_Localized: Ksenia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986103
+    m_Localized: Eleni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986105
+    m_Localized: Dimitra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549001986106
+    m_Localized: "Georgi\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180352
+    m_Localized: Maria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180353
+    m_Localized: Vasiliki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180354
+    m_Localized: Ioanna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180355
+    m_Localized: Despina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180356
+    m_Localized: Zeynep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180357
+    m_Localized: Elif
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180358
+    m_Localized: Defne
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180360
+    m_Localized: Eylul
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180361
+    m_Localized: Azra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180362
+    m_Localized: Nehir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180363
+    m_Localized: Ecrin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180364
+    m_Localized: Leyla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180365
+    m_Localized: Sara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180366
+    m_Localized: Negin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180367
+    m_Localized: Parijs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180368
+    m_Localized: Zahra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180369
+    m_Localized: Shirin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180370
+    m_Localized: Koningschap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180371
+    m_Localized: Mahsa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180372
+    m_Localized: Aisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180373
+    m_Localized: Noor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180374
+    m_Localized: Maryam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180375
+    m_Localized: Fatima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180376
+    m_Localized: Layan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180377
+    m_Localized: Salma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180378
+    m_Localized: Jana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180379
+    m_Localized: Reem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180380
+    m_Localized: Aadhya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180381
+    m_Localized: Saanvi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180382
+    m_Localized: Ananya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180383
+    m_Localized: Diya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180384
+    m_Localized: Myra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180385
+    m_Localized: Kiara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180386
+    m_Localized: Anika
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180387
+    m_Localized: Avni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180389
+    m_Localized: Adaeze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180391
+    m_Localized: Chioma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180392
+    m_Localized: Nneka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180393
+    m_Localized: Folake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180394
+    m_Localized: Temitope
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180395
+    m_Localized: Ifeoma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180397
+    m_Localized: Xinyi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180398
+    m_Localized: Zihan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180399
+    m_Localized: Yutong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180402
+    m_Localized: Xinyan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180403
+    m_Localized: Mengyao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180405
+    m_Localized: Himari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180406
+    m_Localized: Spoelen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180407
+    m_Localized: Ema
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180408
+    m_Localized: Sakura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180409
+    m_Localized: Yui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180410
+    m_Localized: Mio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180411
+    m_Localized: Hina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180412
+    m_Localized: Seo-yeon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180413
+    m_Localized: Ji-woo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180414
+    m_Localized: Min-seo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180415
+    m_Localized: Ha-eun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180416
+    m_Localized: Ji-an
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180417
+    m_Localized: Seo-ah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180420
+    m_Localized: Linh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180421
+    m_Localized: Mai
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180422
+    m_Localized: Thao
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180423
+    m_Localized: Ngoc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180424
+    m_Localized: Anh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180425
+    m_Localized: Trang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180426
+    m_Localized: Huong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180428
+    m_Localized: Engel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180429
+    m_Localized: Althea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180430
+    m_Localized: Samantha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180431
+    m_Localized: Nathalie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180432
+    m_Localized: Prinses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180433
+    m_Localized: Janelle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180434
+    m_Localized: Kristine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180435
+    m_Localized: Jasmijn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180436
+    m_Localized: Putri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180439
+    m_Localized: Ayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180440
+    m_Localized: Sari
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180441
+    m_Localized: Intan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180442
+    m_Localized: Indah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549006180443
+    m_Localized: Wulan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568960
+    m_Localized: Eerste wedstrijd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568961
+    m_Localized: Voltooi je eerste spel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568962
+    m_Localized: Eerste overwinning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568963
+    m_Localized: Win je eerste wedstrijd.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549014568964
+    m_Localized: Eerste MEJNUN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763265
+    m_Localized: Tien overwinningen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763266
+    m_Localized: Win 10 wedstrijden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763268
+    m_Localized: Versla een moeilijke bot.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763269
+    m_Localized: Volledige tabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763270
+    m_Localized: Speel een spel met zes zitplaatsen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763271
+    m_Localized: Normaal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763272
+    m_Localized: Speel 50 wedstrijden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763273
+    m_Localized: Veteraan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763275
+    m_Localized: Gekruid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763276
+    m_Localized: Win 50 wedstrijden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763277
+    m_Localized: Meester van MEJNUN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763278
+    m_Localized: Win 200 wedstrijden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763279
+    m_Localized: Niveau 10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763280
+    m_Localized: Bereik niveau 10.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763281
+    m_Localized: Niveau 25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763282
+    m_Localized: Bereik niveau 25.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763283
+    m_Localized: Niveau 50
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763284
+    m_Localized: Bereik niveau 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763285
+    m_Localized: Verzamelaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763286
+    m_Localized: Ontgrendel alle gratis of te verdienen deckfronten en viltsoorten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763287
+    m_Localized: "MEJNUN \xD710"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763288
+    m_Localized: Win 10 spellen door al je kaarten weg te spelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763289
+    m_Localized: Schoonmaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763291
+    m_Localized: Bliksem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763292
+    m_Localized: Win binnen je eerste vijf beurten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763293
+    m_Localized: Laatste adem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763294
+    m_Localized: Win door je hand leeg te spelen terwijl de trekstapel leeg is.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763295
+    m_Localized: Comeback
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763296
+    m_Localized: Winst na het bezitten van 20 of meer kaarten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763297
+    m_Localized: Het wordt spannend tot het laatste moment.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763298
+    m_Localized: "Win de telling aan het einde van de stapel met precies \xE9\xE9n
+      kaart verschil."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763299
+    m_Localized: Koninklijke Weg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763300
+    m_Localized: Maak een volledige straight van 13 kaarten, van aas tot koning.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763302
+    m_Localized: Maak een straight van vrouw, koning en aas.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763304
+    m_Localized: Ga voor minstens drie sets achter elkaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763305
+    m_Localized: Architect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763306
+    m_Localized: "Leg in \xE9\xE9n beurt minstens acht handkaarten neer."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763307
+    m_Localized: Chirurg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763308
+    m_Localized: Splits een straight en eindig de turn met een geldige board.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763309
+    m_Localized: Geleende tijd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763310
+    m_Localized: "Neem een \u200B\u200Bkaart uit een set van vier kaarten van dezelfde
+      soort en gebruik deze."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763311
+    m_Localized: Dubbelzien
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763312
+    m_Localized: "Be\xEBindig je beurt met beide exemplaren van een kaart op aparte
+      stapels."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763313
+    m_Localized: Geduldig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763314
+    m_Localized: Win zonder de functies Ongedaan maken, Terugdraaien of Bord repareren
+      te gebruiken.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763315
+    m_Localized: Geen zijwieltjes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763316
+    m_Localized: Win met de hints uitgeschakeld.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763317
+    m_Localized: Halas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763319
+    m_Localized: Koel onder druk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763320
+    m_Localized: "Be\xEBindig een geldige beurt wanneer er minder dan drie seconden
+      over zijn."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763321
+    m_Localized: Snelheidsduivel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549018763322
+    m_Localized: Win een spel dat gespeeld wordt met een timer van 30 seconden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957568
+    m_Localized: Reuzendoder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957569
+    m_Localized: Win van vijf sterke bots aan een volle tafel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957570
+    m_Localized: Hattrick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957571
+    m_Localized: Win drie botgames achter elkaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957574
+    m_Localized: Online gaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957576
+    m_Localized: Publiekslieveling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957577
+    m_Localized: Win een online spel met minstens vier menselijke spelers.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957578
+    m_Localized: Feestorganisator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957579
+    m_Localized: Organiseer 10 online games.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957580
+    m_Localized: Geef het door
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957581
+    m_Localized: Voltooi een pass-and-play-spel met minstens vier mensen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957583
+    m_Localized: Een spel eindigen in een patstelling.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957584
+    m_Localized: Hete stoel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957585
+    m_Localized: Je wordt tien keer als eerste gekozen door de vraag te beantwoorden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957586
+    m_Localized: een prestatie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957587
+    m_Localized: Een prestatie.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957589
+    m_Localized: Bereik niveau {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549022957590
+    m_Localized: Win {0:plural:{} game|{} games}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549022957591
+    m_Localized: Verdien {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549022957593
+    m_Localized: door {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549022957595
+    m_Localized: Klassiek ivoor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957596
+    m_Localized: Pixel Pastel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957597
+    m_Localized: Blueeyedrat Classic Contrast 2color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957598
+    m_Localized: Blueeyedrat Classic Contrast 2-kleuren 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957599
+    m_Localized: Blueeyedrat Classic Contrast 4color 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957600
+    m_Localized: Blueeyedrat Classic Contrast 4-kleuren 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957602
+    m_Localized: Blueeydrat Classic Dark 1 kleur 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957604
+    m_Localized: Blueeyedrat Classic Light 1 kleur 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957605
+    m_Localized: Blueeyedrat Classic Light 2-kleuren 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957606
+    m_Localized: Blueeyedrat Classic Light 2-kleuren 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957607
+    m_Localized: Blueeyedrat Classic Light 4-kleuren 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957608
+    m_Localized: Blueeyedrat Classic Light 4 kleuren 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957609
+    m_Localized: Blueeyedrat Classic Light 4-kleuren 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957610
+    m_Localized: Blueeydrat Classic Sepia 1 kleur 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957612
+    m_Localized: Blueeyedrat Classic Sepia 2-kleuren 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957614
+    m_Localized: Hack Deck
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957615
+    m_Localized: Papieren kaarten1 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957616
+    m_Localized: Heerschappen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957617
+    m_Localized: Sofu Groot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957618
+    m_Localized: Sofu Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957619
+    m_Localized: Sofu Klein
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957620
+    m_Localized: Zwart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957621
+    m_Localized: Blauw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957622
+    m_Localized: Bourgogne
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549022957623
+    m_Localized: Groente
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151872
+    m_Localized: Paars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151875
+    m_Localized: Speel solo tegen de AI.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151876
+    m_Localized: Speel Pass & speel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151877
+    m_Localized: Hoe te spelen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151878
+    m_Localized: Cv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151880
+    m_Localized: Galerij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151881
+    m_Localized: Instellingen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151882
+    m_Localized: Ontslag nemen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549027151883
+    m_Localized: "Niveau {0} \xB7 {1} / {2} XP"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549027151884
+    m_Localized: v{0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549027151885
+    m_Localized: Ben je nieuw bij Mejnun?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346176
+    m_Localized: Een kort, begeleid spel leert je alle regels spelenderwijs.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346178
+    m_Localized: Ik ken de regels.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346180
+    m_Localized: Meld je anoniem aan en neem deel met een sessiecode, of vind snel
+      een match.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346182
+    m_Localized: Spelers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346183
+    m_Localized: Draai de timer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346184
+    m_Localized: Uit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346185
+    m_Localized: '{0:meervoud:{} seconde|{} seconden}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346186
+    m_Localized: Tafelcosmetica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346187
+    m_Localized: Kies twee kaartspellen en een tafelkleed. De door de speler gekozen
+      kaarten worden voor de wedstrijd geselecteerd.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346188
+    m_Localized: Sessie aanmaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346189
+    m_Localized: Sessiecode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346190
+    m_Localized: Deelnemen via code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346191
+    m_Localized: Snelle wedstrijd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346192
+    m_Localized: "Verbinden\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346193
+    m_Localized: Neem eerst deel aan een sessie of maak er zelf een aan.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346194
+    m_Localized: De gastheer heeft de wedstrijd afgelast.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346195
+    m_Localized: Je hebt de lobby verlaten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346196
+    m_Localized: Sessiecode niet beschikbaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346197
+    m_Localized: "Wachten op spelers ({0}/{1})\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346198
+    m_Localized: Begin nu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346200
+    m_Localized: Er zijn nog geen spelers verbonden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346201
+    m_Localized: "\u2022 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346202
+    m_Localized: Speler {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346203
+    m_Localized: Wedstrijdopstelling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346204
+    m_Localized: Modus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346206
+    m_Localized: Pass & play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346207
+    m_Localized: Stoelen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346208
+    m_Localized: Draai de timer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346209
+    m_Localized: Uit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346210
+    m_Localized: '{0:meervoud:{} seconde|{} seconden}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346211
+    m_Localized: Stoel {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346212
+    m_Localized: Speler {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346213
+    m_Localized: Menselijk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346214
+    m_Localized: Easy bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346215
+    m_Localized: Middelgrote bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346216
+    m_Localized: Harde bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346217
+    m_Localized: Evenwichtig
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346218
+    m_Localized: Houd je in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346219
+    m_Localized: Blokkeerder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346220
+    m_Localized: "Er moet minstens \xE9\xE9n menselijke speler op de stoel zitten."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346221
+    m_Localized: Tafelcosmetica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346222
+    m_Localized: Kies twee kaartspellen en een tafelkleed. Klik op een voorbeeld
+      om te bladeren.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346223
+    m_Localized: Start het spel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346224
+    m_Localized: Deck {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346225
+    m_Localized: Willekeurige stapel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346226
+    m_Localized: Tafelkleed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346228
+    m_Localized: Kies kaartspel {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346229
+    m_Localized: Kies tafelvilt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346230
+    m_Localized: Nog niet ontgrendeld.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346232
+    m_Localized: Galerij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346233
+    m_Localized: Terrassen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346234
+    m_Localized: Bestuursachtergronden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346235
+    m_Localized: '{0} / {1} decks in bezit'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346236
+    m_Localized: '{0} / {1} bordachtergronden in bezit'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346238
+    m_Localized: Nieuw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346239
+    m_Localized: Selecteer een cosmetisch product
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346240
+    m_Localized: Bekijk de verschillende decks en achtergronden voor de spelborden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346242
+    m_Localized: Eigendom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346243
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549031346244
+    m_Localized: Nieuw in de galerij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346245
+    m_Localized: Voorbeeldweergave niet beschikbaar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346246
+    m_Localized: Voorbeeldweergave wordt geladen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346247
+    m_Localized: Instellingen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346248
+    m_Localized: Gameplay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346250
+    m_Localized: Hints
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346252
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346255
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346256
+    m_Localized: Gameplay en bevestigingen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346257
+    m_Localized: Bevestig de terugdraaiing van het bord
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346258
+    m_Localized: Vraag het eerst voordat je alle kaarten weer in je hand neemt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346259
+    m_Localized: Bevestig het trekken van een kaart.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346261
+    m_Localized: Bevestig de reparatie van het bord.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346262
+    m_Localized: Vraag eerst of u ongeldige kaarten terug in uw hand kunt krijgen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346264
+    m_Localized: Vraag toestemming voordat je een spel verlaat of opnieuw start.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346265
+    m_Localized: CPU-bewegingssnelheid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346266
+    m_Localized: Bepaalt hoe snel de computergestuurde spelers hun zetten doen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346268
+    m_Localized: Heel langzaam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346269
+    m_Localized: Langzaam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346270
+    m_Localized: Normaal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346271
+    m_Localized: Snel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346272
+    m_Localized: Heel snel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346273
+    m_Localized: Iedereen kan als eerste naar beneden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346274
+    m_Localized: Hiermee kan elke speler tijdens zijn eerste beurt een kaart verliezen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346275
+    m_Localized: Toon snelspoelknop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346276
+    m_Localized: Toon een besturing voor het versnellen van CPU-bochten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346277
+    m_Localized: Tafel & hand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346278
+    m_Localized: Markeer de kaart waarop de muiscursor zich bevindt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346281
+    m_Localized: Hiermee pas je aan hoe sterk je hand buigt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346282
+    m_Localized: Kaartspreiding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346283
+    m_Localized: Hiermee wordt de afstand tussen de kaarten in je hand aangepast.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346284
+    m_Localized: Kaartformaat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346285
+    m_Localized: Wijzigt de grootte van je handkaarten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346286
+    m_Localized: Kaartformaat van de tegenstander
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346287
+    m_Localized: Wijzigt de grootte van de kaarten die andere spelers in hun hand
+      hebben.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346288
+    m_Localized: Zoomgevoeligheid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346289
+    m_Localized: Hiermee regel je hoe snel de tabel in- en uitzoomt tijdens het scrollen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346290
+    m_Localized: Steek je hand op
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346291
+    m_Localized: Hiermee pas je aan hoe ver kaarten omhoog komen wanneer ze geselecteerd
+      of met de muis eroverheen bewogen worden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346292
+    m_Localized: Omcirkel de sets met vakjes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346293
+    m_Localized: Omschrijft elke set op de tabel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346294
+    m_Localized: Lijn sets uit op het raster.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346295
+    m_Localized: Plaats de sets netjes in een raster in plaats van organisch over
+      de tafel verspreid.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346296
+    m_Localized: Kaartspreiding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346297
+    m_Localized: Wijzigt de afstand tussen de kaarten in bordspellen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346299
+    m_Localized: Voegt een kleine, natuurlijke variatie toe aan de plaatsing van
+      de kaarten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346300
+    m_Localized: Hints
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346301
+    m_Localized: 'Tip: handige bordkaarten'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346302
+    m_Localized: Een overzicht van belangrijke kaarten die van pas kunnen komen bij
+      een juridische verhuizing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346303
+    m_Localized: Jiggle hintte op kaarten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346306
+    m_Localized: Verminder beweging
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346307
+    m_Localized: Vermindert onnodige bewegingen en animaties.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346308
+    m_Localized: Haptiek
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346310
+    m_Localized: UI-grootte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346311
+    m_Localized: De interface past tekst en bedieningselementen aan op mobiele apparaten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346312
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346313
+    m_Localized: Hoofdvolume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346314
+    m_Localized: Stelt het algehele spelvolume in.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346315
+    m_Localized: Muziekvolume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549031346316
+    m_Localized: Stelt het volume van de achtergrondmuziek in.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540480
+    m_Localized: Effectenvolume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540481
+    m_Localized: Stelt het volume van de kaart- en interface-effecten in.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540482
+    m_Localized: Stemvolume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540483
+    m_Localized: Stelt het spraakvolume in.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540484
+    m_Localized: Taal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540485
+    m_Localized: Taal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540486
+    m_Localized: Hiermee selecteert u de interfacetaal.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540487
+    m_Localized: Online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540489
+    m_Localized: Hiermee wordt ingesteld hoe lang snelle wedstrijden wachten voordat
+      computergestuurde spelers worden toegevoegd.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540490
+    m_Localized: Uit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540491
+    m_Localized: '{0:meervoud:{} seconde|{} seconden}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540492
+    m_Localized: Rekening
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540493
+    m_Localized: Accountfuncties volgen later.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540494
+    m_Localized: Accountfuncties zijn nog niet beschikbaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540495
+    m_Localized: '{0}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540496
+    m_Localized: "{0}\xD7"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540497
+    m_Localized: Onderdelen en spelers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540498
+    m_Localized: 'Mejnun gebruikt twee geschudde standaard kaartspellen van 52 kaarten:
+      in totaal 104 kaarten, zonder jokers. Kaarten uit beide spellen tellen dubbel.
+      Het spel wordt gespeeld met 2 tot 6 spelers, met de klok mee (naar links).'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540499
+    m_Localized: Wie gaat er eerst en hoe wordt ermee omgegaan?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540500
+    m_Localized: 'De computer deelt de kaarten. De winnaar van het vorige spel begint,
+      mits die nog meedoet. Anders kiezen de spelers wie er als eerste aan de beurt
+      is door middel van een vraag: tik op een stoel, lokaal of tegen de computer,
+      of stem online. Online stemmen duurt 20 seconden; bij een gelijkstand wordt
+      willekeurig een winnaar bepaald.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540501
+    m_Localized: "De dealer deelt aan elke speler 11 kaarten, \xE9\xE9n voor \xE9\xE9n,
+      met de klok mee vanaf de eerste speler. De overgebleven kaarten vormen de trekstapel
+      (met de afbeelding naar beneden) en de gekozen eerste speler mag als eerste
+      aan de beurt komen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540502
+    m_Localized: Doel & geldige sets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540503
+    m_Localized: "Speel als eerste je kaarten leeg om te winnen. Een spel bestaat
+      uit \xE9\xE9n ronde; de \u200B\u200Bwinnaar begint als eerste in het volgende
+      spel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540504
+    m_Localized: "Een set van dezelfde soort bestaat uit 3-4 kaarten van dezelfde
+      waarde, waarbij elke kleur anders is. Een straight bestaat uit 3-13 opeenvolgende
+      kaarten van dezelfde kleur, zonder herhaling van dezelfde waarde. Een aas kan
+      laag (A-2-3) of hoog (Q-K-A) zijn, maar nooit beide; K-A-2 is niet toegestaan.
+      Elke set op tafel moet geldig zijn; sets van \xE9\xE9n of twee kaarten zijn
+      niet geldig."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540505
+    m_Localized: Naar beneden gaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540506
+    m_Localized: "Voordat je een kaart verliest, mag je nieuwe sets maken met alleen
+      kaarten uit je hand; je mag geen bestaande sets gebruiken of wijzigen. Je kunt
+      \xE9\xE9n of meerdere sets spelen, zonder minimum aantal punten. Zodra je ten
+      minste \xE9\xE9n geldige set met alleen kaarten uit je hand hebt bevestigd,
+      verlies je je kaart en mag je de rest van de beurt het hele bord gebruiken.
+      Kaarten die je gebruikt om je kaart te verliezen, blijven die beurt op het
+      bord liggen. Met Ongedaan maken of Terugdraaien kun je het verlies ongedaan
+      maken."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540507
+    m_Localized: "Als je geen kaarten meer hebt, mag je het speelbord herschikken,
+      inclusief het tijdelijk ongeldig maken ervan. Om je beurt te be\xEBindigen,
+      moet het speelbord geldig zijn en moet je minstens \xE9\xE9n kaart uit je hand
+      hebben gespeeld."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540509
+    m_Localized: "Trekken (of passen als de stapel leeg is) is altijd mogelijk. Hiermee
+      wordt het speelbord teruggezet naar het begin van je beurt, krijg je je gespeelde
+      kaarten terug in je hand, trek je \xE9\xE9n kaart (indien mogelijk) en be\xEBindig
+      je je beurt. Beurt be\xEBindigen is mogelijk wanneer het speelbord geldig is
+      en je een handkaart hebt gespeeld of bent afgezakt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540510
+    m_Localized: "Met Ongedaan maken ga je terug naar de beginstand van je zetten;
+      Met Opnieuw uitvoeren pas je een ongedaan gemaakte zet in dezelfde beurt opnieuw
+      toe. Nieuwe zetten en acties die de beurt be\xEBindigen, wissen Opnieuw uitvoeren.
+      Bord repareren probeert geldige kaarten uit je hand te behouden terwijl het
+      bord wordt hersteld; kaarten die niet gebruikt kunnen worden, gaan terug naar
+      je hand. Terugzetten herstelt het bord naar de beginstand en geeft je gespeelde
+      kaarten terug naar je hand. Destructieve acties kunnen je om bevestiging vragen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540511
+    m_Localized: Getimede beurten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540512
+    m_Localized: De host kan kiezen voor 30, 60, 90 of 120 seconden per beurt, of
+      de timer uitschakelen bij offline spellen. Online spellen hebben altijd een
+      tijdslimiet. Wanneer de tijd om is, wordt een geldig bord zonder gespeelde
+      kaarten behouden en trek je een kaart; een ongeldig bord zonder gespeelde kaarten
+      wordt hersteld en je trekt een kaart. Als je handkaarten hebt gespeeld en het
+      bord geldig is, eindigt je beurt zonder een kaart te trekken. Als het bord
+      ongeldig is, worden je zetten ongedaan gemaakt totdat het weer geldig is; je
+      trekt alleen een kaart als er geen handkaarten meer op het bord liggen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540513
+    m_Localized: Lege trekstapel & patstellingen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540514
+    m_Localized: 'Als de trekstapel leeg is, wordt Trekken Passen: er wordt geen
+      kaart getrokken en het spel wordt teruggedraaid. Als alle actieve spelers achter
+      elkaar passen zonder een kaart te spelen, wint de speler met de minste kaarten,
+      mits hij of zij de enige is met dat aantal. Als spelers evenveel kaarten hebben,
+      eindigt het spel in een patstelling zonder winnaar.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540515
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540516
+    m_Localized: Spelontwerp en -ontwikkeling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540517
+    m_Localized: Gemaakt met
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540518
+    m_Localized: Unity 6, Universal Render Pipeline, Input System, Audiokinetic Wwise,
+      Unity Gaming Services en Steamworks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540519
+    m_Localized: Bedankt voor het spelen!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540520
+    m_Localized: "Be\xEBindig beurt"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540521
+    m_Localized: Ongedaan maken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540522
+    m_Localized: Opnieuw doen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540523
+    m_Localized: Terugdraaien
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540524
+    m_Localized: Bevestigingsbord
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540525
+    m_Localized: 'Sorteren: rangschikken'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540526
+    m_Localized: 'Soort: pak'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540527
+    m_Localized: Camera resetten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540528
+    m_Localized: Opruimbord
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540529
+    m_Localized: Markering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540530
+    m_Localized: "Markeren\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540531
+    m_Localized: Tekenen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540532
+    m_Localized: Doorgang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540533
+    m_Localized: 'Hint: op'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540534
+    m_Localized: 'Hint: uit'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540535
+    m_Localized: Snel vooruitspoelen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540536
+    m_Localized: Doorgaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540537
+    m_Localized: Halas!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540538
+    m_Localized: Gedaald
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540539
+    m_Localized: "{0} \xB7 Gone Down"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540540
+    m_Localized: "{0} denkt na\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540541
+    m_Localized: Jouw beurt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540542
+    m_Localized: '{0}''s beurt'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540543
+    m_Localized: Jouw beurt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540544
+    m_Localized: De beurt van {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540545
+    m_Localized: Stoel {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540546
+    m_Localized: 'Trekstapel: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540547
+    m_Localized: 'Tijd: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540548
+    m_Localized: Nu ben jij niet aan de beurt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540549
+    m_Localized: Die optie is momenteel niet beschikbaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540550
+    m_Localized: Ga eerst naar beneden voordat je kaarten van het bord gebruikt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540551
+    m_Localized: Kaarten op het bord kunnen niet terug naar je hand worden genomen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540553
+    m_Localized: Die set voldoet niet aan de vereisten om te worden verwijderd.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540554
+    m_Localized: Een set mag niet twee keer dezelfde kaart bevatten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540555
+    m_Localized: Die set bevat te veel kaarten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540556
+    m_Localized: Die kaart kan niet aan deze set worden toegevoegd.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540557
+    m_Localized: Kies een geldige locatie voor die kaart.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540558
+    m_Localized: Die zet omvat het meer dan eens gebruiken van een kaart.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540560
+    m_Localized: Die kaart of set is niet meer verkrijgbaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540562
+    m_Localized: Probeer de gemarkeerde kaarten.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540564
+    m_Localized: Vraag het niet nog eens.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540565
+    m_Localized: Bevestigen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540566
+    m_Localized: Wil je al je kaarten terug in je hand?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540567
+    m_Localized: Enkele ongeldige kaarten keren terug naar je hand. Kun je het speelveld
+      herstellen?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540568
+    m_Localized: De tutorial overslaan? Je kunt hem op elk gewenst moment opnieuw
+      bekijken via 'Hoe te spelen'.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540569
+    m_Localized: Terug naar het hoofdmenu? Dit spel wordt opgeslagen, zodat je later
+      verder kunt spelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540570
+    m_Localized: Dit spel opnieuw starten? De huidige ronde gaat verloren.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540571
+    m_Localized: Gepauzeerd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540572
+    m_Localized: Cv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540573
+    m_Localized: Start het spel opnieuw.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540574
+    m_Localized: Instellingen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540575
+    m_Localized: Tutorial overslaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540577
+    m_Localized: Hoofdmenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540578
+    m_Localized: 'Kamercode: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540579
+    m_Localized: PC-sneltoetsen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540580
+    m_Localized: "Ctrl/Cmd+Z Ongedaan maken\nCtrl/Cmd+Shift+Z of Ctrl+Y Herhalen\nSpatie
+      Beurt be\xEBindigen\nD Tekenen / passen\nR Terugdraaien\nF Bord corrigeren\nH
+      Hint\nF1 Dit blad\nEsc of P Pauze"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540582
+    m_Localized: Tutorial overslaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540587
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540588
+    m_Localized: "\u2713 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549035540590
+    m_Localized: Wie begint?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540591
+    m_Localized: Willekeurige eerste speler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540592
+    m_Localized: Tik om te onthullen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540593
+    m_Localized: MEJNUN!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549035540594
+    m_Localized: Prestaties
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734784
+    m_Localized: Nieuw in de galerij
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734785
+    m_Localized: Nog niet ontgrendeld
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734789
+    m_Localized: Een nieuwe ronde starten?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734790
+    m_Localized: Vraag het niet nog eens.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734793
+    m_Localized: '{0}: {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734794
+    m_Localized: Je hebt de tutorial voltooid. Je bent klaar voor een echt spel!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734795
+    m_Localized: +{0} XP
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734796
+    m_Localized: Ga een level omhoog! Level {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734797
+    m_Localized: "Niveau {0} \xB7 {1} / {2} XP"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734798
+    m_Localized: 'Nieuw: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734799
+    m_Localized: 'Nog niet ontgrendeld: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 6549039734800
+    m_Localized: Nieuw deck ontgrendeld
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734801
+    m_Localized: Tik om verder te gaan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6549039734802
+    m_Localized: door {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  references:
+    version: 2
+    RefIds:
+    - rid: 4825848250703282621
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 6548985208843
+        - id: 6548989403156
+        - id: 6548989403158
+        - id: 6548989403168
+        - id: 6549031346231
+        - id: 6549031346237
+        - id: 6549035540589
+        - id: 6548981014531
+        - id: 6548985208832
+        - id: 6548985208833
+        - id: 6548985208834
+        - id: 6548985208853
+        - id: 6548985208855
+        - id: 6548985208867
+        - id: 6548985208868
+        - id: 6548985208883
+        - id: 6548989403151
+        - id: 6548989403152
+        - id: 6548989403153
+        - id: 6548989403154
+        - id: 6548989403155
+        - id: 6548989403160
+        - id: 6548989403161
+        - id: 6548989403167
+        - id: 6548989403170
+        - id: 6548989403172
+        - id: 6548989403173
+        - id: 6549022957589
+        - id: 6549022957590
+        - id: 6549022957591
+        - id: 6549022957593
+        - id: 6549027151883
+        - id: 6549027151884
+        - id: 6549031346185
+        - id: 6549031346197
+        - id: 6549031346201
+        - id: 6549031346202
+        - id: 6549031346210
+        - id: 6549031346211
+        - id: 6549031346212
+        - id: 6549031346224
+        - id: 6549031346228
+        - id: 6549031346235
+        - id: 6549031346236
+        - id: 6549031346243
+        - id: 6549035540491
+        - id: 6549035540495
+        - id: 6549035540496
+        - id: 6549035540539
+        - id: 6549035540540
+        - id: 6549035540542
+        - id: 6549035540544
+        - id: 6549035540545
+        - id: 6549035540546
+        - id: 6549035540547
+        - id: 6549035540578
+        - id: 6549035540587
+        - id: 6549035540588
+        - id: 6549039734793
+        - id: 6549039734795
+        - id: 6549039734796
+        - id: 6549039734797
+        - id: 6549039734798
+        - id: 6549039734799
+        - id: 6549039734802

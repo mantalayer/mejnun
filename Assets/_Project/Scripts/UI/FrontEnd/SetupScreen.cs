@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using Mejnun.AI;
 using Mejnun.Cosmetics;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Mejnun.UI.FrontEnd
 {
-    public sealed class SetupScreen
+    public sealed class SetupScreen : IDisposable
     {
-        public const string SoloMode = "Solo vs AI";
-        public const string PassAndPlayMode = "Pass & play";
+        public static string SoloMode => Loc.Get("setup.mode.solo");
+        public static string PassAndPlayMode => Loc.Get("setup.mode.pass_and_play");
 
         private const int MaximumSeats = 6;
-        private const string HumanKind = "Human";
-        private static readonly string[] BotKinds = { "Easy bot", "Medium bot", "Hard bot" };
-        private static readonly string[] BotStyles = { "Balanced", "Hold back", "Blocker" };
+        private const int HumanKindIndex = 0;
+        private static readonly int[] TimerChoices = { 0, 30, 60, 90, 120 };
 
         private readonly VisualElement root;
         private readonly Action<MatchRequest> onNext;
@@ -29,7 +29,9 @@ namespace Mejnun.UI.FrontEnd
         private readonly TextField[] nameFields = new TextField[MaximumSeats];
         private readonly DropdownField[] kindFields = new DropdownField[MaximumSeats];
         private readonly DropdownField[] styleFields = new DropdownField[MaximumSeats];
+        private readonly string[] assignedDefaultNames = new string[MaximumSeats];
         private string[] seatBotNames;
+        private Func<string> errorResolver;
         private MatchMode mode;
         private Func<bool> canStart;
 
@@ -47,32 +49,113 @@ namespace Mejnun.UI.FrontEnd
             errorLabel = root.Q<Label>("setup-error");
             startButton = root.Q<Button>("start-match-button");
 
-            var kinds = new List<string> { HumanKind };
-            kinds.AddRange(BotKinds);
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
                 seatRows[seat] = root.Q<VisualElement>("seat-row-" + seat);
                 nameFields[seat] = root.Q<TextField>("player-name-" + seat);
                 kindFields[seat] = root.Q<DropdownField>("seat-kind-" + seat);
                 styleFields[seat] = root.Q<DropdownField>("seat-style-" + seat);
-                kindFields[seat].choices = new List<string>(kinds);
-                kindFields[seat].SetValueWithoutNotify(HumanKind);
-                styleFields[seat].choices = new List<string>(BotStyles);
-                styleFields[seat].SetValueWithoutNotify(BotStyles[0]);
                 var seatIndex = seat;
                 kindFields[seat].RegisterValueChangedCallback(_ => OnKindChanged(seatIndex));
             }
 
-            modeField.choices = new List<string> { SoloMode, PassAndPlayMode };
-            modeField.SetValueWithoutNotify(mode == MatchMode.PassAndPlay ? PassAndPlayMode : SoloMode);
             modeField.SetEnabled(false);
-            turnTimerField.choices = new List<string> { "Off", "30 seconds", "60 seconds", "90 seconds", "120 seconds" };
-            turnTimerField.SetValueWithoutNotify("Off");
+            RenderChoices(HumanKindIndex, (int)BotStyle.Balanced, 0);
             seatCountField.RegisterValueChangedCallback(OnSeatCountChanged);
             root.Q<Button>("setup-back-button").clicked += back;
             startButton.clicked += StartMatch;
 
             ApplyMode(mode);
+            Loc.LanguageChanged += OnLanguageChanged;
+        }
+
+        public void Dispose()
+        {
+            Loc.LanguageChanged -= OnLanguageChanged;
+        }
+
+        private static List<string> KindLabels()
+        {
+            return new List<string>
+            {
+                Loc.Get("setup.seat.kind.human"),
+                Loc.Get("setup.seat.kind.easy_bot"),
+                Loc.Get("setup.seat.kind.medium_bot"),
+                Loc.Get("setup.seat.kind.hard_bot")
+            };
+        }
+
+        private static List<string> StyleLabels()
+        {
+            return new List<string>
+            {
+                Loc.Get("setup.seat.style.balanced"),
+                Loc.Get("setup.seat.style.hold_back"),
+                Loc.Get("setup.seat.style.blocker")
+            };
+        }
+
+        private static List<string> TimerLabels()
+        {
+            return new List<string>
+            {
+                Loc.Get("setup.timer.off"),
+                Loc.Format("setup.timer.seconds", 30),
+                Loc.Format("setup.timer.seconds", 60),
+                Loc.Format("setup.timer.seconds", 90),
+                Loc.Format("setup.timer.seconds", 120)
+            };
+        }
+
+        // Rebuilds every dropdown in the current language. Kind and style
+        // keep their per-seat index; the given defaults are used for fields
+        // that have no selection yet.
+        private void RenderChoices(int defaultKind, int defaultStyle, int defaultTimer)
+        {
+            var kinds = KindLabels();
+            var styles = StyleLabels();
+            for (var seat = 0; seat < MaximumSeats; seat++)
+            {
+                var kind = kindFields[seat].index;
+                var style = styleFields[seat].index;
+                kindFields[seat].choices = new List<string>(kinds);
+                SetIndexWithoutNotify(kindFields[seat], kind < 0 ? defaultKind : kind);
+                styleFields[seat].choices = new List<string>(styles);
+                SetIndexWithoutNotify(styleFields[seat], style < 0 ? defaultStyle : style);
+                nameFields[seat].label = Loc.Format("setup.seat.label", seat + 1);
+            }
+
+            modeField.choices = new List<string> { Loc.Get("setup.mode.solo"), Loc.Get("setup.mode.pass_and_play") };
+            SetIndexWithoutNotify(modeField, mode == MatchMode.PassAndPlay ? 1 : 0);
+            var timer = turnTimerField.index;
+            turnTimerField.choices = TimerLabels();
+            SetIndexWithoutNotify(turnTimerField, timer < 0 ? defaultTimer : timer);
+        }
+
+        private static void SetIndexWithoutNotify(DropdownField field, int index)
+        {
+            var choices = field.choices;
+            if (choices == null || choices.Count == 0)
+            {
+                return;
+            }
+
+            field.SetValueWithoutNotify(choices[Mathf.Clamp(index, 0, choices.Count - 1)]);
+        }
+
+        private void OnLanguageChanged()
+        {
+            RenderChoices(HumanKindIndex, (int)BotStyle.Balanced, 0);
+            for (var seat = 0; seat < MaximumSeats; seat++)
+            {
+                if (!IsBot(seat) && assignedDefaultNames[seat] != null &&
+                    nameFields[seat].value == assignedDefaultNames[seat])
+                {
+                    SetDefaultName(seat, Loc.Format("setup.seat.default_name", seat + 1));
+                }
+            }
+
+            RenderError();
         }
 
         public void SetVisible(bool visible)
@@ -98,7 +181,7 @@ namespace Mejnun.UI.FrontEnd
         public void SetMode(MatchMode matchMode)
         {
             mode = matchMode;
-            modeField.SetValueWithoutNotify(mode == MatchMode.PassAndPlay ? PassAndPlayMode : SoloMode);
+            SetIndexWithoutNotify(modeField, mode == MatchMode.PassAndPlay ? 1 : 0);
             ApplyMode(mode);
         }
 
@@ -108,9 +191,9 @@ namespace Mejnun.UI.FrontEnd
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
                 var kind = matchMode == MatchMode.Solo && seat > 0
-                    ? BotKinds[(int)BotDifficulty.Medium]
-                    : HumanKind;
-                kindFields[seat].SetValueWithoutNotify(kind);
+                    ? KindIndex(BotDifficulty.Medium)
+                    : HumanKindIndex;
+                SetIndexWithoutNotify(kindFields[seat], kind);
                 OnKindChanged(seat);
             }
 
@@ -120,7 +203,7 @@ namespace Mejnun.UI.FrontEnd
                 nameFields[0].SetValueWithoutNotify(savedNickname);
             }
 
-            SetError(string.Empty);
+            SetError(null);
             RefreshRows();
         }
 
@@ -132,7 +215,13 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
-            nameFields[seat].SetValueWithoutNotify(IsBot(seat) ? seatBotNames[seat] : "Player " + (seat + 1));
+            SetDefaultName(seat, IsBot(seat) ? seatBotNames[seat] : Loc.Format("setup.seat.default_name", seat + 1));
+        }
+
+        private void SetDefaultName(int seat, string name)
+        {
+            assignedDefaultNames[seat] = name;
+            nameFields[seat].SetValueWithoutNotify(name);
         }
 
         private void OnSeatCountChanged(ChangeEvent<int> changeEvent)
@@ -176,11 +265,11 @@ namespace Mejnun.UI.FrontEnd
 
             if (humans == 0)
             {
-                SetError("At least one seat must be a human player.");
+                SetError(() => Loc.Get("setup.error.no_human"));
                 return;
             }
 
-            SetError(string.Empty);
+            SetError(null);
             if (mode == MatchMode.Solo && !IsBot(0) && !IsDefaultName(nameFields[0].value))
             {
                 GameSettings.OnlineNickname = nameFields[0].value;
@@ -191,34 +280,33 @@ namespace Mejnun.UI.FrontEnd
 
         private int TimerSeconds()
         {
-            switch (turnTimerField.value)
-            {
-                case "30 seconds": return 30;
-                case "60 seconds": return 60;
-                case "90 seconds": return 90;
-                case "120 seconds": return 120;
-                default: return 0;
-            }
+            var index = turnTimerField.index;
+            return index < 0 || index >= TimerChoices.Length ? 0 : TimerChoices[index];
+        }
+
+        private static int KindIndex(BotDifficulty difficulty)
+        {
+            return HumanKindIndex + 1 + (int)difficulty;
         }
 
         private bool IsBot(int seat)
         {
-            return kindFields[seat].value != HumanKind;
+            return kindFields[seat].index > HumanKindIndex;
         }
 
         private BotDifficulty Difficulty(int seat)
         {
-            var index = Array.IndexOf(BotKinds, kindFields[seat].value);
-            return index < 0 ? BotDifficulty.Medium : (BotDifficulty)index;
+            var index = kindFields[seat].index - (HumanKindIndex + 1);
+            return index < 0 || index > (int)BotDifficulty.Hard ? BotDifficulty.Medium : (BotDifficulty)index;
         }
 
         private BotStyle Style(int seat)
         {
-            var index = Array.IndexOf(BotStyles, styleFields[seat].value);
-            return index < 0 ? BotStyle.Balanced : (BotStyle)index;
+            var index = styleFields[seat].index;
+            return index < 0 || index > (int)BotStyle.Blocker ? BotStyle.Balanced : (BotStyle)index;
         }
 
-        private static bool IsDefaultName(string name)
+        private bool IsDefaultName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -227,7 +315,7 @@ namespace Mejnun.UI.FrontEnd
 
             for (var seat = 0; seat < MaximumSeats; seat++)
             {
-                if (name == "Player " + (seat + 1))
+                if (name == assignedDefaultNames[seat] || name == Loc.Format("setup.seat.default_name", seat + 1))
                 {
                     return true;
                 }
@@ -236,11 +324,19 @@ namespace Mejnun.UI.FrontEnd
             return BotNames.Contains(name);
         }
 
-        private void SetError(string message)
+        // The resolver is kept so the message is re-rendered when the
+        // language changes; null clears the error.
+        private void SetError(Func<string> resolve)
+        {
+            errorResolver = resolve;
+            RenderError();
+        }
+
+        private void RenderError()
         {
             if (errorLabel != null)
             {
-                errorLabel.text = message;
+                errorLabel.text = errorResolver == null ? string.Empty : errorResolver();
             }
         }
     }

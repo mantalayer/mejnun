@@ -8,7 +8,10 @@
     "Mejnun.Game",
     "Mejnun.Audio",
     "Mejnun.UI",
-    "Unity.Addressables"
+    "Unity.Addressables",
+    "Mejnun.Localization",
+    "Unity.Localization",
+    "Unity.ResourceManager"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

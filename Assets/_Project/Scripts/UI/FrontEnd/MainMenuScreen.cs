@@ -2,6 +2,7 @@ using System;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -68,6 +69,7 @@ namespace Mejnun.UI.FrontEnd
             quitButton.clicked += QuitGame;
             AddVersionLabel();
             progression.Changed += Refresh;
+            Loc.LanguageChanged += OnLanguageChanged;
             Refresh();
             cardCursor = new MenuCardCursor(root, tutorialPrompt, cosmeticCatalog, progression, loader);
         }
@@ -178,7 +180,8 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
-            var label = new Label("v" + Application.version) { name = "version-label" };
+            var label = new Label(Loc.Format("menu.main.version", Application.version));
+            label.name = "version-label";
             label.pickingMode = PickingMode.Ignore;
             label.style.position = Position.Absolute;
             label.style.left = 12;
@@ -191,6 +194,7 @@ namespace Mejnun.UI.FrontEnd
         public void Dispose()
         {
             progression.Changed -= Refresh;
+            Loc.LanguageChanged -= OnLanguageChanged;
             feltWipe.Cancel();
             cardCursor.Dispose();
         }
@@ -202,7 +206,18 @@ namespace Mejnun.UI.FrontEnd
             RefreshBackground();
             var progress = ProgressionRules.LevelProgress(profile.Xp);
             levelProgress.value = progress.needed <= 0 ? 0f : 100f * progress.into / progress.needed;
-            levelProgress.title = "Level " + profile.Level + " · " + progress.into + " / " + progress.needed + " XP";
+            levelProgress.title = Loc.Format("menu.main.level_progress", profile.Level, progress.into, progress.needed);
+        }
+
+        private void OnLanguageChanged()
+        {
+            var versionLabel = root.Q<Label>("version-label");
+            if (versionLabel != null)
+            {
+                versionLabel.text = Loc.Format("menu.main.version", Application.version);
+            }
+
+            Refresh();
         }
 
         private TableFelt ResolveFelt(string feltId)

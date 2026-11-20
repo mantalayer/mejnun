@@ -4,7 +4,7 @@
     <ui:Template name="settings-panel-template" src="SettingsPanel.uxml" />
     <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
         <ui:VisualElement name="turn-panel" class="hud-bar turn-panel">
-            <ui:Label name="turn-label" class="status-label" text="Seat 1's turn" />
+            <ui:Label name="turn-label" class="status-label" />
             <ui:Label name="timer-label" class="status-label timer-label" text="" />
         </ui:VisualElement>
         <ui:Button name="pause-button" class="hud-button hamburger-button" text="">
@@ -17,26 +17,62 @@
         <ui:VisualElement class="bottom-area">
             <ui:VisualElement name="status-panel" class="hud-bar status-panel">
                 <ui:VisualElement class="draw-pile-status">
-                    <ui:Label name="draw-pile-label" class="status-label secondary-label draw-pile-label" text="Draw pile: 0" />
+                    <ui:Label name="draw-pile-label" class="status-label secondary-label draw-pile-label" />
                     <ui:VisualElement name="draw-pile-stack" class="draw-pile-stack" picking-mode="Ignore" />
-                    <ui:Button name="draw-pass-button" class="hud-button draw-pile-draw-button" text="Draw" />
+                    <ui:Button name="draw-pass-button" class="hud-button draw-pile-draw-button" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="bottom-bar" class="hud-bar bottom-bar">
-                <ui:Button name="end-turn-button" class="hud-button primary-button" text="End turn" />
-                <ui:Button name="undo-button" class="hud-button" text="Undo" />
-                <ui:Button name="redo-button" class="hud-button" text="Redo" />
-                <ui:Button name="revert-button" class="hud-button" text="Revert" />
-                <ui:Button name="fix-board-button" class="hud-button" text="Fix board" />
-                <ui:Button name="sort-rank-button" class="hud-button" text="Sort: rank" />
-                <ui:Button name="sort-suit-button" class="hud-button" text="Sort: suit" />
-                <ui:Button name="fit-board-button" class="hud-button" text="Reset Camera" />
-                <ui:Button name="compact-board-button" class="hud-button" text="Tidy board" />
-                <ui:Button name="mark-set-button" class="hud-button" text="Mark" />
+                <ui:Button name="end-turn-button" class="hud-button primary-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.end_turn" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="undo-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.undo" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="redo-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.redo" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="revert-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.revert" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="fix-board-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.fix_board" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="sort-rank-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.sort_rank" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="sort-suit-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.sort_suit" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="fit-board-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.reset_camera" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="compact-board-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.tidy_board" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="mark-set-button" class="hud-button" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="fast-forward-dock" class="fast-forward-dock hud-bar" picking-mode="Ignore" style="display: none">
-            <ui:Button name="fast-forward-button" class="hud-button" text="Fast forward" style="display: none" />
+            <ui:Button name="fast-forward-button" class="hud-button" style="display: none" />
         </ui:VisualElement>
         <ui:VisualElement name="opponents-strip" class="opponents-strip" picking-mode="Ignore">
             <ui:VisualElement name="left-opponents" class="opponent-side opponent-left" picking-mode="Ignore" />
@@ -47,8 +83,16 @@
             <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
             <ui:Label name="online-notice" class="online-notice" picking-mode="Ignore" />
             <ui:Label name="online-waiting" class="online-waiting" picking-mode="Ignore" />
-            <ui:Label name="halas-popup" class="halas-popup" text="Halas!" picking-mode="Ignore" />
-            <ui:Label name="gone-down-popup" class="gone-down-popup" text="Gone Down" picking-mode="Ignore" />
+            <ui:Label name="halas-popup" class="halas-popup" picking-mode="Ignore">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.popup.halas" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label name="gone-down-popup" class="gone-down-popup" picking-mode="Ignore">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.popup.gone_down" />
+                </Bindings>
+            </ui:Label>
             <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
             <ui:Label name="invalid-move-popup" class="invalid-move-popup" picking-mode="Ignore" />
             <ui:VisualElement name="marker-layer" class="marker-layer" picking-mode="Ignore" />
@@ -58,10 +102,22 @@
             <ui:VisualElement name="coach-popup" class="coach-popup">
                 <ui:Label name="coach-title" class="coach-title" text="" />
                 <ui:Label name="coach-body" class="coach-body" text="" />
-                <ui:Label name="coach-nudge" class="coach-nudge" text="Try the highlighted cards" />
+                <ui:Label name="coach-nudge" class="coach-nudge">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="tutorial.ui.coach.nudge" />
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement class="coach-actions">
-                    <ui:Button name="coach-skip-button" class="hud-button coach-skip-button" text="Skip tutorial" />
-                    <ui:Button name="coach-next-button" class="hud-button primary-button" text="Next" />
+                    <ui:Button name="coach-skip-button" class="hud-button coach-skip-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="tutorial.ui.coach.skip" />
+                        </Bindings>
+                    </ui:Button>
+                    <ui:Button name="coach-next-button" class="hud-button primary-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="tutorial.ui.coach.next" />
+                        </Bindings>
+                    </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="rule-modal-scrim" class="rule-modal-scrim">
@@ -71,36 +127,92 @@
                     <ui:Label name="rule-body" class="dialog-message rule-body" text="" />
                     <ui:Label name="rule-page" class="rule-page" text="" />
                     <ui:VisualElement class="dialog-actions">
-                        <ui:Button name="rule-back-button" class="hud-button" text="Back" />
-                        <ui:Button name="rule-ok-button" class="hud-button primary-button" text="Got it" />
+                        <ui:Button name="rule-back-button" class="hud-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.back" />
+                            </Bindings>
+                        </ui:Button>
+                        <ui:Button name="rule-ok-button" class="hud-button primary-button" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="confirm-dialog" class="hud-dialog confirm-dialog" style="display: none">
-            <ui:Label name="confirm-message" class="dialog-message" text="Are you sure?" />
-            <ui:Toggle name="confirm-dont-ask" class="dialog-toggle" label="Don't ask again" />
+            <ui:Label name="confirm-message" class="dialog-message" />
+            <ui:Toggle name="confirm-dont-ask" class="dialog-toggle">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="hud.confirm.dont_ask" />
+                </Bindings>
+            </ui:Toggle>
             <ui:VisualElement class="dialog-actions">
-                <ui:Button name="confirm-cancel-button" class="hud-button" text="Cancel" />
-                <ui:Button name="confirm-accept-button" class="hud-button primary-button" text="Confirm" />
+                <ui:Button name="confirm-cancel-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.cancel" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="confirm-accept-button" class="hud-button primary-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.confirm.accept" />
+                    </Bindings>
+                </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="pause-panel" class="hud-dialog pause-panel" style="display: none">
-            <ui:Label class="dialog-title" text="Paused" />
+            <ui:Label class="dialog-title">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.title" />
+                </Bindings>
+            </ui:Label>
             <ui:Label name="room-code-label" class="room-code-label" text="" style="display: none; -unity-text-align: middle-center;" />
-            <ui:Button name="resume-button" class="hud-button primary-button" text="Resume" />
-            <ui:Button name="restart-button" class="hud-button" text="Restart game" />
-            <ui:Button name="settings-button" class="hud-button" text="Settings" />
-            <ui:Button name="hint-button" class="hud-button" text="Hint: off" />
-            <ui:Button name="skip-tutorial-button" class="hud-button" text="Skip tutorial" style="display: none" />
-            <ui:Button name="help-button" class="hud-button" text="? Help" />
-            <ui:Button name="menu-button" class="hud-button" text="Main menu" />
+            <ui:Button name="resume-button" class="hud-button primary-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.resume" />
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="restart-button" class="hud-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.restart" />
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="settings-button" class="hud-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.settings" />
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="hint-button" class="hud-button" />
+            <ui:Button name="skip-tutorial-button" class="hud-button" style="display: none">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.skip_tutorial" />
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="help-button" class="hud-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.help" />
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="menu-button" class="hud-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.main_menu" />
+                </Bindings>
+            </ui:Button>
         </ui:VisualElement>
         <ui:Instance template="settings-panel-template" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" picking-mode="Ignore" />
         <ui:VisualElement name="help-panel" class="hud-dialog help-panel" style="display: none">
-            <ui:Label class="dialog-title" text="PC shortcuts" />
-            <ui:Label class="shortcut-copy" text="Ctrl/Cmd+Z  Undo&#10;Ctrl/Cmd+Shift+Z or Ctrl+Y  Redo&#10;Space  End turn&#10;D  Draw / pass&#10;R  Revert&#10;F  Fix board&#10;H  Hint&#10;F1  This sheet&#10;Esc or P  Pause" />
-            <ui:Button name="help-close-button" class="hud-button primary-button" text="Close" />
+            <ui:Label class="dialog-title">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.help.title" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label class="shortcut-copy">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.help.shortcuts" />
+                </Bindings>
+            </ui:Label>
+            <ui:Button name="help-close-button" class="hud-button primary-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.close" />
+                </Bindings>
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

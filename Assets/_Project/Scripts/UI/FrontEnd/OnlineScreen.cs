@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine.UIElements;
 
 namespace Mejnun.UI.FrontEnd
@@ -13,8 +14,10 @@ namespace Mejnun.UI.FrontEnd
         QuickMatch
     }
 
-    public sealed class OnlineScreen
+    public sealed class OnlineScreen : IDisposable
     {
+        private static readonly int[] TimerChoices = { 0, 30, 60, 90, 120 };
+
         private readonly VisualElement root;
         private readonly VisualElement setupContainer;
         private readonly TextField nicknameField;
@@ -37,6 +40,8 @@ namespace Mejnun.UI.FrontEnd
         private string lobbyCode;
         private IReadOnlyList<string> lobbyPlayerNames;
         private int lobbyMaxPlayers;
+        private Func<string> statusResolver;
+        private string statusText;
 
         public event Action<OnlineAction, string, string> Requested;
         public event Action ContinueRequested;
@@ -61,9 +66,7 @@ namespace Mejnun.UI.FrontEnd
             continueButton = root.Q<Button>("online-continue-button");
             backButton = root.Q<Button>("online-back-button");
 
-            turnTimerField.choices = new List<string>
-                { "Off", "30 seconds", "60 seconds", "90 seconds", "120 seconds" };
-            turnTimerField.SetValueWithoutNotify("Off");
+            RenderTimerChoices();
 
             createButton.clicked += () => Request(OnlineAction.Create);
             joinButton.clicked += () => Request(OnlineAction.JoinByCode);
@@ -71,6 +74,13 @@ namespace Mejnun.UI.FrontEnd
             continueButton.clicked += () => ContinueRequested?.Invoke();
             backButton.clicked += back;
             continueButton.style.display = DisplayStyle.None;
+            ApplySetupContent();
+            Loc.LanguageChanged += OnLanguageChanged;
+        }
+
+        public void Dispose()
+        {
+            Loc.LanguageChanged -= OnLanguageChanged;
         }
 
         public string Nickname => nicknameField.value;
@@ -79,15 +89,47 @@ namespace Mejnun.UI.FrontEnd
         {
             get
             {
-                switch (turnTimerField.value)
-                {
-                    case "30 seconds": return 30;
-                    case "60 seconds": return 60;
-                    case "90 seconds": return 90;
-                    case "120 seconds": return 120;
-                    default: return 0;
-                }
+                var index = turnTimerField.index;
+                return index < 0 || index >= TimerChoices.Length ? 0 : TimerChoices[index];
             }
+        }
+
+        private void RenderTimerChoices()
+        {
+            var selected = turnTimerField.index;
+            var labels = new List<string>
+            {
+                Loc.Get("online.timer.off"),
+                Loc.Format("online.timer.seconds", 30),
+                Loc.Format("online.timer.seconds", 60),
+                Loc.Format("online.timer.seconds", 90),
+                Loc.Format("online.timer.seconds", 120)
+            };
+            turnTimerField.choices = labels;
+            turnTimerField.SetValueWithoutNotify(labels[selected < 0 || selected >= labels.Count ? 0 : selected]);
+        }
+
+        private void OnLanguageChanged()
+        {
+            RenderTimerChoices();
+            if (!lobbyTransitionRunning)
+            {
+                var resolver = statusResolver;
+                var text = statusText;
+                if (isLobby)
+                {
+                    ApplyLobbyContent();
+                }
+                else
+                {
+                    RenderSetupButtons();
+                }
+
+                statusResolver = resolver;
+                statusText = text;
+            }
+
+            RenderStatus();
         }
 
         public void RefreshNickname()
@@ -113,14 +155,45 @@ namespace Mejnun.UI.FrontEnd
             backButton.SetEnabled(!busy);
         }
 
+        // Shows a localized status line, for example
+        // SetLocalizedStatus(() => Loc.Get("online.status.left_lobby")). The
+        // resolver is kept so the line is re-rendered when the language changes.
+        public void SetLocalizedStatus(Func<string> resolve)
+        {
+            statusResolver = resolve;
+            statusText = null;
+            RenderStatus();
+        }
+
+        // Shows text that is already resolved or not localizable (for
+        // example a service error message).
         public void SetStatus(string status)
         {
-            statusLabel.text = status ?? string.Empty;
+            statusResolver = null;
+            statusText = status;
+            RenderStatus();
+        }
+
+        private void RenderStatus()
+        {
+            if (isLobby && statusResolver == null && statusText == null)
+            {
+                statusLabel.text = FormatWaitingStatus();
+                return;
+            }
+
+            statusLabel.text = statusResolver != null ? statusResolver() : statusText ?? string.Empty;
+        }
+
+        private string FormatWaitingStatus()
+        {
+            return Loc.Format("online.lobby.waiting", lobbyPlayerNames == null ? 0 : lobbyPlayerNames.Count,
+                lobbyMaxPlayers);
         }
 
         public void ShowSessionCode(string code)
         {
-            codeLabel.text = string.IsNullOrWhiteSpace(code) ? "Session code unavailable" : code;
+            codeLabel.text = string.IsNullOrWhiteSpace(code) ? Loc.Get("online.lobby.code_unavailable") : code;
             codeLabel.style.display = DisplayStyle.Flex;
             continueButton.style.display = DisplayStyle.Flex;
         }
@@ -223,16 +296,17 @@ namespace Mejnun.UI.FrontEnd
         private void ApplyLobbyContent()
         {
             setupContainer.style.display = DisplayStyle.None;
-            codeLabel.text = string.IsNullOrWhiteSpace(lobbyCode) ? "Session code unavailable" : lobbyCode;
+            codeLabel.text = string.IsNullOrWhiteSpace(lobbyCode) ? Loc.Get("online.lobby.code_unavailable") : lobbyCode;
             codeLabel.style.display = DisplayStyle.Flex;
             playersLabel.text = FormatPlayerNames(lobbyPlayerNames);
             playersLabel.style.display = DisplayStyle.Flex;
-            statusLabel.text = "Waiting for players (" + (lobbyPlayerNames == null ? 0 : lobbyPlayerNames.Count) +
-                               "/" + lobbyMaxPlayers + ")…";
-            continueButton.text = "Start now";
+            statusResolver = null;
+            statusText = null;
+            RenderStatus();
+            continueButton.text = Loc.Get("online.lobby.start_now");
             continueButton.style.display = isHost ? DisplayStyle.Flex : DisplayStyle.None;
             continueButton.SetEnabled(isHost);
-            backButton.text = "Leave lobby";
+            backButton.text = Loc.Get("online.lobby.leave");
         }
 
         private void ApplySetupContent()
@@ -241,9 +315,14 @@ namespace Mejnun.UI.FrontEnd
             codeLabel.style.display = DisplayStyle.None;
             playersLabel.text = string.Empty;
             playersLabel.style.display = DisplayStyle.None;
-            continueButton.text = "Continue";
             continueButton.style.display = DisplayStyle.None;
-            backButton.text = "Back";
+            RenderSetupButtons();
+        }
+
+        private void RenderSetupButtons()
+        {
+            continueButton.text = Loc.Get("common.continue");
+            backButton.text = Loc.Get("common.back");
         }
 
         private void Request(OnlineAction action)
@@ -252,7 +331,7 @@ namespace Mejnun.UI.FrontEnd
             codeLabel.style.display = DisplayStyle.None;
             playersLabel.style.display = DisplayStyle.None;
             continueButton.style.display = DisplayStyle.None;
-            SetStatus("Connecting…");
+            SetLocalizedStatus(() => Loc.Get("online.status.connecting"));
             Requested?.Invoke(action, Nickname, codeField.value);
         }
 
@@ -260,7 +339,7 @@ namespace Mejnun.UI.FrontEnd
         {
             if (playerNames == null || playerNames.Count == 0)
             {
-                return "No players connected yet.";
+                return Loc.Get("online.lobby.no_players");
             }
 
             var names = new StringBuilder();
@@ -271,7 +350,7 @@ namespace Mejnun.UI.FrontEnd
                     names.AppendLine();
                 }
 
-                names.Append("• ").Append(playerNames[index]);
+                names.Append(Loc.Format("online.lobby.player_entry", playerNames[index]));
             }
 
             return names.ToString();

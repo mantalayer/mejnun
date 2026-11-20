@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-Arabic
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-String-Tables-Arabic
+  m_GUID: deac554e394b84982a992b7ac478b9b9
+  m_SerializeEntries:
+  - m_GUID: 42cf0fcc882524b87b7ed2f57d89eea1
+    m_Address: DealerQuestions_ar
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ar
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6bc03d50cc234961800a66e2a30b034
+    m_Address: UI_ar
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ar
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 3110b3842bbe745df8f674158e1e723f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 784c792b8706f4613b4774c667ade111, type: 2}
+    - {fileID: 11400000, guid: 2f6c12c8b03c94e31946c90a6c26e970, type: 2}
+    - {fileID: 11400000, guid: e18ae509de3d34857849a3267a3b3742, type: 2}

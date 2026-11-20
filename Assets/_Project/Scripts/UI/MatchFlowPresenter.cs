@@ -1,6 +1,7 @@
 using System;
 using Mejnun.Cosmetics;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -47,6 +48,7 @@ namespace Mejnun.UI
         private void OnEnable()
         {
             SceneFlow.RegisterTableExit(PlayTableExit);
+            Loc.LanguageChanged += OnLanguageChanged;
             if (matchFlow != null)
             {
                 matchFlow.ScreenChanged += ShowScreen;
@@ -56,6 +58,7 @@ namespace Mejnun.UI
         private void OnDisable()
         {
             SceneFlow.UnregisterTableExit(PlayTableExit);
+            Loc.LanguageChanged -= OnLanguageChanged;
             StopWaitingForResultCollection();
             CompleteTableExit();
             if (matchFlow != null)
@@ -143,6 +146,27 @@ namespace Mejnun.UI
             else if (screen == MatchFlowScreen.Results)
             {
                 resultsScreen.Refresh();
+            }
+        }
+
+        private void OnLanguageChanged()
+        {
+            if (!hasCurrentScreen || flowRoot == null)
+            {
+                return;
+            }
+
+            if (currentScreen == MatchFlowScreen.DealerQuestion)
+            {
+                dealerQuestionScreen.Refresh();
+            }
+            else if (currentScreen == MatchFlowScreen.Handoff)
+            {
+                handoffScreen.Refresh();
+            }
+            else if (currentScreen == MatchFlowScreen.Results)
+            {
+                resultsScreen.RefreshText();
             }
         }
 

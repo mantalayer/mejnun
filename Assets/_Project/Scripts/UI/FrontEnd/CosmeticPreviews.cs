@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Mejnun.Cosmetics;
 using Mejnun.Core;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,8 +30,8 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var message = !skin.IsAddressable || failedSkins.Contains(skin.Id) || skinLoader == null
-                ? "Preview unavailable"
-                : "Preview loading";
+                ? Loc.Get("gallery.preview.unavailable")
+                : Loc.Get("gallery.preview.loading");
             container.Add(new Label(message));
             if (!skin.IsAddressable || skinLoader == null || !requestedSkins.Add(skin.Id))
             {
@@ -54,7 +55,7 @@ namespace Mejnun.UI.FrontEnd
             fan.AddToClassList("hand-fan-preview");
             if (skin == null)
             {
-                fan.Add(new Label("Preview unavailable"));
+                fan.Add(new Label(Loc.Get("gallery.preview.unavailable")));
                 return fan;
             }
 
@@ -197,7 +198,7 @@ namespace Mejnun.UI.FrontEnd
             if (felt == null)
             {
                 preview.style.backgroundColor = new Color(0.16f, 0.38f, 0.26f);
-                preview.Add(new Label("Random felt"));
+                preview.Add(new Label(Loc.Get("picker.felt.random")));
                 return preview;
             }
 

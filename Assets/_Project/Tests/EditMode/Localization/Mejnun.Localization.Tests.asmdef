@@ -1,0 +1,29 @@
+{
+  "name": "Mejnun.Localization.Tests",
+  "rootNamespace": "Mejnun.Localization.Tests",
+  "references": [
+    "Mejnun.Localization",
+    "Mejnun.Localization.Editor",
+    "Mejnun.Platform",
+    "Mejnun.Cosmetics",
+    "Mejnun.Game",
+    "Unity.Localization",
+    "Unity.Localization.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

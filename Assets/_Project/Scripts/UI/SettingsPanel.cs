@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,15 +9,14 @@ namespace Mejnun.UI
 {
     public sealed class SettingsPanel
     {
-        private static readonly string[] CpuSpeedLabels =
-            { "Glacial", "Very slow", "Slow", "Normal", "Fast", "Very fast" };
-        private static readonly string[] BotFillLabels = { "Off", "30 seconds", "60 seconds" };
         private static readonly string[] SettingsPageKeys =
             { "gameplay", "table", "hints", "accessibility", "audio", "general", "rules", "credits" };
         private VisualElement root;
         private Label tooltipLabel;
         private TableView tableView;
         private TableController tableController;
+        private Action languageChangedHandler;
+        private Action localizedValuesHandler;
 
         public event Action Closed;
 
@@ -114,6 +115,8 @@ namespace Mejnun.UI
             BindBotFill();
             BindTooltips();
             GameSettings.Changed += OnSettingsChanged;
+            localizedValuesHandler = RefreshLocalizedValues;
+            Loc.LanguageChanged += localizedValuesHandler;
             RefreshValues();
         }
 
@@ -136,6 +139,17 @@ namespace Mejnun.UI
         public void Dispose()
         {
             GameSettings.Changed -= OnSettingsChanged;
+            if (languageChangedHandler != null)
+            {
+                Loc.LanguageChanged -= languageChangedHandler;
+                languageChangedHandler = null;
+            }
+
+            if (localizedValuesHandler != null)
+            {
+                Loc.LanguageChanged -= localizedValuesHandler;
+                localizedValuesHandler = null;
+            }
         }
 
         private void BindToggle(string name, Func<bool> getValue, Action<bool> setValue,
@@ -178,8 +192,9 @@ namespace Mejnun.UI
         {
             root.Query<VisualElement>().ForEach(element =>
             {
-                var text = element.tooltip;
-                if (string.IsNullOrWhiteSpace(text))
+                // Tooltips come from LocalizedString bindings, which may not
+                // have resolved yet, so read the text when the pointer enters.
+                if (string.IsNullOrWhiteSpace(element.tooltip) && !element.HasBinding(nameof(VisualElement.tooltip)))
                 {
                     return;
                 }
@@ -191,7 +206,7 @@ namespace Mejnun.UI
                 {
                     if (tooltipLabel != null)
                     {
-                        tooltipLabel.text = text;
+                        tooltipLabel.text = element.tooltip;
                     }
                 }, TrickleDown.TrickleDown);
                 tooltipTarget.RegisterCallback<PointerLeaveEvent>(_ =>
@@ -212,15 +227,39 @@ namespace Mejnun.UI
                 return;
             }
 
+            dropdown.choices = CpuSpeedLabels();
             dropdown.RegisterValueChangedCallback(changeEvent =>
             {
-                var index = Array.IndexOf(CpuSpeedLabels, changeEvent.newValue);
+                var index = dropdown.index;
                 if (index >= 0)
                 {
                     GameSettings.CpuSpeed = index;
                 }
             });
-            dropdown.SetValueWithoutNotify(CpuSpeedLabels[GameSettings.CpuSpeed]);
+            SetDropdownIndex(dropdown, GameSettings.CpuSpeed);
+        }
+
+        private static List<string> CpuSpeedLabels()
+        {
+            return new List<string>
+            {
+                Loc.Get("settings.gameplay.cpu_speed.glacial"),
+                Loc.Get("settings.gameplay.cpu_speed.very_slow"),
+                Loc.Get("settings.gameplay.cpu_speed.slow"),
+                Loc.Get("settings.gameplay.cpu_speed.normal"),
+                Loc.Get("settings.gameplay.cpu_speed.fast"),
+                Loc.Get("settings.gameplay.cpu_speed.very_fast")
+            };
+        }
+
+        private static List<string> BotFillLabels()
+        {
+            return new List<string>
+            {
+                Loc.Get("settings.online.bot_fill.off"),
+                Loc.Format("settings.online.bot_fill.seconds", 30),
+                Loc.Format("settings.online.bot_fill.seconds", 60)
+            };
         }
 
         private void BindLanguage()
@@ -231,8 +270,42 @@ namespace Mejnun.UI
                 return;
             }
 
-            dropdown.RegisterValueChangedCallback(changeEvent => GameSettings.Language = "en");
-            dropdown.SetValueWithoutNotify("English");
+            // Choice 0 follows the platform (Steam game language, or the
+            // device's languages); the rest are the shipped locales, each shown
+            // in its own language so players can always find theirs.
+            var codes = new List<string> { LanguagePreference.FollowPlatform };
+            foreach (var code in Loc.AvailableLocaleCodes)
+            {
+                codes.Add(code);
+            }
+
+            void Populate()
+            {
+                var labels = new List<string> { Loc.Get("settings.language.automatic") };
+                foreach (var locale in Loc.AvailableLocales)
+                {
+                    labels.Add(Loc.NativeName(locale));
+                }
+
+                dropdown.choices = labels;
+                var selected = codes.IndexOf(GameSettings.Language);
+                dropdown.SetValueWithoutNotify(labels[selected < 0 ? 0 : selected]);
+            }
+
+            dropdown.RegisterValueChangedCallback(changeEvent =>
+            {
+                var index = dropdown.index;
+                if (index < 0 || index >= codes.Count)
+                {
+                    return;
+                }
+
+                GameSettings.Language = codes[index];
+                Loc.SetLanguage(codes[index]);
+            });
+            languageChangedHandler = Populate;
+            Loc.LanguageChanged += languageChangedHandler;
+            Populate();
         }
 
         private void BindBotFill()
@@ -243,15 +316,40 @@ namespace Mejnun.UI
                 return;
             }
 
+            dropdown.choices = BotFillLabels();
             dropdown.RegisterValueChangedCallback(changeEvent =>
             {
-                var index = Array.IndexOf(BotFillLabels, changeEvent.newValue);
+                var index = dropdown.index;
                 if (index >= 0)
                 {
                     GameSettings.QuickMatchBotFill = index * 30;
                 }
             });
-            dropdown.SetValueWithoutNotify(BotFillLabels[GameSettings.QuickMatchBotFill / 30]);
+            SetDropdownIndex(dropdown, GameSettings.QuickMatchBotFill / 30);
+        }
+
+        // Rebuilds the text that code owns (dropdown choices and slider
+        // values) in the new language.
+        private void RefreshLocalizedValues()
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            var cpuSpeed = root.Q<DropdownField>("cpu-speed-dropdown");
+            if (cpuSpeed != null)
+            {
+                cpuSpeed.choices = CpuSpeedLabels();
+            }
+
+            var botFill = root.Q<DropdownField>("quick-match-bot-fill-dropdown");
+            if (botFill != null)
+            {
+                botFill.choices = BotFillLabels();
+            }
+
+            RefreshValues();
         }
 
         private void OnSettingsChanged(string key)
@@ -329,9 +427,9 @@ namespace Mejnun.UI
             SetSlider("volume-music-slider", GameSettings.VolumeMusic);
             SetSlider("volume-sfx-slider", GameSettings.VolumeSfx);
             SetSlider("volume-voice-slider", GameSettings.VolumeVoice);
-            SetDropdown("cpu-speed-dropdown", CpuSpeedLabels[GameSettings.CpuSpeed]);
-            SetDropdown("language-dropdown", "English");
-            SetDropdown("quick-match-bot-fill-dropdown", BotFillLabels[GameSettings.QuickMatchBotFill / 30]);
+            SetDropdownIndex(root.Q<DropdownField>("cpu-speed-dropdown"), GameSettings.CpuSpeed);
+            SetDropdownIndex(root.Q<DropdownField>("quick-match-bot-fill-dropdown"),
+                GameSettings.QuickMatchBotFill / 30);
         }
 
         private void RefreshTable()
@@ -361,15 +459,21 @@ namespace Mejnun.UI
                 return;
             }
 
-            valueLabel.text = name.StartsWith("volume-", StringComparison.Ordinal) ||
-                              name == "card-messiness-slider"
-                ? Mathf.RoundToInt(value * 100f) + "%"
-                : value.ToString("0.##") + "×";
+            var isPercent = name.StartsWith("volume-", StringComparison.Ordinal) || name == "card-messiness-slider";
+            valueLabel.text = isPercent
+                ? Loc.Format("settings.value.percent", Mathf.RoundToInt(value * 100f))
+                : Loc.Format("settings.value.multiplier", value.ToString("0.##"));
         }
 
-        private void SetDropdown(string name, string value)
+        private static void SetDropdownIndex(DropdownField dropdown, int index)
         {
-            root.Q<DropdownField>(name)?.SetValueWithoutNotify(value);
+            var choices = dropdown?.choices;
+            if (choices == null || choices.Count == 0)
+            {
+                return;
+            }
+
+            dropdown.SetValueWithoutNotify(choices[Mathf.Clamp(index, 0, choices.Count - 1)]);
         }
     }
 }

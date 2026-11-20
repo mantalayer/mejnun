@@ -1,5 +1,6 @@
 using System;
 using Mejnun.Game;
+using Mejnun.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,7 @@ namespace Mejnun.UI
         private readonly VisualElement seatOptions;
         private IVisualElementScheduledItem transition;
         private bool waitingForGeometry;
+        private bool listeningForLanguage;
 
         public DealerQuestionScreen(VisualElement documentRoot, MatchFlow flow)
         {
@@ -22,6 +24,12 @@ namespace Mejnun.UI
             questionLabel = root.Q<Label>("dealer-question-label");
             seatOptions = root.Q<VisualElement>("dealer-seat-options");
             root.Q<Button>("random-dealer-button").clicked += () => matchFlow.ChooseRandomFirstPlayer();
+            root.RegisterCallback<AttachToPanelEvent>(_ => ListenForLanguage(true));
+            root.RegisterCallback<DetachFromPanelEvent>(_ => ListenForLanguage(false));
+            if (root.panel != null)
+            {
+                ListenForLanguage(true);
+            }
         }
 
         public void SetVisible(bool visible)
@@ -79,6 +87,32 @@ namespace Mejnun.UI
                 };
                 button.AddToClassList("seat-choice");
                 seatOptions.Add(button);
+            }
+        }
+
+        private void ListenForLanguage(bool listen)
+        {
+            if (listen == listeningForLanguage)
+            {
+                return;
+            }
+
+            listeningForLanguage = listen;
+            if (listen)
+            {
+                Loc.LanguageChanged += OnLanguageChanged;
+            }
+            else
+            {
+                Loc.LanguageChanged -= OnLanguageChanged;
+            }
+        }
+
+        private void OnLanguageChanged()
+        {
+            if (matchFlow != null && matchFlow.Screen == MatchFlowScreen.DealerQuestion)
+            {
+                Refresh();
             }
         }
 

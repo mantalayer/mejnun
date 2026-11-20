@@ -13,6 +13,7 @@ namespace Mejnun.Platform
         IStats Stats { get; }
         IRichPresence RichPresence { get; }
         IEntitlements Entitlements { get; }
+        ILanguageInfo Language { get; }
 
         // Called once per frame by PlatformCallbackRunner to pump SDK callbacks
         // and flush pending writes.

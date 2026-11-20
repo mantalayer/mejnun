@@ -22,6 +22,7 @@ namespace Mejnun.Platform
         public IStats Stats => this;
         public IRichPresence RichPresence => this;
         public IEntitlements Entitlements => this;
+        public ILanguageInfo Language => DeviceLanguageInfo.Instance;
 
         public bool IsDemo => PlatformBuild.IsDemo;
         public bool IsSteamDeck => m_isSteamDeck;

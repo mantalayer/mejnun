@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: DealerQuestions_zh-Hant
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: zh-Hant
+  m_SharedData: {fileID: 11400000, guid: 87a4643bee3d747fb9ab730fc39509cd, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 6547924049920
+    m_Localized: "\u8AB0\u6700\u6709\u53EF\u80FD\u5FD8\u8A18\u81EA\u5DF1\u8D70\u9032\u623F\u9593\u7684\u539F\u56E0\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244224
+    m_Localized: "\u8AB0\u8B1B\u7684\u7B11\u8A71\u6700\u721B\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244225
+    m_Localized: "\u5A5A\u79AE\u4E0A\u8AB0\u6703\u7B2C\u4E00\u500B\u8DF3\u821E\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244226
+    m_Localized: "\u8AB0\u7684\u624B\u6A5F\u76F8\u7C3F\u6700\u4E82\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244227
+    m_Localized: "\u8AB0\u80FD\u5728\u8352\u5CF6\u4E0A\u751F\u5B58\u6700\u4E45\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244228
+    m_Localized: "\u8AB0\u6700\u6709\u53EF\u80FD\u7121\u610F\u9593\u5F15\u9818\u6F6E\u6D41\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244229
+    m_Localized: "\u8AB0\u7684\u751F\u65E5\u96E2\u4ECA\u5929\u6700\u8FD1\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6547928244230
+    m_Localized: "\u6700\u8FD1\u8AB0\u6D17\u904E\u6FA1\uFF1F"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

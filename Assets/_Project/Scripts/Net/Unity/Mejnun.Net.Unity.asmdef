@@ -2,6 +2,8 @@
   "name": "Mejnun.Net.Unity",
   "rootNamespace": "Mejnun.Net.Unity",
   "references": [
+    "Mejnun.Localization",
+        "Unity.Localization",
     "Mejnun.Net",
     "Mejnun.Game",
     "Mejnun.Core",

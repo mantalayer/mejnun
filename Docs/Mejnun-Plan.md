@@ -385,14 +385,14 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 
 ## 7. Localization
 - `com.unity.localization` from the start. All UI strings and the dealer questions go into String Tables, and Smart Strings handle plurals ("3 cards left"). Arabic has six plural forms, and Smart Strings' plural rules cover that.
-- **Launch languages (11)**: English, Arabic, Persian, Armenian, Spanish, German, Italian, French, Japanese, Chinese, Portuguese.
-  - Locale codes are `en`, `ar`, `fa`, `hy`, `es`, `de`, `it`, `fr`, `ja`, `zh-Hans` and `pt-BR`. Simplified Chinese and Brazilian Portuguese are assumptions *(see Q-C)*.
+- **Launch languages (20)**: English, Arabic, Persian, Armenian, Spanish, German, Italian, French, Japanese, Simplified Chinese, Brazilian Portuguese, Korean, Traditional Chinese, Vietnamese, Dutch, European Portuguese, Russian, Hindi, Swahili and Thai.
+  - Locale codes are `en`, `ar`, `fa`, `hy`, `es`, `de`, `it`, `fr`, `ja`, `zh-Hans`, `pt-BR`, `ko`, `zh-Hant`, `vi`, `nl`, `pt-PT`, `ru`, `hi`, `sw` and `th`.
   - The game follows the device language, with a picker in Settings.
 - **Fonts** (dynamic font assets with a fallback chain, all OFL-licensed):
-  - Noto Sans for Latin text (accents for es/de/it/fr/pt).
+  - Noto Sans for Latin text (accents for es/de/it/fr/pt and Vietnamese).
   - **Vazirmatn** or Noto Sans Arabic for `ar` and `fa`. Both cover the Persian letters پ چ ژ گ and the Persian ی/ک forms.
   - Noto Sans Armenian.
-  - Noto Sans JP and Noto Sans SC.
+  - Noto Sans JP, KR, SC and TC; Noto Sans Devanagari and Noto Sans Thai.
   - CJK fonts are several MB each, so the CJK/Arabic font files go in per-locale Addressable groups. Player nicknames can contain any script and fall back through the whole chain.
 - **Right-to-left** (`ar`, `fa`):
   - Enable the Advanced Text Generator (`-unity-text-generator: advanced` on the UI root).
@@ -419,10 +419,19 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
   | `ja` | `ja` | Japanese |
   | `zh-Hans` | `zh-CN` | Simplified Chinese |
   | `pt-BR` | `pt` | Brazilian Portuguese |
+  | `ko` | `ko` | Korean |
+  | `zh-Hant` | `zh-TW` | Traditional Chinese |
+  | `vi` | `vi` | Vietnamese |
+  | `nl` | `nl` | Dutch |
+  | `pt-PT` | `pt-PT` | European Portuguese |
+  | `ru` | `ru` | Russian |
+  | `hi` | `hi` | Hindi |
+  | `sw` | `sw` | Swahili |
+  | `th` | `th` | Thai |
 
 - **Push and pull:** configure the Unity-to-Sheets push to include only `Key` and `en`, never locale or status columns, so formulas and reviewer edits cannot be overwritten. Pull only the locale columns back into their matching String Tables; do not import `Key`, `en`, or status values. Pull before every build so all translations ship in the build and work offline, without runtime network access or an API key in the game.
 - **Review:** target cells start with the formula and a locale-specific status of `auto`. A reviewer replaces the formula with plain text and sets that locale's status to `reviewed`; later source pushes must preserve both. Review dealer questions as well as UI strings before release.
-- **Adding a language:** create its Unity Locale, add a sheet translation column with the matching Google language code and formula, then add its pull mapping. This requires no game-code change.
+- **Adding a language:** add its Locale code and Google language code to `LocalizationProjectSetup.TargetLocales`, then run **Mejnun > Localization > Set Up Project**. Setup creates the Locale and tables and merges the missing pipeline mapping; the next sync adds the sheet translation column and formula.
 - **Guardrails:** preserve Smart String placeholders such as `{0}` and `{count:plural:...}` and check them after pull; do not allow translation to break plural blocks. Write or verify Arabic six-form plural variants by hand. Keep right-to-left translations as plain text and check their rendering in the RTL UI.
 
 ## 8. Accessibility & settings
@@ -445,7 +454,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **M6** | Cosmetics & progression ✅ | Catalog, inventory, XP/levels, achievements (local), unlock UI, main menu and shared Settings, deck/felt Table picker, Gallery, `TableFeltCatalog` with free Green and Burgundy felts, Pixel Pastel via Addressables | From a cold boot, a player can browse the Gallery, change settings, pick two decks and a felt, and play a game that uses them; a locked item shows its requirement and progress. *Met: full PlayMode 103/103; M6-focused EditMode 22/22; Core EditMode 165/165* |
 | **M7** | Online ✅ | Spike, anonymous auth, UGS sessions (codes and quick match), NGO host-authoritative sync with live turn mirroring (§4.1.1), reconnect, AI takeover, save & pause, migration data handler | Six-device soak test; killing any client or the host recovers per §4.4; every client sees each in-turn move, Undo, Redo, Revert and Fix board as it happens; shared Cloud Code save/resume. *Met: closed by Brennan (2026-11-19). Closed. Friends/platform invites remain a follow-up* |
 | **M8** | Platforms & monetization (in progress) | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads + consent, Unity IAP Remove ads + restore, mobile Build & Upload window + fastlane lanes, Game Center / Play Games | Steam beta-branch upload from the editor. One-click TestFlight and Play internal builds. *In progress: platform layer, Steam backend/uploader tooling and achievement/stat bridge done (Platform EditMode 4/4); store accounts, Build Profiles, ads/IAP, fastlane and mobile platform services pending* |
-| **M9** | Localization & polish | Install `com.unity.localization`; Google Sheets push/pull and auto-translated String Tables for all locales; the 11 languages, font chain, RTL mirroring, localized store listings, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Every String Table entry is non-empty in all locales; Smart String placeholders are checked after pull; release-candidate checklist and native-speaker review for `ar` and `fa` RTL screens |
+| **M9** | Localization & polish | Install `com.unity.localization`; Google Sheets push/pull and auto-translated String Tables for all locales; the 20 languages, font chain, RTL mirroring, localized store listings, accessibility options, perf/battery pass, crash reporting (Unity Cloud Diagnostics) | Every String Table entry is non-empty in all locales; Smart String placeholders are checked after pull; release-candidate checklist and native-speaker review for `ar` and `fa` RTL screens |
 
 Suggested order: M1 → M2 → M3 → M4/M5 in parallel → M6 → M7 → M8 → M9. M7 can start after M2, since it only depends on Core and the views.
 Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Generator plus one RTL test locale (`ar`) in M4, so right-to-left layout issues show up early rather than in M9.
@@ -462,6 +471,10 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 **M8 implementation (2026-11-19, foundation in progress):** Ported the store-neutral platform runtime, Null backend, define-gated Steam backend, and Steam upload editor tooling; replaced Easy Save storage with per-file atomic JSON saves; and connected the six local progression achievements plus game-played/game-won stats to the platform layer. Development settings use Steam App ID 480, while upload app/depot IDs remain empty and the Steam window rejects uploads until real IDs and manually-created Build Profiles are configured. Validation: Platform EditMode 4/4 and Cosmetics `ProfilePersistenceTests` 6/6 pass with no C# compiler errors; the Steam-specific assembly was not compiled with `MEJNUN_STEAM` enabled. Accounts, mobile ads/IAP and fastlane, mobile platform achievements, and device/store acceptance remain deferred.
 
 **M8 next steps (as store accounts become available):** create the Steam app and replace dev App ID 480 in `Assets/Resources/PlatformSettings.asset`; fill the app/depot IDs in `SteamUploadConfig`; create the Steam Build Profiles (with `MEJNUN_STEAM`) in the Build Profiles window and compile the Steam assembly; define the six achievements and two stats in Steamworks; then do a beta-branch upload from the editor. On mobile: review and commit the iOS/Android Wwise plugins, add LevelPlay ads + consent, Unity IAP Remove ads + restore (wired to `EntitlementId.RemoveAds`), the mobile Build & Upload window and fastlane lanes, and Game Center / Play Games backends.
+
+**M9 localization foundation (2026-11-19, in progress):** Installed `com.unity.localization` 1.5.14 with 11 locales (English fallback) and the `UI` and `DealerQuestions` String Tables (912 English entries). All player-facing text in UXML and C# now comes from the tables: menus, Settings, HUD, results, tutorial, dealer questions, bot names, achievements, unlock requirements, and deck and felt names. Dealer questions and seat names are stored and sent as keys. Added the rules (`Docs/Localization.md`, `.junie/AGENTS.md`), a validator and raw-string scanner, an English CSV importer, the Google Sheets push / `GOOGLETRANSLATE` / pull sync, and a pre-build hook that syncs when translations are missing; problems are warnings only. The startup language comes from the Settings choice, then `IPlatformServices.Language` (Steam game and UI language, iOS `NSLocale`, Android `LocaleList`, desktop culture). Validation: EditMode 364/364. PlayMode 128/136; the same 8 tests also fail on the previous commit. Pending: the Google Cloud OAuth client and workbook (§5.5), the first sync (all 9130 target cells are empty), the font chain and RTL work, and native-speaker review.
+
+**M9 language expansion (2026-11-19):** Added Korean, Traditional Chinese, Vietnamese, Dutch, European Portuguese, Russian, Hindi, Swahili and Thai for 20 locales total. `LocalizationProjectSetup` now adds their Locale assets, String Tables and missing translation-pipeline columns; regional matching distinguishes Traditional/Simplified Chinese and European/Brazilian Portuguese. The Google Sheets workbook is not configured, so new locale columns remain untranslated until credentials and the first sync are available. The added scripts still need their font assets and rendering review (particularly Hindi shaping).
 
 ---
 
@@ -490,7 +503,7 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 | 5 | Steam | No Steam app yet. Use dev App ID 480 until it's created; demo later | §5.2, §5.5 |
 | 6 | Mobile automation | Local fastlane driven from an editor window (recommended), set up together in M8 | §5.2 |
 | 7 | Minimum OS | iOS 15, Android 8, Windows 10, macOS 12 | §5.4 |
-| 8 | Languages | en, ar, fa, hy, es, de, it, fr, ja, zh, pt | §7 |
+| 8 | Languages | en, ar, fa, hy, es, de, it, fr, ja, zh-Hans, zh-Hant, pt-BR, pt-PT, ko, vi, nl, ru, hi, sw, th | §7 |
 | 9 | Mobile editions | One free app with a "Remove ads" IAP; Steam is paid | §5.3 |
 | 10 | Card faces | Two distinct faces per game, originally chosen at random from the players' owned faces; superseded by #23 | §3.6 |
 | 11 | Bots in pass-and-play | Yes, mixed freely | §2 |
@@ -513,13 +526,12 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 
 ### 11.2 Still open (new, smaller; the defaults in the text apply until answered)
 - **Q-A Classic mapping**: confirm the zig-zag sprite order in the importer once it exists (unchanged from v1).
-- **Q-C Language variants**: Simplified or Traditional Chinese (or both)? Brazilian or European Portuguese? One neutral Spanish, or Spain and Latin America?
 - **Q-D RTL table**: should the board and hand also mirror for Arabic/Persian players, or stay left-to-right as proposed?
 - **Q-E Faces in solo Random slots**: when a slot is set to Random, should bots contribute random catalogue faces to its candidate pool (default), or should it resolve only from the player's owned faces? This question applies only to Random slots; explicit deck picks are used as selected.
 - **Q-F Remove ads across devices**: honour a Remove ads purchase from the other mobile store via a linked account (Cloud Save), or keep it per store (default)?
 - **Q-G Double-tap quick-place**: keep it as proposed in §3.4, or leave it out?
 - **Q-H Prices**: the Steam price and the Remove ads price tier.
 - **Q-I Board arrangement online**: should a set's position be shared with everyone at the table (it would then be sent as a small view-only message), or be a local preference per client (default)?
-- **Q-J Review depth**: should all 11 languages receive native-speaker review before release, or only `ar`/`fa`, with the rest shipping as machine translation?
+- **Q-J Review depth**: should all 20 languages receive native-speaker review before release, or only `ar`/`fa`, with the rest shipping as machine translation?
 - **Q-K Pass-and-play picks**: should each local human make their own deck and felt picks, or should the shared device make one pick set (default)?
 - **Q-L Live drag ghosts online**: should watchers also see a held card following the active player's pointer before it is dropped (a throttled, view-only stream), or only each applied move (default)?

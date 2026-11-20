@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mejnun.Core;
 using Mejnun.Cosmetics;
 using Mejnun.Game;
+using Mejnun.Localization;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,8 +26,8 @@ namespace Mejnun.Net.Unity
         private SessionRecord migrationRecord;
         private bool[] lastSeatConnections = Array.Empty<bool>();
         private bool[] hasSeatStatus = Array.Empty<bool>();
-        private readonly Dictionary<string, string> seatNamesByAuthenticationId =
-            new Dictionary<string, string>();
+        private bool pausedPromptShown;
+        private readonly Dictionary<string, int> seatsByAuthenticationId = new Dictionary<string, int>();
 
         public bool IsRemoteAuthority => started;
         public bool ApplyCommandsLocally => clientSession != null;
@@ -53,6 +54,11 @@ namespace Mejnun.Net.Unity
             }
         }
 
+        private void Awake()
+        {
+            Loc.LanguageChanged += OnLanguageChanged;
+        }
+
         private void Update()
         {
             if (!started)
@@ -66,6 +72,7 @@ namespace Mejnun.Net.Unity
 
         private void OnDestroy()
         {
+            Loc.LanguageChanged -= OnLanguageChanged;
             if (hostSession != null)
             {
                 hostSession.StateChanged -= OnHostStateChanged;
@@ -144,7 +151,7 @@ namespace Mejnun.Net.Unity
             if (choice == DisconnectChoice.SaveAndPause)
             {
                 matchFlow.SetOnlinePaused(true);
-                matchFlow.PostOnlineNotice("Match paused");
+                matchFlow.PostOnlineNotice(Loc.Get("net.notice.match_paused"));
                 ShowPausedPrompt();
                 return true;
             }
@@ -154,6 +161,7 @@ namespace Mejnun.Net.Unity
                 disconnectPrompt?.RemoveFromHierarchy();
                 disconnectPrompt = null;
                 pendingDisconnectId = null;
+                pausedPromptShown = false;
             }
 
             return true;
@@ -168,10 +176,11 @@ namespace Mejnun.Net.Unity
 
             hostSession.Resume();
             matchFlow.SetOnlinePaused(false);
-            matchFlow.PostOnlineNotice("Match resumed");
+            matchFlow.PostOnlineNotice(Loc.Get("net.notice.match_resumed"));
             disconnectPrompt?.RemoveFromHierarchy();
             disconnectPrompt = null;
             pendingDisconnectId = null;
+            pausedPromptShown = false;
             return true;
         }
 
@@ -301,7 +310,9 @@ namespace Mejnun.Net.Unity
             else if (message is PausedMessage paused)
             {
                 matchFlow.SetOnlinePaused(paused.Paused);
-                matchFlow.PostOnlineNotice(paused.Paused ? "Match paused" : "Match resumed");
+                matchFlow.PostOnlineNotice(paused.Paused
+                    ? Loc.Get("net.notice.match_paused")
+                    : Loc.Get("net.notice.match_resumed"));
             }
         }
 
@@ -315,7 +326,7 @@ namespace Mejnun.Net.Unity
 
         private void OnHostDisconnected()
         {
-            matchFlow?.PostOnlineNotice("Host disconnected");
+            matchFlow?.PostOnlineNotice(Loc.Get("net.notice.host_disconnected"));
         }
 
         private void OnHostSeatStatusChanged(SeatStatusMessage status)
@@ -334,25 +345,23 @@ namespace Mejnun.Net.Unity
             EnsureSeatStatusTracking(matchFlow.SeatCount);
             var wasKnown = hasSeatStatus[status.Seat];
             var wasConnected = lastSeatConnections[status.Seat];
-            var displayName = string.IsNullOrWhiteSpace(status.DisplayName)
-                ? "Player " + (status.Seat + 1)
-                : status.DisplayName;
             if (!string.IsNullOrEmpty(status.AuthenticationId))
             {
-                seatNamesByAuthenticationId[status.AuthenticationId] = displayName;
+                seatsByAuthenticationId[status.AuthenticationId] = status.Seat;
             }
 
-            matchFlow.SetOnlineSeatStatus(status.Seat, displayName, status.IsBot);
+            matchFlow.SetOnlineSeatStatus(status.Seat, status.DisplayName, status.IsBot);
+            var displayName = matchFlow.GetPlayerName(status.Seat);
 
             var isLocalClientJoining = !wasKnown && status.Connected && status.Seat == localSeat &&
                                        launch != null && !launch.IsHost;
             if (isLocalClientJoining || (wasKnown && !wasConnected && status.Connected))
             {
-                matchFlow.PostOnlineNotice(displayName + " joined");
+                matchFlow.PostOnlineNotice(Loc.Format("net.notice.player_joined", displayName));
             }
             else if (wasKnown && wasConnected && !status.Connected)
             {
-                matchFlow.PostOnlineNotice(displayName + " disconnected");
+                matchFlow.PostOnlineNotice(Loc.Format("net.notice.player_disconnected", displayName));
             }
 
             lastSeatConnections[status.Seat] = status.Connected;
@@ -430,16 +439,13 @@ namespace Mejnun.Net.Unity
                 return;
             }
 
-            var message = "Waiting for players (" + readySeats + "/" + matchFlow.SeatCount + ")…";
-            var roomCode = matchFlow.OnlineSessionCode;
-            matchFlow.SetOnlineWaiting(string.IsNullOrWhiteSpace(roomCode)
-                ? message
-                : message + "\nRoom code: " + roomCode);
+            matchFlow.SetOnlineWaiting(FormatWaitingMessage(readySeats, matchFlow.SeatCount,
+                matchFlow.OnlineSessionCode));
         }
 
         private void PostAllPlayersJoinedNotice()
         {
-            matchFlow?.PostOnlineNotice("All players joined");
+            matchFlow?.PostOnlineNotice(Loc.Get("net.notice.all_players_joined"));
         }
 
         private string GetWaitingMessage()
@@ -454,11 +460,50 @@ namespace Mejnun.Net.Unity
                 }
             }
 
-            var message = "Waiting for players (" + readySeats + "/" + hostSession.Game.Setup.SeatCount + ")…";
             var roomCode = matchFlow != null && launch != null && launch.IsHost
                 ? matchFlow.OnlineSessionCode
                 : null;
-            return string.IsNullOrWhiteSpace(roomCode) ? message : message + "\nRoom code: " + roomCode;
+            return FormatWaitingMessage(readySeats, hostSession.Game.Setup.SeatCount, roomCode);
+        }
+
+        private static string FormatWaitingMessage(int readySeats, int seatCount, string roomCode)
+        {
+            return string.IsNullOrWhiteSpace(roomCode)
+                ? Loc.Format("net.waiting.players", readySeats, seatCount)
+                : Loc.Format("net.waiting.players_with_code", readySeats, seatCount, roomCode);
+        }
+
+        // The waiting message and the prompts are built from the current language, so rebuild them when it changes.
+        private void OnLanguageChanged()
+        {
+            if (matchFlow != null && !string.IsNullOrEmpty(matchFlow.OnlineWaitingMessage))
+            {
+                if (hostSession != null)
+                {
+                    if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
+                    {
+                        matchFlow.SetOnlineWaiting(GetWaitingMessage());
+                    }
+                }
+                else
+                {
+                    UpdateClientReadiness();
+                }
+            }
+
+            if (disconnectPrompt == null)
+            {
+                return;
+            }
+
+            if (pausedPromptShown)
+            {
+                ShowPausedPrompt();
+            }
+            else if (!string.IsNullOrEmpty(pendingDisconnectId))
+            {
+                ShowDisconnectPrompt(pendingDisconnectId);
+            }
         }
 
         private void InitializeSeatStatusTracking(int seatCount)
@@ -508,15 +553,12 @@ namespace Mejnun.Net.Unity
 
             var displayName = launch.AuthenticationId == authenticationId
                 ? launch.DisplayName
-                : seatNamesByAuthenticationId.TryGetValue(authenticationId, out var seatName)
-                    ? seatName
+                : seatsByAuthenticationId.TryGetValue(authenticationId, out var seat)
+                    ? matchFlow.GetPlayerName(seat)
                     : null;
-            if (string.IsNullOrWhiteSpace(displayName))
-            {
-                displayName = "A player";
-            }
-
-            matchFlow.PostOnlineNotice(displayName + " is now the host");
+            matchFlow.PostOnlineNotice(string.IsNullOrWhiteSpace(displayName)
+                ? Loc.Get("net.notice.unknown_player_is_host")
+                : Loc.Format("net.notice.player_is_host", displayName));
         }
 
         private void RestoreMigratedHost()
@@ -599,6 +641,7 @@ namespace Mejnun.Net.Unity
 
             disconnectPrompt?.RemoveFromHierarchy();
             pendingDisconnectId = authenticationId;
+            pausedPromptShown = false;
             disconnectPrompt = new VisualElement();
             disconnectPrompt.style.position = Position.Absolute;
             disconnectPrompt.style.left = 0;
@@ -620,14 +663,14 @@ namespace Mejnun.Net.Unity
             card.style.borderTopRightRadius = 12;
             card.style.borderBottomLeftRadius = 12;
             card.style.borderBottomRightRadius = 12;
-            card.Add(new Label("A player disconnected"));
-            card.Add(new Label("Wait for them, let a Medium bot take over, or save and pause."));
-            card.Add(CreateDisconnectButton("Wait / auto-pass", () => ResolveDisconnect(authenticationId,
-                DisconnectChoice.Wait)));
-            card.Add(CreateDisconnectButton("Let AI take over", () => ResolveDisconnect(authenticationId,
-                DisconnectChoice.TakeOverWithBot)));
-            card.Add(CreateDisconnectButton("Save and pause", () => ResolveDisconnect(authenticationId,
-                DisconnectChoice.SaveAndPause)));
+            card.Add(new Label(Loc.Get("net.disconnect.title")));
+            card.Add(new Label(Loc.Get("net.disconnect.message")));
+            card.Add(CreateDisconnectButton(Loc.Get("net.disconnect.wait"),
+                () => ResolveDisconnect(authenticationId, DisconnectChoice.Wait)));
+            card.Add(CreateDisconnectButton(Loc.Get("net.disconnect.bot_takeover"),
+                () => ResolveDisconnect(authenticationId, DisconnectChoice.TakeOverWithBot)));
+            card.Add(CreateDisconnectButton(Loc.Get("net.disconnect.save_and_pause"),
+                () => ResolveDisconnect(authenticationId, DisconnectChoice.SaveAndPause)));
             disconnectPrompt.Add(card);
             document.rootVisualElement.Add(disconnectPrompt);
         }
@@ -641,6 +684,7 @@ namespace Mejnun.Net.Unity
             }
 
             disconnectPrompt?.RemoveFromHierarchy();
+            pausedPromptShown = true;
             disconnectPrompt = new VisualElement();
             disconnectPrompt.style.position = Position.Absolute;
             disconnectPrompt.style.left = 0;
@@ -657,9 +701,9 @@ namespace Mejnun.Net.Unity
             card.style.paddingTop = 22;
             card.style.paddingBottom = 22;
             card.style.backgroundColor = new Color(0.10f, 0.12f, 0.16f, 1f);
-            card.Add(new Label("Match saved and paused"));
-            card.Add(new Label("The host can resume this session when everyone is ready."));
-            card.Add(CreateDisconnectButton("Resume match", () => ResumePausedMatch()));
+            card.Add(new Label(Loc.Get("net.paused.title")));
+            card.Add(new Label(Loc.Get("net.paused.message")));
+            card.Add(CreateDisconnectButton(Loc.Get("net.paused.resume"), () => ResumePausedMatch()));
             disconnectPrompt.Add(card);
             document.rootVisualElement.Add(disconnectPrompt);
         }

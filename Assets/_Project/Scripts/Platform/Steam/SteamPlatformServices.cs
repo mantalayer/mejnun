@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Steamworks;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace Mejnun.Platform.Steam
 {
     // Steamworks.NET backend. Compiled only into MEJNUN_STEAM builds; nothing
     // outside this assembly references Steamworks types.
-    public sealed class SteamPlatformServices : IPlatformServices, IControllerInfo, IAchievements, IStats, IRichPresence, IEntitlements
+    public sealed class SteamPlatformServices : IPlatformServices, IControllerInfo, IAchievements, IStats, IRichPresence, IEntitlements, ILanguageInfo
     {
         private const string BackendName = "Steam";
         private const int BackendPriority = 100;
@@ -32,6 +33,7 @@ namespace Mejnun.Platform.Steam
         private float m_nextStatsStoreTime;
         private float m_nextControllerInfoRefreshTime;
         private PlatformControllerKind m_activeControllerKind;
+        private IReadOnlyList<string> m_preferredLanguageTags;
 
         private SteamPlatformServices(PlatformSettings settings)
         {
@@ -49,6 +51,14 @@ namespace Mejnun.Platform.Steam
         public IStats Stats => this;
         public IRichPresence RichPresence => this;
         public IEntitlements Entitlements => this;
+        public ILanguageInfo Language => this;
+
+        // The language the player picked for this game in the Steam client
+        // (Properties > Language) comes first, then the Steam client UI
+        // language, then the device list. Steam has no Persian, Armenian, Hindi
+        // or Swahili, so when the device prefers one it wins over Steam's choice,
+        // which would otherwise default to English.
+        public IReadOnlyList<string> PreferredLanguageTags => m_preferredLanguageTags ??= ReadPreferredLanguageTags();
 
         public bool IsDemo => PlatformBuild.IsDemo;
         public bool IsSteamDeck => m_isSteamDeck;
@@ -128,6 +138,30 @@ namespace Mejnun.Platform.Steam
 
             services = new SteamPlatformServices(settings);
             return true;
+        }
+
+        private IReadOnlyList<string> ReadPreferredLanguageTags()
+        {
+            var tags = new List<string>();
+            IReadOnlyList<string> deviceTags = DeviceLanguageInfo.Instance.PreferredLanguageTags;
+            if (deviceTags.Count > 0 && !SteamLanguageCodes.IsSupportedBySteam(deviceTags[0]))
+                tags.Add(deviceTags[0]);
+
+            if (IsInitialized)
+            {
+                AddTag(tags, SteamLanguageCodes.ToLanguageTag(SteamApps.GetCurrentGameLanguage()));
+                AddTag(tags, SteamLanguageCodes.ToLanguageTag(SteamUtils.GetSteamUILanguage()));
+            }
+
+            foreach (string tag in deviceTags)
+                AddTag(tags, tag);
+            return tags;
+        }
+
+        private static void AddTag(List<string> tags, string tag)
+        {
+            if (!string.IsNullOrEmpty(tag) && !tags.Contains(tag))
+                tags.Add(tag);
         }
 
         public void Tick()

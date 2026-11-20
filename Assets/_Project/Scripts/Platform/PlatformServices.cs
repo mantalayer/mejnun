@@ -35,6 +35,7 @@ namespace Mejnun.Platform
         public static IStats Stats => Current.Stats;
         public static IRichPresence RichPresence => Current.RichPresence;
         public static IEntitlements Entitlements => Current.Entitlements;
+        public static ILanguageInfo Language => Current.Language;
 
         public static void RegisterBackend(string name, int priority, BackendFactory tryCreate)
         {
@@ -70,9 +71,21 @@ namespace Mejnun.Platform
             Application.quitting -= OnApplicationQuitting;
         }
 
+        // Systems that start before the first scene (such as the localization
+        // startup locale selector) call this so they see the real store backend
+        // instead of the Null fallback. Safe to call more than once.
+        public static void EnsureInitialized()
+        {
+            if (!s_isInitialized)
+                Initialize();
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
+            if (s_isInitialized)
+                return;
+
             PlatformSettings settings = PlatformSettings.Load();
             s_current = CreateBackend(settings);
             s_isInitialized = true;

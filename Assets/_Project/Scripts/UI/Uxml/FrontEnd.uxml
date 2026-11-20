@@ -6,140 +6,288 @@
     <ui:VisualElement name="frontend-root" class="frontend-root">
         <ui:VisualElement name="safe-area" class="frontend-safe-area">
             <ui:VisualElement name="main-menu-screen" class="frontend-screen main-menu-screen">
-                <ui:Label text="MEJNUN" class="frontend-title"/>
-                <ui:Label text="A card game of sets, strategy, and a little chaos." class="frontend-subtitle"/>
-                <ui:ProgressBar name="level-progress" title="Level 1" low-value="0" high-value="100" value="0" class="level-progress"/>
-                <ui:Button name="play-solo-button" text="Play Solo vs AI" class="frontend-button primary-flow-button"/>
-                <ui:Button name="play-pass-and-play-button" text="Play Pass &amp; play" class="frontend-button"/>
-                <ui:Button name="how-to-play-button" text="How to play" class="frontend-button"/>
-                <ui:Button name="resume-match-button" text="Resume" class="frontend-button" style="display: none;"/>
-                <ui:Button name="online-button" text="Play Online" class="frontend-button"/>
-                <ui:Button name="gallery-button" text="Gallery" class="frontend-button"/>
-                <ui:Button name="settings-button" text="Settings" class="frontend-button"/>
-                <ui:Button name="quit-button" text="Quit" class="frontend-button"/>
+                <ui:Label text="MEJNUN" class="frontend-title loc-ignore"/>
+                <ui:Label class="frontend-subtitle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.tagline"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:ProgressBar name="level-progress" low-value="0" high-value="100" value="0" class="level-progress"/>
+                <ui:Button name="play-solo-button" class="frontend-button primary-flow-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.play_solo"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="play-pass-and-play-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.pass_and_play"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="how-to-play-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.how_to_play"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="resume-match-button" class="frontend-button" style="display: none;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.resume"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="online-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.online"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="gallery-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.gallery"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="settings-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.settings"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="quit-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.quit"/>
+                    </Bindings>
+                </ui:Button>
                 <ui:VisualElement name="tutorial-prompt" class="tutorial-prompt" style="display: none;">
                     <ui:VisualElement class="tutorial-prompt-card">
-                        <ui:Label text="New to Mejnun?" class="tutorial-prompt-title"/>
-                        <ui:Label text="A short guided game teaches you every rule by playing." class="frontend-subtitle tutorial-prompt-copy"/>
-                        <ui:Button name="tutorial-prompt-play-button" text="Play the tutorial" class="frontend-button primary-flow-button"/>
-                        <ui:Button name="tutorial-prompt-skip-button" text="I know the rules" class="frontend-button"/>
+                        <ui:Label class="tutorial-prompt-title">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.tutorial_prompt.title"/>
+                            </Bindings>
+                        </ui:Label>
+                        <ui:Label class="frontend-subtitle tutorial-prompt-copy">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.tutorial_prompt.body"/>
+                            </Bindings>
+                        </ui:Label>
+                        <ui:Button name="tutorial-prompt-play-button" class="frontend-button primary-flow-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.tutorial_prompt.play"/>
+                            </Bindings>
+                        </ui:Button>
+                        <ui:Button name="tutorial-prompt-skip-button" class="frontend-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.tutorial_prompt.skip"/>
+                            </Bindings>
+                        </ui:Button>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:ScrollView name="online-screen" class="frontend-screen flow-screen online-screen" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none;">
-                <ui:Label text="Play online" class="flow-title"/>
-                <ui:Label text="Sign in anonymously and join with a session code, or find a quick match." class="frontend-copy online-description"/>
+                <ui:Label class="flow-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="frontend-copy online-description">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.description"/>
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement name="online-setup" class="setup-content">
                     <ui:VisualElement class="setup-fields">
-                        <ui:TextField name="online-nickname-field" label="Nickname" value="Player" class="online-field"/>
-                        <ui:SliderInt name="online-seat-count-field" label="Players" low-value="2" high-value="6" value="2" show-input-field="true" class="online-field"/>
-                        <ui:DropdownField name="online-turn-timer-field" label="Turn timer" class="online-field"/>
+                        <ui:TextField name="online-nickname-field" class="online-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="online.field.nickname"/>
+                            </Bindings>
+                        </ui:TextField>
+                        <ui:SliderInt name="online-seat-count-field" low-value="2" high-value="6" value="2" show-input-field="true" class="online-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="online.field.players"/>
+                            </Bindings>
+                        </ui:SliderInt>
+                        <ui:DropdownField name="online-turn-timer-field" class="online-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="online.field.turn_timer"/>
+                            </Bindings>
+                        </ui:DropdownField>
                     </ui:VisualElement>
                     <ui:VisualElement class="cosmetic-picker-panel">
-                        <ui:Label text="Table cosmetics" class="settings-section-title"/>
-                        <ui:Label text="Choose two decks and a table felt. A player’s choices will be selected for the match." class="cosmetic-picker-copy"/>
+                        <ui:Label class="settings-section-title">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.cosmetics.title"/>
+                            </Bindings>
+                        </ui:Label>
+                        <ui:Label class="cosmetic-picker-copy">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.cosmetics.body"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Button name="online-deck-preview-0" class="cosmetic-preview-button"/>
                         <ui:Button name="online-deck-preview-1" class="cosmetic-preview-button"/>
                         <ui:Button name="online-felt-preview" class="cosmetic-preview-button felt-preview-button"/>
                     </ui:VisualElement>
                     <ui:VisualElement class="setup-fields online-session-fields">
-                        <ui:Button name="online-create-button" text="Create session" class="frontend-button primary-flow-button"/>
-                        <ui:TextField name="online-code-field" label="Session code" class="online-field"/>
-                        <ui:Button name="online-join-button" text="Join by code" class="frontend-button"/>
-                        <ui:Button name="online-quick-match-button" text="Quick match" class="frontend-button"/>
+                        <ui:Button name="online-create-button" class="frontend-button primary-flow-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.action.create"/>
+                            </Bindings>
+                        </ui:Button>
+                        <ui:TextField name="online-code-field" class="online-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="online.field.session_code"/>
+                            </Bindings>
+                        </ui:TextField>
+                        <ui:Button name="online-join-button" class="frontend-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.action.join"/>
+                            </Bindings>
+                        </ui:Button>
+                        <ui:Button name="online-quick-match-button" class="frontend-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.action.quick_match"/>
+                            </Bindings>
+                        </ui:Button>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label name="online-session-code" text="" class="online-session-code" style="display: none;"/>
-                <ui:Label name="online-lobby-players" text="" class="online-lobby-players" style="display: none;"/>
-                <ui:Label name="online-status" text="" class="flow-error online-status"/>
+                <ui:Label name="online-session-code" class="online-session-code" style="display: none;"/>
+                <ui:Label name="online-lobby-players" class="online-lobby-players" style="display: none;"/>
+                <ui:Label name="online-status" class="flow-error online-status"/>
                 <ui:VisualElement class="frontend-actions">
-                    <ui:Button name="online-back-button" text="Back" class="flow-button"/>
-                    <ui:Button name="online-continue-button" text="Continue" class="flow-button primary-flow-button"/>
+                    <ui:Button name="online-back-button" class="flow-button"/>
+                    <ui:Button name="online-continue-button" class="flow-button primary-flow-button"/>
                 </ui:VisualElement>
             </ui:ScrollView>
             <ui:ScrollView name="setup-screen" class="frontend-screen flow-screen setup-screen" style="display: none;">
-                <ui:Label text="Match setup" class="flow-title"/>
+                <ui:Label class="flow-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="setup.title"/>
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement class="setup-content">
                     <ui:VisualElement class="setup-fields">
-                        <ui:DropdownField name="mode-field" label="Mode"/>
-                        <ui:SliderInt name="seat-count-field" label="Seats" low-value="2" high-value="6" value="3" show-input-field="true"/>
-                        <ui:DropdownField name="turn-timer-field" label="Turn timer"/>
+                        <ui:DropdownField name="mode-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="setup.field.mode"/>
+                            </Bindings>
+                        </ui:DropdownField>
+                        <ui:SliderInt name="seat-count-field" low-value="2" high-value="6" value="3" show-input-field="true">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="setup.field.seats"/>
+                            </Bindings>
+                        </ui:SliderInt>
+                        <ui:DropdownField name="turn-timer-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="setup.field.turn_timer"/>
+                            </Bindings>
+                        </ui:DropdownField>
                         <ui:VisualElement name="player-name-fields" class="player-name-fields">
                             <ui:VisualElement name="seat-row-0" class="seat-row">
-                                <ui:TextField name="player-name-0" label="Seat 1" value="Player 1" class="seat-name"/>
+                                <ui:TextField name="player-name-0" class="seat-name"/>
                                 <ui:DropdownField name="seat-kind-0" class="seat-kind"/>
                                 <ui:DropdownField name="seat-style-0" class="seat-style"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="seat-row-1" class="seat-row">
-                                <ui:TextField name="player-name-1" label="Seat 2" value="Player 2" class="seat-name"/>
+                                <ui:TextField name="player-name-1" class="seat-name"/>
                                 <ui:DropdownField name="seat-kind-1" class="seat-kind"/>
                                 <ui:DropdownField name="seat-style-1" class="seat-style"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="seat-row-2" class="seat-row">
-                                <ui:TextField name="player-name-2" label="Seat 3" value="Player 3" class="seat-name"/>
+                                <ui:TextField name="player-name-2" class="seat-name"/>
                                 <ui:DropdownField name="seat-kind-2" class="seat-kind"/>
                                 <ui:DropdownField name="seat-style-2" class="seat-style"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="seat-row-3" class="seat-row">
-                                <ui:TextField name="player-name-3" label="Seat 4" value="Player 4" class="seat-name"/>
+                                <ui:TextField name="player-name-3" class="seat-name"/>
                                 <ui:DropdownField name="seat-kind-3" class="seat-kind"/>
                                 <ui:DropdownField name="seat-style-3" class="seat-style"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="seat-row-4" class="seat-row">
-                                <ui:TextField name="player-name-4" label="Seat 5" value="Player 5" class="seat-name"/>
+                                <ui:TextField name="player-name-4" class="seat-name"/>
                                 <ui:DropdownField name="seat-kind-4" class="seat-kind"/>
                                 <ui:DropdownField name="seat-style-4" class="seat-style"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="seat-row-5" class="seat-row">
-                                <ui:TextField name="player-name-5" label="Seat 6" value="Player 6" class="seat-name"/>
+                                <ui:TextField name="player-name-5" class="seat-name"/>
                                 <ui:DropdownField name="seat-kind-5" class="seat-kind"/>
                                 <ui:DropdownField name="seat-style-5" class="seat-style"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:Label name="setup-error" text="" class="flow-error"/>
+                        <ui:Label name="setup-error" class="flow-error"/>
                     </ui:VisualElement>
                     <ui:VisualElement class="cosmetic-picker-panel">
-                        <ui:Label text="Table cosmetics" class="settings-section-title"/>
-                        <ui:Label text="Choose two decks and a table felt. Click a preview to browse." class="cosmetic-picker-copy"/>
+                        <ui:Label class="settings-section-title">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="setup.cosmetics.title"/>
+                            </Bindings>
+                        </ui:Label>
+                        <ui:Label class="cosmetic-picker-copy">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="setup.cosmetics.body"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Button name="deck-preview-0" class="cosmetic-preview-button"/>
                         <ui:Button name="deck-preview-1" class="cosmetic-preview-button"/>
                         <ui:Button name="felt-preview" class="cosmetic-preview-button felt-preview-button"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement class="frontend-actions">
-                    <ui:Button name="setup-back-button" text="Back" class="flow-button"/>
-                    <ui:Button name="start-match-button" text="Start game" class="flow-button primary-flow-button"/>
+                    <ui:Button name="setup-back-button" class="flow-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.back"/>
+                        </Bindings>
+                    </ui:Button>
+                    <ui:Button name="start-match-button" class="flow-button primary-flow-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="setup.action.start"/>
+                        </Bindings>
+                    </ui:Button>
                 </ui:VisualElement>
             </ui:ScrollView>
             <ui:VisualElement name="cosmetic-popup" class="cosmetic-popup" style="display: none;">
                 <ui:VisualElement name="cosmetic-popup-tail" class="cosmetic-popup-tail"/>
                 <ui:VisualElement class="cosmetic-popup-panel">
-                    <ui:Label name="cosmetic-popup-title" text="Choose a cosmetic" class="flow-title"/>
+                    <ui:Label name="cosmetic-popup-title" class="flow-title"/>
                     <ui:ScrollView name="deck-selector-grid" mode="Vertical" horizontal-scroller-visibility="Hidden" class="cosmetic-selector-grid"/>
                     <ui:ScrollView name="felt-selector-grid" mode="Vertical" horizontal-scroller-visibility="Hidden" class="cosmetic-selector-grid" style="display: none;"/>
-                    <ui:Label name="cosmetic-locked-notice" text="Not unlocked yet" class="cosmetic-locked-notice" style="display: none;"/>
-                    <ui:Button name="cosmetic-popup-close" text="Done" class="flow-button"/>
+                    <ui:Label name="cosmetic-locked-notice" class="cosmetic-locked-notice" style="display: none;"/>
+                    <ui:Button name="cosmetic-popup-close" class="flow-button">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.done"/>
+                        </Bindings>
+                    </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="gallery-screen" class="frontend-screen" style="display: none;">
-                <ui:Label text="Gallery" class="frontend-page-title"/>
+                <ui:Label class="frontend-page-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="gallery.title"/>
+                    </Bindings>
+                </ui:Label>
                 <ui:VisualElement class="gallery-tabs">
-                    <ui:Button name="gallery-decks-tab" text="Decks" class="gallery-tab selected-tab"/>
-                    <ui:Button name="gallery-felts-tab" text="Board backgrounds" class="gallery-tab"/>
-                    <ui:Label name="gallery-count-label" text="0 / 0 owned" class="gallery-count"/>
+                    <ui:Button name="gallery-decks-tab" class="gallery-tab selected-tab">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="gallery.tab.decks"/>
+                        </Bindings>
+                    </ui:Button>
+                    <ui:Button name="gallery-felts-tab" class="gallery-tab">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="gallery.tab.felts"/>
+                        </Bindings>
+                    </ui:Button>
+                    <ui:Label name="gallery-count-label" class="gallery-count"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="gallery-content">
                     <ui:ScrollView name="gallery-items" class="gallery-items"/>
                     <ui:VisualElement class="gallery-details">
-                        <ui:Label name="gallery-selected-title" text="Select a cosmetic" class="gallery-selected-title"/>
+                        <ui:Label name="gallery-selected-title" class="gallery-selected-title"/>
                         <ui:VisualElement name="gallery-preview" class="gallery-preview"/>
-                        <ui:Label name="gallery-selected-new" text="New in Gallery" class="gallery-new-badge" style="display: none;"/>
-                        <ui:Label name="gallery-requirement" text="Browse decks and board backgrounds." class="frontend-copy"/>
-                        <ui:ProgressBar name="gallery-progress" title="Unlock progress" low-value="0" high-value="1" value="0" style="display: none;"/>
-                        <ui:Label name="gallery-progress-label" text="" class="gallery-progress-label" style="display: none;"/>
+                        <ui:Label name="gallery-selected-new" class="gallery-new-badge" style="display: none;"/>
+                        <ui:Label name="gallery-requirement" class="frontend-copy"/>
+                        <ui:ProgressBar name="gallery-progress" low-value="0" high-value="1" value="0" style="display: none;"/>
+                        <ui:Label name="gallery-progress-label" class="gallery-progress-label" style="display: none;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Button name="gallery-back-button" text="Back" class="frontend-button"/>
+                <ui:Button name="gallery-back-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.back"/>
+                    </Bindings>
+                </ui:Button>
             </ui:VisualElement>
             <ui:Instance template="settings-panel-template" picking-mode="Ignore" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"/>
         </ui:VisualElement>

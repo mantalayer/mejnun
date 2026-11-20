@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mejnun.AI;
 using Mejnun.Core;
 using Mejnun.Cosmetics;
+using Mejnun.Localization;
 
 namespace Mejnun.Game
 {
@@ -17,8 +18,12 @@ namespace Mejnun.Game
         public const int CpuSeat = 1;
         public const int Dealer = 0;
         public const ulong Seed = 0x4D454A4E554EUL;
-        public const string CpuName = "Layla";
-        public const string PlayerName = "You";
+
+        /// <summary>Layla's name in the current language.</summary>
+        public static string CpuName => Loc.Get("tutorial.name.cpu");
+
+        /// <summary>The player's seat name ("You") in the current language.</summary>
+        public static string PlayerName => Loc.Get("tutorial.name.player");
 
         private MejnunTutorial(IReadOnlyList<Card>[] hands, IReadOnlyList<Card> drawsTopFirst, ScriptedCpuTurns cpuTurns,
             IReadOnlyList<TutorialStep> steps, IReadOnlyList<TutorialPage> goodToKnow)
@@ -50,8 +55,8 @@ namespace Mejnun.Game
             var tutorial = Create();
             var seats = new[]
             {
-                SeatConfig.Human(PlayerName),
-                SeatConfig.Bot(CpuName, BotDifficulty.Easy)
+                SeatConfig.Human(SeatNames.TutorialPlayer),
+                SeatConfig.Bot(SeatNames.TutorialCpu, BotDifficulty.Easy)
             };
             return new MatchRequest(seats, 0, MatchMode.Tutorial, seed: Seed, shoeOrder: tutorial.ShoeOrder,
                 dealer: Dealer);
@@ -87,37 +92,37 @@ namespace Mejnun.Game
                 {
                     Ui = TutorialUiKind.Modal,
                     HoldCpu = true,
-                    Title = "Welcome to Mejnun",
-                    Body = "Mejnun is played with two full decks: 104 cards. Everyone is dealt 11. " +
-                           "Be the first to empty your hand onto the table to win."
+                    TitleSource = () => Loc.Get("tutorial.step.welcome.title"),
+                    BodySource = () => Loc.Get("tutorial.step.welcome.body")
                 },
                 new TutorialStep("sets")
                 {
                     Ui = TutorialUiKind.Modal,
                     HoldCpu = true,
-                    Title = "Sets",
-                    Body = "Cards go on the table in sets. A same kind is 3 or 4 cards of one rank, all different " +
-                           "suits. A straight is 3 or more cards of one suit, in order.",
+                    TitleSource = () => Loc.Get("tutorial.step.sets.title"),
+                    BodySource = () => Loc.Get("tutorial.step.sets.body"),
                     Diagram = new TutorialDiagram(
-                        new TutorialDiagramGroup(true, "Same kind", C("7C"), C("7D"), C("7S")),
-                        new TutorialDiagramGroup(true, "Straight", C("4H"), C("5H"), C("6H")),
-                        new TutorialDiagramGroup(false, "Mixed suits", C("4H"), C("5C"), C("6H")))
+                        new TutorialDiagramGroup(true, () => Loc.Get("tutorial.diagram.same_kind"),
+                            C("7C"), C("7D"), C("7S")),
+                        new TutorialDiagramGroup(true, () => Loc.Get("tutorial.diagram.straight"),
+                            C("4H"), C("5H"), C("6H")),
+                        new TutorialDiagramGroup(false, () => Loc.Get("tutorial.diagram.mixed_suits"),
+                            C("4H"), C("5C"), C("6H")))
                 },
 
                 // C1 — Layla goes down.
                 new TutorialStep("c1-watch")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + "'s turn",
-                    Body = CpuName + " goes first. Watch what she does.",
+                    TitleSource = () => Loc.Format("tutorial.step.cpu_turn.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.c1_watch.body", CpuName),
                     IsComplete = (state, turn) => IsPlayerTurn(state, 2)
                 },
                 new TutorialStep("c1-down")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + " is Down",
-                    Body = CpuName + " put down a set made only from her hand. That's called going Down, " +
-                           "and one set is enough.",
+                    TitleSource = () => Loc.Format("tutorial.step.c1_down.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.c1_down.body", CpuName),
                     FocusCards = Cards("JS", "QS", "KS")
                 },
 
@@ -125,16 +130,15 @@ namespace Mejnun.Game
                 new TutorialStep("h1a-not-down")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "You're not Down yet",
-                    Body = "You can't use the table until you're Down. First, put down a set from your own hand."
+                    TitleSource = () => Loc.Get("tutorial.step.h1a_not_down.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1a_not_down.body")
                 },
                 new TutorialStep("h1b-go-down")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Go Down first",
-                    Body = "Until you're Down you can only play sets from your own hand. " +
-                           "Put 7♥ 8♥ 9♥ on the empty table.",
-                    PartialBody = "Keep going—finish placing all three cards from your hand to go Down.",
+                    TitleSource = () => Loc.Get("tutorial.step.h1b_go_down.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1b_go_down.body"),
+                    PartialBodySource = () => Loc.Get("tutorial.step.h1b_go_down.partial"),
                     FocusCards = Cards("7H", "8H", "9H"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.MoveCards,
@@ -144,15 +148,14 @@ namespace Mejnun.Game
                 new TutorialStep("h1b-board-open")
                 {
                     Ui = TutorialUiKind.Modal,
-                    Title = "You're Down!",
-                    Body = "Now the whole table is yours to use: add to any set, rearrange, split. " +
-                           "And you can keep playing this same turn."
+                    TitleSource = () => Loc.Get("tutorial.step.h1b_board_open.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1b_board_open.body")
                 },
                 new TutorialStep("h1c-ace-high")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Add to a set",
-                    Body = "Now put your A♠ on " + CpuName + "'s J♠ Q♠ K♠.",
+                    TitleSource = () => Loc.Get("tutorial.step.h1c_ace_high.title"),
+                    BodySource = () => Loc.Format("tutorial.step.h1c_ace_high.body", CpuName),
                     FocusCards = Cards("AS"),
                     Target = TutorialTarget.MeldContaining(C("JS")),
                     Allowed = TutorialAction.MoveCards,
@@ -162,20 +165,22 @@ namespace Mejnun.Game
                 new TutorialStep("h1c-ace-rule")
                 {
                     Ui = TutorialUiKind.Modal,
-                    Title = "Aces",
-                    Body = "An ace can be low (A-2-3) or high (Q-K-A), but a straight never wraps around " +
-                           "(K-A-2).",
+                    TitleSource = () => Loc.Get("tutorial.step.h1c_ace_rule.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1c_ace_rule.body"),
                     Diagram = new TutorialDiagram(
-                        new TutorialDiagramGroup(true, "Low", C("AS"), C("2S"), C("3S")),
-                        new TutorialDiagramGroup(true, "High", C("QS"), C("KS"), C("AS")),
-                        new TutorialDiagramGroup(false, "No wrap", C("KS"), C("AS"), C("2S")))
+                        new TutorialDiagramGroup(true, () => Loc.Get("tutorial.diagram.ace_low"),
+                            C("AS"), C("2S"), C("3S")),
+                        new TutorialDiagramGroup(true, () => Loc.Get("tutorial.diagram.ace_high"),
+                            C("QS"), C("KS"), C("AS")),
+                        new TutorialDiagramGroup(false, () => Loc.Get("tutorial.diagram.no_wrap"),
+                            C("KS"), C("AS"), C("2S")))
                 },
                 new TutorialStep("h1d-same-kind")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Same kind",
-                    Body = "Put 5♣ 5♦ 5♠ on the empty table.",
-                    PartialBody = "Keep going—finish placing all three cards.",
+                    TitleSource = () => Loc.Get("tutorial.step.h1d_same_kind.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1d_same_kind.body"),
+                    PartialBodySource = () => Loc.Get("tutorial.step.h1d_same_kind.partial"),
                     FocusCards = Cards("5C", "5D", "5S"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.MoveCards,
@@ -185,20 +190,20 @@ namespace Mejnun.Game
                 new TutorialStep("h1e-doubles")
                 {
                     Ui = TutorialUiKind.Modal,
-                    Title = "Doubles",
-                    Body = "With two decks every card has a double: same suit and rank, from the other deck " +
-                           "(its card back looks different). A double can never go in the same set.",
+                    TitleSource = () => Loc.Get("tutorial.step.h1e_doubles.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1e_doubles.body"),
                     FocusCards = Cards("9H'", "9H"),
                     Diagram = new TutorialDiagram(
-                        new TutorialDiagramGroup(true, "A double", C("9H"), C("9H'")),
-                        new TutorialDiagramGroup(false, "Same set", C("8H"), C("9H"), C("9H'")))
+                        new TutorialDiagramGroup(true, () => Loc.Get("tutorial.diagram.a_double"),
+                            C("9H"), C("9H'")),
+                        new TutorialDiagramGroup(false, () => Loc.Get("tutorial.diagram.same_set"),
+                            C("8H"), C("9H"), C("9H'")))
                 },
                 new TutorialStep("h1f-end-turn")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "End your turn",
-                    Body = "You can end your turn when every set on the table is valid and you've played at " +
-                           "least one card from your hand.",
+                    TitleSource = () => Loc.Get("tutorial.step.end_turn.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h1f_end_turn.body"),
                     Target = TutorialTarget.ForButton(TutorialButton.EndTurn),
                     Allowed = TutorialAction.EndTurn,
                     IsComplete = (state, turn) => state.TurnNumber >= 3,
@@ -209,16 +214,15 @@ namespace Mejnun.Game
                 new TutorialStep("c2-watch")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + "'s turn",
-                    Body = "Watch " + CpuName + ".",
+                    TitleSource = () => Loc.Format("tutorial.step.cpu_turn.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.cpu_watch.body", CpuName),
                     IsComplete = (state, turn) => IsPlayerTurn(state, 4)
                 },
                 new TutorialStep("c2-extend")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Any set is fair game",
-                    Body = CpuName + " added 10♥ J♥ to your hearts and 5♥ to your fives. " +
-                           "Once you're Down you can add to any set on the table.",
+                    TitleSource = () => Loc.Get("tutorial.step.c2_extend.title"),
+                    BodySource = () => Loc.Format("tutorial.step.c2_extend.body", CpuName),
                     FocusCards = Cards("10H", "JH", "5H")
                 },
 
@@ -226,8 +230,8 @@ namespace Mejnun.Game
                 new TutorialStep("h2a-split")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Split a straight",
-                    Body = "Long-press the 10♥ and drag it to the empty table. The 10♥ J♥ come with it.",
+                    TitleSource = () => Loc.Get("tutorial.step.h2a_split.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h2a_split.body"),
                     FocusCards = Cards("10H", "JH"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.Split | TutorialAction.MoveCards,
@@ -238,17 +242,15 @@ namespace Mejnun.Game
                 new TutorialStep("h2a-invalid")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Not a set yet",
-                    Body = "10♥ J♥ has a red outline: it isn't a valid set. That's fine in the middle of a turn, " +
-                           "but you can't end your turn until every set is valid.",
+                    TitleSource = () => Loc.Get("tutorial.step.h2a_invalid.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h2a_invalid.body"),
                     FocusCards = Cards("10H", "JH")
                 },
                 new TutorialStep("h2b-double")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Use your double",
-                    Body = "Put your 9♥ on 10♥ J♥. It's the double of the 9♥ in the other set, so it's allowed " +
-                           "here.",
+                    TitleSource = () => Loc.Get("tutorial.step.h2b_double.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h2b_double.body"),
                     FocusCards = Cards("9H'"),
                     Target = TutorialTarget.MeldContaining(C("10H")),
                     Allowed = TutorialAction.MoveCards,
@@ -258,8 +260,8 @@ namespace Mejnun.Game
                 new TutorialStep("h2c-undo")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Undo",
-                    Body = "Made a mistake? Undo steps back one move. Try it.",
+                    TitleSource = () => Loc.Get("tutorial.step.h2c_undo.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h2c_undo.body"),
                     Target = TutorialTarget.ForButton(TutorialButton.Undo),
                     Allowed = TutorialAction.Undo,
                     IsComplete = (state, turn) => state.Hands[PlayerSeat].Contains(C("9H'")) &&
@@ -269,9 +271,8 @@ namespace Mejnun.Game
                 new TutorialStep("h2c-redo")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Redo",
-                    Body = "Redo puts the move back. Revert resets the whole turn, and Fix board tries to " +
-                           "repair the table for you.",
+                    TitleSource = () => Loc.Get("tutorial.step.h2c_redo.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h2c_redo.body"),
                     Target = TutorialTarget.ForButton(TutorialButton.Redo),
                     Allowed = TutorialAction.Redo,
                     IsComplete = (state, turn) => HasMeldExactly(state, C("9H'"), C("10H"), C("JH")),
@@ -280,8 +281,8 @@ namespace Mejnun.Game
                 new TutorialStep("h2d-end-turn")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "End your turn",
-                    Body = "Every set is valid again. End your turn.",
+                    TitleSource = () => Loc.Get("tutorial.step.end_turn.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h2d_end_turn.body"),
                     Target = TutorialTarget.ForButton(TutorialButton.EndTurn),
                     Allowed = TutorialAction.EndTurn,
                     IsComplete = (state, turn) => state.TurnNumber >= 5,
@@ -292,25 +293,24 @@ namespace Mejnun.Game
                 new TutorialStep("c3-watch")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + "'s turn",
-                    Body = "Watch " + CpuName + ".",
+                    TitleSource = () => Loc.Format("tutorial.step.cpu_turn.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.cpu_watch.body", CpuName),
                     IsComplete = (state, turn) => IsPlayerTurn(state, 6)
                 },
                 new TutorialStep("c3-draw")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + " drew",
-                    Body = CpuName + " couldn't play, so she drew. Drawing takes one card from the pile and " +
-                           "ends your turn."
+                    TitleSource = () => Loc.Format("tutorial.step.c3_draw.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.c3_draw.body", CpuName)
                 },
 
                 // H3 — taking from a four of a kind, last-card warning.
                 new TutorialStep("h3a-group")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Start a group",
-                    Body = "Put 3♥ 4♥ on the empty table. It's only two cards, so it shows red for now.",
-                    PartialBody = "Keep going—finish placing both cards.",
+                    TitleSource = () => Loc.Get("tutorial.step.h3a_group.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h3a_group.body"),
+                    PartialBodySource = () => Loc.Get("tutorial.step.h3a_group.partial"),
                     FocusCards = Cards("3H", "4H"),
                     Target = TutorialTarget.EmptyBoard,
                     Allowed = TutorialAction.MoveCards,
@@ -320,8 +320,8 @@ namespace Mejnun.Game
                 new TutorialStep("h3a-take")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Borrow from a set",
-                    Body = "A four of a kind still works with three. Drag the 5♥ out of the fives onto 3♥ 4♥.",
+                    TitleSource = () => Loc.Get("tutorial.step.h3a_take.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h3a_take.body"),
                     FocusCards = Cards("5H"),
                     Target = TutorialTarget.MeldContaining(C("3H")),
                     Allowed = TutorialAction.MoveCards,
@@ -332,8 +332,8 @@ namespace Mejnun.Game
                 new TutorialStep("h3b-end-turn")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "End your turn",
-                    Body = "All sets are valid. End your turn.",
+                    TitleSource = () => Loc.Get("tutorial.step.end_turn.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h3b_end_turn.body"),
                     Target = TutorialTarget.ForButton(TutorialButton.EndTurn),
                     Allowed = TutorialAction.EndTurn,
                     IsComplete = (state, turn) => state.TurnNumber >= 7,
@@ -343,9 +343,8 @@ namespace Mejnun.Game
                 {
                     Ui = TutorialUiKind.Popup,
                     HoldCpu = true,
-                    Title = "One card left!",
-                    Body = "When a player is down to their last card, their seat shakes and shows a ! — " +
-                           "everyone can see they're about to win.",
+                    TitleSource = () => Loc.Get("tutorial.step.h3b_last_card.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h3b_last_card.body"),
                     FocusCards = Cards("AH")
                 },
 
@@ -353,15 +352,15 @@ namespace Mejnun.Game
                 new TutorialStep("c4-watch")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + "'s turn",
-                    Body = "Watch " + CpuName + ".",
+                    TitleSource = () => Loc.Format("tutorial.step.cpu_turn.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.cpu_watch.body", CpuName),
                     IsComplete = (state, turn) => IsPlayerTurn(state, 8)
                 },
                 new TutorialStep("c4-new-set")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "New sets",
-                    Body = "Players who are Down can also start brand-new sets from their hand.",
+                    TitleSource = () => Loc.Get("tutorial.step.c4_new_set.title"),
+                    BodySource = () => Loc.Get("tutorial.step.c4_new_set.body"),
                     FocusCards = Cards("7D", "8D", "9D")
                 },
 
@@ -369,16 +368,15 @@ namespace Mejnun.Game
                 new TutorialStep("h4-stuck")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Stuck",
-                    Body = "Your A♥ doesn't fit anywhere on the table.",
+                    TitleSource = () => Loc.Get("tutorial.step.h4_stuck.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h4_stuck.body"),
                     FocusCards = Cards("AH")
                 },
                 new TutorialStep("h4-draw")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Draw",
-                    Body = "Tap Draw to take a card and end your turn. Drawing also returns any cards you " +
-                           "placed this turn.",
+                    TitleSource = () => Loc.Get("tutorial.step.h4_draw.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h4_draw.body"),
                     Target = TutorialTarget.ForButton(TutorialButton.Draw),
                     Allowed = TutorialAction.Draw,
                     IsComplete = (state, turn) => state.TurnNumber >= 9,
@@ -389,8 +387,8 @@ namespace Mejnun.Game
                 new TutorialStep("c5-watch")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = CpuName + "'s turn",
-                    Body = CpuName + " is stuck too.",
+                    TitleSource = () => Loc.Format("tutorial.step.cpu_turn.title", CpuName),
+                    BodySource = () => Loc.Format("tutorial.step.c5_watch.body", CpuName),
                     IsComplete = (state, turn) => IsPlayerTurn(state, 10)
                 },
 
@@ -398,8 +396,8 @@ namespace Mejnun.Game
                 new TutorialStep("h5a-two")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "You drew the 2♥",
-                    Body = "Put the 2♥ on 3♥ 4♥ 5♥.",
+                    TitleSource = () => Loc.Get("tutorial.step.h5a_two.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h5a_two.body"),
                     FocusCards = Cards("2H"),
                     Target = TutorialTarget.MeldContaining(C("3H")),
                     Allowed = TutorialAction.MoveCards,
@@ -409,8 +407,8 @@ namespace Mejnun.Game
                 new TutorialStep("h5b-ace-low")
                 {
                     Ui = TutorialUiKind.Popup,
-                    Title = "Ace low",
-                    Body = "Now the A♥ fits at the low end: A-2-3-4-5♥. Play your last card!",
+                    TitleSource = () => Loc.Get("tutorial.step.h5b_ace_low.title"),
+                    BodySource = () => Loc.Get("tutorial.step.h5b_ace_low.body"),
                     FocusCards = Cards("AH"),
                     Target = TutorialTarget.MeldContaining(C("3H")),
                     Allowed = TutorialAction.MoveCards,
@@ -424,8 +422,8 @@ namespace Mejnun.Game
                 new TutorialStep("good-to-know")
                 {
                     Ui = TutorialUiKind.Modal,
-                    Title = "MEJNUN!",
-                    Body = "You emptied your hand and won. A few more things are good to know.",
+                    TitleSource = () => Loc.Get("tutorial.step.good_to_know.title"),
+                    BodySource = () => Loc.Get("tutorial.step.good_to_know.body"),
                     Pages = goodToKnow
                 }
             };
@@ -435,20 +433,16 @@ namespace Mejnun.Game
         {
             return new[]
             {
-                new TutorialPage("Empty draw pile",
-                    "When the draw pile runs out, Draw becomes Pass. If everyone passes in a row, the player " +
-                    "with the fewest cards wins. A tie is a Stalemate."),
-                new TutorialPage("Timed turns",
-                    "In timed games a clock counts down each turn. When it runs out — Halas! — a valid turn " +
-                    "ends, otherwise your cards go back and you draw."),
-                new TutorialPage("Fix board and Revert",
-                    "Fix board tries to make every set valid while keeping your moves. Revert puts the whole " +
-                    "table back to how it was at the start of your turn."),
-                new TutorialPage("Hints and the table",
-                    "Hints outline cards you can play. Pinch to zoom, drag to pan, and use Fit to see the " +
-                    "whole table."),
-                new TutorialPage("Next game",
-                    "The winner goes first in the next game.")
+                new TutorialPage(() => Loc.Get("tutorial.page.empty_pile.title"),
+                    () => Loc.Get("tutorial.page.empty_pile.body")),
+                new TutorialPage(() => Loc.Get("tutorial.page.timed_turns.title"),
+                    () => Loc.Get("tutorial.page.timed_turns.body")),
+                new TutorialPage(() => Loc.Get("tutorial.page.fix_and_revert.title"),
+                    () => Loc.Get("tutorial.page.fix_and_revert.body")),
+                new TutorialPage(() => Loc.Get("tutorial.page.hints_and_table.title"),
+                    () => Loc.Get("tutorial.page.hints_and_table.body")),
+                new TutorialPage(() => Loc.Get("tutorial.page.next_game.title"),
+                    () => Loc.Get("tutorial.page.next_game.body"))
             };
         }
 
