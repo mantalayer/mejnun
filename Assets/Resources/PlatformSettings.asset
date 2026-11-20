@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a080b0a26df0402abeb174856b40389, type: 3}
+  m_Name: PlatformSettings
+  m_EditorClassIdentifier: Mejnun.Platform::Mejnun.Platform.PlatformSettings
+  m_steamFullAppId: 480
+  m_steamDemoAppId: 0
+  m_achievements:
+  - Id: 1
+    SteamApiName: FIRST_GAME
+  - Id: 2
+    SteamApiName: FIRST_WIN
+  - Id: 3
+    SteamApiName: FIRST_MEJNUN
+  - Id: 4
+    SteamApiName: TEN_WINS
+  - Id: 5
+    SteamApiName: BEAT_HARD_BOT
+  - Id: 6
+    SteamApiName: FULL_TABLE
+  m_stats:
+  - Id: 1
+    SteamApiName: GAMES_PLAYED
+  - Id: 2
+    SteamApiName: GAMES_WON
+  m_dlc: []

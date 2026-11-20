@@ -17,6 +17,7 @@ namespace Mejnun.Game
             profileStore = store ?? throw new ArgumentNullException(nameof(store));
             Profile = profileStore.Load();
             ConfigureCatalog(catalog);
+            PlatformAchievementBridge.SyncOwnedAchievements(Profile.Achievements);
         }
 
         public static ProgressionService Instance
@@ -80,6 +81,7 @@ namespace Mejnun.Game
             {
                 Profile.AddAchievement(newAchievements[index]);
             }
+            PlatformAchievementBridge.RecordMatch(summary, newAchievements);
 
             var newlyUnlocked = new List<string>();
             if (unlockEvaluator != null)
