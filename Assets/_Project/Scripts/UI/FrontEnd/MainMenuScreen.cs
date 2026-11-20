@@ -47,8 +47,7 @@ namespace Mejnun.UI.FrontEnd
             resumeButton = root.Q<Button>("resume-match-button");
             levelProgress = root.Q<ProgressBar>("level-progress");
 
-            root.Q<Button>("play-solo-button").clicked += () => RequestPlay(MatchMode.Solo);
-            root.Q<Button>("play-pass-and-play-button").clicked += () => RequestPlay(MatchMode.PassAndPlay);
+            root.Q<Button>("play-button").clicked += () => RequestPlay(MatchMode.Solo);
             var howToPlayButton = root.Q<Button>("how-to-play-button");
             if (howToPlayButton != null)
             {

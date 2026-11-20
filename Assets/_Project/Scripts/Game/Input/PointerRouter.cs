@@ -78,6 +78,17 @@ namespace Mejnun.Game
         public event Action<PointerGesture> Gesture;
         public GestureSettings Settings => settings;
 
+        public static bool IsInEdgePanZone(Vector2 position, float width, float height, float fraction)
+        {
+            if (width <= 0f || height <= 0f || fraction <= 0f)
+            {
+                return false;
+            }
+
+            var edgeSize = Mathf.Min(width, height) * fraction;
+            return position.x <= edgeSize || position.x >= width - edgeSize || position.y >= height - edgeSize;
+        }
+
         private void OnEnable()
         {
             if (Application.isPlaying)

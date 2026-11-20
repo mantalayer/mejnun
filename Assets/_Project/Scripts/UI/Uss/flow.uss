@@ -65,16 +65,22 @@
 .seat-name {
     flex-grow: 1;
     flex-shrink: 1;
+    flex-basis: 0;
+    min-width: 0;
 }
 
 .seat-kind {
-    width: 150px;
+    width: 190px;
+    flex-shrink: 0;
     margin-left: 6px;
+    margin-right: 0;
 }
 
 .seat-style {
-    width: 120px;
+    width: 170px;
+    flex-shrink: 0;
     margin-left: 4px;
+    margin-right: 0;
 }
 
 .mejnun-banner {

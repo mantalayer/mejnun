@@ -13,29 +13,24 @@
                     </Bindings>
                 </ui:Label>
                 <ui:ProgressBar name="level-progress" low-value="0" high-value="100" value="0" class="level-progress"/>
-                <ui:Button name="play-solo-button" class="frontend-button primary-flow-button">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.play_solo"/>
-                    </Bindings>
-                </ui:Button>
-                <ui:Button name="play-pass-and-play-button" class="frontend-button">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.pass_and_play"/>
-                    </Bindings>
-                </ui:Button>
-                <ui:Button name="how-to-play-button" class="frontend-button">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.how_to_play"/>
-                    </Bindings>
-                </ui:Button>
                 <ui:Button name="resume-match-button" class="frontend-button" style="display: none;">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.resume"/>
                     </Bindings>
                 </ui:Button>
+                <ui:Button name="play-button" class="frontend-button primary-flow-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.play"/>
+                    </Bindings>
+                </ui:Button>
                 <ui:Button name="online-button" class="frontend-button">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.online"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="how-to-play-button" class="frontend-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.how_to_play"/>
                     </Bindings>
                 </ui:Button>
                 <ui:Button name="gallery-button" class="frontend-button">

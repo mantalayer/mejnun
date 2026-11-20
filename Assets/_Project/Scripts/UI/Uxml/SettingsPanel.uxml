@@ -50,7 +50,7 @@
             </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement class="settings-pages">
-        <ui:ScrollView name="settings-page-gameplay" class="settings-scroll settings-page">
+        <ui:ScrollView name="settings-page-gameplay" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.gameplay.section" />
@@ -106,7 +106,7 @@
             </ui:Toggle>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-table" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-table" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.section" />
@@ -170,6 +170,12 @@
                 </ui:Slider>
                 <ui:Label name="opponent-card-scale-value" class="setting-value" />
             </ui:VisualElement>
+            <ui:Toggle name="hide-opponent-hands-toggle">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.hide_opponent_hands" />
+                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.hide_opponent_hands.tooltip" />
+                </Bindings>
+            </ui:Toggle>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label">
                     <Bindings>
@@ -182,6 +188,19 @@
                     </Bindings>
                 </ui:Slider>
                 <ui:Label name="zoom-sensitivity-value" class="setting-value" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_width" />
+                    </Bindings>
+                </ui:Label>
+                <ui:Slider name="edge-pan-width-slider" low-value="0" high-value="0.25">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_pan_width.tooltip" />
+                    </Bindings>
+                </ui:Slider>
+                <ui:Label name="edge-pan-width-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label">
@@ -236,7 +255,7 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-hints" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-hints" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.hints.section" />
@@ -256,7 +275,7 @@
             </ui:Toggle>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-accessibility" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-accessibility" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.accessibility.section" />
@@ -307,7 +326,7 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-audio" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-audio" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.section" />
@@ -367,7 +386,7 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-general" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-general" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.language_section" />
@@ -419,7 +438,7 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-rules" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-rules" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.components.title" />
@@ -518,7 +537,7 @@
             </ui:Label>
         </ui:ScrollView>
 
-        <ui:ScrollView name="settings-page-credits" class="settings-scroll settings-page" style="display: none">
+        <ui:ScrollView name="settings-page-credits" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
             <ui:Label class="settings-section-title">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.title" />

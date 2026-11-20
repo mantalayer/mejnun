@@ -63,6 +63,9 @@ namespace Mejnun.Game.Tests
             var mainMenu = root.Q<VisualElement>(className: "main-menu-screen");
             Assert.That(mainMenu, Is.Not.Null);
             Assert.That(Mathf.RoundToInt(mainMenu.resolvedStyle.maxWidth.value), Is.EqualTo(520));
+            Assert.That(root.Q<Button>("play-button"), Is.Not.Null);
+            Assert.That(root.Q<Button>("play-solo-button"), Is.Null);
+            Assert.That(root.Q<Button>("play-pass-and-play-button"), Is.Null);
             var resumeButton = root.Q<Button>("resume-match-button");
             Assert.That(resumeButton.style.display == DisplayStyle.Flex, Is.EqualTo(SavedGame.HasSave));
             Assert.That(root.Q<Button>("online-button").enabledSelf, Is.True);
@@ -71,7 +74,15 @@ namespace Mejnun.Game.Tests
 
             presenter.Flow.OpenSetup(MatchMode.Solo);
             Assert.That(presenter.Flow.CurrentScreen, Is.EqualTo(FrontEndScreen.Setup));
-            Assert.That(root.Q<DropdownField>("mode-field").value, Is.EqualTo(SetupScreen.SoloMode));
+            var modeField = root.Q<DropdownField>("mode-field");
+            Assert.That(modeField.value, Is.EqualTo(SetupScreen.SoloMode));
+            Assert.That(modeField.enabledSelf, Is.True);
+            modeField.value = SetupScreen.PassAndPlayMode;
+            var botKindField = root.Q<DropdownField>("seat-kind-1");
+            botKindField.value = botKindField.choices[1];
+            var botStyleField = root.Q<DropdownField>("seat-style-1");
+            Assert.That(botStyleField.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+            Assert.That(botStyleField.enabledSelf, Is.True);
             presenter.Flow.Back();
             presenter.Flow.OpenSettings();
             Assert.That(presenter.Flow.CurrentScreen, Is.EqualTo(FrontEndScreen.Settings));

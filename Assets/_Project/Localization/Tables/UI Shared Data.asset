@@ -4765,6 +4765,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848254492836315
+  - m_Id: 74274328010772
+    m_Key: settings.table.hide_opponent_hands
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836316
+  - m_Id: 74274328010773
+    m_Key: settings.table.hide_opponent_hands.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836317
+  - m_Id: 74274328010774
+    m_Key: settings.table.edge_pan_width
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836318
+  - m_Id: 74274328010775
+    m_Key: settings.table.edge_pan_width.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836319
+  - m_Id: 74274328010776
+    m_Key: menu.main.play
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836320
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9206,3 +9231,27 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Bad-move flavor shown above the localized rule explanation.
+    - rid: 4825848254492836316
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Table setting label that tucks opponents' hands partly offscreen
+          when they are idle.
+    - rid: 4825848254492836317
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains that opponents' hands slide partly offscreen until
+          their turn.
+    - rid: 4825848254492836318
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Settings label for the width of the screen-edge camera pan
+          area.
+    - rid: 4825848254492836319
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains that the left, right, and top edge pan area can be
+          resized or disabled at zero.
+    - rid: 4825848254492836320
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Main menu button that opens match setup

@@ -7,6 +7,7 @@ namespace Mejnun.Game
     public sealed class HandView : MonoBehaviour
     {
         [SerializeField] private float bottomMargin = 0.12f;
+        private const float HandHitMargin = 0.1f;
 
         private readonly List<Card> orderedCards = new List<Card>(12);
         private float scrollOffset;
@@ -21,6 +22,13 @@ namespace Mejnun.Game
         public float ScrollOffset => scrollOffset;
         public int RowCount { get; private set; } = 1;
         public float HandTopY { get; private set; }
+        public float HandMinX { get; private set; }
+        public float HandMaxX { get; private set; }
+
+        public bool ContainsHandX(float x)
+        {
+            return layoutCardCount > 0 && x >= HandMinX - HandHitMargin && x <= HandMaxX + HandHitMargin;
+        }
 
         public static int CalculateRowCount(int screenWidth, int screenHeight, int cardCount)
         {
@@ -78,6 +86,8 @@ namespace Mejnun.Game
             {
                 scrollOffset = 0f;
                 HandTopY = -referenceSize;
+                HandMinX = 0f;
+                HandMaxX = 0f;
                 layoutCardCount = 0;
                 return;
             }
@@ -101,6 +111,10 @@ namespace Mejnun.Game
             var maxScroll = Mathf.Max(0f, rowWidth - viewportWidth);
             scrollOffset = Mathf.Clamp(scrollOffset, 0f, maxScroll);
             var firstX = -rowWidth * 0.5f + scaledCardSize.x * 0.5f - scrollOffset;
+            HandMinX = maxScroll > 0f ? -viewportWidth * 0.5f : firstX - scaledCardSize.x * 0.5f;
+            HandMaxX = maxScroll > 0f
+                ? viewportWidth * 0.5f
+                : firstX + (cardsPerRow - 1) * step + scaledCardSize.x * 0.5f;
             var bottomY = -referenceSize + scaledCardSize.y * 0.5f + bottomMargin + bottomInset +
                           Mathf.Clamp(GameSettings.HandLift, 0f, 1.5f);
             var rowStep = scaledCardSize.y * 0.68f;
