@@ -78,7 +78,10 @@ namespace Mejnun.Localization
                 return keys;
 
             foreach (var entry in stringTable.SharedData.Entries)
-                keys.Add(entry.Key);
+            {
+                if (entry.Metadata.GetMetadata<RetiredEntry>() == null)
+                    keys.Add(entry.Key);
+            }
             keys.Sort(StringComparer.Ordinal);
             return keys;
         }

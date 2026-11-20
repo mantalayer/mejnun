@@ -16,7 +16,9 @@ namespace Mejnun.Localization.Tests
         {
             var collection = LocalizationEditorSettings.GetStringTableCollection(table);
             Assert.That(collection, Is.Not.Null, table);
-            return new HashSet<string>(collection.SharedData.Entries.Select(entry => entry.Key));
+            return new HashSet<string>(collection.SharedData.Entries
+                .Where(entry => entry.Metadata.GetMetadata<RetiredEntry>() == null)
+                .Select(entry => entry.Key));
         }
 
         private static void AssertAllPresent(IEnumerable<string> expected, HashSet<string> keys)

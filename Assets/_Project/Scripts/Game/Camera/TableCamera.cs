@@ -26,9 +26,13 @@ namespace Mejnun.Game
         private float bottomInsetFloor;
         private Vector3 fitStartPosition;
         private float fitStartSize;
+        private Vector3 fitStartFeltAnchorPosition;
+        private float fitStartFeltAnchorSize;
         private float fitStartTime;
         private Vector3 fitTargetPosition;
         private float fitTargetSize;
+        private Vector3 feltAnchorPosition;
+        private float feltAnchorSize;
         private bool fitting;
         private bool hasFittedBounds;
 
@@ -41,6 +45,8 @@ namespace Mejnun.Game
         public float ViewportAspect => tableCamera == null ? 1f : tableCamera.aspect;
         public float MaxOrthographicSize => maxOrthographicSize;
         public bool ManuallyAdjusted => manuallyAdjusted;
+        public Vector3 FeltAnchorPosition => feltAnchorPosition;
+        public float FeltAnchorSize => feltAnchorSize;
         public float ZoomFactor => baseOrthographicSize <= 0f
             ? 1f
             : baseOrthographicSize / Mathf.Max(tableCamera.orthographicSize, 0.0001f);
@@ -50,6 +56,8 @@ namespace Mejnun.Game
             tableCamera = GetComponent<Camera>();
             tableCamera.orthographic = true;
             baseOrthographicSize = tableCamera.orthographicSize;
+            feltAnchorPosition = tableCamera.transform.position;
+            feltAnchorSize = tableCamera.orthographicSize;
             bottomInsetFloor = bottomInsetFraction;
         }
 
@@ -99,6 +107,8 @@ namespace Mejnun.Game
             FrameRateGovernor.NotifyActivity();
             tableCamera.transform.position = Vector3.LerpUnclamped(fitStartPosition, fitTargetPosition, eased);
             tableCamera.orthographicSize = Mathf.LerpUnclamped(fitStartSize, fitTargetSize, eased);
+            feltAnchorPosition = Vector3.LerpUnclamped(fitStartFeltAnchorPosition, fitTargetPosition, eased);
+            feltAnchorSize = Mathf.LerpUnclamped(fitStartFeltAnchorSize, fitTargetSize, eased);
             baseOrthographicSize = tableCamera.orthographicSize;
         }
 
@@ -198,6 +208,8 @@ namespace Mejnun.Game
             {
                 fitStartPosition = tableCamera.transform.position;
                 fitStartSize = tableCamera.orthographicSize;
+                fitStartFeltAnchorPosition = feltAnchorPosition;
+                fitStartFeltAnchorSize = feltAnchorSize;
                 fitStartTime = Time.unscaledTime;
             }
 
@@ -335,6 +347,8 @@ namespace Mejnun.Game
         {
             tableCamera.transform.position = fitTargetPosition;
             tableCamera.orthographicSize = fitTargetSize;
+            feltAnchorPosition = fitTargetPosition;
+            feltAnchorSize = fitTargetSize;
             baseOrthographicSize = fitTargetSize;
             fitting = false;
         }

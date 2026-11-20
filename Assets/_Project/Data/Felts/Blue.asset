@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 166306372329342f0a35805e51391aba, type: 3}
-  m_Name: Midnight
+  m_Name: Blue
   m_EditorClassIdentifier: Mejnun.Cosmetics::Mejnun.Cosmetics.TableFelt
   id: blue
   displayName: Blue
   mode: 0
   tile: {fileID: 21300000, guid: 313914196451c49bfb3a0f7a1146fbf4, type: 3}
-  tileWorldSize: 1
+  tileWorldSize: 10
   border: {fileID: 0}
   image: {fileID: 0}
   tint: {r: 1, g: 1, b: 1, a: 1}

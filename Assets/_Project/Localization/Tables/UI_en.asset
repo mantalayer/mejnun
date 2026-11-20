@@ -3562,6 +3562,13 @@ MonoBehaviour:
     m_Localized: That move is not allowed by the game rules.
     m_Metadata:
       m_Items: []
+  - m_Id: 999999999999999
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
   - m_Id: 6549035540564
     m_Localized: Don't ask again
     m_Metadata:
@@ -3816,6 +3823,158 @@ MonoBehaviour:
     m_Localized: Limit mobile rendering to 30 frames per second.
     m_Metadata:
       m_Items: []
+  - m_Id: 74273040359424
+    m_Localized: Great!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074624
+    m_Localized: Awesome!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074625
+    m_Localized: Groovy!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074626
+    m_Localized: Niiice!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074627
+    m_Localized: You know how to make me feel pretty.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074628
+    m_Localized: That's what I'm talking about!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074629
+    m_Localized: I need more of that in my life.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074630
+    m_Localized: I like it. I love it.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074631
+    m_Localized: Whoo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074632
+    m_Localized: Hot dog!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074633
+    m_Localized: Well, butter my buns and call me a biscuit!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074634
+    m_Localized: And how!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074635
+    m_Localized: Cha!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074636
+    m_Localized: Sweet as!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074637
+    m_Localized: Sweet!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074638
+    m_Localized: Yallah!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074639
+    m_Localized: Hella!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74273250074640
+    m_Localized: Hecka!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010752
+    m_Localized: Bad!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010753
+    m_Localized: Not there!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010754
+    m_Localized: What were you thinking?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010755
+    m_Localized: How could you?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010756
+    m_Localized: Straight to jail...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010757
+    m_Localized: That's illegal...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010758
+    m_Localized: I don't understand you...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010759
+    m_Localized: You think like a hamster...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010760
+    m_Localized: Somebody has a case of the mondays...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010761
+    m_Localized: Oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010762
+    m_Localized: Big oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010763
+    m_Localized: Biggest oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010764
+    m_Localized: Small oof...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010765
+    m_Localized: Shame...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010766
+    m_Localized: ERROR! INFERIOR INTELLIGENCE DETECTED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010767
+    m_Localized: My cat can play better than that.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010768
+    m_Localized: Huh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010769
+    m_Localized: Well I didn't expect that...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010770
+    m_Localized: Ummm...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010771
+    m_Localized: Well that could have gone better...
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -3889,3 +4048,4 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734799
         - id: 6549039734802
+        - id: 999999999999999

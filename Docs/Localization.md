@@ -24,7 +24,7 @@ A deliberate exception (a glyph such as `×`, the "MEJNUN!" logo word) is marked
 
 - `UI`: all interface text. `DealerQuestions`: the opening questions (`dq.001`, `dq.002`, …).
 - Keys are lowercase, dot-separated `area.screen.item`, with words joined by `_`: `menu.main.play`, `hud.button.end_turn`, `settings.audio.master_volume`, `achievement.ten_wins.name`.
-- Areas in use: `app`, `common`, `menu`, `setup`, `online`, `picker`, `gallery`, `settings`, `rules`, `credits`, `hud`, `flow`, `results`, `table`, `deck_unlock`, `tutorial`, `match`, `save`, `dealer`, `bot`, `net`, `achievement`, `cosmetic`, `unlock`, `profile`.
+- Areas in use: `app`, `common`, `menu`, `setup`, `online`, `picker`, `gallery`, `settings`, `rules`, `credits`, `hud`, `flavor`, `flow`, `results`, `table`, `deck_unlock`, `tutorial`, `match`, `save`, `dealer`, `bot`, `net`, `achievement`, `cosmetic`, `unlock`, `profile`.
 - `common.*` holds only generic words used in many places (`common.ok`, `common.cancel`, `common.back`, `common.close`, `common.on`, `common.off`, `common.yes`, `common.no`, `common.continue`, `common.done`, `common.locked`, `common.loading`). Anything with screen-specific meaning gets its own key, even if the English is the same: translations often differ by context.
 - Never rename or reuse a key once it has shipped to the sheet. If the meaning changes, add a new key and delete the old one.
 - Add a **comment** to every entry whose context is not obvious (what the placeholders are, where the text appears, length limits). Comments go into the entry's `Comment` metadata and help reviewers.
@@ -76,6 +76,22 @@ question.text = Loc.GetFrom(Loc.DealerQuestionsTable, questionKey);
 3. Run **Mejnun > Localization > Validate** (or the EditMode tests). There must be no `RawString`, `UnknownKey` or `EmptySource` issues.
 4. Commit the changed table assets (`Assets/_Project/Localization/Tables/*`) with the code.
 
+### Importing popup lines and dealer questions
+
+Use **Mejnun > Localization > Import Popups & Questions Sheet** to import the English source from the `Good Popups`, `Bad Popups` and `Deciding Questions` tabs. Put English in column A; the importer reads or fills stable keys in column B (it adds a `key` header when column A has a recognized header and B1 is blank). It writes good/bad lines to `UI` keys (`flavor.good.NNN` / `flavor.bad.NNN`) and questions to `DealerQuestions` keys (`dq.NNN`), then saves a `table,key,en,comment` snapshot at `Assets/_Project/Localization/Source/PopupSheet.csv`.
+
+On the first import, lines without keys are matched to existing active entries by trimmed English text (case-insensitive); unmatched lines get the next unused number, including numbers occupied by retired entries. The assigned key is written back to column B. On later imports, a valid key in column B is authoritative, so changing a line to fix a typo updates that same localization entry. Duplicate English rows are imported only once and the duplicate row's key cell is cleared. Entries removed from a tab are marked retired in shared table metadata: they are preserved and never reused, but are omitted from runtime content lists such as popup selection and dealer questions. Re-adding a retired line without its former key creates a new key; restoring its original key in column B reactivates it.
+
+The importer uses the configured `SheetsServiceProvider` OAuth client and the separate `PopupSpreadsheetId` setting in `LocalizationPipelineSettings`, so it does not use or change the translation-sync workbook ID (`SpreadsheetId`). It resolves each tab by its configured gid first, then falls back to the expected tab name (`Good Popups`, `Bad Popups` or `Deciding Questions`) if a gid has changed. It reads columns A and B and reports added, updated and retired entries. Batch users can override the popup workbook ID and tab IDs when needed:
+
+```
+Unity -batchmode -quit -projectPath . \
+  -executeMethod Mejnun.Localization.Editor.LocalizationSheetImporter.ImportFromCommandLine \
+  -popupSheetId <spreadsheet-id> [-goodPopupsGid <gid>] [-badPopupsGid <gid>] [-decidingQuestionsGid <gid>]
+```
+
+The `UI` entry `hud.invalid_move.flavor` formats the optional bad-move line and the stock rule explanation as `{0}\n{1}`. Good-move flavor lines are shown on a one-in-three chance; if a line is unavailable or not selected, the existing localized popup is used.
+
 Translations normally arrive through the sheet (§6) the next time someone syncs or builds. Reviewed exceptions are kept in `HandwrittenTranslations.csv` and reapplied after each pull; do not edit translated table assets by hand.
 
 ## 6. Translation pipeline
@@ -99,7 +115,7 @@ Translations normally arrive through the sheet (§6) the next time someone syncs
 1. In Google Cloud, create a project, enable the **Google Sheets API**, and create an **OAuth client ID** of type *Desktop app*.
 2. In Unity: **Assets > Create > Localization > Google Sheets Service**, and enter the client ID and secret (keep this asset out of public repos; it is ignored by the build).
 3. Create the workbook, share it with the Google account you will sign in with, and copy its ID from the URL.
-4. Select `Assets/_Project/Localization/LocalizationPipelineSettings.asset`, assign the Sheets Service asset and paste the spreadsheet ID.
+4. Select `Assets/_Project/Localization/LocalizationPipelineSettings.asset`, assign the Sheets Service asset and set `SpreadsheetId` for translation sync. Set `PopupSpreadsheetId` separately for the popup/questions source workbook.
 5. Run **Mejnun > Localization > Sync with Google Sheets** once. A browser window opens for sign-in, and the token is cached for later syncs and builds.
 
 ### Fonts, right-to-left layout and digits
@@ -136,6 +152,7 @@ Store-side localization is managed outside the game: the Steam store page, Steam
 | Mejnun > Localization > Set Up Project | `LocalizationProjectSetup.Run` (idempotent: locales, tables, selectors, `AppInfo`) |
 | Mejnun > Localization > Validate | `LocalizationValidator.Validate` → `Logs/LocalizationReport.txt` |
 | Mejnun > Localization > Import English Source CSV… | `LocalizationSourceImporter.ImportCsv` |
+| Mejnun > Localization > Import Popups & Questions Sheet | `LocalizationSheetImporter.ImportSheet` |
 | Mejnun > Localization > Sync with Google Sheets | `LocalizationSheetsSync.Sync` |
 | Mejnun > Localization > Apply Handwritten Translations | `HandwrittenTranslationApplier.ApplyAll` |
 | Mejnun > Localization > Set Up Fonts | `FontChainSetup.SetUpFonts` |

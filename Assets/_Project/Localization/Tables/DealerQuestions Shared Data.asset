@@ -20,41 +20,299 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262619004
+      - rid: 4825848254492836316
   - m_Id: 6547928244224
     m_Key: dq.002
     m_Metadata:
       m_Items:
       - rid: 4825848250262619005
+      - rid: 4825848254492836317
   - m_Id: 6547928244225
     m_Key: dq.003
     m_Metadata:
       m_Items:
       - rid: 4825848250262619006
+      - rid: 4825848254492836318
   - m_Id: 6547928244226
     m_Key: dq.004
     m_Metadata:
       m_Items:
       - rid: 4825848250262619007
+      - rid: 4825848254492836319
   - m_Id: 6547928244227
     m_Key: dq.005
     m_Metadata:
       m_Items:
       - rid: 4825848250262619008
+      - rid: 4825848254492836320
   - m_Id: 6547928244228
     m_Key: dq.006
     m_Metadata:
       m_Items:
       - rid: 4825848250262619009
+      - rid: 4825848254492836321
   - m_Id: 6547928244229
     m_Key: dq.007
     m_Metadata:
       m_Items:
       - rid: 4825848250262619010
+      - rid: 4825848254492836322
   - m_Id: 6547928244230
     m_Key: dq.008
     m_Metadata:
       m_Items:
       - rid: 4825848250262619011
+      - rid: 4825848254492836323
+  - m_Id: 74276106395648
+    m_Key: dq.009
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836324
+  - m_Id: 74276131561472
+    m_Key: dq.010
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836325
+  - m_Id: 74276131561473
+    m_Key: dq.011
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836326
+  - m_Id: 74276131561474
+    m_Key: dq.012
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836327
+  - m_Id: 74276131561475
+    m_Key: dq.013
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836328
+  - m_Id: 74276131561476
+    m_Key: dq.014
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836329
+  - m_Id: 74276131561477
+    m_Key: dq.015
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836330
+  - m_Id: 74276131561478
+    m_Key: dq.016
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836331
+  - m_Id: 74276131561479
+    m_Key: dq.017
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836332
+  - m_Id: 74276131561480
+    m_Key: dq.018
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836333
+  - m_Id: 74276131561481
+    m_Key: dq.019
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836334
+  - m_Id: 74276131561482
+    m_Key: dq.020
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836335
+  - m_Id: 74276131561483
+    m_Key: dq.021
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836336
+  - m_Id: 74276131561484
+    m_Key: dq.022
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836337
+  - m_Id: 74276131561485
+    m_Key: dq.023
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836338
+  - m_Id: 74276131561486
+    m_Key: dq.024
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836339
+  - m_Id: 74276131561487
+    m_Key: dq.025
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836340
+  - m_Id: 74276131561488
+    m_Key: dq.026
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836341
+  - m_Id: 74276131561489
+    m_Key: dq.027
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836342
+  - m_Id: 74276131561490
+    m_Key: dq.028
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836343
+  - m_Id: 74276131561491
+    m_Key: dq.029
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836344
+  - m_Id: 74276131561492
+    m_Key: dq.030
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836345
+  - m_Id: 74276131561493
+    m_Key: dq.031
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836346
+  - m_Id: 74276131561494
+    m_Key: dq.032
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836347
+  - m_Id: 74276131561495
+    m_Key: dq.033
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836348
+  - m_Id: 74276131561496
+    m_Key: dq.034
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836349
+  - m_Id: 74276131561497
+    m_Key: dq.035
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836350
+  - m_Id: 74276131561498
+    m_Key: dq.036
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836351
+  - m_Id: 74276131561499
+    m_Key: dq.037
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836352
+  - m_Id: 74276131561500
+    m_Key: dq.038
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836353
+  - m_Id: 74276131561501
+    m_Key: dq.039
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836354
+  - m_Id: 74276131561502
+    m_Key: dq.040
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836355
+  - m_Id: 74276131561503
+    m_Key: dq.041
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836356
+  - m_Id: 74276131561504
+    m_Key: dq.042
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836357
+  - m_Id: 74276131561505
+    m_Key: dq.043
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836358
+  - m_Id: 74276131561506
+    m_Key: dq.044
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836359
+  - m_Id: 74276131561507
+    m_Key: dq.045
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836360
+  - m_Id: 74276131561508
+    m_Key: dq.046
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836361
+  - m_Id: 74276131561509
+    m_Key: dq.047
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836362
+  - m_Id: 74276131561510
+    m_Key: dq.048
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836363
+  - m_Id: 74276131561511
+    m_Key: dq.049
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836364
+  - m_Id: 74276131561512
+    m_Key: dq.050
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836365
+  - m_Id: 74276131561513
+    m_Key: dq.051
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836366
+  - m_Id: 74276131561514
+    m_Key: dq.052
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836367
+  - m_Id: 74276131561515
+    m_Key: dq.053
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836368
+  - m_Id: 74276131561516
+    m_Key: dq.054
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836369
+  - m_Id: 74276131561517
+    m_Key: dq.055
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836370
+  - m_Id: 74276131561518
+    m_Key: dq.056
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836371
+  - m_Id: 74276131561519
+    m_Key: dq.057
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836372
+  - m_Id: 74276131561520
+    m_Key: dq.058
+    m_Metadata:
+      m_Items:
+      - rid: 4825848254492836373
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -106,3 +364,277 @@ MonoBehaviour:
       data:
         m_CommentText: Light-hearted "who goes first" question asked to all players
           before a local game; the answer picks the first player.
+    - rid: 4825848254492836316
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836317
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836318
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836319
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836320
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836321
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836322
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836323
+      type: {class: RetiredEntry, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848254492836324
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836325
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836326
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836327
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836328
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836329
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836330
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836331
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836332
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836333
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836334
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836335
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836336
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836337
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836338
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836339
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836340
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836341
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836342
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836343
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836344
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836345
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836346
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836347
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836348
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836349
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836350
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836351
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836352
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836353
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836354
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836355
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836356
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836357
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836358
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836359
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836360
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836361
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836362
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836363
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836364
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836365
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836366
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836367
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836368
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836369
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836370
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836371
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836372
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.
+    - rid: 4825848254492836373
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Question asked to players before a local game; answers decide
+          who goes first.

@@ -76,6 +76,7 @@ namespace Mejnun.UI
         private Label halasPopup;
         private Label timerLabel;
         private Label goneDownPopup;
+        private Label goodMovePopup;
         private Label goneDownTag;
         private Label invalidMovePopup;
         private Label onlineNotice;
@@ -84,6 +85,7 @@ namespace Mejnun.UI
         private bool onlineNoticeShowing;
         private IVisualElementScheduledItem turnPopupHide;
         private IVisualElementScheduledItem goneDownPopupHide;
+        private IVisualElementScheduledItem goodMovePopupHide;
         private IVisualElementScheduledItem goneDownTagHide;
         private IVisualElementScheduledItem halasHide;
         private IVisualElementScheduledItem invalidMoveHide;
@@ -135,6 +137,10 @@ namespace Mejnun.UI
         private Action<bool> pendingConfirmSetting;
         private Func<string> pendingConfirmMessage;
         private RuleError? lastInvalidMoveError;
+        private string lastInvalidFlavorKey;
+        private string lastGoodMoveFlavorKey;
+        private int goodMoveMeldId = -1;
+        private int lastMoveFlavorFrame = -1;
         private int announcedSeat = -1;
         private float nextBadgePulse;
         private bool badgePulse;
@@ -232,7 +238,12 @@ namespace Mejnun.UI
 
             if (invalidMovePopup != null && lastInvalidMoveError.HasValue)
             {
-                invalidMovePopup.text = InvalidMoveMessage(lastInvalidMoveError.Value);
+                invalidMovePopup.text = InvalidMoveText(lastInvalidMoveError.Value, lastInvalidFlavorKey);
+            }
+
+            if (goodMovePopup != null && !string.IsNullOrEmpty(lastGoodMoveFlavorKey))
+            {
+                goodMovePopup.text = Loc.Get(lastGoodMoveFlavorKey);
             }
 
             if (confirmMessage != null && pendingConfirmMessage != null)
@@ -449,6 +460,7 @@ namespace Mejnun.UI
             {
                 tableController.Synchronized += OnSynchronized;
                 tableController.WentDown += OnWentDown;
+                tableController.GoodMove += OnGoodMove;
                 tableController.DownRevealed += OnDownRevealed;
                 tableController.InvalidGesture += OnInvalidGesture;
                 tableController.MarkModeChanged += OnMarkModeChanged;
@@ -499,6 +511,7 @@ namespace Mejnun.UI
             {
                 tableController.Synchronized -= OnSynchronized;
                 tableController.WentDown -= OnWentDown;
+                tableController.GoodMove -= OnGoodMove;
                 tableController.DownRevealed -= OnDownRevealed;
                 tableController.InvalidGesture -= OnInvalidGesture;
                 tableController.MarkModeChanged -= OnMarkModeChanged;
@@ -525,6 +538,7 @@ namespace Mejnun.UI
 
             turnPopupHide?.Pause();
             goneDownPopupHide?.Pause();
+            goodMovePopupHide?.Pause();
             goneDownTagHide?.Pause();
             halasHide?.Pause();
             invalidMoveHide?.Pause();
@@ -685,6 +699,7 @@ namespace Mejnun.UI
 
             RefreshIfInputStateChanged();
             UpdateDownRevealTag();
+            UpdateGoodMovePopupPosition();
             UpdateTimerLabel();
             UpdateLastCardBadges();
             UpdateDrawPilePosition();
@@ -1053,6 +1068,7 @@ namespace Mejnun.UI
             turnPopup = root.Q<Label>("turn-popup");
             halasPopup = root.Q<Label>("halas-popup");
             goneDownPopup = root.Q<Label>("gone-down-popup");
+            goodMovePopup = root.Q<Label>("good-move-popup");
             goneDownTag = root.Q<Label>("gone-down-tag");
             invalidMovePopup = root.Q<Label>("invalid-move-popup");
             onlineNotice = root.Q<Label>("online-notice");
@@ -1536,7 +1552,37 @@ namespace Mejnun.UI
             if (tableController != null && tableController.InputEnabled &&
                 tableController.Game.State.CurrentSeat == seat)
             {
-                goneDownPopupHide = ShowPopup(goneDownPopup, goneDownPopupHide);
+                lastMoveFlavorFrame = Time.frameCount;
+                var flavorKey = FlavorLines.PickGood();
+                if (string.IsNullOrEmpty(flavorKey))
+                {
+                    goneDownPopupHide = ShowPopup(goneDownPopup, goneDownPopupHide);
+                }
+                else
+                {
+                    var meldId = revealedDownSeat == seat && revealedDownMeldIds != null &&
+                                 revealedDownMeldIds.Count > 0
+                        ? revealedDownMeldIds[0]
+                        : -1;
+                    ShowGoodMoveFlavor(flavorKey, meldId);
+                }
+            }
+        }
+
+        private void OnGoodMove(GoodMoveKind kind, int meldId)
+        {
+            goodMoveMeldId = meldId;
+            if (lastMoveFlavorFrame == Time.frameCount)
+            {
+                UpdateGoodMovePopupPosition();
+                return;
+            }
+
+            lastMoveFlavorFrame = Time.frameCount;
+            var flavorKey = FlavorLines.PickGood();
+            if (!string.IsNullOrEmpty(flavorKey))
+            {
+                ShowGoodMoveFlavor(flavorKey, meldId);
             }
         }
 
@@ -1632,6 +1678,52 @@ namespace Mejnun.UI
             }
         }
 
+        private void UpdateGoodMovePopupPosition()
+        {
+            if (goodMovePopup == null)
+            {
+                return;
+            }
+
+            var popupParent = goodMovePopup.parent;
+            if (goodMoveMeldId < 0 || root == null || root.panel == null || popupParent == null ||
+                tableView == null || tableView.ViewCamera == null ||
+                !tableView.TryGetMeldAnchor(goodMoveMeldId, out var world))
+            {
+                goodMovePopup.EnableInClassList("good-move-popup--centered", true);
+                goodMovePopup.style.left = StyleKeyword.Null;
+                goodMovePopup.style.top = StyleKeyword.Null;
+                return;
+            }
+
+            var panelPosition = RuntimePanelUtils.CameraTransformWorldToPanel(root.panel, world, tableView.ViewCamera);
+            var localPosition = popupParent.WorldToLocal(panelPosition);
+            var parentWidth = popupParent.contentRect.width;
+            if (!IsFinite(localPosition.x) || !IsFinite(localPosition.y) || !IsFinite(parentWidth) || parentWidth <= 0f)
+            {
+                goodMovePopup.EnableInClassList("good-move-popup--centered", true);
+                goodMovePopup.style.left = StyleKeyword.Null;
+                goodMovePopup.style.top = StyleKeyword.Null;
+                return;
+            }
+
+            var popupWidth = goodMovePopup.resolvedStyle.width;
+            if (!IsFinite(popupWidth) || popupWidth <= 0f)
+            {
+                popupWidth = goodMovePopup.layout.width;
+            }
+
+            var halfWidth = IsFinite(popupWidth) && popupWidth > 0f ? popupWidth * 0.5f : 0f;
+            const float edgeMargin = 8f;
+            var minX = halfWidth + edgeMargin;
+            var maxX = parentWidth - halfWidth - edgeMargin;
+            var left = minX <= maxX ? Mathf.Clamp(localPosition.x, minX, maxX) : parentWidth * 0.5f;
+
+            goodMovePopup.EnableInClassList("good-move-popup--centered", false);
+            goodMovePopup.style.left = left;
+            goodMovePopup.style.top = localPosition.y - 16f;
+        }
+
         private void ClearDownRevealTag()
         {
             revealedDownMeldIds = null;
@@ -1665,6 +1757,40 @@ namespace Mejnun.UI
             {
                 Refresh(tableController.Game.State, tableController.Game.Turn);
             }
+
+            if (result?.Winner.HasValue == true && IsLocalWinner(result.Winner.Value))
+            {
+                lastMoveFlavorFrame = Time.frameCount;
+                var flavorKey = FlavorLines.PickGood();
+                if (!string.IsNullOrEmpty(flavorKey))
+                {
+                    ShowGoodMoveFlavor(flavorKey);
+                }
+            }
+        }
+
+        private bool IsLocalWinner(int seat)
+        {
+            if (matchFlow != null && matchFlow.IsOnline)
+            {
+                return matchFlow.IsLocalSeat(seat);
+            }
+
+            return !IsBotSeat(seat);
+        }
+
+        private void ShowGoodMoveFlavor(string flavorKey, int meldId = -1)
+        {
+            if (goodMovePopup == null)
+            {
+                return;
+            }
+
+            lastGoodMoveFlavorKey = flavorKey;
+            goodMoveMeldId = meldId;
+            goodMovePopup.text = Loc.Get(flavorKey);
+            UpdateGoodMovePopupPosition();
+            goodMovePopupHide = ShowPopup(goodMovePopup, goodMovePopupHide, 2200);
         }
 
         private void Refresh(GameState state, TurnSession turn)
@@ -1870,8 +1996,7 @@ namespace Mejnun.UI
                 opponent.Add(name);
                 if (IsBotSeat(seat))
                 {
-                    var botBadge = new Label("🤖");
-                    botBadge.pickingMode = PickingMode.Ignore;
+                    var botBadge = new BotBadgeIcon();
                     botBadge.AddToClassList("opponent-bot-badge");
                     opponent.Add(botBadge);
                 }
@@ -2185,8 +2310,17 @@ namespace Mejnun.UI
             }
 
             lastInvalidMoveError = error;
-            invalidMovePopup.text = InvalidMoveMessage(error);
+            lastInvalidFlavorKey = FlavorLines.PickBad();
+            invalidMovePopup.text = InvalidMoveText(error, lastInvalidFlavorKey);
             invalidMoveHide = ShowPopup(invalidMovePopup, invalidMoveHide, 2400);
+        }
+
+        private static string InvalidMoveText(RuleError error, string flavorKey)
+        {
+            var reason = InvalidMoveMessage(error);
+            return string.IsNullOrEmpty(flavorKey)
+                ? reason
+                : Loc.Format("hud.invalid_move.flavor", Loc.Get(flavorKey), reason);
         }
 
         private static string InvalidMoveMessage(RuleError error)

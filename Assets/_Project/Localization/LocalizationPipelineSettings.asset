@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Mejnun.Localization.Editor::Mejnun.Localization.Editor.LocalizationPipelineSettings
   SheetsServiceProvider: {fileID: 11400000, guid: 7e638290ed1c84a73af49ae894afc7c1, type: 2}
   SpreadsheetId: 1KyBXzstUSV1dUmxQISUuLhfY1WbZ7Y5djeUdl5VbMsg
+  PopupSpreadsheetId: 1kEKMuh_SyPiWCqKREpXMf1fXh6f3QmqY0rXrHE-U9j4
   Tabs:
   - Collection: UI
     TabName: UI

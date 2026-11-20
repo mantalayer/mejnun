@@ -15,6 +15,12 @@ namespace Mejnun.Game
         FixBoard
     }
 
+    public enum GoodMoveKind
+    {
+        NewSet,
+        CardAdded
+    }
+
     public sealed class TableController : MonoBehaviour
     {
         [SerializeField] private TableView tableView;
@@ -85,6 +91,7 @@ namespace Mejnun.Game
 
         public event Action<GameState, TurnSession> Synchronized;
         public event Action<int> WentDown;
+        public event Action<GoodMoveKind, int> GoodMove;
         public event Action<int, IReadOnlyList<int>> DownRevealed;
         public event Action<RuleError> InvalidGesture;
         public event Action<GameResult> GameWon;
@@ -428,7 +435,14 @@ namespace Mejnun.Game
                 return CommandResult.Success();
             }
 
+            var validMeldCardCounts = ValidMeldCardCounts(game.State);
             var result = ExecuteBatch(interpretation.Batch);
+            if (result.Ok && TryClassifyGoodMove(game.State, validMeldCardCounts, out var goodMoveKind,
+                    out var meldId))
+            {
+                GoodMove?.Invoke(goodMoveKind, meldId);
+            }
+
             gestureInterpreter.Complete(interpretation, result.Ok);
             RefreshSelection();
             if (result.Ok)
@@ -437,6 +451,52 @@ namespace Mejnun.Game
                 Haptics.Drop();
             }
             return result;
+        }
+
+        private static Dictionary<int, int> ValidMeldCardCounts(GameState state)
+        {
+            var validMeldCardCounts = new Dictionary<int, int>();
+            for (var index = 0; index < state.Board.Count; index++)
+            {
+                var meld = state.Board[index];
+                if (MeldValidator.Classify(meld.Cards).IsValid)
+                {
+                    validMeldCardCounts[meld.Id] = meld.Cards.Count;
+                }
+            }
+
+            return validMeldCardCounts;
+        }
+
+        private static bool TryClassifyGoodMove(GameState state, Dictionary<int, int> previousValidMelds,
+            out GoodMoveKind kind, out int meldId)
+        {
+            for (var index = 0; index < state.Board.Count; index++)
+            {
+                var meld = state.Board[index];
+                if (!MeldValidator.Classify(meld.Cards).IsValid)
+                {
+                    continue;
+                }
+
+                if (!previousValidMelds.TryGetValue(meld.Id, out var previousCardCount))
+                {
+                    kind = GoodMoveKind.NewSet;
+                    meldId = meld.Id;
+                    return true;
+                }
+
+                if (meld.Cards.Count > previousCardCount)
+                {
+                    kind = GoodMoveKind.CardAdded;
+                    meldId = meld.Id;
+                    return true;
+                }
+            }
+
+            kind = default;
+            meldId = -1;
+            return false;
         }
 
         public CommandResult ExecuteHandGesture(GestureInput input)
