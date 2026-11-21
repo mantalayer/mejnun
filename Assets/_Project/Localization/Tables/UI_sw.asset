@@ -4125,6 +4125,12 @@ MonoBehaviour:
     m_Localized: "Inaunganishwa tena kwenye mechi\u2026"
     m_Metadata:
       m_Items: []
+  - m_Id: 410560075128833
+    m_Localized: "Tunasubiri wachezaji wakubali mechi ya marudiano\u2026 ({0}/{1}
+      tayari)"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
   references:
     version: 2
     RefIds:
@@ -4204,3 +4210,4 @@ MonoBehaviour:
         - id: 349485963141135
         - id: 377671954456576
         - id: 377671971233792
+        - id: 410560075128833

@@ -4133,6 +4133,12 @@ MonoBehaviour:
     m_Localized: "Reconectando con el partido\u2026"
     m_Metadata:
       m_Items: []
+  - m_Id: 410560075128833
+    m_Localized: "Esperando a que los jugadores acepten la revancha\u2026 ({0}/{1}
+      listos)"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
   references:
     version: 2
     RefIds:
@@ -4212,3 +4218,4 @@ MonoBehaviour:
         - id: 349485963141135
         - id: 377671954456576
         - id: 377671971233792
+        - id: 410560075128833

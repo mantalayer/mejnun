@@ -40,9 +40,11 @@ namespace Mejnun.Game
         private bool matchPaused;
         private bool applicationPaused;
         private bool remoteAuthority;
+        private bool onlineRematchAccepted;
         private int onlineLocalSeat = -1;
         private bool onlineDeckPreloadPending;
         private MejnunGame pendingOnlineGame;
+        private MejnunGame deferredOnlineGame;
         private string onlineWaitingMessage = string.Empty;
         private float elapsedMatchSeconds;
         private MatchRequest activeRequest;
@@ -105,6 +107,7 @@ namespace Mejnun.Game
         public event Action<MatchFlowScreen> ScreenChanged;
         public event Action OnlineSeatsChanged;
         public event Action<string> OnlineNotice;
+        public event Action OnlineRematchRequested;
 
         public string OnlineWaitingMessage => onlineWaitingMessage;
 
@@ -402,6 +405,13 @@ namespace Mejnun.Game
                 return;
             }
 
+            if (Screen == MatchFlowScreen.Results && authoritativeGame.State.Phase != GamePhase.Finished &&
+                !onlineRematchAccepted)
+            {
+                deferredOnlineGame = authoritativeGame;
+                return;
+            }
+
             var duration = authoritativeGame.Setup.TurnSeconds;
             if (TurnSeconds != duration)
             {
@@ -454,9 +464,50 @@ namespace Mejnun.Game
                 return;
             }
 
+            if (Screen == MatchFlowScreen.Results && authoritativeGame.State.Phase != GamePhase.Finished &&
+                !onlineRematchAccepted)
+            {
+                deferredOnlineGame = authoritativeGame;
+                return;
+            }
+
+            var startingRematch = Game != null && Game.State.Phase == GamePhase.Finished &&
+                                  authoritativeGame.State.Phase != GamePhase.Finished;
+            if (startingRematch)
+            {
+                GameSettings.FastForward = false;
+                matchPaused = false;
+                elapsedMatchSeconds = 0;
+                RoundSeed = authoritativeGame.Setup.Seed;
+                questionRandom = new System.Random(unchecked((int)(RoundSeed ^ (RoundSeed >> 32))));
+                LastResult = null;
+                LastProgression = null;
+                resultRecorded = false;
+                chosenFirstByQuestion = false;
+                pendingTutorialResult = null;
+                handoffSeat = -1;
+                revealedSeat = -1;
+                lastSavedGame = null;
+                lastSavedTurnNumber = -1;
+                DealerQuestionKey = null;
+                cardTracker.Reset();
+                allBotsHard = AreAllOpponentsHardBots();
+                matchStatsTracker.Reset(TurnSeconds);
+                ProgressionService.Instance.SetLastUsedFelt(authoritativeGame.State.TableFeltId);
+                tableView?.ResetForNewGame();
+                tableView?.ClearCpuPlacementViews();
+                tableView?.ApplyFelt(authoritativeGame.State.TableFeltId);
+                deferredOnlineGame = null;
+            }
+
             Game = authoritativeGame;
             tableController?.Resync(authoritativeGame);
             ApplyOnlineViewer();
+            if (startingRematch)
+            {
+                SetScreen(MatchFlowScreen.Turn);
+            }
+
             if (authoritativeGame.State.Phase == GamePhase.Finished && authoritativeGame.State.Result != null &&
                 Screen != MatchFlowScreen.Results)
             {
@@ -738,6 +789,25 @@ namespace Mejnun.Game
             if (LastResult == null)
             {
                 return false;
+            }
+
+            if (IsOnline)
+            {
+                if (onlineRematchAccepted)
+                {
+                    return true;
+                }
+
+                onlineRematchAccepted = true;
+                var deferredGame = deferredOnlineGame;
+                deferredOnlineGame = null;
+                OnlineRematchRequested?.Invoke();
+                if (deferredGame != null && Screen == MatchFlowScreen.Results)
+                {
+                    ApplyOnlineGame(deferredGame);
+                }
+
+                return true;
             }
 
             var firstPlayer = LastResult.NextFirstPlayer;
@@ -1217,6 +1287,7 @@ namespace Mejnun.Game
             lastSavedGame = null;
             lastSavedTurnNumber = -1;
             LastResult = result;
+            onlineRematchAccepted = false;
             if (IsTutorial)
             {
                 resultRecorded = true;

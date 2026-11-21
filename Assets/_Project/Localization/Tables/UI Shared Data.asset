@@ -4925,6 +4925,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848275513376768
+  - m_Id: 410560075128833
+    m_Key: net.waiting.rematch
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376769
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9507,3 +9512,8 @@ MonoBehaviour:
       data:
         m_CommentText: Shown while a returning player waits for the host to restore
           their seat and send the match welcome.
+    - rid: 4825848275513376769
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown while waiting for every player to accept the
+          rematch.

@@ -87,6 +87,84 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
+        public void Host_RematchWaitsForEveryPlayerThenStartsOneSharedGame()
+        {
+            var host = NewFinishedHost();
+            var previousSeed = host.Game.Setup.Seed;
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+
+                clientA.SubmitRematch();
+
+                Assert.That(host.IsRematchPending, Is.True);
+                Assert.That(host.RematchReadyCount, Is.EqualTo(1));
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.ChoosingDealer));
+                Assert.That(host.Game.Setup.Seed, Is.Not.EqualTo(previousSeed));
+                AssertMirrored(host, clientA, 0);
+                AssertMirrored(host, clientB, 1);
+                Assert.That(clientA.IsRematchPending, Is.True);
+                Assert.That(clientA.RematchStatus.ReadySeats, Is.EqualTo(1));
+                Assert.That(host.SubmitCommands("player-a", new[] { GameCommand.ChooseRandomDealer() }), Is.False);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.ChoosingDealer));
+
+                clientB.SubmitRematch();
+
+                Assert.That(host.IsRematchPending, Is.False);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
+                Assert.That(host.Game.State.Dealer, Is.EqualTo(1));
+                Assert.That(clientA.Game.State.Dealer, Is.EqualTo(host.Game.State.Dealer));
+                Assert.That(clientB.Game.State.Dealer, Is.EqualTo(host.Game.State.Dealer));
+                AssertMirrored(host, clientA, 0);
+                AssertMirrored(host, clientB, 1);
+            }
+        }
+
+        [Test]
+        public void Host_RematchIsIgnoredWhileGameIsNotFinished()
+        {
+            var host = NewHost();
+            using (var network = new LoopbackNetwork(host))
+            {
+                var client = network.Connect("player-a", "A");
+                var previousSeed = host.Game.Setup.Seed;
+
+                client.SubmitRematch();
+
+                Assert.That(host.IsRematchPending, Is.False);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
+                Assert.That(host.Game.Setup.Seed, Is.EqualTo(previousSeed));
+            }
+        }
+
+        [Test]
+        public void Host_RematchCountsBotSeatsAsReady()
+        {
+            var host = NewFinishedHost(3);
+            host.AddBot(1, "Bot");
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+
+                clientA.SubmitRematch();
+
+                Assert.That(host.IsRematchPending, Is.True);
+                Assert.That(host.RematchReadyCount, Is.EqualTo(2));
+                Assert.That(clientA.RematchStatus.ReadySeats, Is.EqualTo(2));
+
+                clientB.SubmitRematch();
+
+                Assert.That(host.IsRematchPending, Is.False);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
+                Assert.That(host.Game.State.Dealer, Is.EqualTo(2));
+                AssertMirrored(host, clientA, 0);
+                AssertMirrored(host, clientB, 2);
+            }
+        }
+
+        [Test]
         public void Host_TickAppliesTurnTimeout()
         {
             var game = NewGame(1);
@@ -295,18 +373,24 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
-        public void NetCodec_RoundTripsPauseRejectAndAwayMessages()
+        public void NetCodec_RoundTripsPauseRejectAwayAndRematchMessages()
         {
             var paused = (PausedMessage)NetCodec.Decode(NetCodec.Encode(
                 new PausedMessage(PauseReason.WaitingForPlayers)));
             var rejected = (RejectedMessage)NetCodec.Decode(NetCodec.Encode(
                 new RejectedMessage(JoinRejectReason.NoFreeSeat, "full")));
             var away = NetCodec.Decode(NetCodec.Encode(new AwayMessage()));
+            var rematch = NetCodec.Decode(NetCodec.Encode(new RematchMessage()));
+            var rematchStatus = (RematchStatusMessage)NetCodec.Decode(NetCodec.Encode(
+                new RematchStatusMessage(1, 2)));
 
             Assert.That(paused.Reason, Is.EqualTo(PauseReason.WaitingForPlayers));
             Assert.That(rejected.Code, Is.EqualTo(JoinRejectReason.NoFreeSeat));
             Assert.That(rejected.DebugReason, Is.EqualTo("full"));
             Assert.That(away, Is.TypeOf<AwayMessage>());
+            Assert.That(rematch, Is.TypeOf<RematchMessage>());
+            Assert.That(rematchStatus.ReadySeats, Is.EqualTo(1));
+            Assert.That(rematchStatus.SeatCount, Is.EqualTo(2));
         }
 
         [Test]
@@ -435,6 +519,33 @@ namespace Mejnun.Net.Tests
         private static HostSession NewHost()
         {
             return new HostSession(NewHostGame());
+        }
+
+        private static HostSession NewFinishedHost(int seatCount = 2)
+        {
+            var game = new MejnunGame(new GameSetup(seatCount, 71UL, dealer: seatCount - 1));
+            for (var seat = 1; seat < seatCount; seat++)
+            {
+                var topIndex = game.State.DrawPile.Count - 1;
+                game.State.Hands[seat].Add(game.State.DrawPile[topIndex]);
+                game.State.DrawPile.RemoveAt(topIndex);
+            }
+
+            while (game.State.DrawPile.Count > 0)
+            {
+                var topIndex = game.State.DrawPile.Count - 1;
+                game.State.Hands[1].Add(game.State.DrawPile[topIndex]);
+                game.State.DrawPile.RemoveAt(topIndex);
+            }
+
+            for (var pass = 0; pass < seatCount; pass++)
+            {
+                var seat = game.State.CurrentSeat;
+                Assert.That(game.Apply(GameCommand.DrawOrPass(seat)).Ok, Is.True);
+            }
+
+            Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Finished));
+            return new HostSession(game);
         }
 
         private static MejnunGame NewHostGame()

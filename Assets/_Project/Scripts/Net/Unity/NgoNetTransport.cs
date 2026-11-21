@@ -88,6 +88,7 @@ namespace Mejnun.Net.Unity
             if (client != null)
             {
                 client.CommandsReady -= SendToServer;
+                client.RematchRequested -= SendToServer;
                 client = null;
             }
 
@@ -116,12 +117,14 @@ namespace Mejnun.Net.Unity
             if (client != null)
             {
                 client.CommandsReady -= SendToServer;
+                client.RematchRequested -= SendToServer;
             }
 
             Configure(manager, ugsSession, authenticationId, displayName);
             isHost = false;
             client = clientSession ?? throw new ArgumentNullException(nameof(clientSession));
             client.CommandsReady += SendToServer;
+            client.RematchRequested += SendToServer;
             EnsureRegistered();
             SendJoinIfConnected();
         }
@@ -151,6 +154,7 @@ namespace Mejnun.Net.Unity
             if (client != null)
             {
                 client.CommandsReady -= SendToServer;
+                client.RematchRequested -= SendToServer;
             }
         }
 
@@ -286,6 +290,11 @@ namespace Mejnun.Net.Unity
             SendToServer((NetMessage)message);
         }
 
+        private void SendToServer(RematchMessage message)
+        {
+            SendToServer((NetMessage)message);
+        }
+
         private void SendToServer(NetMessage message)
         {
             if (networkManager == null || !networkManager.IsClient || networkManager.IsHost)
@@ -415,6 +424,13 @@ namespace Mejnun.Net.Unity
                 authenticationByClient.TryGetValue(senderClientId, out var authenticationId))
             {
                 host.SubmitCommands(authenticationId, commands.Commands);
+                return;
+            }
+
+            if (message is RematchMessage &&
+                authenticationByClient.TryGetValue(senderClientId, out authenticationId))
+            {
+                host.RequestRematch(authenticationId);
                 return;
             }
 

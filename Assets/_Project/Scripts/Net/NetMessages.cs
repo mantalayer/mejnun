@@ -13,7 +13,9 @@ namespace Mejnun.Net
         Rejected,
         SeatStatus,
         Paused,
-        Away
+        Away,
+        Rematch,
+        RematchStatus
     }
 
     public abstract class NetMessage
@@ -170,5 +172,36 @@ namespace Mejnun.Net
             : base(NetMessageKind.Away)
         {
         }
+    }
+
+    public sealed class RematchMessage : NetMessage
+    {
+        public RematchMessage()
+            : base(NetMessageKind.Rematch)
+        {
+        }
+    }
+
+    public sealed class RematchStatusMessage : NetMessage
+    {
+        public RematchStatusMessage(int readySeats, int seatCount)
+            : base(NetMessageKind.RematchStatus)
+        {
+            if (seatCount <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(seatCount));
+            }
+
+            if (readySeats < 0 || readySeats > seatCount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(readySeats));
+            }
+
+            ReadySeats = readySeats;
+            SeatCount = seatCount;
+        }
+
+        public int ReadySeats { get; }
+        public int SeatCount { get; }
     }
 }

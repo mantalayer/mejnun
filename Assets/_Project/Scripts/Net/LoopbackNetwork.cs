@@ -28,6 +28,7 @@ namespace Mejnun.Net
                 client = new ClientSession();
                 var capturedId = authenticationId;
                 client.CommandsReady += message => host.SubmitCommands(capturedId, message.Commands);
+                client.RematchRequested += _ => host.RequestRematch(capturedId);
                 clients.Add(authenticationId, client);
             }
 
