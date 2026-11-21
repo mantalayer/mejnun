@@ -6,6 +6,7 @@ UI,net.waiting.save_pause,Save & pause,Host action that saves and pauses the mat
 UI,net.waiting.finding_host,"Host disconnected, finding a new host…",Status shown while waiting for Unity host migration.
 UI,net.waiting.recovery_failed,Couldn't recover the match,Status shown when host migration does not restore a usable session.
 UI,net.waiting.reconnecting,{0} is reconnecting… {1}s,Compact status banner with a player name and remaining grace seconds.
+UI,net.waiting.rematch,"Waiting for players to accept the rematch… ({0}/{1} ready)",Status shown while waiting for every player to accept the rematch.
 UI,net.waiting.please_wait,"Please wait, the AI is finishing this turn",Shown to a player waiting to take control from the AI.
 UI,net.seat.host_badge,Host,Badge identifying the player who currently owns the host role.
 UI,net.seat.status.empty,Waiting for player,Status shown for a seat that has not been filled.

@@ -4138,6 +4138,11 @@ MonoBehaviour:
     m_Localized: "Reconectando \xE0 partida\u2026"
     m_Metadata:
       m_Items: []
+  - m_Id: 410560075128833
+    m_Localized: "Aguardando jogadores aceitarem a revanche\u2026 ({0}/{1} prontos)"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
   references:
     version: 2
     RefIds:
@@ -4217,3 +4222,4 @@ MonoBehaviour:
         - id: 349485963141135
         - id: 377671954456576
         - id: 377671971233792
+        - id: 410560075128833

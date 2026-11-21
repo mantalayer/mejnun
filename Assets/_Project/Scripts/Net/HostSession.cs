@@ -19,6 +19,9 @@ namespace Mejnun.Net
         private readonly SeatRoster roster;
         private readonly ISnapshotStore snapshotStore;
         private readonly int[] lastGraceSeconds;
+        private bool[] rematchVotes;
+        private bool isRematchPending;
+        private int? pendingRematchFirstPlayer;
         private double turnElapsed;
         private double botElapsed;
 
@@ -50,6 +53,8 @@ namespace Mejnun.Net
         public MejnunGame Game { get; private set; }
         public PauseReason PauseReason { get; private set; }
         public bool IsPaused => PauseReason != Mejnun.Net.PauseReason.None;
+        public bool IsRematchPending => isRematchPending;
+        public int RematchReadyCount => CountRematchVotes();
         public SeatRoster Roster => roster;
         public ISnapshotStore SnapshotStore => snapshotStore;
         public event Action<string, NetMessage> MessageSent;
@@ -57,6 +62,7 @@ namespace Mejnun.Net
         public event Action<SeatStatusMessage> SeatStatusChanged;
         public event Action<int> SeatExpired;
         public event Action<PauseReason> PauseReasonChanged;
+        public event Action<RematchStatusMessage> RematchStatusChanged;
 
         public bool AreAllSeatsConnected
         {
@@ -111,6 +117,12 @@ namespace Mejnun.Net
             RefreshPresencePauseReason();
             Send(authenticationId, new PausedMessage(PauseReason));
             BroadcastSeatStatuses();
+            if (IsRematchPending)
+            {
+                Send(authenticationId, CreateRematchStatus());
+            }
+
+            TryStartRematch();
             return seat;
         }
 
@@ -118,6 +130,53 @@ namespace Mejnun.Net
         {
             roster.AddBot(seat, displayName, difficulty);
             BroadcastSeatStatuses();
+            TryStartRematch();
+        }
+
+        public bool RequestRematch(string authenticationId)
+        {
+            var seat = FindSeat(authenticationId);
+            if (seat < 0 || !roster.IsConnected(authenticationId))
+            {
+                return false;
+            }
+
+            if (!IsRematchPending)
+            {
+                if (Game.State.Phase != GamePhase.Finished)
+                {
+                    return false;
+                }
+
+                var previousSetup = Game.Setup;
+                pendingRematchFirstPlayer = Game.State.Result?.NextFirstPlayer;
+                var nextSeed = unchecked(previousSetup.Seed + 1UL);
+                Game = new MejnunGame(new GameSetup(previousSetup.SeatCount, nextSeed, null,
+                    previousSetup.TurnSeconds, previousSetup.FacePool, previousSetup.DeckPicks,
+                    previousSetup.FeltPool, previousSetup.ShoeOrder));
+                rematchVotes = new bool[roster.SeatCount];
+                isRematchPending = true;
+                turnElapsed = 0;
+                botElapsed = 0;
+                for (var index = 0; index < roster.SeatCount; index++)
+                {
+                    var presence = roster.Get(index).Presence;
+                    rematchVotes[index] = presence == SeatPresence.Bot || presence == SeatPresence.BotControlled;
+                }
+
+                SaveSnapshot();
+                StateChanged?.Invoke(Game);
+                BroadcastStates();
+            }
+            else if (Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                return false;
+            }
+
+            rematchVotes[seat] = true;
+            BroadcastRematchStatus();
+            TryStartRematch();
+            return true;
         }
 
         public bool SubmitCommands(string authenticationId, IReadOnlyList<GameCommand> commands)
@@ -126,6 +185,12 @@ namespace Mejnun.Net
             if (seat < 0 || !roster.IsConnected(authenticationId))
             {
                 Send(authenticationId, new RejectedMessage(null, "The sender has no connected player seat."));
+                return false;
+            }
+
+            if (IsRematchPending)
+            {
+                Send(authenticationId, new RejectedMessage(null, "The rematch is waiting for all seats."));
                 return false;
             }
 
@@ -150,6 +215,7 @@ namespace Mejnun.Net
             RefreshPresencePauseReason();
             BroadcastSeatStatuses();
             StateChanged?.Invoke(Game);
+            TryStartRematch();
             return true;
         }
 
@@ -220,6 +286,7 @@ namespace Mejnun.Net
             RefreshPresencePauseReason();
             BroadcastSeatStatuses();
             StateChanged?.Invoke(Game);
+            TryStartRematch();
             return true;
         }
 
@@ -229,6 +296,7 @@ namespace Mejnun.Net
             RefreshPresencePauseReason();
             BroadcastSeatStatuses();
             StateChanged?.Invoke(Game);
+            TryStartRematch();
         }
 
         public void Resume()
@@ -249,6 +317,7 @@ namespace Mejnun.Net
             SaveSnapshot();
             StateChanged?.Invoke(Game);
             BroadcastStates();
+            TryStartRematch();
         }
 
         public void Tick(double elapsedSeconds)
@@ -418,6 +487,92 @@ namespace Mejnun.Net
                         new StateUpdateMessage(SnapshotSerializer.WriteForSeat(Game, seat)));
                 }
             }
+        }
+
+        private void TryStartRematch()
+        {
+            if (!IsRematchPending || IsPaused || Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                return;
+            }
+
+            var readyCountBeforeBots = CountRematchVotes();
+            var allSeatsVoted = true;
+            for (var seat = 0; seat < roster.SeatCount; seat++)
+            {
+                var presence = roster.Get(seat).Presence;
+                if (presence == SeatPresence.Bot || presence == SeatPresence.BotControlled)
+                {
+                    rematchVotes[seat] = true;
+                }
+
+                if (!rematchVotes[seat])
+                {
+                    allSeatsVoted = false;
+                }
+            }
+
+            if (CountRematchVotes() != readyCountBeforeBots)
+            {
+                BroadcastRematchStatus();
+            }
+
+            if (!allSeatsVoted)
+            {
+                return;
+            }
+
+            var seatCount = Game.Setup.SeatCount;
+            var dealer = pendingRematchFirstPlayer.HasValue
+                ? (pendingRematchFirstPlayer.Value - 1 + seatCount) % seatCount
+                : -1;
+            var result = dealer >= 0
+                ? Game.Apply(GameCommand.ChooseDealer(dealer))
+                : Game.Apply(GameCommand.ChooseRandomDealer());
+            if (!result.Ok)
+            {
+                return;
+            }
+
+            isRematchPending = false;
+            rematchVotes = null;
+            pendingRematchFirstPlayer = null;
+            turnElapsed = 0;
+            botElapsed = 0;
+            SaveSnapshot();
+            StateChanged?.Invoke(Game);
+            BroadcastStates();
+        }
+
+        private int CountRematchVotes()
+        {
+            if (!IsRematchPending || rematchVotes == null)
+            {
+                return 0;
+            }
+
+            var count = 0;
+            for (var seat = 0; seat < rematchVotes.Length; seat++)
+            {
+                if (rematchVotes[seat])
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private RematchStatusMessage CreateRematchStatus()
+        {
+            return new RematchStatusMessage(RematchReadyCount, roster.SeatCount);
+        }
+
+        private void BroadcastRematchStatus()
+        {
+            var message = CreateRematchStatus();
+            RematchStatusChanged?.Invoke(message);
+            SendAll(message);
         }
 
         private void BroadcastSeatStatuses()

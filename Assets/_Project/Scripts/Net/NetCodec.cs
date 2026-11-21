@@ -90,6 +90,15 @@ namespace Mejnun.Net
                     }
                     case NetMessageKind.Away:
                         break;
+                    case NetMessageKind.Rematch:
+                        break;
+                    case NetMessageKind.RematchStatus:
+                    {
+                        var status = (RematchStatusMessage)message;
+                        writer.Write(status.ReadySeats);
+                        writer.Write(status.SeatCount);
+                        break;
+                    }
                     default:
                         throw new InvalidDataException("Unsupported network message.");
                 }
@@ -165,6 +174,12 @@ namespace Mejnun.Net
                         break;
                     case NetMessageKind.Away:
                         message = new AwayMessage();
+                        break;
+                    case NetMessageKind.Rematch:
+                        message = new RematchMessage();
+                        break;
+                    case NetMessageKind.RematchStatus:
+                        message = new RematchStatusMessage(reader.ReadInt32(), reader.ReadInt32());
                         break;
                     default:
                         throw new InvalidDataException("Unsupported network message.");

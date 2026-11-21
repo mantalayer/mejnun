@@ -13,9 +13,12 @@ namespace Mejnun.Net
         public int LocalSeat { get; private set; } = -1;
         public PauseReason PauseReason { get; private set; }
         public bool IsPaused => PauseReason != Mejnun.Net.PauseReason.None;
+        public RematchStatusMessage RematchStatus { get; private set; }
+        public bool IsRematchPending => RematchStatus != null;
         public IReadOnlyList<SeatStatusMessage> SeatStatuses => seatStatuses.AsReadOnly();
         public event Action<MejnunGame> StateChanged;
         public event Action<NetMessage> StatusChanged;
+        public event Action<RematchMessage> RematchRequested;
 
         public void Submit(IReadOnlyList<GameCommand> commands)
         {
@@ -28,6 +31,11 @@ namespace Mejnun.Net
         }
 
         public event Action<CommandsMessage> CommandsReady;
+
+        public void SubmitRematch()
+        {
+            RematchRequested?.Invoke(new RematchMessage());
+        }
 
         public void Receive(NetMessage message)
         {
@@ -50,6 +58,10 @@ namespace Mejnun.Net
                     break;
                 case NetMessageKind.Paused:
                     PauseReason = ((PausedMessage)message).Reason;
+                    StatusChanged?.Invoke(message);
+                    break;
+                case NetMessageKind.RematchStatus:
+                    RematchStatus = (RematchStatusMessage)message;
                     StatusChanged?.Invoke(message);
                     break;
                 case NetMessageKind.SeatStatus:
@@ -81,6 +93,11 @@ namespace Mejnun.Net
 
             Game = SnapshotSerializer.Read(snapshot);
             lastSnapshot = (byte[])snapshot.Clone();
+            if (Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                RematchStatus = null;
+            }
+
             StateChanged?.Invoke(Game);
         }
 

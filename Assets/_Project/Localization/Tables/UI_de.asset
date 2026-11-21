@@ -4153,6 +4153,12 @@ MonoBehaviour:
     m_Localized: "Verbindung zum Spiel wird wiederhergestellt\u2026"
     m_Metadata:
       m_Items: []
+  - m_Id: 410560075128833
+    m_Localized: "Warten auf die Annahme des R\xFCckspiels durch die Spieler\u2026
+      ({0}/{1} bereit)"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
   references:
     version: 2
     RefIds:
@@ -4232,3 +4238,4 @@ MonoBehaviour:
         - id: 349485963141135
         - id: 377671954456576
         - id: 377671971233792
+        - id: 410560075128833

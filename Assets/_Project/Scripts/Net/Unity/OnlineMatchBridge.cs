@@ -163,11 +163,15 @@ namespace Mejnun.Net.Unity
                 launch.Service.MigrationHandler.DataRestored -= OnMigrationDataRestored;
             }
 
-            if (matchFlow != null && matchFlow.Controller != null)
+            if (matchFlow != null)
             {
-                matchFlow.Controller.SetCommandRelay(null);
-                matchFlow.SetOnlineAuthority(false, -1);
-                matchFlow.OnlineSessionCode = null;
+                matchFlow.OnlineRematchRequested -= OnOnlineRematchRequested;
+                if (matchFlow.Controller != null)
+                {
+                    matchFlow.Controller.SetCommandRelay(null);
+                    matchFlow.SetOnlineAuthority(false, -1);
+                    matchFlow.OnlineSessionCode = null;
+                }
             }
 
             if (launch != null)
@@ -389,6 +393,9 @@ namespace Mejnun.Net.Unity
                     return;
                 }
 
+                matchFlow.OnlineRematchRequested -= OnOnlineRematchRequested;
+                matchFlow.OnlineRematchRequested += OnOnlineRematchRequested;
+
                 transport = GetComponent<NgoNetTransport>();
                 if (transport == null)
                 {
@@ -487,6 +494,7 @@ namespace Mejnun.Net.Unity
             launch.Service.MigrationHandler.AuthoritativeSession = hostSession;
             hostSession.StateChanged += OnHostStateChanged;
             hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
+            hostSession.RematchStatusChanged += OnHostRematchStatusChanged;
             hostSession.PauseReasonChanged += OnHostPauseReasonChanged;
             hostSession.SeatExpired += OnSeatExpired;
             if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
@@ -540,6 +548,7 @@ namespace Mejnun.Net.Unity
 
             hostSession.StateChanged -= OnHostStateChanged;
             hostSession.SeatStatusChanged -= OnHostSeatStatusChanged;
+            hostSession.RematchStatusChanged -= OnHostRematchStatusChanged;
             hostSession.PauseReasonChanged -= OnHostPauseReasonChanged;
             hostSession.SeatExpired -= OnSeatExpired;
         }
@@ -550,8 +559,13 @@ namespace Mejnun.Net.Unity
             {
                 UgsOnlineService.ClearUnfinishedMatch();
             }
+            else if (matchFlow.Game != null && matchFlow.Game.State.Phase == GamePhase.Finished)
+            {
+                UgsOnlineService.MarkUnfinishedMatch();
+            }
 
             matchFlow.ApplyOnlineGame(game);
+            UpdateHostReadiness();
             PublishRosterChanged();
             QueueMigrationUpload();
         }
@@ -561,6 +575,10 @@ namespace Mejnun.Net.Unity
             if (game.State.Phase == GamePhase.Finished)
             {
                 UgsOnlineService.ClearUnfinishedMatch();
+            }
+            else if (matchFlow.Game != null && matchFlow.Game.State.Phase == GamePhase.Finished)
+            {
+                UgsOnlineService.MarkUnfinishedMatch();
             }
 
             localSeat = clientSession.LocalSeat;
@@ -587,6 +605,10 @@ namespace Mejnun.Net.Unity
                 matchFlow.SetOnlinePaused(paused.Paused);
                 PostPauseNotice(paused.Paused);
                 PublishRosterChanged();
+            }
+            else if (message is RematchStatusMessage)
+            {
+                UpdateClientReadiness();
             }
             else if (message is RejectedMessage rejected)
             {
@@ -649,6 +671,23 @@ namespace Mejnun.Net.Unity
             QueueMigrationUpload();
         }
 
+        private void OnHostRematchStatusChanged(RematchStatusMessage status)
+        {
+            UpdateHostReadiness();
+        }
+
+        private void OnOnlineRematchRequested()
+        {
+            if (hostSession != null)
+            {
+                hostSession.RequestRematch(launch.AuthenticationId);
+            }
+            else
+            {
+                clientSession?.SubmitRematch();
+            }
+        }
+
         private void HandleSeatStatus(SeatStatusMessage status)
         {
             if (status == null || matchFlow == null || status.Seat < 0 || status.Seat >= matchFlow.SeatCount)
@@ -689,8 +728,21 @@ namespace Mejnun.Net.Unity
 
         private void UpdateHostReadiness()
         {
-            if (hostSession == null || hostSession.Game.State.Phase != GamePhase.ChoosingDealer)
+            if (hostSession == null)
             {
+                return;
+            }
+
+            if (hostSession.IsRematchPending)
+            {
+                matchFlow.SetOnlineWaiting(FormatRematchWaitingMessage(hostSession.RematchReadyCount,
+                    hostSession.Game.Setup.SeatCount));
+                return;
+            }
+
+            if (hostSession.Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                matchFlow.SetOnlineWaiting(string.Empty);
                 return;
             }
 
@@ -740,6 +792,13 @@ namespace Mejnun.Net.Unity
             if (clientSession.LocalSeat < 0)
             {
                 matchFlow.SetOnlineWaiting(Loc.Get("net.waiting.rejoining"));
+                return;
+            }
+
+            if (clientSession.IsRematchPending)
+            {
+                var status = clientSession.RematchStatus;
+                matchFlow.SetOnlineWaiting(FormatRematchWaitingMessage(status.ReadySeats, status.SeatCount));
                 return;
             }
 
@@ -897,6 +956,11 @@ namespace Mejnun.Net.Unity
                 : Loc.Format("net.waiting.players_with_code", readySeats, seatCount, roomCode);
         }
 
+        private static string FormatRematchWaitingMessage(int readySeats, int seatCount)
+        {
+            return Loc.Format("net.waiting.rematch", readySeats, seatCount);
+        }
+
         // The waiting message is built from the current language, so rebuild it when the language changes.
         private void OnLanguageChanged()
         {
@@ -904,7 +968,12 @@ namespace Mejnun.Net.Unity
             {
                 if (hostSession != null)
                 {
-                    if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
+                    if (hostSession.IsRematchPending)
+                    {
+                        matchFlow.SetOnlineWaiting(FormatRematchWaitingMessage(hostSession.RematchReadyCount,
+                            hostSession.Game.Setup.SeatCount));
+                    }
+                    else if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
                     {
                         matchFlow.SetOnlineWaiting(GetWaitingMessage());
                     }
@@ -1139,6 +1208,7 @@ namespace Mejnun.Net.Unity
             hostSession = HostSession.FromRecord(record, snapshotStore);
             hostSession.StateChanged += OnHostStateChanged;
             hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
+            hostSession.RematchStatusChanged += OnHostRematchStatusChanged;
             hostSession.PauseReasonChanged += OnHostPauseReasonChanged;
             hostSession.SeatExpired += OnSeatExpired;
             localSeat = hostSession.PrepareForPromotion(launch.AuthenticationId);
