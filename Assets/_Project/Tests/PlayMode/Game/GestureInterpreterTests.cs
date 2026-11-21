@@ -71,6 +71,100 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void TappingBoardCardSelectsIt()
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(3, out var straight);
+            var meld = new Meld(1, new List<Card>
+            {
+                Card.FromId(straight[0]),
+                Card.FromId(straight[1]),
+                Card.FromId(straight[2])
+            });
+            game.State.Board.Add(meld);
+            var interpreter = new GestureInterpreter();
+            var cardHit = GestureHit.BoardCard(straight[1], meld.Id, 1, 1);
+
+            var result = interpreter.Interpret(new GestureInput(GestureType.Tap, cardHit, GestureHit.None),
+                game.State, game.Turn);
+
+            Assert.That(result.SelectionChanged, Is.True);
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { straight[1] }));
+        }
+
+        [Test]
+        public void TappingCardsInSameMeldAddsAndTogglesSelection()
+        {
+            var game = CreateGameWithTwoBoardMelds(out var straight);
+            var firstMeld = game.State.Board[0];
+            var interpreter = new GestureInterpreter();
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[2], firstMeld.Id, 2, 2), GestureHit.None), game.State, game.Turn);
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[0], firstMeld.Id, 0, 0), GestureHit.None), game.State, game.Turn);
+
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { straight[2], straight[0] }));
+
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[2], firstMeld.Id, 2, 2), GestureHit.None), game.State, game.Turn);
+
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { straight[0] }));
+            Assert.That(interpreter.SelectedBoardMeldId, Is.EqualTo(firstMeld.Id));
+        }
+
+        [Test]
+        public void TappingCardInAnotherMeldReplacesBoardSelection()
+        {
+            var game = CreateGameWithTwoBoardMelds(out var straight);
+            var firstMeld = game.State.Board[0];
+            var secondMeld = game.State.Board[1];
+            var interpreter = new GestureInterpreter();
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[0], firstMeld.Id, 0, 0), GestureHit.None), game.State, game.Turn);
+
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[4], secondMeld.Id, 1, 1), GestureHit.None), game.State, game.Turn);
+
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { straight[4] }));
+            Assert.That(interpreter.SelectedBoardMeldId, Is.EqualTo(secondMeld.Id));
+        }
+
+        [Test]
+        public void TappingHandCardClearsBoardSelection()
+        {
+            var game = CreateGameWithTwoBoardMelds(out var straight);
+            var hand = game.State.Hands[game.State.CurrentSeat];
+            var interpreter = new GestureInterpreter();
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[0], game.State.Board[0].Id, 0, 0), GestureHit.None), game.State,
+                game.Turn);
+
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.HandCard(hand[0].Id, 0), GestureHit.None), game.State, game.Turn);
+
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { hand[0].Id }));
+            Assert.That(interpreter.IsBoardSelection, Is.False);
+        }
+
+        [Test]
+        public void DragFromSelectedBoardCardMovesSelectionInMeldOrder()
+        {
+            var game = CreateGameWithTwoBoardMelds(out var straight);
+            var meld = game.State.Board[0];
+            var interpreter = new GestureInterpreter();
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[2], meld.Id, 2, 2), GestureHit.None), game.State, game.Turn);
+            interpreter.Interpret(new GestureInput(GestureType.Tap,
+                GestureHit.BoardCard(straight[0], meld.Id, 0, 0), GestureHit.None), game.State, game.Turn);
+
+            var result = interpreter.Interpret(new GestureInput(GestureType.Drag,
+                GestureHit.BoardCard(straight[0], meld.Id, 0, 0), GestureHit.EmptyBoard()), game.State, game.Turn);
+
+            Assert.That(result.Batch.Count, Is.EqualTo(1));
+            Assert.That(result.Batch.Commands[0].Type, Is.EqualTo(CommandType.MoveCards));
+            Assert.That(result.Batch.Commands[0].CardIds, Is.EqualTo(new[] { straight[0], straight[2] }));
+        }
+
+        [Test]
         public void ToggleCardSelectionRevertsAnImmediateTap()
         {
             var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);
@@ -158,6 +252,31 @@ namespace Mejnun.Game.Tests
             Assert.That(result.Batch.Commands[0].Index, Is.EqualTo(1));
             Assert.That(result.Batch.Commands[1].Type, Is.EqualTo(CommandType.MoveCards));
             Assert.That(result.Batch.Commands[1].CardIds, Is.EqualTo(new[] { pickedCard.Id }));
+        }
+
+        [TestCase(1)]
+        [TestCase(4)]
+        public void DragFromMiddleOfStraightBackIntoSameMeldKeepsStraightIntact(int targetIndex)
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out var straight);
+            var seat = game.State.CurrentSeat;
+            Assert.That(game.Apply(GameCommand.MoveCards(seat, straight, CardTarget.NewMeld(0))).Ok, Is.True);
+            var meld = game.State.Board[0];
+            var pickedCard = meld.Cards[1];
+            var interpreter = new GestureInterpreter();
+
+            var result = interpreter.Interpret(new GestureInput(GestureType.Drag,
+                GestureHit.BoardCard(pickedCard.Id, meld.Id, 1, 0), GestureHit.MeldGap(meld.Id, targetIndex)),
+                game.State, game.Turn);
+
+            Assert.That(result.Batch.Count, Is.EqualTo(1));
+            Assert.That(result.Batch.Commands[0].Type, Is.EqualTo(CommandType.MoveCards));
+            Assert.That(result.Batch.Commands[0].CardIds, Is.EqualTo(new[] { pickedCard.Id }));
+            Assert.That(game.Apply(result.Batch.Commands[0]).Ok, Is.True);
+            Assert.That(game.State.Board.Count, Is.EqualTo(1));
+            Assert.That(game.State.Board[0].Id, Is.EqualTo(meld.Id));
+            Assert.That(game.State.Board[0].Cards.ConvertAll(card => card.Id), Is.EqualTo(straight));
+            Assert.That(MeldValidator.IsBoardValid(game.State.Board), Is.True);
         }
 
         [Test]
@@ -366,6 +485,24 @@ namespace Mejnun.Game.Tests
             }
 
             return false;
+        }
+
+        private static MejnunGame CreateGameWithTwoBoardMelds(out byte[] straight)
+        {
+            var game = GestureTestGameFactory.CreateGameWithStraightInHand(6, out straight);
+            game.State.Board.Add(new Meld(1, new List<Card>
+            {
+                Card.FromId(straight[0]),
+                Card.FromId(straight[1]),
+                Card.FromId(straight[2])
+            }));
+            game.State.Board.Add(new Meld(2, new List<Card>
+            {
+                Card.FromId(straight[3]),
+                Card.FromId(straight[4]),
+                Card.FromId(straight[5])
+            }));
+            return game;
         }
     }
 }

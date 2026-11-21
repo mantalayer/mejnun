@@ -23,6 +23,7 @@ namespace Mejnun.Game
 
     public sealed class TableController : MonoBehaviour
     {
+        private const float BoardTailHighlightStaggerSeconds = 0.035f;
         [SerializeField] private TableView tableView;
         [SerializeField] private PointerRouter pointerRouter;
         [SerializeField] private MonoBehaviour feedbackSinkBehaviour;
@@ -45,7 +46,14 @@ namespace Mejnun.Game
         private MejnunGame game;
         private IFeedbackSink feedbackSink;
         private GestureHit dragSource;
+        private readonly List<byte> boardTailCardIds = new List<byte>();
         private bool dragActive;
+        private Vector2 lastDragPosition;
+        private bool lastDragIsLongPress;
+        private bool edgePanArmed;
+        private bool boardHoldLift;
+        private bool boardTailLifted;
+        private float boardHoldStartedAt;
         private bool handScrollActive;
         private bool panActive;
         private bool inputPaused;
@@ -55,7 +63,7 @@ namespace Mejnun.Game
         private bool markModeActive;
         private byte? hoveredCardId;
         private TapEffect lastTapEffect;
-        private byte lastTapCardId;
+        private SelectionSnapshot lastTapSelectionSnapshot;
         [SerializeField, Min(0f)] private float timeoutFixStepSeconds = 0.6f;
         private readonly SetMarkers setMarkers = new SetMarkers();
 
@@ -142,6 +150,7 @@ namespace Mejnun.Game
         private void OnDisable()
         {
             SetHoveredCard(null);
+            ResetEdgePanDrag();
             if (pointerRouter != null)
             {
                 pointerRouter.Gesture -= HandlePointerGesture;
@@ -155,6 +164,7 @@ namespace Mejnun.Game
 
         private void Update()
         {
+            UpdateEdgePan();
             var mouse = Mouse.current;
             if (!GameSettings.CardHoverHighlight || tableView == null || mouse == null ||
                 mouse.leftButton.isPressed || mouse.rightButton.isPressed || mouse.middleButton.isPressed ||
@@ -175,6 +185,76 @@ namespace Mejnun.Game
             SetHoveredCard(hit.Kind == GestureHitKind.HandCard || hit.Kind == GestureHitKind.BoardCard
                 ? hit.CardId
                 : (byte?)null);
+        }
+
+        private void UpdateEdgePan()
+        {
+            if (!dragActive || sweepSelectActive || (!InputEnabled && !HandInputEnabled) || !edgePanArmed ||
+                tableView == null || GameSettings.EdgePanWidth <= 0f)
+            {
+                return;
+            }
+
+            var direction = PointerRouter.GetEdgePanDirection(lastDragPosition, Screen.width, Screen.height,
+                GameSettings.EdgePanWidth, tableView.EdgePanBottomInset * Screen.height);
+            if (direction.sqrMagnitude <= 0f)
+            {
+                return;
+            }
+
+            var screenDelta = -direction * (PointerRouter.EdgePanSpeedScreensPerSecond * GameSettings.EdgePanSpeed *
+                                            Mathf.Min(Screen.width, Screen.height) * Time.unscaledDeltaTime);
+            tableView.PanCamera(screenDelta, lastDragPosition, false);
+            if (dragSource.Kind == GestureHitKind.BoardCard)
+            {
+                tableView.UpdateBoardLift(lastDragPosition);
+            }
+            else if (dragSource.Kind == GestureHitKind.HandCard)
+            {
+                tableView.UpdateHandLift(lastDragPosition);
+            }
+
+            UpdateDropPreview(lastDragPosition, lastDragIsLongPress);
+        }
+
+        private void TrackEdgePanGesture(PointerGesture pointerGesture)
+        {
+            switch (pointerGesture.Kind)
+            {
+                case PointerGestureKind.DragStarted:
+                    lastDragPosition = pointerGesture.Position;
+                    lastDragIsLongPress = pointerGesture.IsLongPress;
+                    edgePanArmed = !IsInDragEdgePanZone(pointerGesture.StartPosition) ||
+                                   !IsInDragEdgePanZone(pointerGesture.Position);
+                    break;
+                case PointerGestureKind.DragUpdated:
+                    lastDragPosition = pointerGesture.Position;
+                    lastDragIsLongPress = pointerGesture.IsLongPress;
+                    if (!edgePanArmed && !IsInDragEdgePanZone(pointerGesture.Position))
+                    {
+                        edgePanArmed = true;
+                    }
+
+                    break;
+                case PointerGestureKind.DragEnded:
+                case PointerGestureKind.Cancelled:
+                    ResetEdgePanDrag();
+                    break;
+            }
+        }
+
+        private bool IsInDragEdgePanZone(Vector2 position)
+        {
+            var bottomInset = tableView == null ? 0f : tableView.EdgePanBottomInset * Screen.height;
+            return PointerRouter.GetEdgePanDirection(position, Screen.width, Screen.height,
+                GameSettings.EdgePanWidth, bottomInset).sqrMagnitude > 0f;
+        }
+
+        private void ResetEdgePanDrag()
+        {
+            lastDragPosition = Vector2.zero;
+            lastDragIsLongPress = false;
+            edgePanArmed = false;
         }
 
         private void SetHoveredCard(byte? cardId)
@@ -1232,6 +1312,96 @@ namespace Mejnun.Game
             }
         }
 
+        private void BeginBoardHoldLift(GestureHit source, Vector2 position, Vector2 startPosition)
+        {
+            if (PointerRouter.IsInEdgePanZone(startPosition, Screen.width, Screen.height, GameSettings.EdgePanWidth))
+            {
+                return;
+            }
+
+            dragSource = source;
+            dragActive = true;
+            boardHoldLift = true;
+            boardTailLifted = false;
+            boardHoldStartedAt = Time.unscaledTime;
+            boardTailCardIds.Clear();
+            var selectedBoardCardIds = gestureInterpreter.IsBoardSelection &&
+                                        gestureInterpreter.IsSelected(source.CardId)
+                ? gestureInterpreter.GetSelectedBoardCardIds(source, game.State)
+                : new byte[0];
+            var liftSelection = selectedBoardCardIds.Length > 1;
+            if (!liftSelection && gestureInterpreter.IsBoardSelection)
+            {
+                gestureInterpreter.ClearSelection();
+                RefreshSelection();
+            }
+
+            if (!liftSelection)
+            {
+                var tailCardIds = gestureInterpreter.GetLongPressCardIds(source, game.State);
+                for (var index = 0; index < tailCardIds.Length; index++)
+                {
+                    if (tailCardIds[index] != source.CardId)
+                    {
+                        boardTailCardIds.Add(tailCardIds[index]);
+                    }
+                }
+            }
+
+            var liftCardIds = liftSelection ? selectedBoardCardIds : new[] { source.CardId };
+            tableView.BeginBoardLift(source.CardId, liftCardIds, position);
+            Haptics.Pickup();
+        }
+
+        private void UpdateBoardTailPickupCharge()
+        {
+            if (!boardHoldLift || boardTailLifted || boardTailCardIds.Count == 0)
+            {
+                return;
+            }
+
+            var heldAfterLongPress = Time.unscaledTime - boardHoldStartedAt;
+            for (var index = 0; index < boardTailCardIds.Count; index++)
+            {
+                var delay = PointerRouter.TailHighlightDelaySeconds +
+                            index * BoardTailHighlightStaggerSeconds;
+                var progress = PointerRouter.GetTailHighlightProgress(heldAfterLongPress, delay,
+                    PointerRouter.TailHoldSeconds);
+                tableView.GetCardView(boardTailCardIds[index])?.SetPickupCharge(progress);
+            }
+        }
+
+        private void CompleteBoardTailHold(Vector2 position)
+        {
+            if (!boardHoldLift || boardTailLifted || boardTailCardIds.Count == 0)
+            {
+                return;
+            }
+
+            var liftCardIds = gestureInterpreter.GetLongPressCardIds(dragSource, game.State);
+            tableView.BeginBoardLift(dragSource.CardId, liftCardIds, position);
+            boardTailLifted = true;
+            Haptics.Pickup();
+            ClearBoardPickupCharge();
+        }
+
+        private void ClearBoardPickupCharge()
+        {
+            for (var index = 0; index < boardTailCardIds.Count; index++)
+            {
+                tableView.GetCardView(boardTailCardIds[index])?.SetPickupCharge(0f);
+            }
+        }
+
+        private void ResetBoardHoldLift()
+        {
+            ClearBoardPickupCharge();
+            boardTailCardIds.Clear();
+            boardHoldLift = false;
+            boardTailLifted = false;
+            boardHoldStartedAt = 0f;
+        }
+
         private void UpdateSweepSelection(Vector2 position)
         {
             var hit = tableView.HitTest(position);
@@ -1240,7 +1410,17 @@ namespace Mejnun.Game
                 return;
             }
 
+            var previousSelection = new HashSet<byte>(gestureInterpreter.SelectedCardIds);
             gestureInterpreter.SelectHandRange(tableView.HandOrder.GetCardIds(HandSeat), dragSource.Index, hit.Index);
+            var selectedCardIds = gestureInterpreter.SelectedCardIds;
+            for (var index = 0; index < selectedCardIds.Count; index++)
+            {
+                if (selectedCardIds[index] != dragSource.CardId && !previousSelection.Contains(selectedCardIds[index]))
+                {
+                    Haptics.Pickup();
+                }
+            }
+
             RefreshSelection();
         }
 
@@ -1250,6 +1430,8 @@ namespace Mejnun.Game
             {
                 return;
             }
+
+            TrackEdgePanGesture(pointerGesture);
 
             if (pointerGesture.Kind == PointerGestureKind.Tap)
             {
@@ -1278,6 +1460,30 @@ namespace Mejnun.Game
                 {
                     dragHit = GestureHit.EmptyBoard();
                 }
+
+                var isSelectedBoardCard = dragHit.Kind == GestureHitKind.BoardCard &&
+                                          gestureInterpreter.IsBoardSelection &&
+                                          gestureInterpreter.IsSelected(dragHit.CardId);
+                if (PointerRouter.ShouldPanBoardDrag(pointerGesture.IsTouch, pointerGesture.IsLongPress,
+                        isSelectedBoardCard) &&
+                    (dragHit.Kind == GestureHitKind.BoardCard || dragHit.Kind == GestureHitKind.MeldGrip))
+                {
+                    dragHit = GestureHit.EmptyBoard();
+                }
+            }
+
+            if (boardHoldLift && !InputEnabled)
+            {
+                dragActive = false;
+                handScrollActive = false;
+                meldReorderActive = false;
+                sweepSelectActive = false;
+                panActive = false;
+                ResetEdgePanDrag();
+                tableView.EndBoardLift();
+                ResetBoardHoldLift();
+                SynchronizeViews();
+                return;
             }
 
             if (IsRemoteTurnBlocked() && (pointerGesture.Kind == PointerGestureKind.Tap ||
@@ -1308,6 +1514,7 @@ namespace Mejnun.Game
                 var blockedHit = dragHit;
                 if (blockedHit.Kind == GestureHitKind.BoardCard || blockedHit.Kind == GestureHitKind.MeldGrip)
                 {
+                    ResetEdgePanDrag();
                     NotifyInvalid(RuleError.NotYourTurn);
                     return;
                 }
@@ -1363,36 +1570,50 @@ namespace Mejnun.Game
             if (pointerGesture.Kind == PointerGestureKind.DragStarted)
             {
                 SetMarkMode(false);
-                dragSource = dragHit;
-                sweepSelectActive = dragSource.Kind == GestureHitKind.HandCard && pointerGesture.IsLongPress &&
-                                    (InputEnabled || HandInputEnabled);
-                var boardDragWhileDisabled = !InputEnabled &&
-                                             (dragSource.Kind == GestureHitKind.BoardCard ||
-                                              dragSource.Kind == GestureHitKind.MeldGrip);
-                handScrollActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.HandArea;
-                meldReorderActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.MeldGrip;
-                dragActive = !sweepSelectActive && !boardDragWhileDisabled &&
-                             (dragSource.Kind == GestureHitKind.HandCard || dragSource.Kind == GestureHitKind.BoardCard);
-                panActive = !sweepSelectActive && (boardDragWhileDisabled ||
-                            (!dragActive && !handScrollActive && !meldReorderActive));
-                if (sweepSelectActive)
+                if (boardHoldLift && dragSource.Kind == GestureHitKind.BoardCard)
                 {
-                    UpdateSweepSelection(pointerGesture.StartPosition);
+                    ClearBoardPickupCharge();
                 }
-                else if (dragSource.Kind == GestureHitKind.HandCard && (InputEnabled || HandInputEnabled))
+                else
                 {
-                    tableView.BeginHandLift(dragSource.CardId, gestureInterpreter.SelectedCardIds,
-                        pointerGesture.StartPosition);
+                    dragSource = dragHit;
+                    sweepSelectActive = dragSource.Kind == GestureHitKind.HandCard && pointerGesture.IsLongPress &&
+                                        (InputEnabled || HandInputEnabled);
+                    var boardDragWhileDisabled = !InputEnabled &&
+                                                 (dragSource.Kind == GestureHitKind.BoardCard ||
+                                                  dragSource.Kind == GestureHitKind.MeldGrip);
+                    handScrollActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.HandArea;
+                    meldReorderActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.MeldGrip;
+                    dragActive = !sweepSelectActive && !boardDragWhileDisabled &&
+                                 (dragSource.Kind == GestureHitKind.HandCard ||
+                                  dragSource.Kind == GestureHitKind.BoardCard);
+                    panActive = !sweepSelectActive && (boardDragWhileDisabled ||
+                                (!dragActive && !handScrollActive && !meldReorderActive));
+                    if (sweepSelectActive)
+                    {
+                        UpdateSweepSelection(pointerGesture.StartPosition);
+                    }
+                    else if (dragSource.Kind == GestureHitKind.HandCard && (InputEnabled || HandInputEnabled))
+                    {
+                        tableView.BeginHandLift(dragSource.CardId, gestureInterpreter.SelectedCardIds,
+                            pointerGesture.StartPosition);
+                    }
+                    else if (dragSource.Kind == GestureHitKind.BoardCard && InputEnabled)
+                    {
+                        var selectedBoardCardIds = gestureInterpreter.IsBoardSelection &&
+                                                    gestureInterpreter.IsSelected(dragSource.CardId)
+                            ? gestureInterpreter.GetSelectedBoardCardIds(dragSource, game.State)
+                            : new byte[0];
+                        var liftCardIds = selectedBoardCardIds.Length > 0
+                            ? selectedBoardCardIds
+                            : new[] { dragSource.CardId };
+                        tableView.BeginBoardLift(dragSource.CardId, liftCardIds, pointerGesture.StartPosition);
+                    }
                 }
-                else if (dragSource.Kind == GestureHitKind.BoardCard && InputEnabled)
-                {
-                    var liftedCardIds = pointerGesture.IsLongPress
-                        ? gestureInterpreter.GetLongPressCardIds(dragSource, game.State)
-                        : new[] { dragSource.CardId };
-                    tableView.BeginBoardLift(dragSource.CardId, liftedCardIds, pointerGesture.StartPosition);
-                }
+
                 if (panActive)
                 {
+                    tableView.BeginCameraPan();
                     return;
                 }
             }
@@ -1403,9 +1624,14 @@ namespace Mejnun.Game
                 {
                     tableView.PanCamera(pointerGesture.Delta, pointerGesture.Position);
                 }
-                else if (pointerGesture.Kind == PointerGestureKind.DragEnded ||
-                         pointerGesture.Kind == PointerGestureKind.Cancelled)
+                else if (pointerGesture.Kind == PointerGestureKind.DragEnded)
                 {
+                    tableView.ReleaseCameraPan();
+                    panActive = false;
+                }
+                else if (pointerGesture.Kind == PointerGestureKind.Cancelled)
+                {
+                    tableView.CancelCameraPan();
                     panActive = false;
                 }
 
@@ -1429,9 +1655,11 @@ namespace Mejnun.Game
                 handScrollActive = false;
                 meldReorderActive = false;
                 sweepSelectActive = false;
+                ResetEdgePanDrag();
                 tableView.EndHandLift();
                 tableView.EndMeldLift();
                 tableView.EndBoardLift();
+                ResetBoardHoldLift();
                 SynchronizeViews();
                 return;
             }
@@ -1441,16 +1669,19 @@ namespace Mejnun.Game
                 case PointerGestureKind.Tap:
                 {
                     var hit = tableView.HitTest(pointerGesture.Position);
-                    var source = hit.Kind == GestureHitKind.HandCard ? hit : GestureHit.None;
-                    var target = hit.Kind == GestureHitKind.HandCard ? GestureHit.None : hit;
-                    if (source.Kind == GestureHitKind.HandCard)
+                    var isBoardSelectionTap = hit.Kind == GestureHitKind.BoardCard &&
+                                               (gestureInterpreter.SelectedCardIds.Count == 0 ||
+                                                gestureInterpreter.IsBoardSelection);
+                    if (hit.Kind == GestureHitKind.HandCard || isBoardSelectionTap)
                     {
                         lastTapEffect = TapEffect.SelectionToggle;
-                        lastTapCardId = source.CardId;
-                        ExecuteGesture(new GestureInput(GestureType.Tap, source, target));
+                        lastTapSelectionSnapshot = gestureInterpreter.CaptureSelection();
+                        ExecuteGesture(new GestureInput(GestureType.Tap, hit, GestureHit.None));
                     }
                     else
                     {
+                        var source = GestureHit.None;
+                        var target = hit;
                         var selectedCount = gestureInterpreter.SelectedCardIds.Count;
                         var result = ExecuteGesture(new GestureInput(GestureType.Tap, source, target));
                         if (selectedCount > 0 && result.Ok && gestureInterpreter.SelectedCardIds.Count == 0)
@@ -1466,7 +1697,7 @@ namespace Mejnun.Game
                     var hit = tableView.HitTest(pointerGesture.Position);
                     if (lastTapEffect == TapEffect.SelectionToggle)
                     {
-                        gestureInterpreter.ToggleCardSelection(lastTapCardId);
+                        gestureInterpreter.RestoreSelection(lastTapSelectionSnapshot);
                         RefreshSelection();
                     }
 
@@ -1475,7 +1706,24 @@ namespace Mejnun.Game
                     break;
                 }
                 case PointerGestureKind.LongPress:
-                    HandleLongPress(pointerGesture.Position, true);
+                {
+                    var hit = tableView.HitTest(pointerGesture.Position);
+                    if (hit.Kind == GestureHitKind.BoardCard)
+                    {
+                        BeginBoardHoldLift(hit, pointerGesture.Position, pointerGesture.StartPosition);
+                    }
+                    else
+                    {
+                        HandleLongPress(pointerGesture.Position, true);
+                    }
+
+                    break;
+                }
+                case PointerGestureKind.HoldProgress:
+                    UpdateBoardTailPickupCharge();
+                    break;
+                case PointerGestureKind.TailHold:
+                    CompleteBoardTailHold(pointerGesture.Position);
                     break;
                 case PointerGestureKind.DragStarted:
                     if (meldReorderActive)
@@ -1483,7 +1731,7 @@ namespace Mejnun.Game
                         tableView.BeginMeldLift(dragSource.MeldId, pointerGesture.StartPosition);
                     }
 
-                    if (dragActive)
+                    if (dragActive && !boardHoldLift)
                     {
                         Haptics.Pickup();
                     }
@@ -1552,7 +1800,10 @@ namespace Mejnun.Game
                                      tableView.TryGetHandDropTarget(out var handDropTarget)
                             ? handDropTarget
                             : tableView.HitTest(pointerGesture.Position);
-                        var type = pointerGesture.IsLongPress ? GestureType.LongPressDrag : GestureType.Drag;
+                        var isLongPressDrag = dragSource.Kind == GestureHitKind.BoardCard
+                            ? boardTailLifted
+                            : pointerGesture.IsLongPress;
+                        var type = isLongPressDrag ? GestureType.LongPressDrag : GestureType.Drag;
                         if (target.Kind == GestureHitKind.EmptyBoard)
                         {
                             tableView.SetPendingNewMeldPoint(pointerGesture.Position);
@@ -1587,6 +1838,7 @@ namespace Mejnun.Game
                     tableView.EndHandLift();
                     tableView.EndBoardLift();
                     tableView.ClearDropPreview();
+                    ResetBoardHoldLift();
 
                     break;
                 case PointerGestureKind.Cancelled:
@@ -1605,6 +1857,7 @@ namespace Mejnun.Game
                     tableView.EndHandLift();
                     tableView.EndMeldLift();
                     tableView.EndBoardLift();
+                    ResetBoardHoldLift();
                     SynchronizeViews();
                     var boardView = GetComponentInChildren<BoardView>();
                     if (boardView != null)
@@ -1619,7 +1872,7 @@ namespace Mejnun.Game
         private void ClearLastTapEffect()
         {
             lastTapEffect = TapEffect.None;
-            lastTapCardId = 0;
+            lastTapSelectionSnapshot = default;
         }
 
         private void HandleHandPointerGesture(PointerGesture pointerGesture)
@@ -1635,7 +1888,7 @@ namespace Mejnun.Game
                         if (pointerGesture.Kind == PointerGestureKind.Tap)
                         {
                             lastTapEffect = TapEffect.SelectionToggle;
-                            lastTapCardId = hit.CardId;
+                            lastTapSelectionSnapshot = gestureInterpreter.CaptureSelection();
                         }
 
                         ExecuteHandGesture(new GestureInput(GestureType.Tap, hit, GestureHit.None));
@@ -1750,13 +2003,14 @@ namespace Mejnun.Game
             }
 
             var target = tableView.HitTest(position);
-            var type = isLongPress ? GestureType.LongPressDrag : GestureType.Drag;
+            var isLongPressDrag = dragSource.Kind == GestureHitKind.BoardCard ? boardTailLifted : isLongPress;
+            var type = isLongPressDrag ? GestureType.LongPressDrag : GestureType.Drag;
             var preview = gestureInterpreter.Interpret(new GestureInput(type, dragSource, target), game.State,
                 game.Turn);
             IReadOnlyList<byte> draggedIds;
             if (dragSource.Kind == GestureHitKind.BoardCard)
             {
-                draggedIds = isLongPress
+                draggedIds = boardTailLifted
                     ? gestureInterpreter.GetLongPressCardIds(dragSource, game.State)
                     : new[] { dragSource.CardId };
             }

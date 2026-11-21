@@ -239,6 +239,9 @@ namespace Mejnun.Game.Tests
             }
 
             var tableView = Object.FindAnyObjectByType<TableView>();
+            var tableCamera = Object.FindAnyObjectByType<TableCamera>();
+            Assert.That(tableCamera, Is.Not.Null);
+            var feltAnchorSize = tableCamera.FeltAnchorSize;
             var state = tableView.CurrentState;
             var boardCards = new[] { state.DrawPile[0], state.DrawPile[1], state.DrawPile[2] };
             state.DrawPile.RemoveRange(0, boardCards.Length);
@@ -257,6 +260,7 @@ namespace Mejnun.Game.Tests
 
             Assert.That(tableView.CollectBoardToPile(), Is.EqualTo(TableView.BoardCollectSeconds));
             yield return new WaitForSecondsRealtime(TableView.BoardCollectSeconds + 0.1f);
+            Assert.That(tableCamera.Camera.orthographicSize, Is.EqualTo(feltAnchorSize).Within(0.01f));
 
             for (var index = 0; index < boardCards.Length; index++)
             {

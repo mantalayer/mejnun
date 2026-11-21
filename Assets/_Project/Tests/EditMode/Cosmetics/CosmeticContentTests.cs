@@ -48,12 +48,22 @@ namespace Mejnun.Cosmetics.Tests
             Assert.That(hackDeck.Unlock.AchievementId, Is.EqualTo(AchievementIds.BeatHardBot));
             Assert.That(green.Unlock.Kind, Is.EqualTo(UnlockKind.Free));
             Assert.That(green.Mode, Is.EqualTo(FeltRenderMode.Tiled));
-            Assert.That(burgundy.Unlock.Kind, Is.EqualTo(UnlockKind.Free));
+            Assert.That(burgundy.Unlock.Kind, Is.EqualTo(UnlockKind.Level));
+            Assert.That(burgundy.Unlock.Target, Is.EqualTo(2));
             Assert.That(burgundy.Mode, Is.EqualTo(FeltRenderMode.Tiled));
             Assert.That(blue.Id, Is.EqualTo("blue"));
             Assert.That(blue.Unlock.Kind, Is.EqualTo(UnlockKind.Level));
             Assert.That(blue.Unlock.Target, Is.EqualTo(3));
             Assert.That(blue.Mode, Is.EqualTo(FeltRenderMode.Tiled));
+
+            foreach (var (id, level) in new[] { ("teal", 5), ("purple", 7), ("black", 10) })
+            {
+                var felt = felts.Resolve(id);
+                Assert.That(felt.Id, Is.EqualTo(id));
+                Assert.That(felt.Unlock.Kind, Is.EqualTo(UnlockKind.Level), id);
+                Assert.That(felt.Unlock.Target, Is.EqualTo(level), id);
+                Assert.That(felt.Mode, Is.EqualTo(FeltRenderMode.Tiled), id);
+            }
         }
     }
 }

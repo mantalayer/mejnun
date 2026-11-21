@@ -3,6 +3,7 @@
     "rootNamespace": "Mejnun.Localization.Editor",
     "references": [
         "Mejnun.Localization",
+        "Mejnun.Cosmetics",
         "Unity.Localization",
         "Unity.Localization.Editor",
         "Unity.Addressables",

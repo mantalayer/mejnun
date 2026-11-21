@@ -9,9 +9,10 @@ namespace Mejnun.Game
     [Serializable]
     public sealed class GestureSettings
     {
-        [Min(1f)] public float DragThresholdPixels = 10f;
+        [Min(0.1f)] public float TouchDragSlopMillimeters = 2.5f;
+        [Min(0.1f)] public float TouchLongPressSlopMillimeters = 4.5f;
+        [Min(1f)] public float MouseDragThresholdPixels = 4f;
         [Min(1f)] public float PinchThresholdPixels = 24f;
-        [Min(0.1f)] public float LongPressSeconds = 0.35f;
         [Min(0.1f)] public float DoubleTapSeconds = 0.3f;
         [Min(1f)] public float DoubleTapDistancePixels = 40f;
     }
@@ -21,6 +22,8 @@ namespace Mejnun.Game
         Tap,
         DoubleTap,
         LongPress,
+        HoldProgress,
+        TailHold,
         DragStarted,
         DragUpdated,
         DragEnded,
@@ -31,7 +34,7 @@ namespace Mejnun.Game
     public readonly struct PointerGesture
     {
         public PointerGesture(PointerGestureKind kind, Vector2 startPosition, Vector2 position, Vector2 delta,
-            bool isLongPress, float scale)
+            bool isLongPress, float scale, bool isTouch, float heldSeconds)
         {
             Kind = kind;
             StartPosition = startPosition;
@@ -39,6 +42,8 @@ namespace Mejnun.Game
             Delta = delta;
             IsLongPress = isLongPress;
             Scale = scale;
+            IsTouch = isTouch;
+            HeldSeconds = heldSeconds;
         }
 
         public PointerGestureKind Kind { get; }
@@ -47,10 +52,16 @@ namespace Mejnun.Game
         public Vector2 Delta { get; }
         public bool IsLongPress { get; }
         public float Scale { get; }
+        public bool IsTouch { get; }
+        public float HeldSeconds { get; }
     }
 
     public sealed class PointerRouter : MonoBehaviour
     {
+        private const float FallbackDpi = 160f;
+        public const float TailHoldSeconds = 0.6f;
+        public const float TailHighlightDelaySeconds = 0.15f;
+        public const float EdgePanSpeedScreensPerSecond = 1.2f;
         [SerializeField] private GestureSettings settings = new GestureSettings();
 
         private bool touchSupportEnabled;
@@ -61,9 +72,13 @@ namespace Mejnun.Game
         private bool ignoreTouchesUntilAllLifted;
         private bool dragging;
         private bool longPressStarted;
+        private bool tailHoldCompleted;
         private Vector2 pointerStart;
         private Vector2 lastPosition;
         private float pressStartedAt;
+        private float longPressStartedAt;
+        private float activeLongPressSeconds;
+        private float dragStartedHeldSeconds;
         private bool pendingTap;
         private Vector2 pendingTapPosition;
         private float pendingTapAt;
@@ -84,6 +99,72 @@ namespace Mejnun.Game
 
             var edgeSize = Mathf.Min(width, height) * fraction;
             return position.x <= edgeSize || position.x >= width - edgeSize || position.y >= height - edgeSize;
+        }
+
+        public static Vector2 GetEdgePanDirection(Vector2 position, float width, float height, float fraction,
+            float bottomInset = 0f)
+        {
+            if (width <= 0f || height <= 0f || fraction <= 0f)
+            {
+                return Vector2.zero;
+            }
+
+            var edgeSize = Mathf.Min(width, height) * fraction;
+            var direction = Vector2.zero;
+            if (position.x <= edgeSize)
+            {
+                direction.x = -Mathf.Clamp01(2f * (1f - position.x / edgeSize));
+            }
+            else if (position.x >= width - edgeSize)
+            {
+                direction.x = Mathf.Clamp01(2f * (position.x - (width - edgeSize)) / edgeSize);
+            }
+
+            bottomInset = Mathf.Clamp(bottomInset, 0f, height);
+            if (position.y <= bottomInset + edgeSize)
+            {
+                direction.y = -Mathf.Clamp01(2f * (bottomInset + edgeSize - position.y) / edgeSize);
+            }
+            else if (position.y >= height - edgeSize)
+            {
+                direction.y = Mathf.Clamp01(2f * (position.y - (height - edgeSize)) / edgeSize);
+            }
+
+            return direction;
+        }
+
+        public static float MillimetersToPixels(float millimeters, float dpi)
+        {
+            if (millimeters <= 0f)
+            {
+                return 0f;
+            }
+
+            return millimeters * (dpi > 0f ? dpi : FallbackDpi) / 25.4f;
+        }
+
+        public static bool ShouldPanBoardDrag(bool isTouch, bool isLongPress, bool isSelectedCard)
+        {
+            return isTouch && !isLongPress && !isSelectedCard;
+        }
+
+        public static float GetTailHighlightProgress(float heldAfterLongPressSeconds, float highlightDelaySeconds,
+            float tailHoldSeconds)
+        {
+            var heldSeconds = Mathf.Max(0f, heldAfterLongPressSeconds);
+            var highlightDelay = Mathf.Max(0f, highlightDelaySeconds);
+            var tailHold = Mathf.Max(0f, tailHoldSeconds);
+            if (heldSeconds < highlightDelay)
+            {
+                return 0f;
+            }
+
+            if (tailHold <= highlightDelay)
+            {
+                return heldSeconds >= tailHold ? 1f : 0f;
+            }
+
+            return Mathf.Clamp01((heldSeconds - highlightDelay) / (tailHold - highlightDelay));
         }
 
         private void OnEnable()
@@ -285,8 +366,12 @@ namespace Mejnun.Game
             pointerStart = position;
             lastPosition = position;
             pressStartedAt = Time.unscaledTime;
+            activeLongPressSeconds = GameSettings.LongPressSeconds;
             dragging = false;
             longPressStarted = false;
+            tailHoldCompleted = false;
+            longPressStartedAt = 0f;
+            dragStartedHeldSeconds = 0f;
         }
 
         private void UpdatePointer(Vector2 position)
@@ -296,20 +381,40 @@ namespace Mejnun.Game
                 return;
             }
 
-            var delta = position - lastPosition;
+            var previousPosition = lastPosition;
+            var delta = position - previousPosition;
             lastPosition = position;
+            var heldSeconds = Time.unscaledTime - pressStartedAt;
             var distance = Vector2.Distance(pointerStart, position);
-            if (!longPressStarted && !dragging && distance < settings.DragThresholdPixels &&
-                Time.unscaledTime - pressStartedAt >= settings.LongPressSeconds)
+            if (!longPressStarted && !dragging && distance < GetLongPressSlopPixels() &&
+                heldSeconds >= activeLongPressSeconds)
             {
                 longPressStarted = true;
+                longPressStartedAt = Time.unscaledTime;
                 pendingTap = false;
                 Emit(PointerGestureKind.LongPress, position, delta, true, 1f);
             }
 
-            if (!dragging && distance >= settings.DragThresholdPixels)
+            var dragThreshold = longPressStarted ? GetLongPressSlopPixels() : GetDragThresholdPixels();
+            var willStartDrag = !dragging && distance >= dragThreshold;
+            if (longPressStarted && !dragging && !tailHoldCompleted)
+            {
+                var heldAfterLongPress = Time.unscaledTime - longPressStartedAt;
+                if (heldAfterLongPress >= TailHoldSeconds)
+                {
+                    tailHoldCompleted = true;
+                    Emit(PointerGestureKind.TailHold, position, delta, true, 1f);
+                }
+                else if (!willStartDrag)
+                {
+                    Emit(PointerGestureKind.HoldProgress, position, delta, true, 1f);
+                }
+            }
+
+            if (!dragging && distance >= dragThreshold)
             {
                 dragging = true;
+                dragStartedHeldSeconds = heldSeconds;
                 pendingTap = false;
                 Emit(PointerGestureKind.DragStarted, position, delta, longPressStarted, 1f);
             }
@@ -317,6 +422,20 @@ namespace Mejnun.Game
             {
                 Emit(PointerGestureKind.DragUpdated, position, delta, longPressStarted, 1f);
             }
+        }
+
+        private float GetDragThresholdPixels()
+        {
+            return pointerIsTouch
+                ? MillimetersToPixels(settings.TouchDragSlopMillimeters, Screen.dpi)
+                : settings.MouseDragThresholdPixels;
+        }
+
+        private float GetLongPressSlopPixels()
+        {
+            return pointerIsTouch
+                ? MillimetersToPixels(settings.TouchLongPressSlopMillimeters, Screen.dpi)
+                : settings.MouseDragThresholdPixels;
         }
 
         private void FinishPointer(Vector2 position)
@@ -342,6 +461,7 @@ namespace Mejnun.Game
             pointerDown = false;
             dragging = false;
             longPressStarted = false;
+            tailHoldCompleted = false;
             pointerIsTouch = false;
         }
 
@@ -356,6 +476,7 @@ namespace Mejnun.Game
             pointerDown = false;
             dragging = false;
             longPressStarted = false;
+            tailHoldCompleted = false;
             pointerIsTouch = false;
         }
 
@@ -385,7 +506,11 @@ namespace Mejnun.Game
 
         private void Emit(PointerGestureKind kind, Vector2 position, Vector2 delta, bool isLongPress, float scale)
         {
-            Gesture?.Invoke(new PointerGesture(kind, pointerStart, position, delta, isLongPress, scale));
+            var heldSeconds = dragging
+                ? dragStartedHeldSeconds
+                : pointerDown ? Time.unscaledTime - pressStartedAt : 0f;
+            Gesture?.Invoke(new PointerGesture(kind, pointerStart, position, delta, isLongPress, scale,
+                pointerIsTouch, heldSeconds));
         }
     }
 }

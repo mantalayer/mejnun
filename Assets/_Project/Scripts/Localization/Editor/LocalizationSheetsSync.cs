@@ -91,6 +91,7 @@ namespace Mejnun.Localization.Editor
 
         public static Result Sync(LocalizationPipelineSettings settings)
         {
+            CosmeticNameSync.SyncAll();
             var service = settings.SheetsServiceProvider.Service;
             var result = new Result();
             var deadline = DateTime.UtcNow.AddSeconds(settings.TranslationWaitSeconds);

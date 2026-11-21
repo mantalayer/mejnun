@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0f8532f6624d6e9257a48a740c2df1, type: 3}
+  m_Name: SettingsDefaults
+  m_EditorClassIdentifier: Mejnun.Game::Mejnun.Game.SettingsDefaults
+  ConfirmRevert: 1
+  ConfirmDraw: 0
+  ConfirmFix: 1
+  ConfirmLeave: 0
+  HintBoardMoves: 0
+  HintJiggle: 1
+  CardHoverHighlight: 1
+  ReducedMotion: 0
+  HapticsEnabled: 1
+  EasyOpeningDeal: 0
+  FourColourDeck: 0
+  LeftHanded: 0
+  BatterySaver: 0
+  HandArcAmount: 0.246
+  HandSpread: 0.5147
+  HandCardScale: 1.245
+  HandLift: 0.149
+  OpponentCardScale: 1
+  HideOpponentHandsMobile: 1
+  HideOpponentHandsDesktop: 0
+  EdgePanWidthMobile: 0.14
+  EdgePanWidthDesktop: 0.08
+  EdgePanSpeed: 1
+  LongPressSeconds: 0.15
+  ZoomSensitivity: 5
+  OverlapSets: 1
+  OrganicBoard: 1
+  BoardCardSpread: 0.99
+  CardMessiness: 0.251
+  UiScaleMobile: 1.5
+  UiScaleDesktop: 1
+  CpuSpeed: 3
+  ShowFastForward: 1
+  VolumeMaster: 1
+  VolumeMusic: 1
+  VolumeSfx: 1
+  VolumeVoice: 1
+  QuickMatchBotFill: 30

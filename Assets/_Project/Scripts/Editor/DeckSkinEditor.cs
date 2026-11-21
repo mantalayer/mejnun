@@ -34,6 +34,7 @@ namespace Mejnun.Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("blank"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("pixelArt"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("pixelsPerUnit"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("unlock"));
 
             var faces = serializedObject.FindProperty("faces");
             DrawFacesGrid(faces);

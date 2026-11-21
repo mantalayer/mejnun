@@ -2678,11 +2678,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957614
-    m_Localized: Hack Deck
+    m_Localized: Brilho Neon
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957615
-    m_Localized: "Cart\xF5es de Papel1 1"
+    m_Localized: Rabisco
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957616
@@ -2690,7 +2690,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957617
-    m_Localized: Sofu Grande
+    m_Localized: Sofu
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957619
@@ -4143,6 +4143,52 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282614
+  - m_Id: 500000000000000
+    m_Localized: "Atraso r\xE1pido na coleta"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 500000000000001
+    m_Localized: "Mantenha o dedo pressionado brevemente antes de selecionar uma
+      carta do tabuleiro; movimentos r\xE1pidos de arrastar percorrem o tabuleiro."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 500000000000002
+    m_Localized: '{0:0.00} s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 500000000000003
+    m_Localized: "Redefinir configura\xE7\xF5es"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 500000000000004
+    m_Localized: "Restaurar padr\xF5es de f\xE1brica"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 500000000000005
+    m_Localized: "Restaura as configura\xE7\xF5es para os valores padr\xE3o definidos
+      para um novo dispositivo. Seu idioma, apelido e progresso no tutorial ser\xE3o
+      mantidos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 638500138377216
+    m_Localized: "dura\xE7\xE3o da reten\xE7\xE3o de coleta"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 638500549419008
+    m_Localized: "\xC9 hora de segurar antes de pegar uma carta do tabuleiro. Continue
+      segurando para pegar o resto da cauda."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010777
+    m_Localized: velocidade de rolagem da borda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74274328010778
+    m_Localized: "Ajuste a velocidade de deslocamento do tabuleiro enquanto voc\xEA
+      arrasta um cart\xE3o para a borda da tela."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4223,3 +4269,4 @@ MonoBehaviour:
         - id: 377671954456576
         - id: 377671971233792
         - id: 410560075128833
+        - id: 500000000000002

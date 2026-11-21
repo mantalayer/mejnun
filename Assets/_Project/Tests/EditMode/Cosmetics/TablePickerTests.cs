@@ -50,12 +50,12 @@ namespace Mejnun.Cosmetics.Tests
         public void PickerRemembersOwnedPicksAndRejectsDuplicateSlots()
         {
             var freeSkins = FindFreeSkins();
-            progression.SetLastPicks(new[] { freeSkins[0].Id, freeSkins[0].Id }, "burgundy");
+            progression.SetLastPicks(new[] { freeSkins[0].Id, freeSkins[0].Id }, "green");
             picker.SetSetupRequest(SoloSetup());
 
             Assert.That(picker.GetDeckPick(0), Is.EqualTo(freeSkins[0].Id));
             Assert.That(picker.GetDeckPick(1), Is.Null);
-            Assert.That(picker.FeltPick, Is.EqualTo("burgundy"));
+            Assert.That(picker.FeltPick, Is.EqualTo("green"));
             Assert.That(picker.SelectDeck(1, freeSkins[0].Id), Is.False);
             Assert.That(picker.SelectDeck(1, freeSkins[1].Id), Is.True);
             Assert.That(picker.CanStart, Is.True);
@@ -84,12 +84,12 @@ namespace Mejnun.Cosmetics.Tests
             picker.SetSetupRequest(SoloSetup());
             Assert.That(picker.SelectDeck(0, freeSkins[0].Id), Is.True);
             Assert.That(picker.SelectDeck(1, freeSkins[1].Id), Is.True);
-            Assert.That(picker.SelectFelt("burgundy"), Is.True);
+            Assert.That(picker.SelectFelt("green"), Is.True);
 
             var request = picker.CreateMatchRequest();
 
             CollectionAssert.AreEqual(new[] { freeSkins[0].Id, freeSkins[1].Id }, request.DeckPicks);
-            CollectionAssert.AreEqual(new[] { "burgundy" }, request.FeltPool);
+            CollectionAssert.AreEqual(new[] { "green" }, request.FeltPool);
             CollectionAssert.AreEquivalent(progression.CreateUnlockEvaluator().OwnedFaceIds(), request.RandomFacePool);
             CollectionAssert.Contains(request.RandomFacePool, freeSkins[0].Id);
             Assert.That(request.Mode, Is.EqualTo(MatchMode.Solo));

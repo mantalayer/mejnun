@@ -10,11 +10,14 @@
             </ui:Label>
             <ui:Label name="dealer-question-label" class="flow-copy" />
             <ui:VisualElement name="dealer-seat-options" class="seat-options" />
-            <ui:Button name="random-dealer-button" class="flow-button primary-flow-button">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="flow.dealer.random" />
-                </Bindings>
-            </ui:Button>
+            <ui:VisualElement name="random-dealer-column" class="seat-choice-column">
+                <ui:VisualElement name="random-vote-marks" class="vote-marks" />
+                <ui:Button name="random-dealer-button" class="flow-button primary-flow-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="flow.dealer.random" />
+                    </Bindings>
+                </ui:Button>
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="handoff-screen" class="flow-screen handoff-screen">
             <ui:Label name="handoff-message" class="flow-title" />

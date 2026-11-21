@@ -205,6 +205,32 @@
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label">
                     <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_speed" />
+                    </Bindings>
+                </ui:Label>
+                <ui:Slider name="edge-pan-speed-slider" low-value="0.25" high-value="3">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_pan_speed.tooltip" />
+                    </Bindings>
+                </ui:Slider>
+                <ui:Label name="edge-pan-speed-value" class="setting-value" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.pickup_hold" />
+                    </Bindings>
+                </ui:Label>
+                <ui:Slider name="long-press-seconds-slider" low-value="0.1" high-value="0.8">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.pickup_hold.tooltip" />
+                    </Bindings>
+                </ui:Slider>
+                <ui:Label name="long-press-seconds-value" class="setting-value" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label">
+                    <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.raise_hand" />
                     </Bindings>
                 </ui:Label>
@@ -422,6 +448,18 @@
                     </Bindings>
                 </ui:DropdownField>
             </ui:VisualElement>
+
+            <ui:Label class="settings-section-title">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.reset_section" />
+                </Bindings>
+            </ui:Label>
+            <ui:Button name="settings-reset-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.reset_defaults" />
+                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.reset_defaults.tooltip" />
+                </Bindings>
+            </ui:Button>
 
             <ui:VisualElement name="account-settings-section">
                 <ui:Label class="settings-section-title">

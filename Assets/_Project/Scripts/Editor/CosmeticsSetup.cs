@@ -31,7 +31,7 @@ namespace Mejnun.Editor
                 throw new InvalidOperationException("Build the deck skin catalog before applying cosmetic unlocks.");
             }
 
-            ApplySkinUnlocks(deckCatalog);
+            RebuildSkinCatalog(deckCatalog);
 
             var greenTile = EnsureSprite("green_tile", 16, 16, GreenTile, TextureWrapMode.Repeat, Vector4.zero);
             var burgundyTile = EnsureSprite("burgundy_tile", 16, 16, BurgundyTile, TextureWrapMode.Repeat,
@@ -67,10 +67,8 @@ namespace Mejnun.Editor
             Debug.Log("Applied M6 cosmetic unlocks and generated the felt catalog.");
         }
 
-        private static void ApplySkinUnlocks(DeckSkinCatalog catalog)
+        private static void RebuildSkinCatalog(DeckSkinCatalog catalog)
         {
-            var requirements = BuildSkinRequirements();
-            var assigned = new HashSet<string>(StringComparer.Ordinal);
             var guids = AssetDatabase.FindAssets("t:DeckSkin", new[] { SkinFolder });
             var skinAssets = new List<DeckSkin>();
             for (var index = 0; index < guids.Length; index++)
@@ -82,22 +80,7 @@ namespace Mejnun.Editor
                     continue;
                 }
 
-                var assetName = Path.GetFileNameWithoutExtension(path);
-                var requirement = requirements.TryGetValue(assetName, out var unlock)
-                    ? unlock
-                    : UnlockRequirement.Free;
-                skin.ConfigureUnlock(requirement);
-                EditorUtility.SetDirty(skin);
-                assigned.Add(assetName);
                 skinAssets.Add(skin);
-            }
-
-            foreach (var expected in requirements.Keys)
-            {
-                if (!assigned.Contains(expected))
-                {
-                    throw new InvalidOperationException("Could not find deck skin asset " + expected + ".");
-                }
             }
 
             skinAssets.Sort((first, second) => string.Compare(first.Id, second.Id, StringComparison.Ordinal));
@@ -126,42 +109,6 @@ namespace Mejnun.Editor
 
             catalog.Configure(completeCatalog);
             EditorUtility.SetDirty(catalog);
-        }
-
-        private static Dictionary<string, UnlockRequirement> BuildSkinRequirements()
-        {
-            var requirements = new Dictionary<string, UnlockRequirement>(StringComparer.Ordinal)
-            {
-                { "Classic", UnlockRequirement.Free },
-                { "ClassicIvory", UnlockRequirement.Free },
-                { "PixelPastel", new UnlockRequirement(UnlockKind.Level, 2) },
-                { "card_pngs", new UnlockRequirement(UnlockKind.Level, 3) },
-                { "paper_cards1_1", new UnlockRequirement(UnlockKind.Level, 4) },
-                { "sofu_small", new UnlockRequirement(UnlockKind.Level, 5) },
-                { "sofu_medium", new UnlockRequirement(UnlockKind.Level, 6) },
-                { "sofu_large", new UnlockRequirement(UnlockKind.Level, 7) },
-                { "blueeyedrat_classic_light_1color_0", new UnlockRequirement(UnlockKind.Level, 8) },
-                { "blueeyedrat_classic_light_2color_0", new UnlockRequirement(UnlockKind.Level, 9) },
-                { "blueeyedrat_classic_light_2color_1", new UnlockRequirement(UnlockKind.Level, 10) },
-                { "blueeyedrat_classic_light_4color_0", new UnlockRequirement(UnlockKind.Level, 12) },
-                { "blueeyedrat_classic_light_4color_1", new UnlockRequirement(UnlockKind.Level, 14) },
-                { "blueeyedrat_classic_light_4color_2", new UnlockRequirement(UnlockKind.Level, 16) },
-                { "blueeyedrat_classic_sepia_1color_0", new UnlockRequirement(UnlockKind.Wins, 1) },
-                { "blueeyedrat_classic_sepia_2color_0", new UnlockRequirement(UnlockKind.Wins, 3) },
-                { "blueeyedrat_classic_sepia_2color_1", new UnlockRequirement(UnlockKind.Wins, 5) },
-                { "blueeyedrat_classic_dark_1color_0", new UnlockRequirement(UnlockKind.Wins, 8) },
-                { "blueeyedrat_classic_dark_2color_0", new UnlockRequirement(UnlockKind.Wins, 12) },
-                { "blueeyedrat_classic_contrast_2color_0", new UnlockRequirement(UnlockKind.Wins, 15) },
-                { "blueeyedrat_classic_contrast_2color_1", new UnlockRequirement(UnlockKind.Wins, 20) },
-                { "blueeyedrat_classic_contrast_4color_0", new UnlockRequirement(UnlockKind.Wins, 25) },
-                { "blueeyedrat_classic_contrast_4color_1", new UnlockRequirement(UnlockKind.Wins, 30) },
-                { "blueeyedrat_classic_contrast_4color_2", new UnlockRequirement(UnlockKind.Wins, 40) },
-                { "reigns", new UnlockRequirement(UnlockKind.Achievement,
-                    achievementId: AchievementIds.FirstMejnun) },
-                { "hack_deck", new UnlockRequirement(UnlockKind.Achievement,
-                    achievementId: AchievementIds.BeatHardBot) }
-            };
-            return requirements;
         }
 
         private static Sprite EnsureSprite(string name, int width, int height,

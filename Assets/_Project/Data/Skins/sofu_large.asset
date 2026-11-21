@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: sofu_large
   m_EditorClassIdentifier: Mejnun.Cosmetics::Mejnun.Cosmetics.DeckSkin
   id: sofu_large
-  displayName: Sofu Large
+  displayName: Sofu
+  artist: 
   faces:
   - {fileID: 21300000, guid: 18424ad5d78144ba78fa7ecf9d1d4ad7, type: 3}
   - {fileID: 21300000, guid: 291b2626edf904811a25dbd2e8fade7c, type: 3}
@@ -81,6 +82,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7b9345bbfbf8241a39d6196afc559b66, type: 3}
   blank: {fileID: 21300000, guid: 8099a76bcb2664efd932f94731f15ba0, type: 3}
   pixelArt: 0
+  fourColourInk: 1
   pixelsPerUnit: 100
   unlock:
     kind: 1

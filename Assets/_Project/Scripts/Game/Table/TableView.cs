@@ -105,6 +105,7 @@ namespace Mejnun.Game
         private bool hasHandAspect;
         private int handGapIndex = -1;
         private float handBottomInset;
+        private float edgePanBottomInset;
         private float boardTopInset;
         private float boardLeftInset;
         private float boardRightInset;
@@ -403,6 +404,7 @@ namespace Mejnun.Game
             }
 
             boardCleared = false;
+            tableCamera?.ReleaseFeltAnchor();
             handsCleared = false;
             boardRestorePending = false;
             boardCollecting = false;
@@ -441,7 +443,7 @@ namespace Mejnun.Game
             boardCollectFlights.Clear();
             boardStoredTargets.Clear();
             boardCleared = true;
-            tableCamera?.FitBoard();
+            tableCamera?.FitFeltAnchor();
             if (CurrentState == null)
             {
                 return 0f;
@@ -821,12 +823,27 @@ namespace Mejnun.Game
             }
         }
 
-        public void PanCamera(Vector2 screenDelta, Vector2 screenPosition)
+        public void BeginCameraPan()
+        {
+            tableCamera?.BeginPan();
+        }
+
+        public void PanCamera(Vector2 screenDelta, Vector2 screenPosition, bool trackForInertia = true)
         {
             if (tableCamera != null)
             {
-                tableCamera.Pan(screenDelta, screenPosition);
+                tableCamera.Pan(screenDelta, screenPosition, trackForInertia);
             }
+        }
+
+        public void ReleaseCameraPan()
+        {
+            tableCamera?.ReleasePan();
+        }
+
+        public void CancelCameraPan()
+        {
+            tableCamera?.CancelPanInertia();
         }
 
         public void SetDrawPileScreenPosition(Vector2 screenPosition)
@@ -2025,6 +2042,13 @@ namespace Mejnun.Game
 
             handBottomInset = inset;
             RefreshHandLayout();
+        }
+
+        public float EdgePanBottomInset => edgePanBottomInset;
+
+        public void SetEdgePanBottomInset(float screenFraction)
+        {
+            edgePanBottomInset = Mathf.Clamp01(screenFraction);
         }
 
         public void SetBoardInsets(float top, float left, float right)

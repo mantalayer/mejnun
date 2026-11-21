@@ -82,6 +82,7 @@ namespace Mejnun.Game.Tests
             var root = new VisualElement();
             var toggle = new Toggle { name = "hide-opponent-hands-toggle" };
             root.Add(toggle);
+            var document = AttachToRuntimePanel(root);
             var panel = new SettingsPanel();
 
             try
@@ -96,6 +97,7 @@ namespace Mejnun.Game.Tests
             finally
             {
                 panel.Dispose();
+                DestroyRuntimePanel(document);
                 if (hadSetting)
                 {
                     PlayerPrefs.SetInt(GameSettings.HideOpponentHandsKey, previousValue);
@@ -118,6 +120,7 @@ namespace Mejnun.Game.Tests
             var root = new VisualElement();
             var slider = new Slider { name = "edge-pan-width-slider", lowValue = 0f, highValue = 0.25f };
             root.Add(slider);
+            var document = AttachToRuntimePanel(root);
             var panel = new SettingsPanel();
 
             try
@@ -137,6 +140,7 @@ namespace Mejnun.Game.Tests
             finally
             {
                 panel.Dispose();
+                DestroyRuntimePanel(document);
                 if (hadSetting)
                 {
                     PlayerPrefs.SetFloat(GameSettings.EdgePanWidthKey, previousValue);
@@ -147,6 +151,117 @@ namespace Mejnun.Game.Tests
                 }
 
                 PlayerPrefs.Save();
+            }
+        }
+
+        [Test]
+        public void LongPressSliderUsesScriptableDefaultAndClampsSetting()
+        {
+            var previousDefaults = SettingsDefaults.Active;
+            var defaults = ScriptableObject.CreateInstance<SettingsDefaults>();
+            defaults.LongPressSeconds = 0.22f;
+            var hadSetting = PlayerPrefs.HasKey(GameSettings.LongPressSecondsKey);
+            var previousValue = PlayerPrefs.GetFloat(GameSettings.LongPressSecondsKey, 0.35f);
+            var root = new VisualElement();
+            var slider = new Slider { name = "long-press-seconds-slider", lowValue = 0.1f, highValue = 0.8f };
+            root.Add(slider);
+            var document = AttachToRuntimePanel(root);
+            var panel = new SettingsPanel();
+
+            try
+            {
+                SettingsDefaults.Active = defaults;
+                PlayerPrefs.DeleteKey(GameSettings.LongPressSecondsKey);
+                panel.Initialize(root);
+                Assert.That(slider.value, Is.EqualTo(0.22f).Within(0.001f));
+
+                slider.value = 0.25f;
+                Assert.That(GameSettings.LongPressSeconds, Is.EqualTo(0.25f).Within(0.001f));
+
+                GameSettings.LongPressSeconds = 0f;
+                Assert.That(GameSettings.LongPressSeconds, Is.EqualTo(0.1f));
+                GameSettings.LongPressSeconds = 1f;
+                Assert.That(GameSettings.LongPressSeconds, Is.EqualTo(0.8f));
+            }
+            finally
+            {
+                panel.Dispose();
+                DestroyRuntimePanel(document);
+                RestoreFloatSetting(GameSettings.LongPressSecondsKey, hadSetting, previousValue);
+                SettingsDefaults.Active = previousDefaults;
+                Object.DestroyImmediate(defaults);
+            }
+        }
+
+        [Test]
+        public void ResetButtonRestoresScriptableDefaultsAndKeepsPersonalSettings()
+        {
+            const string languageKey = "settings.language";
+            const string nicknameKey = "settings.online.nickname";
+            const string tutorialKey = "settings.tutorial.completed";
+            var previousDefaults = SettingsDefaults.Active;
+            var defaults = ScriptableObject.CreateInstance<SettingsDefaults>();
+            defaults.ConfirmRevert = false;
+            defaults.EdgePanWidthMobile = 0.17f;
+            defaults.EdgePanWidthDesktop = 0.17f;
+            defaults.LongPressSeconds = 0.23f;
+            var hadConfirmRevert = PlayerPrefs.HasKey("settings.confirm.revert");
+            var previousConfirmRevert = PlayerPrefs.GetInt("settings.confirm.revert");
+            var hadEdgePan = PlayerPrefs.HasKey(GameSettings.EdgePanWidthKey);
+            var previousEdgePan = PlayerPrefs.GetFloat(GameSettings.EdgePanWidthKey, 0.08f);
+            var hadLongPress = PlayerPrefs.HasKey(GameSettings.LongPressSecondsKey);
+            var previousLongPress = PlayerPrefs.GetFloat(GameSettings.LongPressSecondsKey, 0.35f);
+            var hadLanguage = PlayerPrefs.HasKey(languageKey);
+            var previousLanguage = PlayerPrefs.GetString(languageKey);
+            var hadNickname = PlayerPrefs.HasKey(nicknameKey);
+            var previousNickname = PlayerPrefs.GetString(nicknameKey);
+            var hadTutorial = PlayerPrefs.HasKey(tutorialKey);
+            var previousTutorial = PlayerPrefs.GetInt(tutorialKey);
+            var root = new VisualElement();
+            var toggle = new Toggle { name = "confirm-revert-toggle" };
+            var slider = new Slider { name = "long-press-seconds-slider", lowValue = 0.1f, highValue = 0.8f };
+            var resetButton = new Button { name = "settings-reset-button" };
+            root.Add(toggle);
+            root.Add(slider);
+            root.Add(resetButton);
+            var document = AttachToRuntimePanel(root);
+            var panel = new SettingsPanel();
+
+            try
+            {
+                SettingsDefaults.Active = defaults;
+                panel.Initialize(root);
+                GameSettings.ConfirmRevert = true;
+                GameSettings.EdgePanWidth = 0.2f;
+                GameSettings.LongPressSeconds = 0.3f;
+                GameSettings.Language = "pt-BR";
+                GameSettings.OnlineNickname = "Player";
+                GameSettings.TutorialCompleted = true;
+
+                panel.ResetToDefaults();
+
+                Assert.That(GameSettings.ConfirmRevert, Is.False);
+                Assert.That(GameSettings.EdgePanWidth, Is.EqualTo(0.17f).Within(0.001f));
+                Assert.That(GameSettings.LongPressSeconds, Is.EqualTo(0.23f).Within(0.001f));
+                Assert.That(toggle.value, Is.False);
+                Assert.That(slider.value, Is.EqualTo(0.23f).Within(0.001f));
+                Assert.That(GameSettings.Language, Is.EqualTo("pt-BR"));
+                Assert.That(GameSettings.OnlineNickname, Is.EqualTo("Player"));
+                Assert.That(GameSettings.TutorialCompleted, Is.True);
+            }
+            finally
+            {
+                panel.Dispose();
+                DestroyRuntimePanel(document);
+                RestoreIntSetting("settings.confirm.revert", hadConfirmRevert, previousConfirmRevert);
+                RestoreFloatSetting(GameSettings.EdgePanWidthKey, hadEdgePan, previousEdgePan);
+                RestoreFloatSetting(GameSettings.LongPressSecondsKey, hadLongPress, previousLongPress);
+                RestoreStringSetting(languageKey, hadLanguage, previousLanguage);
+                RestoreStringSetting(nicknameKey, hadNickname, previousNickname);
+                RestoreIntSetting(tutorialKey, hadTutorial, previousTutorial);
+                PlayerPrefs.Save();
+                SettingsDefaults.Active = previousDefaults;
+                Object.DestroyImmediate(defaults);
             }
         }
 
@@ -174,12 +289,12 @@ namespace Mejnun.Game.Tests
                 panel.Initialize(root);
                 panel.ShowPage(selectedPage);
 
-                Assert.That(root.Q<VisualElement>("settings-page-" + selectedPage).style.display,
+                Assert.That(root.Q<VisualElement>("settings-page-" + selectedPage).style.display.value,
                     Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(gameplayPage.style.display, Is.EqualTo(DisplayStyle.None));
-                Assert.That(rulesPage.style.display,
+                Assert.That(gameplayPage.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(rulesPage.style.display.value,
                     Is.EqualTo(selectedPage == "rules" ? DisplayStyle.Flex : DisplayStyle.None));
-                Assert.That(creditsPage.style.display,
+                Assert.That(creditsPage.style.display.value,
                     Is.EqualTo(selectedPage == "credits" ? DisplayStyle.Flex : DisplayStyle.None));
                 Assert.That(root.Q<Button>("settings-tab-" + selectedPage).ClassListContains("selected-tab"),
                     Is.True);
@@ -248,6 +363,58 @@ namespace Mejnun.Game.Tests
             slider = new Slider { name = "volume-master-slider" };
             root.Add(slider);
             return root;
+        }
+
+        private static UIDocument AttachToRuntimePanel(VisualElement root)
+        {
+            var gameObject = new GameObject("Settings Panel Test Document");
+            var document = gameObject.AddComponent<UIDocument>();
+            document.panelSettings = ScriptableObject.CreateInstance<PanelSettings>();
+            document.rootVisualElement.Add(root);
+            return document;
+        }
+
+        private static void DestroyRuntimePanel(UIDocument document)
+        {
+            var panelSettings = document.panelSettings;
+            Object.DestroyImmediate(document.gameObject);
+            Object.DestroyImmediate(panelSettings);
+        }
+
+        private static void RestoreFloatSetting(string key, bool hadSetting, float value)
+        {
+            if (hadSetting)
+            {
+                PlayerPrefs.SetFloat(key, value);
+            }
+            else
+            {
+                PlayerPrefs.DeleteKey(key);
+            }
+        }
+
+        private static void RestoreIntSetting(string key, bool hadSetting, int value)
+        {
+            if (hadSetting)
+            {
+                PlayerPrefs.SetInt(key, value);
+            }
+            else
+            {
+                PlayerPrefs.DeleteKey(key);
+            }
+        }
+
+        private static void RestoreStringSetting(string key, bool hadSetting, string value)
+        {
+            if (hadSetting)
+            {
+                PlayerPrefs.SetString(key, value);
+            }
+            else
+            {
+                PlayerPrefs.DeleteKey(key);
+            }
         }
 
         private sealed class RecordingAudioService : IAudioService

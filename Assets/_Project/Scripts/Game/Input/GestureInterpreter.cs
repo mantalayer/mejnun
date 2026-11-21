@@ -112,11 +112,33 @@ namespace Mejnun.Game
         public bool ReorderTargetIsSlot { get; internal set; }
     }
 
+    public readonly struct SelectionSnapshot
+    {
+        private readonly byte[] cardIds;
+
+        internal SelectionSnapshot(IReadOnlyList<byte> selectedCardIds, int selectedMeldId)
+        {
+            cardIds = new byte[selectedCardIds.Count];
+            for (var index = 0; index < selectedCardIds.Count; index++)
+            {
+                cardIds[index] = selectedCardIds[index];
+            }
+
+            BoardMeldId = selectedMeldId;
+        }
+
+        public IReadOnlyList<byte> CardIds => cardIds ?? new byte[0];
+        public int BoardMeldId { get; }
+    }
+
     public sealed class GestureInterpreter
     {
         private readonly List<byte> selectedCardIds = new List<byte>(Card.CardsPerDeck);
+        private int selectedMeldId = -1;
 
         public IReadOnlyList<byte> SelectedCardIds => selectedCardIds;
+        public int SelectedBoardMeldId => selectedMeldId;
+        public bool IsBoardSelection => selectedMeldId >= 0;
 
         public GestureResult Interpret(GestureInput input, GameState state, TurnSession turn)
         {
@@ -186,10 +208,17 @@ namespace Mejnun.Game
                 return false;
             }
 
+            var switchedFromBoard = IsBoardSelection;
+            if (switchedFromBoard)
+            {
+                selectedCardIds.Clear();
+                selectedMeldId = -1;
+            }
+
             var firstIndex = anchorIndex < currentIndex ? anchorIndex : currentIndex;
             var lastIndex = anchorIndex > currentIndex ? anchorIndex : currentIndex;
             var rangeCount = lastIndex - firstIndex + 1;
-            var changed = selectedCardIds.Count != rangeCount;
+            var changed = switchedFromBoard || selectedCardIds.Count != rangeCount;
             for (var index = 0; !changed && index < rangeCount; index++)
             {
                 changed = selectedCardIds[index] != orderedHandIds[firstIndex + index];
@@ -204,6 +233,71 @@ namespace Mejnun.Game
             for (var index = firstIndex; index <= lastIndex; index++)
             {
                 selectedCardIds.Add(orderedHandIds[index]);
+            }
+
+            return true;
+        }
+
+        public byte[] GetSelectedBoardCardIds(GestureHit source, GameState state)
+        {
+            if (!IsBoardSelection || source.Kind != GestureHitKind.BoardCard || source.MeldId != selectedMeldId ||
+                state == null)
+            {
+                return new byte[0];
+            }
+
+            var meld = FindMeld(state.Board, selectedMeldId);
+            if (meld == null)
+            {
+                return new byte[0];
+            }
+
+            var ids = new List<byte>(selectedCardIds.Count);
+            for (var index = 0; index < meld.Cards.Count; index++)
+            {
+                var cardId = meld.Cards[index].Id;
+                if (selectedCardIds.Contains(cardId))
+                {
+                    ids.Add(cardId);
+                }
+            }
+
+            return ids.ToArray();
+        }
+
+        public SelectionSnapshot CaptureSelection()
+        {
+            return new SelectionSnapshot(selectedCardIds, selectedMeldId);
+        }
+
+        public void RestoreSelection(SelectionSnapshot snapshot)
+        {
+            selectedCardIds.Clear();
+            for (var index = 0; index < snapshot.CardIds.Count; index++)
+            {
+                selectedCardIds.Add(snapshot.CardIds[index]);
+            }
+
+            selectedMeldId = selectedCardIds.Count > 0 ? snapshot.BoardMeldId : -1;
+        }
+
+        public bool ToggleBoardCardSelection(GestureHit hit)
+        {
+            if (hit.Kind != GestureHitKind.BoardCard)
+            {
+                return false;
+            }
+
+            if (!IsBoardSelection || selectedMeldId != hit.MeldId)
+            {
+                selectedCardIds.Clear();
+                selectedMeldId = hit.MeldId;
+            }
+
+            ToggleSelectedCard(hit.CardId);
+            if (selectedCardIds.Count == 0)
+            {
+                selectedMeldId = -1;
             }
 
             return true;
@@ -236,12 +330,14 @@ namespace Mejnun.Game
             if (result != null && succeeded && result.ClearSelectionOnSuccess && selectedCardIds.Count > 0)
             {
                 selectedCardIds.Clear();
+                selectedMeldId = -1;
             }
         }
 
         public void ClearSelection()
         {
             selectedCardIds.Clear();
+            selectedMeldId = -1;
         }
 
         private void InterpretTap(GestureInput input, GameState state, TurnSession turn, GestureResult result)
@@ -254,12 +350,27 @@ namespace Mejnun.Game
             }
 
             var targetHit = input.Target.Kind == GestureHitKind.None ? input.Source : input.Target;
+            if (targetHit.Kind == GestureHitKind.BoardCard &&
+                (selectedCardIds.Count == 0 || IsBoardSelection))
+            {
+                ToggleBoardCardSelection(targetHit);
+                result.SelectionChanged = true;
+                return;
+            }
+
             if (selectedCardIds.Count == 0 || !TryCreateTarget(targetHit, state, turn, out var target))
             {
                 return;
             }
 
-            AddMove(result.Batch, state.CurrentSeat, CopySelectedCardIds(), target);
+            var selectedIds = CopySelectedCardIds();
+            if (IsBoardSelection && target.Kind == TargetKind.Hand && !AllFromStartHand(turn, selectedIds))
+            {
+                result.Denied = true;
+                return;
+            }
+
+            AddMove(result.Batch, state.CurrentSeat, selectedIds, target);
             result.ClearSelectionOnSuccess = true;
         }
 
@@ -519,6 +630,21 @@ namespace Mejnun.Game
             }
 
             var classification = MeldValidator.Classify(meld.Cards);
+            var selectedBoardIds = GetSelectedBoardCardIds(input.Source, state);
+            if (selectedBoardIds.Length > 1 && IsSelected(input.Source.CardId))
+            {
+                if (target.Kind == TargetKind.Hand && !AllFromStartHand(turn, selectedBoardIds))
+                {
+                    result.Denied = true;
+                    return;
+                }
+
+                AddMove(result.Batch, seat, selectedBoardIds,
+                    ClampSameMeldTarget(target, meld, selectedBoardIds.Length));
+                result.ClearSelectionOnSuccess = true;
+                return;
+            }
+
             if (input.Type == GestureType.LongPressDrag)
             {
                 var ids = GetLongPressCardIds(meld, input.Source.Index, classification.Kind);
@@ -531,7 +657,7 @@ namespace Mejnun.Game
                     }
                 }
 
-                AddMove(result.Batch, seat, ids, target);
+                AddMove(result.Batch, seat, ids, ClampSameMeldTarget(target, meld, ids.Length));
                 result.ClearSelectionOnSuccess = true;
                 return;
             }
@@ -542,13 +668,15 @@ namespace Mejnun.Game
                 return;
             }
 
-            if ((classification.Kind == MeldKind.StraightLow || classification.Kind == MeldKind.StraightHigh) &&
+            var targetIsSourceMeld = target.Kind == TargetKind.Meld && target.MeldId == meld.Id;
+            if (!targetIsSourceMeld &&
+                (classification.Kind == MeldKind.StraightLow || classification.Kind == MeldKind.StraightHigh) &&
                 input.Source.Index > 0 && input.Source.Index < meld.Cards.Count - 1)
             {
                 result.Batch.Add(GameCommand.SplitMeld(seat, meld.Id, input.Source.Index));
             }
 
-            AddMove(result.Batch, seat, new[] { input.Source.CardId }, target);
+            AddMove(result.Batch, seat, new[] { input.Source.CardId }, ClampSameMeldTarget(target, meld, 1));
             result.ClearSelectionOnSuccess = true;
         }
 
@@ -641,6 +769,17 @@ namespace Mejnun.Game
             }
         }
 
+        private static CardTarget ClampSameMeldTarget(CardTarget target, Meld sourceMeld, int movedCount)
+        {
+            if (target.Kind != TargetKind.Meld || target.MeldId != sourceMeld.Id)
+            {
+                return target;
+            }
+
+            var maxIndex = sourceMeld.Cards.Count - movedCount;
+            return target.Index > maxIndex ? CardTarget.Meld(target.MeldId, maxIndex) : target;
+        }
+
         private static Meld FindMeld(IReadOnlyList<Meld> melds, int meldId)
         {
             for (var index = 0; index < melds.Count; index++)
@@ -717,6 +856,17 @@ namespace Mejnun.Game
         }
 
         public void ToggleCardSelection(byte cardId)
+        {
+            if (IsBoardSelection)
+            {
+                selectedCardIds.Clear();
+                selectedMeldId = -1;
+            }
+
+            ToggleSelectedCard(cardId);
+        }
+
+        private void ToggleSelectedCard(byte cardId)
         {
             var index = selectedCardIds.IndexOf(cardId);
             if (index >= 0)

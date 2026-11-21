@@ -89,6 +89,7 @@ namespace Mejnun.Net.Unity
             {
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
+                client.FirstPlayerVoteRequested -= SendToServer;
                 client = null;
             }
 
@@ -118,6 +119,7 @@ namespace Mejnun.Net.Unity
             {
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
+                client.FirstPlayerVoteRequested -= SendToServer;
             }
 
             Configure(manager, ugsSession, authenticationId, displayName);
@@ -125,6 +127,7 @@ namespace Mejnun.Net.Unity
             client = clientSession ?? throw new ArgumentNullException(nameof(clientSession));
             client.CommandsReady += SendToServer;
             client.RematchRequested += SendToServer;
+            client.FirstPlayerVoteRequested += SendToServer;
             EnsureRegistered();
             SendJoinIfConnected();
         }
@@ -155,6 +158,7 @@ namespace Mejnun.Net.Unity
             {
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
+                client.FirstPlayerVoteRequested -= SendToServer;
             }
         }
 
@@ -295,6 +299,11 @@ namespace Mejnun.Net.Unity
             SendToServer((NetMessage)message);
         }
 
+        private void SendToServer(FirstPlayerVoteMessage message)
+        {
+            SendToServer((NetMessage)message);
+        }
+
         private void SendToServer(NetMessage message)
         {
             if (networkManager == null || !networkManager.IsClient || networkManager.IsHost)
@@ -431,6 +440,13 @@ namespace Mejnun.Net.Unity
                 authenticationByClient.TryGetValue(senderClientId, out authenticationId))
             {
                 host.RequestRematch(authenticationId);
+                return;
+            }
+
+            if (message is FirstPlayerVoteMessage vote &&
+                authenticationByClient.TryGetValue(senderClientId, out authenticationId))
+            {
+                host.CastFirstPlayerVote(authenticationId, vote.Choice);
                 return;
             }
 

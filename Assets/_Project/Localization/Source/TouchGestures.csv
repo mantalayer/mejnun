@@ -1,0 +1,7 @@
+table,key,en,comment
+UI,settings.table.pickup_hold,Pickup hold duration,Label for how long a board card must be held before it is picked up.
+UI,settings.table.pickup_hold.tooltip,Time to hold before one board card is picked up. Keep holding to pick up the rest of the tail.,Explains the single-card hold and the longer tail pickup hold.
+UI,settings.value.seconds,"{0:0.00} s",Seconds shown beside the pickup hold duration slider; {0} is the selected duration.
+UI,settings.general.reset_section,Reset settings,Settings section heading for restoring configured defaults.
+UI,settings.general.reset_defaults,Reset to defaults,Button that restores settings from the SettingsDefaults asset.
+UI,settings.general.reset_defaults.tooltip,"Restore settings to the configured defaults for a new device. Your language, nickname, and tutorial progress are kept.",Explains which settings are reset and which personal settings remain.

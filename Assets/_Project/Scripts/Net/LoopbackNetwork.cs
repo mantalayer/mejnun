@@ -29,6 +29,7 @@ namespace Mejnun.Net
                 var capturedId = authenticationId;
                 client.CommandsReady += message => host.SubmitCommands(capturedId, message.Commands);
                 client.RematchRequested += _ => host.RequestRematch(capturedId);
+                client.FirstPlayerVoteRequested += message => host.CastFirstPlayerVote(capturedId, message.Choice);
                 clients.Add(authenticationId, client);
             }
 

@@ -7,6 +7,11 @@ namespace Mejnun.Game
     public sealed class TableCamera : MonoBehaviour
     {
         private const float FitDuration = 0.4f;
+        private const float PanInertiaTimeConstant = 0.12f;
+        private const float PanVelocitySmoothingTime = 0.04f;
+        private const float MaxPanInertiaSpeed = 8f;
+        private const float MinPanInertiaSpeed = 0.03f;
+        private const float RecentPanMovementWindow = 0.08f;
 
         [SerializeField] private float minOrthographicSize = 1.5f;
         [SerializeField] private float maxOrthographicSize = 20f;
@@ -34,6 +39,13 @@ namespace Mejnun.Game
         private bool fitting;
         private bool hasFittedBounds;
         private bool hasFeltAnchor;
+        private bool holdFeltAnchor;
+        private Vector3 panVelocity;
+        private float lastPanMovementTime;
+        private bool hasPanMovement;
+        private bool panTracking;
+        private bool panInertiaActive;
+        private bool mousePanActive;
 
         public Camera Camera => tableCamera;
         public float BottomInsetFraction => bottomInsetFraction;
@@ -74,6 +86,9 @@ namespace Mejnun.Game
             {
                 pointerRouter.Gesture -= HandlePointerGesture;
             }
+
+            CancelPanInertia();
+            mousePanActive = false;
         }
 
         private void Update()
@@ -83,30 +98,62 @@ namespace Mejnun.Game
 
         private void LateUpdate()
         {
-            if (!fitting || tableCamera == null)
+            if (tableCamera == null)
+            {
+                return;
+            }
+
+            if (fitting)
+            {
+                if (GameSettings.ReducedMotion)
+                {
+                    ApplyFitTarget();
+                }
+                else
+                {
+                    var progress = Mathf.Clamp01((Time.unscaledTime - fitStartTime) / FitDuration);
+                    if (progress >= 1f)
+                    {
+                        ApplyFitTarget();
+                    }
+                    else
+                    {
+                        var remaining = 1f - progress;
+                        var eased = 1f - remaining * remaining * remaining;
+                        FrameRateGovernor.NotifyActivity();
+                        tableCamera.transform.position =
+                            Vector3.LerpUnclamped(fitStartPosition, fitTargetPosition, eased);
+                        tableCamera.orthographicSize = Mathf.LerpUnclamped(fitStartSize, fitTargetSize, eased);
+                        baseOrthographicSize = tableCamera.orthographicSize;
+                    }
+                }
+            }
+
+            if (!panInertiaActive)
             {
                 return;
             }
 
             if (GameSettings.ReducedMotion)
             {
-                ApplyFitTarget();
+                CancelPanInertia();
                 return;
             }
 
-            var progress = Mathf.Clamp01((Time.unscaledTime - fitStartTime) / FitDuration);
-            if (progress >= 1f)
+            var deltaTime = Time.unscaledDeltaTime;
+            if (deltaTime <= 0f)
             {
-                ApplyFitTarget();
                 return;
             }
 
-            var remaining = 1f - progress;
-            var eased = 1f - remaining * remaining * remaining;
+            tableCamera.transform.position += panVelocity * deltaTime;
             FrameRateGovernor.NotifyActivity();
-            tableCamera.transform.position = Vector3.LerpUnclamped(fitStartPosition, fitTargetPosition, eased);
-            tableCamera.orthographicSize = Mathf.LerpUnclamped(fitStartSize, fitTargetSize, eased);
-            baseOrthographicSize = tableCamera.orthographicSize;
+            panVelocity *= Mathf.Exp(-deltaTime / PanInertiaTimeConstant);
+            if (panVelocity.sqrMagnitude <= MinPanInertiaSpeed * MinPanInertiaSpeed)
+            {
+                CancelPanInertia();
+                return;
+            }
         }
 
         public void SetBoardBounds(Bounds bounds)
@@ -118,7 +165,7 @@ namespace Mejnun.Game
 
         public void AutoFit(Bounds bounds)
         {
-            if (!manuallyAdjusted)
+            if (!holdFeltAnchor && !manuallyAdjusted)
             {
                 FitBounds(bounds, fitPadding, false);
             }
@@ -173,14 +220,52 @@ namespace Mejnun.Game
 
         public void FitBoard()
         {
-            if (hasBoardBounds)
+            if (!holdFeltAnchor && hasBoardBounds)
             {
                 FitBounds(boardBounds, fitPadding, true);
             }
         }
 
+        public void FitFeltAnchor()
+        {
+            holdFeltAnchor = true;
+            CancelPanInertia();
+            if (tableCamera == null)
+            {
+                tableCamera = GetComponent<Camera>();
+            }
+
+            tableCamera.orthographic = true;
+            var animate = Application.isPlaying && hasFittedBounds && !GameSettings.ReducedMotion;
+            var targetChanged = !fitting ||
+                                Vector3.SqrMagnitude(fitTargetPosition - feltAnchorPosition) > 0.000001f ||
+                                Mathf.Abs(fitTargetSize - feltAnchorSize) > 0.0001f;
+            if (animate && targetChanged)
+            {
+                fitStartPosition = tableCamera.transform.position;
+                fitStartSize = tableCamera.orthographicSize;
+                fitStartTime = Time.unscaledTime;
+            }
+
+            fitTargetPosition = feltAnchorPosition;
+            fitTargetSize = feltAnchorSize;
+            fitting = animate;
+            manuallyAdjusted = false;
+            if (!fitting)
+            {
+                ApplyFitTarget();
+            }
+        }
+
+        public void ReleaseFeltAnchor()
+        {
+            holdFeltAnchor = false;
+            FitBoard();
+        }
+
         public void FitBounds(Bounds bounds, float padding = 1.1f, bool resetManualAdjustment = true)
         {
+            CancelPanInertia();
             if (tableCamera == null)
             {
                 tableCamera = GetComponent<Camera>();
@@ -230,12 +315,41 @@ namespace Mejnun.Game
 
         public void Pan(Vector2 screenDelta)
         {
-            PanByScreenDelta(screenDelta, true);
+            PanByScreenDelta(screenDelta, true, true);
         }
 
-        public void Pan(Vector2 screenDelta, Vector2 screenPosition)
+        public void Pan(Vector2 screenDelta, Vector2 screenPosition, bool trackForInertia = true)
         {
-            PanByScreenDelta(screenDelta, screenPosition, true);
+            PanByScreenDelta(screenDelta, screenPosition, true, trackForInertia);
+        }
+
+        public void BeginPan()
+        {
+            CancelPanInertia();
+            panTracking = true;
+        }
+
+        public void ReleasePan()
+        {
+            var canCoast = panTracking && hasPanMovement && !GameSettings.ReducedMotion &&
+                           Time.unscaledTime - lastPanMovementTime < RecentPanMovementWindow &&
+                           panVelocity.sqrMagnitude > MinPanInertiaSpeed * MinPanInertiaSpeed;
+            panTracking = false;
+            hasPanMovement = false;
+            panInertiaActive = canCoast;
+            if (!canCoast)
+            {
+                panVelocity = Vector3.zero;
+            }
+        }
+
+        public void CancelPanInertia()
+        {
+            panVelocity = Vector3.zero;
+            lastPanMovementTime = 0f;
+            hasPanMovement = false;
+            panTracking = false;
+            panInertiaActive = false;
         }
 
         public Vector3 SnapWorldPosition(Vector3 position, float pixelsPerUnit)
@@ -264,6 +378,12 @@ namespace Mejnun.Game
             var mouse = Mouse.current;
             if (mouse == null)
             {
+                if (mousePanActive)
+                {
+                    CancelPanInertia();
+                    mousePanActive = false;
+                }
+
                 return;
             }
 
@@ -276,9 +396,21 @@ namespace Mejnun.Game
                 ZoomAtScreenPoint(factor, pointer, true);
             }
 
-            if (mouse.rightButton.isPressed || mouse.middleButton.isPressed)
+            var isPanning = mouse.rightButton.isPressed || mouse.middleButton.isPressed;
+            if (isPanning)
             {
-                PanByScreenDelta(mouse.delta.ReadValue(), pointer, true);
+                if (!mousePanActive)
+                {
+                    BeginPan();
+                    mousePanActive = true;
+                }
+
+                PanByScreenDelta(mouse.delta.ReadValue(), pointer, true, true);
+            }
+            else if (mousePanActive)
+            {
+                ReleasePan();
+                mousePanActive = false;
             }
         }
 
@@ -291,6 +423,7 @@ namespace Mejnun.Game
 
             if (markManual)
             {
+                CancelPanInertia();
                 FrameRateGovernor.NotifyActivity();
                 fitting = false;
             }
@@ -306,16 +439,17 @@ namespace Mejnun.Game
             }
         }
 
-        private void PanByScreenDelta(Vector2 screenDelta, bool markManual)
+        private void PanByScreenDelta(Vector2 screenDelta, bool markManual, bool trackForInertia)
         {
             var mouse = Mouse.current;
             var pointer = mouse != null
                 ? mouse.position.ReadValue()
                 : new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            PanByScreenDelta(screenDelta, pointer, markManual);
+            PanByScreenDelta(screenDelta, pointer, markManual, trackForInertia);
         }
 
-        private void PanByScreenDelta(Vector2 screenDelta, Vector2 pointer, bool markManual)
+        private void PanByScreenDelta(Vector2 screenDelta, Vector2 pointer, bool markManual,
+            bool trackForInertia)
         {
             if (screenDelta.sqrMagnitude <= 0.001f)
             {
@@ -324,13 +458,34 @@ namespace Mejnun.Game
 
             if (markManual)
             {
+                if (!trackForInertia)
+                {
+                    CancelPanInertia();
+                }
+
                 FrameRateGovernor.NotifyActivity();
                 fitting = false;
             }
 
             var current = ScreenToWorld(pointer);
             var previous = ScreenToWorld(pointer - screenDelta);
-            tableCamera.transform.position += previous - current;
+            var worldDelta = previous - current;
+            tableCamera.transform.position += worldDelta;
+            if (trackForInertia)
+            {
+                if (!panTracking)
+                {
+                    BeginPan();
+                }
+
+                var deltaTime = Mathf.Max(Time.unscaledDeltaTime, 0.001f);
+                var smoothing = 1f - Mathf.Exp(-deltaTime / PanVelocitySmoothingTime);
+                var sampledVelocity = worldDelta / deltaTime;
+                panVelocity = Vector3.ClampMagnitude(
+                    Vector3.Lerp(panVelocity, sampledVelocity, smoothing), MaxPanInertiaSpeed);
+                lastPanMovementTime = Time.unscaledTime;
+                hasPanMovement = true;
+            }
             if (markManual)
             {
                 manuallyAdjusted = true;

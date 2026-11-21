@@ -22,6 +22,11 @@ namespace Mejnun.Net
         private bool[] rematchVotes;
         private bool isRematchPending;
         private int? pendingRematchFirstPlayer;
+        private bool firstPlayerVoteOpen;
+        private string firstPlayerVoteQuestionKey = string.Empty;
+        private bool[] firstPlayerVoteCandidates;
+        private int[] firstPlayerVotes;
+        private readonly Random firstPlayerVoteRandom = new Random();
         private double turnElapsed;
         private double botElapsed;
 
@@ -55,6 +60,8 @@ namespace Mejnun.Net
         public bool IsPaused => PauseReason != Mejnun.Net.PauseReason.None;
         public bool IsRematchPending => isRematchPending;
         public int RematchReadyCount => CountRematchVotes();
+        public bool IsFirstPlayerVoteOpen => firstPlayerVoteOpen;
+        public Func<string> QuestionKeyProvider { get; set; }
         public SeatRoster Roster => roster;
         public ISnapshotStore SnapshotStore => snapshotStore;
         public event Action<string, NetMessage> MessageSent;
@@ -63,6 +70,7 @@ namespace Mejnun.Net
         public event Action<int> SeatExpired;
         public event Action<PauseReason> PauseReasonChanged;
         public event Action<RematchStatusMessage> RematchStatusChanged;
+        public event Action<FirstPlayerVoteStatusMessage> FirstPlayerVoteChanged;
 
         public bool AreAllSeatsConnected
         {
@@ -122,8 +130,83 @@ namespace Mejnun.Net
                 Send(authenticationId, CreateRematchStatus());
             }
 
+            if (firstPlayerVoteOpen)
+            {
+                Send(authenticationId, CreateFirstPlayerVoteStatus());
+            }
+
             TryStartRematch();
             return seat;
+        }
+
+        public bool BeginFirstPlayerVote(string questionKey)
+        {
+            if (Game.State.Phase != GamePhase.ChoosingDealer || IsRematchPending)
+            {
+                return false;
+            }
+
+            if (firstPlayerVoteOpen)
+            {
+                return true;
+            }
+
+            firstPlayerVoteCandidates = new bool[roster.SeatCount];
+            firstPlayerVotes = new int[roster.SeatCount];
+            var candidateCount = 0;
+            var soleCandidate = -1;
+            for (var seat = 0; seat < roster.SeatCount; seat++)
+            {
+                firstPlayerVotes[seat] = FirstPlayerVote.NoVote;
+                var authenticationId = roster.Get(seat).AuthenticationId;
+                if (!roster.IsConnected(authenticationId))
+                {
+                    continue;
+                }
+
+                firstPlayerVoteCandidates[seat] = true;
+                candidateCount++;
+                soleCandidate = seat;
+            }
+
+            if (candidateCount == 0)
+            {
+                firstPlayerVoteCandidates = null;
+                firstPlayerVotes = null;
+                return false;
+            }
+
+            if (candidateCount == 1)
+            {
+                firstPlayerVoteQuestionKey = questionKey ?? string.Empty;
+                return CompleteFirstPlayerVote(soleCandidate);
+            }
+
+            firstPlayerVoteQuestionKey = questionKey ?? string.Empty;
+            firstPlayerVoteOpen = true;
+            BroadcastFirstPlayerVoteStatus();
+            return true;
+        }
+
+        public bool CastFirstPlayerVote(string authenticationId, int choice)
+        {
+            var seat = FindSeat(authenticationId);
+            if (!firstPlayerVoteOpen || seat < 0 || !firstPlayerVoteCandidates[seat] ||
+                !roster.IsConnected(authenticationId))
+            {
+                return false;
+            }
+
+            if (choice != FirstPlayerVote.RandomVote &&
+                (choice < 0 || choice >= firstPlayerVoteCandidates.Length || !firstPlayerVoteCandidates[choice]))
+            {
+                return false;
+            }
+
+            firstPlayerVotes[seat] = choice;
+            BroadcastFirstPlayerVoteStatus();
+            TryResolveFirstPlayerVote();
+            return true;
         }
 
         public void AddBot(int seat, string displayName, BotDifficulty difficulty = BotDifficulty.Medium)
@@ -423,6 +506,13 @@ namespace Mejnun.Net
             for (var index = 0; index < commands.Count; index++)
             {
                 var command = commands[index];
+                if (firstPlayerVoteOpen &&
+                    (command.Type == CommandType.ChooseDealer || command.Type == CommandType.ChooseRandomDealer))
+                {
+                    Reject(senderId, "First-player voting is open.");
+                    return false;
+                }
+
                 if (command.Type == CommandType.ChooseRandomDealer)
                 {
                     if (Game.State.Phase != GamePhase.ChoosingDealer)
@@ -491,7 +581,13 @@ namespace Mejnun.Net
 
         private void TryStartRematch()
         {
-            if (!IsRematchPending || IsPaused || Game.State.Phase != GamePhase.ChoosingDealer)
+            if (!IsRematchPending)
+            {
+                TryResolveFirstPlayerVote();
+                return;
+            }
+
+            if (IsPaused || Game.State.Phase != GamePhase.ChoosingDealer)
             {
                 return;
             }
@@ -523,12 +619,23 @@ namespace Mejnun.Net
             }
 
             var seatCount = Game.Setup.SeatCount;
-            var dealer = pendingRematchFirstPlayer.HasValue
-                ? (pendingRematchFirstPlayer.Value - 1 + seatCount) % seatCount
-                : -1;
-            var result = dealer >= 0
-                ? Game.Apply(GameCommand.ChooseDealer(dealer))
-                : Game.Apply(GameCommand.ChooseRandomDealer());
+            var nextFirstPlayer = pendingRematchFirstPlayer;
+            if (!nextFirstPlayer.HasValue)
+            {
+                isRematchPending = false;
+                rematchVotes = null;
+                pendingRematchFirstPlayer = null;
+                turnElapsed = 0;
+                botElapsed = 0;
+                SaveSnapshot();
+                StateChanged?.Invoke(Game);
+                BroadcastStates();
+                BeginFirstPlayerVote(QuestionKeyProvider == null ? null : QuestionKeyProvider());
+                return;
+            }
+
+            var dealer = (nextFirstPlayer.Value - 1 + seatCount) % seatCount;
+            var result = Game.Apply(GameCommand.ChooseDealer(dealer));
             if (!result.Ok)
             {
                 return;
@@ -542,6 +649,94 @@ namespace Mejnun.Net
             SaveSnapshot();
             StateChanged?.Invoke(Game);
             BroadcastStates();
+        }
+
+        private void TryResolveFirstPlayerVote()
+        {
+            if (!firstPlayerVoteOpen || IsPaused || Game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                return;
+            }
+
+            var candidatesChanged = false;
+            var voterCount = 0;
+            var allCandidatesVoted = true;
+            for (var seat = 0; seat < firstPlayerVoteCandidates.Length; seat++)
+            {
+                if (!firstPlayerVoteCandidates[seat])
+                {
+                    continue;
+                }
+
+                var entry = roster.Get(seat);
+                if (entry.Presence != SeatPresence.Connected)
+                {
+                    firstPlayerVoteCandidates[seat] = false;
+                    firstPlayerVotes[seat] = FirstPlayerVote.NoVote;
+                    candidatesChanged = true;
+                    continue;
+                }
+
+                voterCount++;
+                if (firstPlayerVotes[seat] == FirstPlayerVote.NoVote)
+                {
+                    allCandidatesVoted = false;
+                }
+            }
+
+            if (candidatesChanged)
+            {
+                BroadcastFirstPlayerVoteStatus();
+            }
+
+            if (!allCandidatesVoted || voterCount == 0)
+            {
+                return;
+            }
+
+            var winner = FirstPlayerVote.Resolve(firstPlayerVotes, firstPlayerVoteCandidates,
+                firstPlayerVoteCandidates, firstPlayerVoteRandom);
+            CompleteFirstPlayerVote(winner);
+        }
+
+        private bool CompleteFirstPlayerVote(int firstPlayerSeat)
+        {
+            if (firstPlayerSeat < 0 || firstPlayerSeat >= Game.Setup.SeatCount)
+            {
+                return false;
+            }
+
+            var dealer = (firstPlayerSeat - 1 + Game.Setup.SeatCount) % Game.Setup.SeatCount;
+            var result = Game.Apply(GameCommand.ChooseDealer(dealer));
+            if (!result.Ok)
+            {
+                return false;
+            }
+
+            firstPlayerVoteOpen = false;
+            SaveSnapshot();
+            BroadcastFirstPlayerVoteStatus();
+            StateChanged?.Invoke(Game);
+            BroadcastStates();
+            return true;
+        }
+
+        private FirstPlayerVoteStatusMessage CreateFirstPlayerVoteStatus()
+        {
+            return new FirstPlayerVoteStatusMessage(firstPlayerVoteOpen, firstPlayerVoteQuestionKey,
+                firstPlayerVoteCandidates, firstPlayerVotes);
+        }
+
+        private void BroadcastFirstPlayerVoteStatus()
+        {
+            if (firstPlayerVoteCandidates == null || firstPlayerVotes == null)
+            {
+                return;
+            }
+
+            var status = CreateFirstPlayerVoteStatus();
+            FirstPlayerVoteChanged?.Invoke(status);
+            SendAll(status);
         }
 
         private int CountRematchVotes()

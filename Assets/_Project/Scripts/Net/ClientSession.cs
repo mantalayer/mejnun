@@ -15,10 +15,12 @@ namespace Mejnun.Net
         public bool IsPaused => PauseReason != Mejnun.Net.PauseReason.None;
         public RematchStatusMessage RematchStatus { get; private set; }
         public bool IsRematchPending => RematchStatus != null;
+        public FirstPlayerVoteStatusMessage FirstPlayerVoteStatus { get; private set; }
         public IReadOnlyList<SeatStatusMessage> SeatStatuses => seatStatuses.AsReadOnly();
         public event Action<MejnunGame> StateChanged;
         public event Action<NetMessage> StatusChanged;
         public event Action<RematchMessage> RematchRequested;
+        public event Action<FirstPlayerVoteMessage> FirstPlayerVoteRequested;
 
         public void Submit(IReadOnlyList<GameCommand> commands)
         {
@@ -35,6 +37,11 @@ namespace Mejnun.Net
         public void SubmitRematch()
         {
             RematchRequested?.Invoke(new RematchMessage());
+        }
+
+        public void SubmitFirstPlayerVote(int choice)
+        {
+            FirstPlayerVoteRequested?.Invoke(new FirstPlayerVoteMessage(choice));
         }
 
         public void Receive(NetMessage message)
@@ -62,6 +69,15 @@ namespace Mejnun.Net
                     break;
                 case NetMessageKind.RematchStatus:
                     RematchStatus = (RematchStatusMessage)message;
+                    StatusChanged?.Invoke(message);
+                    break;
+                case NetMessageKind.FirstPlayerVoteStatus:
+                    FirstPlayerVoteStatus = (FirstPlayerVoteStatusMessage)message;
+                    if (FirstPlayerVoteStatus.IsOpen)
+                    {
+                        RematchStatus = null;
+                    }
+
                     StatusChanged?.Invoke(message);
                     break;
                 case NetMessageKind.SeatStatus:
@@ -96,6 +112,7 @@ namespace Mejnun.Net
             if (Game.State.Phase != GamePhase.ChoosingDealer)
             {
                 RematchStatus = null;
+                FirstPlayerVoteStatus = null;
             }
 
             StateChanged?.Invoke(Game);

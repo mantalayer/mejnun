@@ -13,6 +13,8 @@ namespace Mejnun.UI
         private readonly MatchFlow matchFlow;
         private readonly Label questionLabel;
         private readonly VisualElement seatOptions;
+        private readonly VisualElement randomVoteMarks;
+        private readonly Button randomButton;
         private IVisualElementScheduledItem transition;
         private bool waitingForGeometry;
         private bool listeningForLanguage;
@@ -23,7 +25,9 @@ namespace Mejnun.UI
             matchFlow = flow;
             questionLabel = root.Q<Label>("dealer-question-label");
             seatOptions = root.Q<VisualElement>("dealer-seat-options");
-            root.Q<Button>("random-dealer-button").clicked += () => matchFlow.ChooseRandomFirstPlayer();
+            randomVoteMarks = root.Q<VisualElement>("random-vote-marks");
+            randomButton = root.Q<Button>("random-dealer-button");
+            randomButton.clicked += () => matchFlow.ChooseRandomFirstPlayer();
             root.RegisterCallback<AttachToPanelEvent>(_ => ListenForLanguage(true));
             root.RegisterCallback<DetachFromPanelEvent>(_ => ListenForLanguage(false));
             if (root.panel != null)
@@ -78,15 +82,44 @@ namespace Mejnun.UI
         {
             questionLabel.text = matchFlow.DealerQuestion;
             seatOptions.Clear();
+            var onlineVote = matchFlow.IsOnlineFirstPlayerVoteOpen;
             for (var seat = 0; seat < matchFlow.SeatCount; seat++)
             {
+                if (onlineVote && !matchFlow.IsOnlineFirstPlayerVoteCandidate(seat))
+                {
+                    continue;
+                }
+
                 var seatIndex = seat;
                 var button = new Button(() => matchFlow.ChooseFirstPlayer(seatIndex))
                 {
                     text = matchFlow.GetPlayerName(seat)
                 };
                 button.AddToClassList("seat-choice");
-                seatOptions.Add(button);
+                button.SetEnabled(!onlineVote || matchFlow.CanVoteOnlineFirstPlayer);
+                if (onlineVote && matchFlow.OnlineFirstPlayerLocalVote == seat)
+                {
+                    button.AddToClassList("seat-choice--selected");
+                }
+
+                var column = new VisualElement();
+                column.AddToClassList("seat-choice-column");
+                column.Add(CreateVoteMarks(onlineVote ? matchFlow.GetOnlineFirstPlayerVoteCount(seat) : 0));
+                column.Add(button);
+                seatOptions.Add(column);
+            }
+
+            randomButton.SetEnabled(!onlineVote || matchFlow.CanVoteOnlineFirstPlayer);
+            randomVoteMarks.Clear();
+            AddVoteMarks(randomVoteMarks,
+                onlineVote ? matchFlow.GetOnlineFirstPlayerVoteCount(-1) : 0);
+            if (onlineVote && matchFlow.OnlineFirstPlayerLocalVote == -1)
+            {
+                randomButton.AddToClassList("seat-choice--selected");
+            }
+            else
+            {
+                randomButton.RemoveFromClassList("seat-choice--selected");
             }
         }
 
@@ -101,10 +134,48 @@ namespace Mejnun.UI
             if (listen)
             {
                 Loc.LanguageChanged += OnLanguageChanged;
+                matchFlow.OnlineSeatsChanged += OnOnlineSeatsChanged;
+                matchFlow.OnlineFirstPlayerVoteChanged += OnOnlineFirstPlayerVoteChanged;
             }
             else
             {
                 Loc.LanguageChanged -= OnLanguageChanged;
+                matchFlow.OnlineSeatsChanged -= OnOnlineSeatsChanged;
+                matchFlow.OnlineFirstPlayerVoteChanged -= OnOnlineFirstPlayerVoteChanged;
+            }
+        }
+
+        private void OnOnlineSeatsChanged()
+        {
+            if (matchFlow != null && matchFlow.Screen == MatchFlowScreen.DealerQuestion)
+            {
+                Refresh();
+            }
+        }
+
+        private void OnOnlineFirstPlayerVoteChanged()
+        {
+            if (matchFlow != null && matchFlow.Screen == MatchFlowScreen.DealerQuestion)
+            {
+                Refresh();
+            }
+        }
+
+        private static VisualElement CreateVoteMarks(int count)
+        {
+            var marks = new VisualElement();
+            marks.AddToClassList("vote-marks");
+            AddVoteMarks(marks, count);
+            return marks;
+        }
+
+        private static void AddVoteMarks(VisualElement marks, int count)
+        {
+            for (var index = 0; index < count; index++)
+            {
+                var check = new VisualElement();
+                check.AddToClassList("vote-check");
+                marks.Add(check);
             }
         }
 

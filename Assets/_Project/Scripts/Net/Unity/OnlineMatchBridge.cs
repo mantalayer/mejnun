@@ -166,6 +166,7 @@ namespace Mejnun.Net.Unity
             if (matchFlow != null)
             {
                 matchFlow.OnlineRematchRequested -= OnOnlineRematchRequested;
+                matchFlow.OnlineFirstPlayerVoteCast -= OnOnlineFirstPlayerVoteCast;
                 if (matchFlow.Controller != null)
                 {
                     matchFlow.Controller.SetCommandRelay(null);
@@ -395,6 +396,8 @@ namespace Mejnun.Net.Unity
 
                 matchFlow.OnlineRematchRequested -= OnOnlineRematchRequested;
                 matchFlow.OnlineRematchRequested += OnOnlineRematchRequested;
+                matchFlow.OnlineFirstPlayerVoteCast -= OnOnlineFirstPlayerVoteCast;
+                matchFlow.OnlineFirstPlayerVoteCast += OnOnlineFirstPlayerVoteCast;
 
                 transport = GetComponent<NgoNetTransport>();
                 if (transport == null)
@@ -418,6 +421,7 @@ namespace Mejnun.Net.Unity
                     clientSession = new ClientSession();
                     clientSession.StateChanged += OnClientStateChanged;
                     clientSession.StatusChanged += OnClientStatusChanged;
+                    matchFlow.SetOnlineFirstPlayerVote(false, null, null, null);
                 }
 
                 if (!matchFlow.StartMatch(matchFlow.ActiveRequest))
@@ -491,10 +495,12 @@ namespace Mejnun.Net.Unity
         {
             snapshotStore = new CloudSaveSnapshotStore();
             hostSession = new HostSession(matchFlow.Game, snapshotStore);
+            hostSession.QuestionKeyProvider = () => matchFlow.DealerQuestionKey;
             launch.Service.MigrationHandler.AuthoritativeSession = hostSession;
             hostSession.StateChanged += OnHostStateChanged;
             hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
             hostSession.RematchStatusChanged += OnHostRematchStatusChanged;
+            hostSession.FirstPlayerVoteChanged += OnHostFirstPlayerVoteChanged;
             hostSession.PauseReasonChanged += OnHostPauseReasonChanged;
             hostSession.SeatExpired += OnSeatExpired;
             if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
@@ -549,6 +555,7 @@ namespace Mejnun.Net.Unity
             hostSession.StateChanged -= OnHostStateChanged;
             hostSession.SeatStatusChanged -= OnHostSeatStatusChanged;
             hostSession.RematchStatusChanged -= OnHostRematchStatusChanged;
+            hostSession.FirstPlayerVoteChanged -= OnHostFirstPlayerVoteChanged;
             hostSession.PauseReasonChanged -= OnHostPauseReasonChanged;
             hostSession.SeatExpired -= OnSeatExpired;
         }
@@ -583,6 +590,16 @@ namespace Mejnun.Net.Unity
 
             localSeat = clientSession.LocalSeat;
             matchFlow.SetOnlineAuthority(true, localSeat);
+            if (game.State.Phase != GamePhase.ChoosingDealer)
+            {
+                matchFlow.SetOnlineFirstPlayerVote(false, null, null, null);
+            }
+            else if (clientSession.FirstPlayerVoteStatus != null)
+            {
+                var vote = clientSession.FirstPlayerVoteStatus;
+                matchFlow.SetOnlineFirstPlayerVote(vote.IsOpen, vote.QuestionKey, vote.Candidates, vote.Votes);
+            }
+
             matchFlow.ApplyOnlineGame(game);
             UpdateClientReadiness();
             PublishRosterChanged();
@@ -608,6 +625,11 @@ namespace Mejnun.Net.Unity
             }
             else if (message is RematchStatusMessage)
             {
+                UpdateClientReadiness();
+            }
+            else if (message is FirstPlayerVoteStatusMessage vote)
+            {
+                matchFlow.SetOnlineFirstPlayerVote(vote.IsOpen, vote.QuestionKey, vote.Candidates, vote.Votes);
                 UpdateClientReadiness();
             }
             else if (message is RejectedMessage rejected)
@@ -676,6 +698,11 @@ namespace Mejnun.Net.Unity
             UpdateHostReadiness();
         }
 
+        private void OnHostFirstPlayerVoteChanged(FirstPlayerVoteStatusMessage status)
+        {
+            matchFlow.SetOnlineFirstPlayerVote(status.IsOpen, status.QuestionKey, status.Candidates, status.Votes);
+        }
+
         private void OnOnlineRematchRequested()
         {
             if (hostSession != null)
@@ -685,6 +712,18 @@ namespace Mejnun.Net.Unity
             else
             {
                 clientSession?.SubmitRematch();
+            }
+        }
+
+        private void OnOnlineFirstPlayerVoteCast(int choice)
+        {
+            if (hostSession != null)
+            {
+                hostSession.CastFirstPlayerVote(launch.AuthenticationId, choice);
+            }
+            else
+            {
+                clientSession?.SubmitFirstPlayerVote(choice);
             }
         }
 
@@ -747,8 +786,10 @@ namespace Mejnun.Net.Unity
             }
 
             var readySeatCount = CountReadySeats();
+            var expectedSeats = Mathf.Min(hostSession.Game.Setup.SeatCount,
+                Mathf.Max(1, launch.Session == null ? 1 : launch.Session.PlayerCount));
             var enoughPlayersReady = launch.StartedEarly
-                ? readySeatCount >= 2
+                ? readySeatCount >= expectedSeats
                 : hostSession.AreAllSeatsConnected;
             if (!enoughPlayersReady)
             {
@@ -762,8 +803,11 @@ namespace Mejnun.Net.Unity
             {
                 CancelInvoke(nameof(PostAllPlayersJoinedNotice));
                 Invoke(nameof(PostAllPlayersJoinedNotice), 1.2f);
-                hostSession.SubmitCommands(launch.AuthenticationId,
-                    new[] { GameCommand.ChooseRandomDealer() });
+            }
+
+            if (!hostSession.IsFirstPlayerVoteOpen)
+            {
+                hostSession.BeginFirstPlayerVote(matchFlow.DealerQuestionKey);
             }
         }
 
@@ -799,6 +843,12 @@ namespace Mejnun.Net.Unity
             {
                 var status = clientSession.RematchStatus;
                 matchFlow.SetOnlineWaiting(FormatRematchWaitingMessage(status.ReadySeats, status.SeatCount));
+                return;
+            }
+
+            if (clientSession.FirstPlayerVoteStatus != null && clientSession.FirstPlayerVoteStatus.IsOpen)
+            {
+                matchFlow.SetOnlineWaiting(string.Empty);
                 return;
             }
 
@@ -1206,9 +1256,11 @@ namespace Mejnun.Net.Unity
 
             snapshotStore = snapshotStore ?? new CloudSaveSnapshotStore();
             hostSession = HostSession.FromRecord(record, snapshotStore);
+            hostSession.QuestionKeyProvider = () => matchFlow.DealerQuestionKey;
             hostSession.StateChanged += OnHostStateChanged;
             hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
             hostSession.RematchStatusChanged += OnHostRematchStatusChanged;
+            hostSession.FirstPlayerVoteChanged += OnHostFirstPlayerVoteChanged;
             hostSession.PauseReasonChanged += OnHostPauseReasonChanged;
             hostSession.SeatExpired += OnSeatExpired;
             localSeat = hostSession.PrepareForPromotion(launch.AuthenticationId);

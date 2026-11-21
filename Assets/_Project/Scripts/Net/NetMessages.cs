@@ -15,7 +15,9 @@ namespace Mejnun.Net
         Paused,
         Away,
         Rematch,
-        RematchStatus
+        RematchStatus,
+        FirstPlayerVote,
+        FirstPlayerVoteStatus
     }
 
     public abstract class NetMessage
@@ -203,5 +205,76 @@ namespace Mejnun.Net
 
         public int ReadySeats { get; }
         public int SeatCount { get; }
+    }
+
+    public sealed class FirstPlayerVoteMessage : NetMessage
+    {
+        public FirstPlayerVoteMessage(int choice)
+            : base(NetMessageKind.FirstPlayerVote)
+        {
+            if (choice < FirstPlayerVote.RandomVote || choice >= 6)
+            {
+                throw new ArgumentOutOfRangeException(nameof(choice));
+            }
+
+            Choice = choice;
+        }
+
+        public int Choice { get; }
+    }
+
+    public sealed class FirstPlayerVoteStatusMessage : NetMessage
+    {
+        private readonly bool[] candidates;
+        private readonly int[] votes;
+
+        public FirstPlayerVoteStatusMessage(bool isOpen, string questionKey, bool[] candidates, int[] votes)
+            : base(NetMessageKind.FirstPlayerVoteStatus)
+        {
+            if (candidates == null)
+            {
+                throw new ArgumentNullException(nameof(candidates));
+            }
+
+            if (votes == null)
+            {
+                throw new ArgumentNullException(nameof(votes));
+            }
+
+            if (candidates.Length == 0 || candidates.Length > 6 || candidates.Length != votes.Length)
+            {
+                throw new ArgumentException("Vote status must contain matching seat arrays of one to six seats.");
+            }
+
+            var candidateCount = 0;
+            for (var seat = 0; seat < candidates.Length; seat++)
+            {
+                if (candidates[seat])
+                {
+                    candidateCount++;
+                }
+
+                if (votes[seat] != FirstPlayerVote.NoVote && votes[seat] != FirstPlayerVote.RandomVote &&
+                    (votes[seat] < 0 || votes[seat] >= candidates.Length || !candidates[votes[seat]]))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(votes));
+                }
+            }
+
+            if (isOpen && candidateCount == 0)
+            {
+                throw new ArgumentException("An open vote must have at least one candidate.", nameof(candidates));
+            }
+
+            IsOpen = isOpen;
+            QuestionKey = questionKey ?? string.Empty;
+            this.candidates = (bool[])candidates.Clone();
+            this.votes = (int[])votes.Clone();
+        }
+
+        public bool IsOpen { get; }
+        public string QuestionKey { get; }
+        public bool[] Candidates => (bool[])candidates.Clone();
+        public int[] Votes => (int[])votes.Clone();
     }
 }

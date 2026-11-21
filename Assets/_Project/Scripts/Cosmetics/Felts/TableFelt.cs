@@ -29,6 +29,9 @@ namespace Mejnun.Cosmetics
 
         public string Id => id;
         public string DisplayName => ResolveDisplayName(id, displayName);
+        // The English name stored in the asset; editor tools copy this, never
+        // the localized DisplayName.
+        public string SerializedDisplayName => displayName;
         public FeltRenderMode Mode => mode;
         public Sprite Tile => tile;
         public float TileWorldSize => tileWorldSize;

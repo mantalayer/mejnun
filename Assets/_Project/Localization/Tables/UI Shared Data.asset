@@ -4790,6 +4790,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848254492836320
+  - m_Id: 74274328010777
+    m_Key: settings.table.edge_pan_speed
+    m_Metadata:
+      m_Items:
+      - rid: 4825848289759592450
+  - m_Id: 74274328010778
+    m_Key: settings.table.edge_pan_speed.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848289759592451
   - m_Id: 312397158932480
     m_Key: felt_unlock.caption
     m_Metadata:
@@ -4930,6 +4940,46 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848275513376769
+  - m_Id: 500000000000000
+    m_Key: settings.table.quick_pickup
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376770
+  - m_Id: 500000000000001
+    m_Key: settings.table.quick_pickup.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376771
+  - m_Id: 500000000000002
+    m_Key: settings.value.seconds
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376772
+  - m_Id: 500000000000003
+    m_Key: settings.general.reset_section
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376773
+  - m_Id: 500000000000004
+    m_Key: settings.general.reset_defaults
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376774
+  - m_Id: 500000000000005
+    m_Key: settings.general.reset_defaults.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376775
+  - m_Id: 638500138377216
+    m_Key: settings.table.pickup_hold
+    m_Metadata:
+      m_Items:
+      - rid: 4825848289759592448
+  - m_Id: 638500549419008
+    m_Key: settings.table.pickup_hold.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848289759592449
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9517,3 +9567,48 @@ MonoBehaviour:
       data:
         m_CommentText: Status shown while waiting for every player to accept the
           rematch.
+    - rid: 4825848275513376770
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Label for the time a touch must be held before a board card
+          drag picks it up.
+    - rid: 4825848275513376771
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the delay before a touch drag picks up a board card.
+    - rid: 4825848275513376772
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Seconds shown beside the pickup hold duration slider; {0}
+          is the selected duration.
+    - rid: 4825848275513376773
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Settings section heading for restoring configured defaults.
+    - rid: 4825848275513376774
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Button that restores settings from the SettingsDefaults asset.
+    - rid: 4825848275513376775
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains which settings are reset and which personal settings
+          remain.
+    - rid: 4825848289759592448
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Label for how long a board card must be held before it is
+          picked up.
+    - rid: 4825848289759592449
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the single-card hold and the longer tail pickup hold.
+    - rid: 4825848289759592450
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Settings slider that adjusts board pan speed while dragging
+          a card near a screen edge.
+    - rid: 4825848289759592451
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the edge scroll speed multiplier.

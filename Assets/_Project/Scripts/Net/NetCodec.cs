@@ -99,6 +99,25 @@ namespace Mejnun.Net
                         writer.Write(status.SeatCount);
                         break;
                     }
+                    case NetMessageKind.FirstPlayerVote:
+                        writer.Write(((FirstPlayerVoteMessage)message).Choice);
+                        break;
+                    case NetMessageKind.FirstPlayerVoteStatus:
+                    {
+                        var status = (FirstPlayerVoteStatusMessage)message;
+                        writer.Write(status.IsOpen);
+                        WriteString(writer, status.QuestionKey);
+                        var candidates = status.Candidates;
+                        var votes = status.Votes;
+                        writer.Write(candidates.Length);
+                        for (var seat = 0; seat < candidates.Length; seat++)
+                        {
+                            writer.Write(candidates[seat]);
+                            writer.Write((sbyte)votes[seat]);
+                        }
+
+                        break;
+                    }
                     default:
                         throw new InvalidDataException("Unsupported network message.");
                 }
@@ -181,6 +200,30 @@ namespace Mejnun.Net
                     case NetMessageKind.RematchStatus:
                         message = new RematchStatusMessage(reader.ReadInt32(), reader.ReadInt32());
                         break;
+                    case NetMessageKind.FirstPlayerVote:
+                        message = new FirstPlayerVoteMessage(reader.ReadInt32());
+                        break;
+                    case NetMessageKind.FirstPlayerVoteStatus:
+                    {
+                        var isOpen = reader.ReadBoolean();
+                        var questionKey = ReadString(reader);
+                        var seatCount = ReadCount(reader, 6, "vote seats");
+                        if (seatCount == 0)
+                        {
+                            throw new InvalidDataException("Vote status must include at least one seat.");
+                        }
+
+                        var candidates = new bool[seatCount];
+                        var votes = new int[seatCount];
+                        for (var seat = 0; seat < seatCount; seat++)
+                        {
+                            candidates[seat] = reader.ReadBoolean();
+                            votes[seat] = reader.ReadSByte();
+                        }
+
+                        message = new FirstPlayerVoteStatusMessage(isOpen, questionKey, candidates, votes);
+                        break;
+                    }
                     default:
                         throw new InvalidDataException("Unsupported network message.");
                 }

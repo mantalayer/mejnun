@@ -122,6 +122,88 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
+        public void Host_FirstPlayerVoteResolvesAfterEveryConnectedCandidateVotes()
+        {
+            var host = NewChoosingHost(3);
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+                var clientC = network.Connect("player-c", "C");
+
+                Assert.That(host.BeginFirstPlayerVote("dealer.question.example"), Is.True);
+                Assert.That(clientA.FirstPlayerVoteStatus.IsOpen, Is.True);
+                CollectionAssert.AreEqual(new[] { true, true, true }, clientA.FirstPlayerVoteStatus.Candidates);
+                Assert.That(host.CastFirstPlayerVote("player-a", 1), Is.True);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.ChoosingDealer));
+
+                clientB.SubmitFirstPlayerVote(1);
+                clientC.SubmitFirstPlayerVote(2);
+
+                Assert.That(host.IsFirstPlayerVoteOpen, Is.False);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
+                Assert.That(host.Game.State.CurrentSeat, Is.EqualTo(1));
+                Assert.That(clientA.FirstPlayerVoteStatus == null || !clientA.FirstPlayerVoteStatus.IsOpen, Is.True);
+                Assert.That(clientA.Game.State.CurrentSeat, Is.EqualTo(1));
+            }
+        }
+
+        [Test]
+        public void Host_FirstPlayerVoteRejectsNonCandidateVoter()
+        {
+            var host = NewChoosingHost(3);
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+                host.BeginFirstPlayerVote("dealer.question.example");
+                var clientC = network.Connect("player-c", "C");
+
+                Assert.That(clientC.FirstPlayerVoteStatus.IsOpen, Is.True);
+                Assert.That(clientC.FirstPlayerVoteStatus.Candidates[2], Is.False);
+                Assert.That(host.CastFirstPlayerVote("player-c", 0), Is.False);
+                Assert.That(clientA.FirstPlayerVoteStatus.Candidates[0], Is.True);
+                Assert.That(clientB.FirstPlayerVoteStatus.Candidates[1], Is.True);
+            }
+        }
+
+        [Test]
+        public void Host_AloneStartsWithHostWithoutOpeningVote()
+        {
+            var host = NewChoosingHost(2);
+            host.Join("player-a", "A");
+
+            Assert.That(host.BeginFirstPlayerVote("dealer.question.example"), Is.True);
+
+            Assert.That(host.IsFirstPlayerVoteOpen, Is.False);
+            Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.Playing));
+            Assert.That(host.Game.State.CurrentSeat, Is.Zero);
+        }
+
+        [Test]
+        public void Host_RematchWithoutNextFirstPlayerOpensVote()
+        {
+            var host = NewStalemateHost();
+            Assert.That(host.Game.State.Result.NextFirstPlayer.HasValue, Is.False);
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+                var clientC = network.Connect("player-c", "C");
+
+                clientA.SubmitRematch();
+                clientB.SubmitRematch();
+                clientC.SubmitRematch();
+
+                Assert.That(host.IsRematchPending, Is.False);
+                Assert.That(host.Game.State.Phase, Is.EqualTo(GamePhase.ChoosingDealer));
+                Assert.That(host.IsFirstPlayerVoteOpen, Is.True);
+                Assert.That(clientA.FirstPlayerVoteStatus.IsOpen, Is.True);
+                Assert.That(clientA.IsRematchPending, Is.False);
+            }
+        }
+
+        [Test]
         public void Host_RematchIsIgnoredWhileGameIsNotFinished()
         {
             var host = NewHost();
@@ -521,6 +603,11 @@ namespace Mejnun.Net.Tests
             return new HostSession(NewHostGame());
         }
 
+        private static HostSession NewChoosingHost(int seatCount)
+        {
+            return new HostSession(new MejnunGame(new GameSetup(seatCount, 73UL)));
+        }
+
         private static HostSession NewFinishedHost(int seatCount = 2)
         {
             var game = new MejnunGame(new GameSetup(seatCount, 71UL, dealer: seatCount - 1));
@@ -542,6 +629,28 @@ namespace Mejnun.Net.Tests
             {
                 var seat = game.State.CurrentSeat;
                 Assert.That(game.Apply(GameCommand.DrawOrPass(seat)).Ok, Is.True);
+            }
+
+            Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Finished));
+            return new HostSession(game);
+        }
+
+        private static HostSession NewStalemateHost()
+        {
+            const int seatCount = 3;
+            var game = new MejnunGame(new GameSetup(seatCount, 71UL, dealer: seatCount - 1));
+            while (game.State.DrawPile.Count > 0)
+            {
+                var topIndex = game.State.DrawPile.Count - 1;
+                game.State.Hands[2].Add(game.State.DrawPile[topIndex]);
+                game.State.DrawPile.RemoveAt(topIndex);
+            }
+
+            Assert.That(game.State.Hands[0].Count, Is.EqualTo(game.State.Hands[1].Count));
+            Assert.That(game.State.Hands[2].Count, Is.GreaterThan(game.State.Hands[0].Count));
+            for (var pass = 0; pass < seatCount; pass++)
+            {
+                Assert.That(game.Apply(GameCommand.DrawOrPass(game.State.CurrentSeat)).Ok, Is.True);
             }
 
             Assert.That(game.State.Phase, Is.EqualTo(GamePhase.Finished));

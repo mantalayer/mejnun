@@ -60,6 +60,7 @@ namespace Mejnun.Game
         private bool dimmed;
         private bool supportsFourColourInk = true;
         private SpriteRenderer cardHighlight;
+        private SpriteRenderer pickupChargeOutline;
         private SpriteRenderer focusGlow;
         private SpriteRenderer hintGlow;
         private SpriteRenderer hintGlowBloom;
@@ -163,6 +164,36 @@ namespace Mejnun.Game
             RefreshHintOutline();
         }
 
+        public void SetPickupCharge(float progress)
+        {
+            if (progress <= 0f)
+            {
+                if (pickupChargeOutline != null)
+                {
+                    pickupChargeOutline.enabled = false;
+                }
+
+                return;
+            }
+
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = GetComponent<SpriteRenderer>();
+            }
+
+            if (spriteRenderer == null || spriteRenderer.sprite == null)
+            {
+                return;
+            }
+
+            pickupChargeOutline ??= CreateHintSprite("Pickup Charge Outline", 1.04f);
+            var charge = Mathf.Clamp01(progress);
+            pickupChargeOutline.enabled = true;
+            pickupChargeOutline.sprite = spriteRenderer.sprite;
+            pickupChargeOutline.color = new Color(1f, 0.78f, 0.12f, charge * 0.72f);
+            pickupChargeOutline.transform.localScale = Vector3.one * (1.04f + charge * 0.08f);
+        }
+
         /// <summary>The tutorial's "move this card" highlight: a pulsing gold outline, separate from hints.</summary>
         public void SetTutorialFocus(bool focused)
         {
@@ -256,6 +287,11 @@ namespace Mejnun.Game
             if (cardHighlight != null)
             {
                 cardHighlight.sortingOrder = rendererOrder + 1;
+            }
+
+            if (pickupChargeOutline != null)
+            {
+                pickupChargeOutline.sortingOrder = rendererOrder + 1;
             }
 
             if (hintGlowBloom != null)

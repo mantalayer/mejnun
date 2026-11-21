@@ -113,6 +113,10 @@ namespace Mejnun.UI
                 value => GameSettings.OpponentCardScale = value, RefreshTable);
             BindSlider("edge-pan-width-slider", () => GameSettings.EdgePanWidth,
                 value => GameSettings.EdgePanWidth = value);
+            BindSlider("edge-pan-speed-slider", () => GameSettings.EdgePanSpeed,
+                value => GameSettings.EdgePanSpeed = value);
+            BindSlider("long-press-seconds-slider", () => GameSettings.LongPressSeconds,
+                value => GameSettings.LongPressSeconds = value);
             BindSlider("zoom-sensitivity-slider", () => GameSettings.ZoomSensitivity,
                 value => GameSettings.ZoomSensitivity = value);
             BindSlider("board-card-spread-slider", () => GameSettings.BoardCardSpread,
@@ -132,9 +136,23 @@ namespace Mejnun.UI
             BindLanguage();
             BindBotFill();
             BindTooltips();
+            var resetButton = root.Q<Button>("settings-reset-button");
+            if (resetButton != null)
+            {
+                resetButton.clicked += ResetToDefaults;
+            }
+
             GameSettings.Changed += OnSettingsChanged;
             localizedValuesHandler = RefreshLocalizedValues;
             Loc.LanguageChanged += localizedValuesHandler;
+            RefreshValues();
+        }
+
+        public void ResetToDefaults()
+        {
+            GameSettings.ResetToDefaults();
+            RefreshTable();
+            tableView?.RefreshHandLayout();
             RefreshValues();
         }
 
@@ -464,6 +482,8 @@ namespace Mejnun.UI
             SetSlider("hand-lift-slider", GameSettings.HandLift);
             SetSlider("opponent-card-scale-slider", GameSettings.OpponentCardScale);
             SetSlider("edge-pan-width-slider", GameSettings.EdgePanWidth);
+            SetSlider("edge-pan-speed-slider", GameSettings.EdgePanSpeed);
+            SetSlider("long-press-seconds-slider", GameSettings.LongPressSeconds);
             SetSlider("zoom-sensitivity-slider", GameSettings.ZoomSensitivity);
             SetSlider("board-card-spread-slider", GameSettings.BoardCardSpread);
             SetSlider("card-messiness-slider", GameSettings.CardMessiness);
@@ -505,9 +525,16 @@ namespace Mejnun.UI
 
             var isPercent = name.StartsWith("volume-", StringComparison.Ordinal) || name == "card-messiness-slider" ||
                             name == "edge-pan-width-slider";
-            valueLabel.text = isPercent
-                ? Loc.Format("settings.value.percent", Mathf.RoundToInt(value * 100f))
-                : Loc.Format("settings.value.multiplier", value.ToString("0.##"));
+            if (name == "long-press-seconds-slider")
+            {
+                valueLabel.text = Loc.Format("settings.value.seconds", value);
+            }
+            else
+            {
+                valueLabel.text = isPercent
+                    ? Loc.Format("settings.value.percent", Mathf.RoundToInt(value * 100f))
+                    : Loc.Format("settings.value.multiplier", value.ToString("0.##"));
+            }
         }
 
         private static void SetDropdownIndex(DropdownField dropdown, int index)

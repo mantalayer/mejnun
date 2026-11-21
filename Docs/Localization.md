@@ -94,6 +94,8 @@ The `UI` entry `hud.invalid_move.flavor` formats the optional bad-move line and 
 
 Translations normally arrive through the sheet (§6) the next time someone syncs or builds. Reviewed exceptions are kept in `HandwrittenTranslations.csv` and reapplied after each pull; do not edit translated table assets by hand.
 
+Deck skin and table felt names are copied from each asset's serialized English `displayName` into the `UI` entry derived from its stable ID when the asset is saved. To sync all names immediately, use **Mejnun > Localization > Sync Deck & Felt Names**; the next Sheets sync then updates changed English cells, refreshes frozen auto-translations, and marks reviewed translations as needing review.
+
 ## 6. Translation pipeline
 
 ```

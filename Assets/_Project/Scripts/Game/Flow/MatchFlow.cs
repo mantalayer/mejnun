@@ -42,6 +42,9 @@ namespace Mejnun.Game
         private bool remoteAuthority;
         private bool onlineRematchAccepted;
         private int onlineLocalSeat = -1;
+        private bool onlineFirstPlayerVoteOpen;
+        private bool[] onlineFirstPlayerVoteCandidates = Array.Empty<bool>();
+        private int[] onlineFirstPlayerVotes = Array.Empty<int>();
         private bool onlineDeckPreloadPending;
         private MejnunGame pendingOnlineGame;
         private MejnunGame deferredOnlineGame;
@@ -108,8 +111,16 @@ namespace Mejnun.Game
         public event Action OnlineSeatsChanged;
         public event Action<string> OnlineNotice;
         public event Action OnlineRematchRequested;
+        public event Action OnlineFirstPlayerVoteChanged;
+        public event Action<int> OnlineFirstPlayerVoteCast;
 
         public string OnlineWaitingMessage => onlineWaitingMessage;
+        public bool IsOnlineFirstPlayerVoteOpen => IsOnline && onlineFirstPlayerVoteOpen;
+        public bool CanVoteOnlineFirstPlayer => IsOnlineFirstPlayerVoteOpen && !matchPaused &&
+                                                IsOnlineFirstPlayerVoteCandidate(onlineLocalSeat);
+        public int OnlineFirstPlayerLocalVote => onlineLocalSeat >= 0 && onlineLocalSeat < onlineFirstPlayerVotes.Length
+            ? onlineFirstPlayerVotes[onlineLocalSeat]
+            : -2;
 
         public string HandoffMessage => CurrentSeat < 0
             ? string.Empty
@@ -335,6 +346,12 @@ namespace Mejnun.Game
         {
             remoteAuthority = enabled;
             onlineLocalSeat = localSeat;
+            if (!enabled)
+            {
+                onlineFirstPlayerVoteOpen = false;
+                onlineFirstPlayerVoteCandidates = Array.Empty<bool>();
+                onlineFirstPlayerVotes = Array.Empty<int>();
+            }
             if (turnTimer != null)
             {
                 turnTimer.enabled = true;
@@ -396,6 +413,49 @@ namespace Mejnun.Game
         {
             onlineWaitingMessage = message ?? string.Empty;
             tableController?.SetInputPaused(matchPaused || !string.IsNullOrEmpty(onlineWaitingMessage));
+        }
+
+        public void SetOnlineFirstPlayerVote(bool isOpen, string questionKey, bool[] candidates, int[] votes)
+        {
+            if (!remoteAuthority)
+            {
+                return;
+            }
+
+            onlineFirstPlayerVoteOpen = isOpen;
+            onlineFirstPlayerVoteCandidates = candidates == null ? Array.Empty<bool>() : (bool[])candidates.Clone();
+            onlineFirstPlayerVotes = votes == null ? Array.Empty<int>() : (int[])votes.Clone();
+            if (isOpen)
+            {
+                DealerQuestionKey = questionKey;
+            }
+
+            if (Game != null && Game.State.Phase == GamePhase.ChoosingDealer && Screen != MatchFlowScreen.Results)
+            {
+                SetScreen(isOpen ? MatchFlowScreen.DealerQuestion : MatchFlowScreen.Turn);
+            }
+
+            OnlineFirstPlayerVoteChanged?.Invoke();
+        }
+
+        public bool IsOnlineFirstPlayerVoteCandidate(int seat)
+        {
+            return IsOnlineFirstPlayerVoteOpen && seat >= 0 && seat < onlineFirstPlayerVoteCandidates.Length &&
+                   onlineFirstPlayerVoteCandidates[seat];
+        }
+
+        public int GetOnlineFirstPlayerVoteCount(int choice)
+        {
+            var count = 0;
+            for (var seat = 0; seat < onlineFirstPlayerVotes.Length; seat++)
+            {
+                if (onlineFirstPlayerVotes[seat] == choice)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         public void ApplyOnlineGame(MejnunGame authoritativeGame)
@@ -489,7 +549,7 @@ namespace Mejnun.Game
                 revealedSeat = -1;
                 lastSavedGame = null;
                 lastSavedTurnNumber = -1;
-                DealerQuestionKey = null;
+                DealerQuestionKey = PickDealerQuestionKey();
                 cardTracker.Reset();
                 allBotsHard = AreAllOpponentsHardBots();
                 matchStatsTracker.Reset(TurnSeconds);
@@ -503,7 +563,11 @@ namespace Mejnun.Game
             Game = authoritativeGame;
             tableController?.Resync(authoritativeGame);
             ApplyOnlineViewer();
-            if (startingRematch)
+            if (Screen != MatchFlowScreen.Results && authoritativeGame.State.Phase == GamePhase.ChoosingDealer)
+            {
+                SetScreen(IsOnlineFirstPlayerVoteOpen ? MatchFlowScreen.DealerQuestion : MatchFlowScreen.Turn);
+            }
+            else if (startingRematch)
             {
                 SetScreen(MatchFlowScreen.Turn);
             }
@@ -529,6 +593,7 @@ namespace Mejnun.Game
             }
 
             tableController?.SetInputPaused(paused || !string.IsNullOrEmpty(onlineWaitingMessage));
+            OnlineFirstPlayerVoteChanged?.Invoke();
         }
 
         /// <summary>Leaves the tutorial: it counts as completed, nothing is saved, and the menu is shown.</summary>
@@ -742,7 +807,28 @@ namespace Mejnun.Game
         {
             if (SeatCount <= 0 || seat < 0 || seat >= SeatCount)
             {
+                if (IsOnline)
+                {
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
                 return ChooseDealer(seat);
+            }
+
+            if (IsOnline)
+            {
+                if (!CanVoteOnlineFirstPlayer)
+                {
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
+                OnlineFirstPlayerVoteCast?.Invoke(seat);
+                if (seat == StatsTrackingSeat())
+                {
+                    chosenFirstByQuestion = true;
+                }
+
+                return CommandResult.Success();
             }
 
             var dealerSeat = (seat - 1 + SeatCount) % SeatCount;
@@ -757,6 +843,11 @@ namespace Mejnun.Game
 
         public CommandResult ChooseRandomDealer()
         {
+            if (IsOnline)
+            {
+                return ChooseRandomFirstPlayer();
+            }
+
             if (Game == null || Game.State.Phase != GamePhase.ChoosingDealer || tableController == null)
             {
                 return CommandResult.Failure(RuleError.WrongPhase);
@@ -767,6 +858,17 @@ namespace Mejnun.Game
 
         public CommandResult ChooseRandomFirstPlayer()
         {
+            if (IsOnline)
+            {
+                if (!CanVoteOnlineFirstPlayer)
+                {
+                    return CommandResult.Failure(RuleError.WrongPhase);
+                }
+
+                OnlineFirstPlayerVoteCast?.Invoke(-1);
+                return CommandResult.Success();
+            }
+
             return ChooseRandomDealer();
         }
 
@@ -907,6 +1009,9 @@ namespace Mejnun.Game
             GameSettings.FastForward = false;
             elapsedMatchSeconds = 0f;
             matchPaused = false;
+            onlineFirstPlayerVoteOpen = false;
+            onlineFirstPlayerVoteCandidates = Array.Empty<bool>();
+            onlineFirstPlayerVotes = Array.Empty<int>();
             RoundSeed = seed;
             Debug.Log("Mejnun round seed: " + RoundSeed);
             questionRandom = new System.Random(unchecked((int)(seed ^ (seed >> 32))));
@@ -1077,7 +1182,7 @@ namespace Mejnun.Game
                 }
                 else if (state.Phase == GamePhase.ChoosingDealer)
                 {
-                    SetScreen(MatchFlowScreen.Turn);
+                    SetScreen(IsOnlineFirstPlayerVoteOpen ? MatchFlowScreen.DealerQuestion : MatchFlowScreen.Turn);
                 }
                 else if (state.Phase == GamePhase.Playing && Screen != MatchFlowScreen.Results)
                 {

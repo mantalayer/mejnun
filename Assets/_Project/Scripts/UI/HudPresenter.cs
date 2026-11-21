@@ -1204,11 +1204,15 @@ namespace Mejnun.UI
             if (tableView == null || root == null || root.worldBound.height <= 0f)
             {
                 tableView?.SetHandBottomInset(0f);
+                tableView?.SetEdgePanBottomInset(0f);
                 return;
             }
 
             var insetY = root.worldBound.yMax;
             var hasBottomBar = TryGetVisibleBounds(bottomBar, out var bottomBounds);
+            tableView.SetEdgePanBottomInset(hasBottomBar
+                ? Mathf.Clamp01((root.worldBound.yMax - bottomBounds.yMin) / root.worldBound.height)
+                : 0f);
             if (hasBottomBar)
             {
                 insetY = Mathf.Min(insetY, bottomBounds.yMin);
@@ -3074,7 +3078,7 @@ namespace Mejnun.UI
             if (keyboard.downArrowKey.isPressed) pan.y += 8f;
             if (pan.sqrMagnitude > 0f)
             {
-                tableView?.PanCamera(pan, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+                tableView?.PanCamera(pan, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), false);
             }
 
             if (keyboard.pKey.wasPressedThisFrame)
