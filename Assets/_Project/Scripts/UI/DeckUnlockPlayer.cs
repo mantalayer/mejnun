@@ -10,6 +10,7 @@ namespace Mejnun.UI
     {
         private readonly DeckSkinLoader skinLoader;
         private readonly DeckUnlockPresentation unlockPresentation;
+        private readonly FeltUnlockPresentation feltUnlockPresentation;
         private ProgressionReport lastPlayedReport;
         private int loadGeneration;
 
@@ -17,6 +18,7 @@ namespace Mejnun.UI
         {
             skinLoader = loader;
             unlockPresentation = new DeckUnlockPresentation(documentRoot);
+            feltUnlockPresentation = new FeltUnlockPresentation(documentRoot);
         }
 
         public void Play(ProgressionReport report, Action finished = null)
@@ -29,10 +31,14 @@ namespace Mejnun.UI
 
             lastPlayedReport = report;
             var generation = ++loadGeneration;
-            var entries = ProgressionService.Instance.Catalog?.Decks?.GetEntries();
+            unlockPresentation.Cancel();
+            feltUnlockPresentation.Cancel();
+            var catalog = ProgressionService.Instance.Catalog;
+            var feltItems = ResolveFelts(report, catalog);
+            var entries = catalog?.Decks?.GetEntries();
             if (entries == null)
             {
-                finished?.Invoke();
+                PlayResolvedFelts(feltItems, finished, generation);
                 return;
             }
 
@@ -58,7 +64,7 @@ namespace Mejnun.UI
 
             if (candidates.Count == 0)
             {
-                finished?.Invoke();
+                PlayResolvedFelts(feltItems, finished, generation);
                 return;
             }
 
@@ -79,7 +85,7 @@ namespace Mejnun.UI
                     resolved[index] = CreatePresentationItem(candidates[index], candidates[index].Skin);
                 }
 
-                PlayResolvedDecks(resolved, finished);
+                PlayResolvedDecks(resolved, feltItems, finished, generation);
                 return;
             }
 
@@ -109,7 +115,7 @@ namespace Mejnun.UI
                     pendingLoads--;
                     if (pendingLoads == 0)
                     {
-                        PlayResolvedDecks(resolved, finished);
+                        PlayResolvedDecks(resolved, feltItems, finished, generation);
                     }
                 });
             }
@@ -119,6 +125,36 @@ namespace Mejnun.UI
         {
             loadGeneration++;
             unlockPresentation.Cancel();
+            feltUnlockPresentation.Cancel();
+        }
+
+        private static List<FeltUnlockPresentationItem> ResolveFelts(ProgressionReport report,
+            CosmeticCatalog catalog)
+        {
+            var felts = new List<FeltUnlockPresentationItem>();
+            var feltCatalog = catalog == null ? null : catalog.Felts;
+            if (feltCatalog == null)
+            {
+                return felts;
+            }
+
+            var seenIds = new HashSet<string>(StringComparer.Ordinal);
+            for (var index = 0; index < report.NewlyUnlockedItems.Count; index++)
+            {
+                var itemId = report.NewlyUnlockedItems[index];
+                if (string.IsNullOrWhiteSpace(itemId) || !seenIds.Add(itemId))
+                {
+                    continue;
+                }
+
+                var felt = feltCatalog.Resolve(itemId);
+                if (felt != null)
+                {
+                    felts.Add(new FeltUnlockPresentationItem(felt, felt.DisplayName));
+                }
+            }
+
+            return felts;
         }
 
         private static DeckUnlockPresentationItem CreatePresentationItem(DeckSkinInfo entry, DeckSkin skin)
@@ -127,8 +163,14 @@ namespace Mejnun.UI
                 string.IsNullOrWhiteSpace(entry.Artist) ? skin.Artist : entry.Artist);
         }
 
-        private void PlayResolvedDecks(IReadOnlyList<DeckUnlockPresentationItem> resolved, Action finished)
+        private void PlayResolvedDecks(IReadOnlyList<DeckUnlockPresentationItem> resolved,
+            IReadOnlyList<FeltUnlockPresentationItem> feltItems, Action finished, int generation)
         {
+            if (generation != loadGeneration)
+            {
+                return;
+            }
+
             var items = new List<DeckUnlockPresentationItem>();
             for (var index = 0; index < resolved.Count; index++)
             {
@@ -138,7 +180,30 @@ namespace Mejnun.UI
                 }
             }
 
-            unlockPresentation.Play(items, finished);
+            if (items.Count == 0)
+            {
+                PlayResolvedFelts(feltItems, finished, generation);
+                return;
+            }
+
+            unlockPresentation.Play(items, () => PlayResolvedFelts(feltItems, finished, generation));
+        }
+
+        private void PlayResolvedFelts(IReadOnlyList<FeltUnlockPresentationItem> felts, Action finished,
+            int generation)
+        {
+            if (generation != loadGeneration)
+            {
+                return;
+            }
+
+            feltUnlockPresentation.Play(felts, () =>
+            {
+                if (generation == loadGeneration)
+                {
+                    finished?.Invoke();
+                }
+            });
         }
     }
 }

@@ -64,6 +64,7 @@ namespace Mejnun.Game.Tests
             var hintButton = root.Q<Button>("hint-button");
             var helpButton = root.Q<Button>("help-button");
             var pausePanel = root.Q<VisualElement>("pause-panel");
+            var confirmDialog = root.Q<VisualElement>("confirm-dialog");
             var drawPass = root.Q<Button>("draw-pass-button");
             var undo = root.Q<Button>("undo-button");
             var fixBoard = root.Q<Button>("fix-board-button");
@@ -89,6 +90,9 @@ namespace Mejnun.Game.Tests
             Assert.That(pauseButton.Query<VisualElement>(className: "hamburger-bar").ToList().Count, Is.EqualTo(3));
             Assert.That(pauseButton.parent, Is.Not.SameAs(bottomBar));
             Assert.That(pausePanel, Is.Not.Null);
+            Assert.That(confirmDialog, Is.Not.Null);
+            Assert.That(confirmDialog.parent, Is.SameAs(hudRoot));
+            Assert.That(hudRoot.IndexOf(confirmDialog), Is.GreaterThan(hudRoot.IndexOf(pausePanel)));
             Assert.That(exitButton.parent, Is.SameAs(pausePanel));
             Assert.That(hintButton, Is.Not.Null);
             Assert.That(hintButton.parent, Is.SameAs(pausePanel));

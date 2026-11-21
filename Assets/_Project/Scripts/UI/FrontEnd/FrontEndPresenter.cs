@@ -21,6 +21,8 @@ namespace Mejnun.UI.FrontEnd
         private Rect lastSafeArea;
         private int lastWidth;
         private int lastHeight;
+        private Vector2 lastPanelSize;
+        private bool lastPhoneLayout;
         private bool destinationTransitionPending;
         private readonly SoftKeyboardBackGuard keyboardBackGuard = new SoftKeyboardBackGuard();
 
@@ -121,7 +123,8 @@ namespace Mejnun.UI.FrontEnd
                 }
             }
 
-            if (Screen.width != lastWidth || Screen.height != lastHeight || Screen.safeArea != lastSafeArea)
+            if (Screen.width != lastWidth || Screen.height != lastHeight || Screen.safeArea != lastSafeArea ||
+                GetPanelSize() != lastPanelSize || DeviceProfile.IsPhoneLayout != lastPhoneLayout)
             {
                 ApplySafeArea();
             }
@@ -151,10 +154,20 @@ namespace Mejnun.UI.FrontEnd
                 return;
             }
 
-            SafeAreaUtility.Apply(safeAreaRoot, Screen.safeArea, Screen.width, Screen.height);
+            var phoneLayout = DeviceProfile.IsPhoneLayout;
+            SafeAreaUtility.Apply(safeAreaRoot, Screen.safeArea, Screen.width, Screen.height,
+                phoneLayout ? 12f : 0f);
             lastSafeArea = Screen.safeArea;
             lastWidth = Screen.width;
             lastHeight = Screen.height;
+            lastPanelSize = GetPanelSize();
+            lastPhoneLayout = phoneLayout;
+        }
+
+        private Vector2 GetPanelSize()
+        {
+            var panel = safeAreaRoot?.panel;
+            return panel == null ? Vector2.zero : panel.visualTree.layout.size;
         }
     }
 }

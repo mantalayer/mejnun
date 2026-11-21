@@ -4790,6 +4790,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848254492836320
+  - m_Id: 312397158932480
+    m_Key: felt_unlock.caption
+    m_Metadata:
+      m_Items:
+      - rid: 4825848269378158592
+  - m_Id: 312397712580608
+    m_Key: felt_unlock.hint
+    m_Metadata:
+      m_Items:
+      - rid: 4825848269378158593
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9255,3 +9265,11 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Main menu button that opens match setup
+    - rid: 4825848269378158592
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Caption shown when a new table felt is revealed.
+    - rid: 4825848269378158593
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Tap instruction shown during the felt unlock reveal.

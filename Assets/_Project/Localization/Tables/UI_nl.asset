@@ -50,7 +50,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208860
-    m_Localized: Gebruik je dubbelganger
+    m_Localized: Gebruik je dubbel
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208865
@@ -758,7 +758,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282621
   - m_Id: 6548985208854
-    m_Localized: Elke set is toegestaan.
+    m_Localized: Elke set is geschikt.
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208855
@@ -837,8 +837,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208873
-    m_Localized: "Vier dezelfde kaarten werken nog steeds met drie. Sleep de 5\u2665
-      uit de vijven naar 3\u2665 4\u2665."
+    m_Localized: "Een viertal werkt nog steeds met drie. Sleep de 5\u2665 uit de
+      vijven naar 3\u2665 4\u2665."
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208874
@@ -921,7 +921,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403139
-    m_Localized: Lege lade
+    m_Localized: Lege ladestapel
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403141
@@ -953,7 +953,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403148
-    m_Localized: De winnaar begint als eerste aan de volgende wedstrijd.
+    m_Localized: De winnaar begint als eerste in de volgende wedstrijd.
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403149
@@ -2439,7 +2439,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763293
-    m_Localized: Laatste ademtocht
+    m_Localized: Laatste adem
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763294
@@ -2518,7 +2518,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763314
-    m_Localized: Win zonder Ongedaan maken, Terugdraaien of Bord repareren te gebruiken.
+    m_Localized: Win zonder de functies Ongedaan maken, Terugdraaien of Bord repareren
+      te gebruiken.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763315
@@ -2603,8 +2604,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957585
-    m_Localized: Je wordt tien keer gekozen om als eerste aan de beurt te komen door
-      de vraag te beantwoorden.
+    m_Localized: Je wordt tien keer als eerste gekozen door de vraag te beantwoorden.
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957586
@@ -2656,7 +2656,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957600
-    m_Localized: Blueeydrat Classic Contrast 4-kleuren 1
+    m_Localized: Blueeyedrat Classic Contrast 4-kleuren 1
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957602
@@ -2680,7 +2680,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957608
-    m_Localized: Blueeyedrat Classic Light 4-kleuren 1
+    m_Localized: Blueeyedrat Classic Light 4 kleuren 1
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957609
@@ -2692,7 +2692,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957612
-    m_Localized: Blueeydrat Classic Sepia 2-kleuren 1
+    m_Localized: Blueeyedrat Classic Sepia 2-kleuren 1
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957614
@@ -3077,7 +3077,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346259
-    m_Localized: Bevestig dat je een kaart trekt.
+    m_Localized: Bevestig het trekken van een kaart.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346261
@@ -3085,7 +3085,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346262
-    m_Localized: Vraag eerst of u ongeldige kaarten terug in uw hand wilt krijgen.
+    m_Localized: Vraag eerst of u ongeldige kaarten terug in uw hand kunt krijgen.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346264
@@ -3186,8 +3186,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346291
-    m_Localized: Hiermee kunt u aanpassen hoe ver kaarten omhoog komen wanneer ze
-      worden geselecteerd of wanneer u er met de muis overheen beweegt.
+    m_Localized: Hiermee pas je aan hoe ver kaarten omhoog komen wanneer ze geselecteerd
+      of met de muis eroverheen bewogen worden.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346292
@@ -3282,7 +3282,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540481
-    m_Localized: Stelt het volume van de geluidskaart en interface-effecten in.
+    m_Localized: Stelt het volume van de kaart- en interface-effecten in.
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540482
@@ -3379,8 +3379,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540503
-    m_Localized: "Speel als eerste je hand leeg om te winnen. Een spel bestaat uit
-      \xE9\xE9n ronde; de \u200B\u200Bwinnaar begint als eerste in het volgende spel."
+    m_Localized: "Speel als eerste je kaarten leeg om te winnen. Een spel bestaat
+      uit \xE9\xE9n ronde; de \u200B\u200Bwinnaar begint als eerste in het volgende
+      spel."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540504
@@ -3427,10 +3428,9 @@ MonoBehaviour:
       Met Opnieuw uitvoeren pas je een ongedaan gemaakte zet in dezelfde beurt opnieuw
       toe. Nieuwe zetten en acties die de beurt be\xEBindigen, wissen Opnieuw uitvoeren.
       Bord repareren probeert geldige kaarten uit je hand te behouden terwijl het
-      bord wordt gerepareerd; kaarten die niet gebruikt kunnen worden, gaan terug
-      naar je hand. Terugzetten herstelt het bord naar de beginstand van de beurt
-      en geeft je gespeelde kaarten terug naar je hand. Destructieve acties kunnen
-      je om bevestiging vragen."
+      bord wordt hersteld; kaarten die niet gebruikt kunnen worden, gaan terug naar
+      je hand. Terugzetten herstelt het bord naar de beginstand en geeft je gespeelde
+      kaarten terug naar je hand. Destructieve acties kunnen je om bevestiging vragen."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540511
@@ -4019,6 +4019,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 74274328010776
     m_Localized: Toneelstuk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397158932480
+    m_Localized: Nieuw vilt ontgrendeld
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397712580608
+    m_Localized: Tik om verder te gaan
     m_Metadata:
       m_Items: []
   references:

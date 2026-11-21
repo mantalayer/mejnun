@@ -198,7 +198,9 @@ namespace Mejnun.UI.FrontEnd
             if (felt == null)
             {
                 preview.style.backgroundColor = new Color(0.16f, 0.38f, 0.26f);
-                preview.Add(new Label(Loc.Get("picker.felt.random")));
+                var randomLogo = new VisualElement();
+                randomLogo.AddToClassList("random-deck-logo");
+                preview.Add(randomLogo);
                 return preview;
             }
 

@@ -3988,11 +3988,20 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 74274328010775
-    m_Localized: Controls how far from the left, right, and top edges a drag starts panning the board; set to 0 to disable.
+    m_Localized: Controls how far from the left, right, and top edges a drag starts
+      panning the board; set to 0 to disable.
     m_Metadata:
       m_Items: []
   - m_Id: 74274328010776
     m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397158932480
+    m_Localized: New felt unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397712580608
+    m_Localized: Tap to continue
     m_Metadata:
       m_Items: []
   references:

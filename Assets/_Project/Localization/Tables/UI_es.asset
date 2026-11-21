@@ -73,7 +73,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282625
   - m_Id: 6548989403158
-    m_Localized: "\xA1{0} victorias!"
+    m_Localized: "\xA1{0} gana!"
     m_Metadata:
       m_Items:
       - rid: 4825848250703282625
@@ -320,7 +320,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180396
-    m_Localized: yinuo
+    m_Localized: Yinuo
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180400
@@ -2632,7 +2632,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282625
   - m_Id: 6549022957590
-    m_Localized: Gana {0:plural:{} juego|{} juegos}
+    m_Localized: Ganar {0:plural:{} juego|{} juegos}
     m_Metadata:
       m_Items:
       - rid: 4825848250703282625
@@ -3205,7 +3205,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346296
-    m_Localized: "Dispersi\xF3n de cartas del tablero"
+    m_Localized: "Dispersi\xF3n de cartas de mesa"
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346299
@@ -3641,7 +3641,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540564
-    m_Localized: No vuelvas a preguntar
+    m_Localized: No lo preguntes de nuevo
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540565
@@ -3760,7 +3760,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549039734790
-    m_Localized: No vuelvas a preguntar
+    m_Localized: No lo preguntes de nuevo
     m_Metadata:
       m_Items: []
   - m_Id: 6549039734793
@@ -4018,6 +4018,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 74274328010776
     m_Localized: Jugar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397158932480
+    m_Localized: Se ha desbloqueado un nuevo fieltro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397712580608
+    m_Localized: Toca para continuar
     m_Metadata:
       m_Items: []
   references:

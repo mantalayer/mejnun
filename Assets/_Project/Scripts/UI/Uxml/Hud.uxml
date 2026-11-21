@@ -138,26 +138,6 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="confirm-dialog" class="hud-dialog confirm-dialog" style="display: none">
-            <ui:Label name="confirm-message" class="dialog-message" />
-            <ui:Toggle name="confirm-dont-ask" class="dialog-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="hud.confirm.dont_ask" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:VisualElement class="dialog-actions">
-                <ui:Button name="confirm-cancel-button" class="hud-button">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.cancel" />
-                    </Bindings>
-                </ui:Button>
-                <ui:Button name="confirm-accept-button" class="hud-button primary-button">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.confirm.accept" />
-                    </Bindings>
-                </ui:Button>
-            </ui:VisualElement>
-        </ui:VisualElement>
         <ui:VisualElement name="pause-panel" class="hud-dialog pause-panel" style="display: none">
             <ui:Label class="dialog-title">
                 <Bindings>
@@ -214,6 +194,26 @@
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.close" />
                 </Bindings>
             </ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement name="confirm-dialog" class="hud-dialog confirm-dialog" style="display: none">
+            <ui:Label name="confirm-message" class="dialog-message" />
+            <ui:Toggle name="confirm-dont-ask" class="dialog-toggle">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="hud.confirm.dont_ask" />
+                </Bindings>
+            </ui:Toggle>
+            <ui:VisualElement class="dialog-actions">
+                <ui:Button name="confirm-cancel-button" class="hud-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.cancel" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="confirm-accept-button" class="hud-button primary-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.confirm.accept" />
+                    </Bindings>
+                </ui:Button>
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

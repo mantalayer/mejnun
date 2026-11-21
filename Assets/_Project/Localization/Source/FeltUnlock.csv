@@ -1,0 +1,3 @@
+table,key,en,comment
+UI,felt_unlock.caption,New felt unlocked,Caption shown when a new table felt is revealed.
+UI,felt_unlock.hint,Tap to continue,Tap instruction shown during the felt unlock reveal.

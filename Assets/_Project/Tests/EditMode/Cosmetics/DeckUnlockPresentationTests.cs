@@ -107,6 +107,33 @@ namespace Mejnun.Cosmetics.Tests
             Assert.That(finished, Is.True);
         }
 
+        [Test]
+        public void LandscapeGridKeepsThirteenColumnsAndFourRows()
+        {
+            var layout = DeckUnlockPresentation.ComputeGridLayout(1280f, 720f, Card.CardsPerDeck);
+
+            Assert.That(layout.Columns, Is.EqualTo(13));
+            Assert.That(layout.Rows, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void PortraitGridUsesMoreRowsAndLargerCardsWithoutOverflow()
+        {
+            const float width = 1080f;
+            const float height = 2340f;
+            var layout = DeckUnlockPresentation.ComputeGridLayout(width, height, Card.CardsPerDeck);
+            var totalWidth = layout.CardWidth * layout.Columns + layout.GapX * (layout.Columns - 1);
+            var totalHeight = layout.CardHeight * layout.Rows + layout.GapY * (layout.Rows - 1);
+            var previousCardWidth = Mathf.Min(width * 0.9f / 13f, height * 0.76f / 4f * 0.72f);
+
+            Assert.That(layout.Rows, Is.GreaterThan(4));
+            Assert.That(layout.CardWidth, Is.GreaterThan(previousCardWidth));
+            Assert.That(layout.Left, Is.GreaterThanOrEqualTo(0f));
+            Assert.That(layout.Top, Is.GreaterThanOrEqualTo(0f));
+            Assert.That(layout.Left + totalWidth, Is.LessThanOrEqualTo(width));
+            Assert.That(layout.Top + totalHeight, Is.LessThanOrEqualTo(height));
+        }
+
         private void SendTap()
         {
             // The test root is not attached to a panel, so UI Toolkit does not dispatch pointer events;

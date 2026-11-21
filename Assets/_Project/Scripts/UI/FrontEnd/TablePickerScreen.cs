@@ -61,6 +61,7 @@ namespace Mejnun.UI.FrontEnd
             feltGrid = popup.Q<ScrollView>("felt-selector-grid");
             ConfigureGrid(deckGrid);
             ConfigureGrid(feltGrid);
+            popup.RegisterCallback<GeometryChangedEvent>(OnPopupGeometryChanged);
             deckPreviewButtons[0].clicked += () => OpenDeckPopup(0);
             deckPreviewButtons[1].clicked += () => OpenDeckPopup(1);
             feltPreviewButton.clicked += OpenFeltPopup;
@@ -75,6 +76,7 @@ namespace Mejnun.UI.FrontEnd
         public void Dispose()
         {
             Loc.LanguageChanged -= OnLanguageChanged;
+            popup.UnregisterCallback<GeometryChangedEvent>(OnPopupGeometryChanged);
         }
 
         public string GetDeckPick(int slot)
@@ -253,6 +255,14 @@ namespace Mejnun.UI.FrontEnd
             ClosePopup();
         }
 
+        private void OnPopupGeometryChanged(GeometryChangedEvent evt)
+        {
+            if (popupOpen && (evt.oldRect.width != evt.newRect.width || evt.oldRect.height != evt.newRect.height))
+            {
+                PositionPopup();
+            }
+        }
+
         private void PositionPopup()
         {
             if (popupAnchor == null || popup.panel == null || popupHost.panel == null)
@@ -308,25 +318,25 @@ namespace Mejnun.UI.FrontEnd
                 left = Mathf.Clamp(anchorCenterX - width * 0.5f, edgeInset, maxLeft);
                 var aboveAnchor = anchorMin.y - height - gap;
                 var belowAnchor = anchorMax.y + gap;
-                if (belowAnchor <= maxTop)
-                {
-                    top = belowAnchor;
-                    tailEdge = PopupTailEdge.Top;
-                }
-                else if (aboveAnchor >= edgeInset)
+                if (aboveAnchor >= edgeInset)
                 {
                     top = aboveAnchor;
                     tailEdge = PopupTailEdge.Bottom;
                 }
-                else if (hostHeight - edgeInset - anchorMax.y >= anchorMin.y - edgeInset)
+                else if (belowAnchor <= maxTop)
                 {
-                    top = Mathf.Clamp(belowAnchor, edgeInset, maxTop);
+                    top = belowAnchor;
                     tailEdge = PopupTailEdge.Top;
                 }
-                else
+                else if (anchorMin.y - edgeInset >= hostHeight - edgeInset - anchorMax.y)
                 {
                     top = Mathf.Clamp(aboveAnchor, edgeInset, maxTop);
                     tailEdge = PopupTailEdge.Bottom;
+                }
+                else
+                {
+                    top = Mathf.Clamp(belowAnchor, edgeInset, maxTop);
+                    tailEdge = PopupTailEdge.Top;
                 }
             }
 
