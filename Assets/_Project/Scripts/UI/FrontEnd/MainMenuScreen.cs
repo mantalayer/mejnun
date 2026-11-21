@@ -3,6 +3,7 @@ using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
 using Mejnun.Localization;
+using Mejnun.Net.Unity;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,12 +18,14 @@ namespace Mejnun.UI.FrontEnd
         private readonly Action settings;
         private readonly Action howToPlay;
         private readonly Action online;
+        private readonly Action reconnectOnline;
         private readonly VisualElement tutorialPrompt;
         private MatchMode pendingMode;
         private readonly VisualElement frontendRoot;
         private readonly CosmeticCatalog cosmeticCatalog;
         private readonly ProgressionService progression;
         private readonly Button resumeButton;
+        private readonly Button reconnectButton;
         private readonly ProgressBar levelProgress;
         private readonly MenuCardCursor cardCursor;
         private readonly FeltWipe feltWipe;
@@ -30,7 +33,7 @@ namespace Mejnun.UI.FrontEnd
 
         public MainMenuScreen(VisualElement documentRoot, CosmeticCatalog catalog, Action<MatchMode> playAction,
             Action resumeAction, Action openGallery, Action openSettings, Action startTutorial = null,
-            Action openOnline = null, DeckSkinLoader loader = null)
+            Action openOnline = null, DeckSkinLoader loader = null, Action reconnectOnline = null)
         {
             root = documentRoot.Q<VisualElement>("main-menu-screen");
             frontendRoot = documentRoot.Q<VisualElement>("frontend-root");
@@ -42,9 +45,11 @@ namespace Mejnun.UI.FrontEnd
             settings = openSettings;
             howToPlay = startTutorial;
             online = openOnline;
+            this.reconnectOnline = reconnectOnline;
             progression = ProgressionService.Instance;
             tutorialPrompt = root.Q<VisualElement>("tutorial-prompt");
             resumeButton = root.Q<Button>("resume-match-button");
+            reconnectButton = root.Q<Button>("reconnect-match-button");
             levelProgress = root.Q<ProgressBar>("level-progress");
 
             root.Q<Button>("play-button").clicked += () => RequestPlay(MatchMode.Solo);
@@ -60,6 +65,7 @@ namespace Mejnun.UI.FrontEnd
                 tutorialPrompt.Q<Button>("tutorial-prompt-skip-button").clicked += DeclineTutorialPrompt;
             }
             resumeButton.clicked += () => resume?.Invoke();
+            reconnectButton.clicked += () => reconnectOnline?.Invoke();
             root.Q<Button>("online-button").clicked += () => online?.Invoke();
             root.Q<Button>("gallery-button").clicked += () => gallery?.Invoke();
             root.Q<Button>("settings-button").clicked += () => settings?.Invoke();
@@ -201,11 +207,23 @@ namespace Mejnun.UI.FrontEnd
         private void Refresh()
         {
             resumeButton.style.display = SavedGame.HasSave ? DisplayStyle.Flex : DisplayStyle.None;
+            RefreshReconnectOption();
             var profile = progression.Profile;
             RefreshBackground();
             var progress = ProgressionRules.LevelProgress(profile.Xp);
             levelProgress.value = progress.needed <= 0 ? 0f : 100f * progress.into / progress.needed;
             levelProgress.title = Loc.Format("menu.main.level_progress", profile.Level, progress.into, progress.needed);
+        }
+
+        public void RefreshReconnectOption()
+        {
+            var sessionCode = UgsOnlineService.LastSessionCode;
+            var showReconnect = UgsOnlineService.HasUnfinishedMatch && !string.IsNullOrWhiteSpace(sessionCode);
+            reconnectButton.style.display = showReconnect ? DisplayStyle.Flex : DisplayStyle.None;
+            if (showReconnect)
+            {
+                reconnectButton.text = Loc.Format("menu.main.reconnect", sessionCode);
+            }
         }
 
         private void OnLanguageChanged()

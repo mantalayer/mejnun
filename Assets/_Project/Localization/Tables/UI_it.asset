@@ -314,7 +314,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957571
-    m_Localized: Vinci tre partite contro i bot di fila.
+    m_Localized: Vinci tre partite di fila contro i bot.
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957578
@@ -713,7 +713,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208858
-    m_Localized: Non ancora un set
+    m_Localized: "Non \xE8 ancora un set"
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208859
@@ -1017,7 +1017,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403177
-    m_Localized: Lascia che l'IA prenda il controllo
+    m_Localized: Lasciamo che l'IA prenda il controllo
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403178
@@ -1258,7 +1258,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403245
-    m_Localized: Teo
+    m_Localized: Theo
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403246
@@ -2066,7 +2066,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180375
-    m_Localized: Fatina
+    m_Localized: Fatima
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180376
@@ -2350,7 +2350,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763270
-    m_Localized: Organizza una partita con sei posti.
+    m_Localized: Gioca una partita con sei posti.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763271
@@ -3405,7 +3405,7 @@ MonoBehaviour:
     m_Localized: "Le combinazioni dello stesso tipo contengono 3-4 carte dello stesso
       valore, con ogni seme diverso. Le scale contengono da 3 a 13 carte consecutive
       dello stesso seme, senza ripetizione di valore. Un asso pu\xF2 essere basso
-      (A-2-3) o alto (Q-K-A), ma mai entrambi; K-A-2 non \xE8 consentito. Ogni combinazione
+      (A-2-3) o alto (Q-K-A), ma mai entrambi; K-A-2 non \xE8 ammesso. Ogni combinazione
       sul tavolo deve essere valida; le combinazioni di una o due carte non sono
       valide."
     m_Metadata:
@@ -3459,7 +3459,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540513
-    m_Localized: Mazzo di sorteggio vuoto e stalli
+    m_Localized: Mazzo vuoto e stalli
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540514
@@ -4042,6 +4042,111 @@ MonoBehaviour:
     m_Localized: Nuovo feltro sbloccato
     m_Metadata:
       m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: 'Codice della stanza: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 346014409023488
+    m_Localized: Per questa partita non ci sono posti liberi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: "Non \xE8 stato possibile trovare una corrispondenza con quel codice"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: Al momento non sono disponibili partite.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: Impossibile accedere alla partita. Riprova.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: In attesa dei giocatori
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141121
+    m_Localized: Lascia la partita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Salva e metti in pausa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: "Host disconnesso, ricerca di un nuovo host in corso\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: Impossibile recuperare la partita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} si sta ricollegando\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 349485963141126
+    m_Localized: Attendi, l'IA sta terminando questo turno.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: Ospite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: In attesa del giocatore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: Collegato
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Riconnessione
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: Disconnesso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: IA che gioca
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: In attesa dell'IA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Continua ad aspettare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: Lascia che l'IA giochi per {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 377671954456576
+    m_Localized: Riconnettiti alla stanza {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 377671971233792
+    m_Localized: "Riconnessione alla stanza {0}\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 377671971233793
+    m_Localized: "La partita \xE8 terminata."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "Riconnessione alla partita in corso\u2026"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4116,3 +4221,8 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

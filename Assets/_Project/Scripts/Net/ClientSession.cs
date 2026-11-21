@@ -7,10 +7,13 @@ namespace Mejnun.Net
     public sealed class ClientSession
     {
         private byte[] lastSnapshot;
+        private readonly List<SeatStatusMessage> seatStatuses = new List<SeatStatusMessage>();
 
         public MejnunGame Game { get; private set; }
         public int LocalSeat { get; private set; } = -1;
-        public bool IsPaused { get; private set; }
+        public PauseReason PauseReason { get; private set; }
+        public bool IsPaused => PauseReason != Mejnun.Net.PauseReason.None;
+        public IReadOnlyList<SeatStatusMessage> SeatStatuses => seatStatuses.AsReadOnly();
         public event Action<MejnunGame> StateChanged;
         public event Action<NetMessage> StatusChanged;
 
@@ -46,10 +49,21 @@ namespace Mejnun.Net
                     ReplaceView(((StateUpdateMessage)message).Snapshot);
                     break;
                 case NetMessageKind.Paused:
-                    IsPaused = ((PausedMessage)message).Paused;
+                    PauseReason = ((PausedMessage)message).Reason;
                     StatusChanged?.Invoke(message);
                     break;
                 case NetMessageKind.SeatStatus:
+                {
+                    var status = (SeatStatusMessage)message;
+                    while (seatStatuses.Count <= status.Seat)
+                    {
+                        seatStatuses.Add(null);
+                    }
+
+                    seatStatuses[status.Seat] = status;
+                    StatusChanged?.Invoke(message);
+                    break;
+                }
                 case NetMessageKind.Rejected:
                     StatusChanged?.Invoke(message);
                     break;

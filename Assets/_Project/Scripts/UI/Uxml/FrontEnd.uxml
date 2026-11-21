@@ -18,6 +18,7 @@
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.resume"/>
                     </Bindings>
                 </ui:Button>
+                <ui:Button name="reconnect-match-button" class="frontend-button" style="display: none;" />
                 <ui:Button name="play-button" class="frontend-button primary-flow-button">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.play"/>

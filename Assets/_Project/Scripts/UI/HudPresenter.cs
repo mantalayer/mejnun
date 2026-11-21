@@ -4,6 +4,7 @@ using Mejnun.Cosmetics;
 using Mejnun.Core;
 using Mejnun.Game;
 using Mejnun.Localization;
+using Mejnun.Net.Unity;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -81,6 +82,7 @@ namespace Mejnun.UI
         private Button helpButton;
         private Button skipTutorialButton;
         private TutorialOverlay tutorialOverlay;
+        private OnlineWaitingOverlayPresenter onlineWaitingOverlay;
         private Label turnPopup;
         private Label halasPopup;
         private Label timerLabel;
@@ -273,6 +275,7 @@ namespace Mejnun.UI
         private void Start()
         {
             tutorialOverlay?.Bind(matchFlow == null ? null : matchFlow.Tutorial);
+            TryBindOnlineWaitingOverlay();
             if (SceneFlow.TryTakeTableIntro())
             {
                 if (root != null && root.worldBound.width > 0f && root.worldBound.height > 0f)
@@ -709,6 +712,7 @@ namespace Mejnun.UI
         private void OnDestroy()
         {
             tutorialOverlay?.Unbind();
+            onlineWaitingOverlay?.Dispose();
             onlineNoticeHide?.Pause();
             if (settingsPanelBinder != null)
             {
@@ -719,6 +723,7 @@ namespace Mejnun.UI
 
         private void Update()
         {
+            TryBindOnlineWaitingOverlay();
             UpdateTableEdgeAnimations();
             UpdateTableExitAnimation();
             HandleKeyboardShortcuts();
@@ -926,6 +931,20 @@ namespace Mejnun.UI
             FadeOutOnlineWaiting();
         }
 
+        private void TryBindOnlineWaitingOverlay()
+        {
+            if (onlineWaitingOverlay != null || root == null || matchFlow == null)
+            {
+                return;
+            }
+
+            var bridge = matchFlow.GetComponent<OnlineMatchBridge>();
+            if (bridge != null)
+            {
+                onlineWaitingOverlay = new OnlineWaitingOverlayPresenter(root, bridge, RequestLeave);
+            }
+        }
+
         private void FadeOutOnlineWaiting()
         {
             onlineWaitingShow?.Pause();
@@ -1062,11 +1081,31 @@ namespace Mejnun.UI
             }
 
             var target = evt.target as VisualElement;
+            if (IsInsideEnabledButton(target))
+            {
+                return;
+            }
+
             if ((bottomBar != null && (bottomBar.Contains(target) || bottomBar.worldBound.Contains(evt.position))) ||
                 (statusPanel != null && (statusPanel.Contains(target) || statusPanel.worldBound.Contains(evt.position))))
             {
                 ShowInvalidMove(RuleError.NotYourTurn);
             }
+        }
+
+        public static bool IsInsideEnabledButton(VisualElement element)
+        {
+            while (element != null)
+            {
+                if (element is Button button && button.enabledInHierarchy)
+                {
+                    return true;
+                }
+
+                element = element.parent;
+            }
+
+            return false;
         }
 
         public static bool IsPhoneScreen(bool isMobilePlatform, int width, int height, float dpi)

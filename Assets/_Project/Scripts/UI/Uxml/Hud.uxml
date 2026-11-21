@@ -2,6 +2,7 @@
     <ui:Style src="../Uss/common.uss" />
     <ui:Style src="../Uss/table.uss" />
     <ui:Template name="settings-panel-template" src="SettingsPanel.uxml" />
+    <ui:Template name="online-waiting-overlay-template" src="OnlineWaitingOverlay.uxml" />
     <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
         <ui:VisualElement name="turn-panel" class="hud-bar turn-panel">
             <ui:Label name="turn-label" class="status-label" />
@@ -195,6 +196,8 @@
                 </Bindings>
             </ui:Button>
         </ui:VisualElement>
+        <ui:Instance template="online-waiting-overlay-template" picking-mode="Ignore"
+                     style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" />
         <ui:VisualElement name="confirm-dialog" class="hud-dialog confirm-dialog" style="display: none">
             <ui:Label name="confirm-message" class="dialog-message" />
             <ui:Toggle name="confirm-dont-ask" class="dialog-toggle">

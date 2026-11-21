@@ -1,0 +1,18 @@
+table,key,en,comment
+UI,net.waiting.title,Waiting for players,Title of the full-screen online waiting panel.
+UI,net.waiting.room_code,Room code: {0},Shows the room code so a player can share it with a returning friend.
+UI,net.waiting.leave,Leave match,Button that returns the player to the front end.
+UI,net.waiting.save_pause,Save & pause,Host action that saves and pauses the match while players are absent.
+UI,net.waiting.finding_host,"Host disconnected, finding a new host…",Status shown while waiting for Unity host migration.
+UI,net.waiting.recovery_failed,Couldn't recover the match,Status shown when host migration does not restore a usable session.
+UI,net.waiting.reconnecting,{0} is reconnecting… {1}s,Compact status banner with a player name and remaining grace seconds.
+UI,net.waiting.please_wait,"Please wait, the AI is finishing this turn",Shown to a player waiting to take control from the AI.
+UI,net.seat.host_badge,Host,Badge identifying the player who currently owns the host role.
+UI,net.seat.status.empty,Waiting for player,Status shown for a seat that has not been filled.
+UI,net.seat.status.connected,Connected,Status shown for a connected human seat.
+UI,net.seat.status.reconnecting,Reconnecting,Status shown during a player's grace period.
+UI,net.seat.status.disconnected,Disconnected,Status shown after a player's reconnect grace expires.
+UI,net.seat.status.ai_playing,AI playing,Status shown when AI is controlling a human seat.
+UI,net.seat.status.waiting_for_ai,Waiting for AI,Status shown while AI finishes a turn before handing the seat back.
+UI,net.host.keep_waiting,Keep waiting,Host action that leaves the disconnected seat reserved.
+UI,net.host.let_ai_play,Let AI play for {0},Host action to let AI control the named absent player seat.

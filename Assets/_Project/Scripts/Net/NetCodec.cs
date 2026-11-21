@@ -60,25 +60,36 @@ namespace Mejnun.Net
                         break;
                     }
                     case NetMessageKind.Rejected:
-                        WriteString(writer, ((RejectedMessage)message).Reason);
+                    {
+                        var rejected = (RejectedMessage)message;
+                        writer.Write(rejected.Code.HasValue);
+                        if (rejected.Code.HasValue)
+                        {
+                            writer.Write((byte)rejected.Code.Value);
+                        }
+
+                        WriteString(writer, rejected.DebugReason);
                         break;
+                    }
                     case NetMessageKind.SeatStatus:
                     {
                         var status = (SeatStatusMessage)message;
                         writer.Write(status.Seat);
                         WriteString(writer, status.AuthenticationId);
                         WriteString(writer, status.DisplayName);
-                        writer.Write(status.Connected);
-                        writer.Write(status.IsBot);
+                        writer.Write((byte)status.Presence);
+                        writer.Write(status.PendingHandBack);
+                        writer.Write(status.GraceRemaining);
                         break;
                     }
                     case NetMessageKind.Paused:
                     {
                         var paused = (PausedMessage)message;
-                        writer.Write(paused.Paused);
-                        WriteString(writer, paused.Reason);
+                        writer.Write((byte)paused.Reason);
                         break;
                     }
+                    case NetMessageKind.Away:
+                        break;
                     default:
                         throw new InvalidDataException("Unsupported network message.");
                 }
@@ -139,14 +150,21 @@ namespace Mejnun.Net
                         break;
                     }
                     case NetMessageKind.Rejected:
-                        message = new RejectedMessage(ReadString(reader));
+                    {
+                        var code = reader.ReadBoolean() ? (JoinRejectReason?)ReadEnum<JoinRejectReason>(reader,
+                            "join reject reason") : null;
+                        message = new RejectedMessage(code, ReadString(reader));
                         break;
+                    }
                     case NetMessageKind.SeatStatus:
                         message = new SeatStatusMessage(reader.ReadInt32(), ReadString(reader), ReadString(reader),
-                            reader.ReadBoolean(), reader.ReadBoolean());
+                            ReadEnum<SeatPresence>(reader, "seat presence"), reader.ReadBoolean(), reader.ReadSingle());
                         break;
                     case NetMessageKind.Paused:
-                        message = new PausedMessage(reader.ReadBoolean(), ReadString(reader));
+                        message = new PausedMessage(ReadEnum<PauseReason>(reader, "pause reason"));
+                        break;
+                    case NetMessageKind.Away:
+                        message = new AwayMessage();
                         break;
                     default:
                         throw new InvalidDataException("Unsupported network message.");

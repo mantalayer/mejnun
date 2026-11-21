@@ -884,7 +884,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403140
-    m_Localized: Wakati rundo la droo likiisha, Droo inakuwa Pasi. Ikiwa kila mtu
+    m_Localized: Wakati rundo la droo likiisha, droo inakuwa Pasi. Ikiwa kila mtu
       atapiga pasi mfululizo, mchezaji mwenye kadi chache zaidi atashinda. Sare ni
       Sare.
     m_Metadata:
@@ -2455,8 +2455,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763294
-    m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako huku rundo la droo likiwa
-      tupu.
+    m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako huku rundo la kuteka
+      likiwa tupu.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763296
@@ -2935,7 +2935,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346216
-    m_Localized: Roboti ngumu
+    m_Localized: Boti ngumu
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346218
@@ -2976,7 +2976,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282629
   - m_Id: 6549031346229
-    m_Localized: Chagua fulana ya meza
+    m_Localized: Chagua fanicha ya meza
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346230
@@ -3181,7 +3181,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346289
-    m_Localized: Hudhibiti jinsi jedwali linavyokuza kwa kasi wakati wa kusogeza.
+    m_Localized: Hudhibiti jinsi jedwali linavyokuza haraka wakati wa kusogeza.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346292
@@ -3390,8 +3390,8 @@ MonoBehaviour:
     m_Localized: Tendua hatua nyuma kupitia hatua zako; Rudia tena hatua isiyotekelezwa
       katika zamu ile ile. Hatua mpya na vitendo vya kugeuza huondoa Rudia. Bodi
       ya Kurekebisha hujaribu kuweka michezo halali kutoka kwa mkono wako wakati
-      wa kurekebisha bodi; kadi ambazo haziwezi kutumia hurudi kwenye mkono wako.
-      Revert hurejesha bodi katika hali yake ya kuanza kugeuza na kurudisha kadi
+      wa kurekebisha ubao; kadi ambazo haziwezi kutumia hurudi kwenye mkono wako.
+      Revert hurejesha ubao katika hali yake ya kuanza kugeuka na hurudisha kadi
       zako zilizochezwa kwenye mkono wako. Vitendo vya uharibifu vinaweza kukuomba
       uthibitishe.
     m_Metadata:
@@ -3401,7 +3401,7 @@ MonoBehaviour:
       au kuzima kipima muda katika michezo ya nje ya mtandao. Michezo ya mtandaoni
       hupangwa kila wakati. Wakati unapoisha, ubao halali usio na michezo ya mkono
       huwekwa na unachora; ubao batili usio na michezo ya mkono hurejeshwa na unachora.
-      Ukicheza kadi za mkono na ubao ni halali, zamu yako inaisha bila sare. Ikiwa
+      Ukicheza kadi za mkono na ubao ni halali, zamu yako huisha bila sare. Ikiwa
       ni batili, mienendo yako hutenduliwa hadi iwe halali; unachora tu ikiwa hakuna
       kadi ya mkono iliyobaki kwenye ubao.
     m_Metadata:
@@ -3951,7 +3951,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 74274328010762
-    m_Localized: Duuuh kubwa...
+    m_Localized: Mkubwa sana...
     m_Metadata:
       m_Items: []
   - m_Id: 74274328010763
@@ -4018,6 +4018,111 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 312397712580608
     m_Localized: Gusa ili kuendelea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: 'Nambari ya chumba: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 346014409023488
+    m_Localized: Mechi hii haina viti vya bure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: Hatukuweza kupata inayolingana na msimbo huo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: Hakuna mechi zinazopatikana kwa sasa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: Haikuweza kujiunga na mechi. Tafadhali jaribu tena.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: Kusubiri wachezaji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141121
+    m_Localized: Acha mechi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Hifadhi na usitishe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: "Seva mwenyeji imetenganishwa, ikipata seva mwenyeji mpya\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: Haikuweza kurejesha mechi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} inaunganisha tena\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 349485963141126
+    m_Localized: Tafadhali subiri, AI inakamilisha zamu hii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: Mwenyeji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: Inasubiri mchezaji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: Imeunganishwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Kuunganisha upya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: Imetenganishwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: Inacheza AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: Inasubiri AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Endelea kusubiri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: Acha AI icheze kwa {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 377671954456576
+    m_Localized: Unganisha tena kwenye chumba cha {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 377671971233792
+    m_Localized: "Inaunganisha tena kwenye chumba {0}\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 377671971233793
+    m_Localized: Mechi hiyo imekwisha.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "Inaunganishwa tena kwenye mechi\u2026"
     m_Metadata:
       m_Items: []
   references:
@@ -4094,3 +4199,8 @@ MonoBehaviour:
         - id: 6549039734799
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

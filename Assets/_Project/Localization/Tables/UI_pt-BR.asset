@@ -419,7 +419,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346227
-    m_Localized: "Aleat\xF3rio"
+    m_Localized: "feltro aleat\xF3rio"
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346241
@@ -463,7 +463,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346287
-    m_Localized: "Altera o tamanho das cartas exibidas nas m\xE3os dos outros jogadores."
+    m_Localized: "Altera o tamanho das cartas mostradas nas m\xE3os dos outros jogadores."
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346297
@@ -889,8 +889,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548989403144
     m_Localized: "A op\xE7\xE3o \"Fix board\" tenta validar todas as partidas, mantendo
-      suas jogadas. A op\xE7\xE3o \"Revert board\" restaura a mesa ao estado em que
-      estava no in\xEDcio do seu turno."
+      suas jogadas. A op\xE7\xE3o \"Revert board\" restaura toda a mesa ao estado
+      em que estava no in\xEDcio do seu turno."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403145
@@ -2561,7 +2561,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957577
-    m_Localized: Ganhe um jogo online com pelo menos quatro jogadores humanos.
+    m_Localized: Ganhe uma partida online com pelo menos quatro jogadores humanos.
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957578
@@ -3500,7 +3500,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540524
-    m_Localized: Fixar placa
+    m_Localized: "Placa de fixa\xE7\xE3o"
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540525
@@ -3607,7 +3607,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540550
-    m_Localized: "Des\xE7a at\xE9 a mesa antes de usar as cartas do tabuleiro."
+    m_Localized: "Antes de usar as cartas do tabuleiro, des\xE7a at\xE9 a mesa."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540551
@@ -3871,7 +3871,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 74273250074628
-    m_Localized: "\xC9 disso que estou falando!"
+    m_Localized: "\xC9 exatamente disso que estou falando!"
     m_Metadata:
       m_Items: []
   - m_Id: 74273250074629
@@ -4033,6 +4033,111 @@ MonoBehaviour:
     m_Localized: Toque para continuar
     m_Metadata:
       m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: "C\xF3digo do quarto: {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 346014409023488
+    m_Localized: "Este jogo n\xE3o tem lugares livres."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: "N\xE3o encontramos nenhuma correspond\xEAncia com esse c\xF3digo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: "N\xE3o h\xE1 resultados dispon\xEDveis no momento."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: "N\xE3o foi poss\xEDvel entrar na partida. Tente novamente."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: Aguardando jogadores
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141121
+    m_Localized: Partida sem jogo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Salvar e pausar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: "Host desconectado, procurando um novo host\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: "N\xE3o foi poss\xEDvel recuperar a partida."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} est\xE1 reconectando\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 349485963141126
+    m_Localized: "Aguarde, a IA est\xE1 terminando este turno."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: Hospedar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: Aguardando jogador
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: Conectado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Reconectando
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: Desconectado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: IA jogando
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: Aguardando IA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Continue esperando
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: Deixe a IA jogar por {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 377671954456576
+    m_Localized: "Reconectar \xE0 sala {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 377671971233792
+    m_Localized: "Reconectando \xE0 sala {0}\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 377671971233793
+    m_Localized: Essa partida terminou.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "Reconectando \xE0 partida\u2026"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4107,3 +4212,8 @@ MonoBehaviour:
         - id: 6549039734799
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

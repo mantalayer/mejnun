@@ -80,8 +80,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548989403142
     m_Localized: "Dans les jeux chronom\xE9tr\xE9s, un chronom\xE8tre d\xE9compte
-      chaque tour. Quand le temps est \xE9coul\xE9 \u2014 Hale ! \u2014 le tour valide
-      se termine ; sinon, vos cartes retournent dans le jeu et vous piochez."
+      chaque tour. Quand le temps est \xE9coul\xE9 \u2014 Hale ! \u2014, le tour
+      valide se termine ; sinon, vos cartes retournent dans le jeu et vous piochez."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403152
@@ -453,7 +453,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346262
-    m_Localized: Demandez la permission avant de reprendre des cartes invalides.
+    m_Localized: Demandez avant de reprendre des cartes invalides.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346267
@@ -773,7 +773,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548985208857
     m_Localized: "Appuyez longuement sur le 10\u2665 et faites-le glisser vers la
-      table vide. Le 10\u2665 J\u2665 sera inclus."
+      zone vide du tableau. Le 10\u2665 J\u2665 sera inclus."
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208858
@@ -1564,7 +1564,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548993597512
-    m_Localized: Haoyu
+    m_Localized: Hao Yu
     m_Metadata:
       m_Items: []
   - m_Id: 6548993597513
@@ -2468,7 +2468,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763289
-    m_Localized: Balayage complet
+    m_Localized: Nettoyage complet
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763290
@@ -2505,7 +2505,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763299
-    m_Localized: Route royale
+    m_Localized: Route Royale
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763300
@@ -2537,7 +2537,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763308
-    m_Localized: "S\xE9parez une suite et terminez le tour avec une donne valide."
+    m_Localized: "S\xE9parez une quinte et terminez le tour avec une donne valide."
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763309
@@ -2895,7 +2895,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346190
-    m_Localized: Se connecter par code
+    m_Localized: Rejoignez-nous par code
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346192
@@ -3243,8 +3243,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346295
-    m_Localized: "Disposez les couverts en une grille bien ordonn\xE9e au lieu de
-      les r\xE9partir de fa\xE7on organique sur la table."
+    m_Localized: "Disposez les couverts en une grille bien ordonn\xE9e plut\xF4t
+      que de fa\xE7on organique sur la table."
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346296
@@ -3256,7 +3256,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346298
-    m_Localized: "D\xE9sordre des cartes"
+    m_Localized: "d\xE9sordre des cartes"
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346299
@@ -3392,8 +3392,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6549035540498
     m_Localized: "Mejnun utilise deux jeux de 52 cartes standard m\xE9lang\xE9s\_:
-      104 cartes au total, sans joker. Les cartes identiques des deux jeux sont des
-      doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
+      104 cartes au total, sans joker. Les cartes identiques des deux jeux forment
+      des doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
       d'une montre (vers la gauche)."
     m_Metadata:
       m_Items: []
@@ -3510,7 +3510,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540524
-    m_Localized: carte de fixation
+    m_Localized: Tableau de fixation
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540525
@@ -4042,6 +4042,111 @@ MonoBehaviour:
     m_Localized: Appuyez pour continuer
     m_Metadata:
       m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: 'Code de la chambre : {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 346014409023488
+    m_Localized: Il n'y a plus de places libres pour ce match.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: "Nous n'avons trouv\xE9 aucune correspondance avec ce code."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: Aucun match n'est disponible pour le moment.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: "Impossible de rejoindre la partie. Veuillez r\xE9essayer."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: En attente des joueurs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141121
+    m_Localized: Quitter le match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Sauvegarder et mettre en pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: "H\xF4te d\xE9connect\xE9, recherche d'un nouvel h\xF4te\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: "Impossible de r\xE9cup\xE9rer le match"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} se reconnecte\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 349485963141126
+    m_Localized: Veuillez patienter, l'IA termine son tour.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: "H\xF4te"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: En attente du joueur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: "Connect\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Se reconnecter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: "D\xE9connect\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: L'IA joue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: En attendant l'IA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Continuez d'attendre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: Laissez l'IA jouer pour {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 377671954456576
+    m_Localized: "Se reconnecter \xE0 la salle {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 377671971233792
+    m_Localized: "Reconnexion \xE0 la salle {0}\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 377671971233793
+    m_Localized: "Ce match est termin\xE9."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "Se reconnecter au match\u2026"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4116,3 +4221,8 @@ MonoBehaviour:
         - id: 6549039734799
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

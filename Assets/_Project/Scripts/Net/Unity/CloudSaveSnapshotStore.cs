@@ -10,6 +10,7 @@ namespace Mejnun.Net.Unity
     public sealed class CloudSaveSnapshotStore : ISnapshotStore
     {
         private const string Key = "mejnun_online_session_v1";
+        private const int CurrentVersion = 2;
         private SessionRecord cachedRecord;
 
         public Task PendingSave { get; private set; } = Task.CompletedTask;
@@ -69,14 +70,18 @@ namespace Mejnun.Net.Unity
                     DisplayName = seat.DisplayName,
                     Connected = seat.Connected,
                     IsBot = seat.IsBot,
-                    Difficulty = (int)seat.Difficulty
+                    Difficulty = (int)seat.Difficulty,
+                    Presence = (int)seat.Presence,
+                    PendingHandBack = seat.PendingHandBack
                 };
             }
 
             return new CloudRecord
             {
+                Version = CurrentVersion,
                 Snapshot = Convert.ToBase64String(record.Snapshot),
                 Paused = record.Paused,
+                PauseReason = (int)record.PauseReason,
                 Seats = seats
             };
         }
@@ -88,6 +93,11 @@ namespace Mejnun.Net.Unity
                 throw new InvalidOperationException("Cloud Save contains an invalid Mejnun session record.");
             }
 
+            if (data.Version > CurrentVersion)
+            {
+                throw new InvalidOperationException("Cloud Save contains an unsupported Mejnun session record version.");
+            }
+
             var seats = new SeatRecord[data.Seats.Length];
             for (var index = 0; index < seats.Length; index++)
             {
@@ -95,20 +105,68 @@ namespace Mejnun.Net.Unity
                 var difficulty = seat.Difficulty >= byte.MinValue && seat.Difficulty <= byte.MaxValue
                     ? (BotDifficulty)seat.Difficulty
                     : BotDifficulty.Medium;
-                seats[index] = new SeatRecord(seat.AuthenticationId, seat.DisplayName, seat.Connected,
-                    seat.IsBot, Enum.IsDefined(typeof(BotDifficulty), difficulty)
-                        ? difficulty
-                        : BotDifficulty.Medium);
+                if (!Enum.IsDefined(typeof(BotDifficulty), difficulty))
+                {
+                    difficulty = BotDifficulty.Medium;
+                }
+
+                var presence = data.Version >= CurrentVersion
+                    ? ReadPresence(seat.Presence)
+                    : ReadLegacyPresence(seat);
+                seats[index] = new SeatRecord(seat.AuthenticationId, seat.DisplayName, presence,
+                    data.Version >= CurrentVersion && seat.PendingHandBack, difficulty);
             }
 
-            return new SessionRecord(Convert.FromBase64String(data.Snapshot), seats, data.Paused);
+            var pauseReason = data.Version >= CurrentVersion
+                ? ReadPauseReason(data.PauseReason)
+                : data.Paused ? PauseReason.SavedByHost : PauseReason.None;
+            return new SessionRecord(Convert.FromBase64String(data.Snapshot), seats, pauseReason);
+        }
+
+        private static SeatPresence ReadLegacyPresence(CloudSeat seat)
+        {
+            if (seat.IsBot)
+            {
+                return SeatPresence.Bot;
+            }
+
+            if (string.IsNullOrEmpty(seat.AuthenticationId))
+            {
+                return SeatPresence.Empty;
+            }
+
+            return seat.Connected ? SeatPresence.Reconnecting : SeatPresence.Disconnected;
+        }
+
+        private static SeatPresence ReadPresence(int value)
+        {
+            if (value < byte.MinValue || value > byte.MaxValue ||
+                !Enum.IsDefined(typeof(SeatPresence), (byte)value))
+            {
+                throw new InvalidOperationException("Cloud Save contains an invalid seat presence value.");
+            }
+
+            return (SeatPresence)value;
+        }
+
+        private static PauseReason ReadPauseReason(int value)
+        {
+            if (value < byte.MinValue || value > byte.MaxValue ||
+                !Enum.IsDefined(typeof(PauseReason), (byte)value))
+            {
+                throw new InvalidOperationException("Cloud Save contains an invalid pause reason value.");
+            }
+
+            return (PauseReason)value;
         }
 
         [Serializable]
         private sealed class CloudRecord
         {
+            public int Version;
             public string Snapshot;
             public bool Paused;
+            public int PauseReason;
             public CloudSeat[] Seats;
         }
 
@@ -120,6 +178,8 @@ namespace Mejnun.Net.Unity
             public bool Connected;
             public bool IsBot;
             public int Difficulty;
+            public int Presence;
+            public bool PendingHandBack;
         }
     }
 }

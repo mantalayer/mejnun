@@ -4800,6 +4800,131 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848269378158593
+  - m_Id: 346014409023488
+    m_Key: online.status.no_free_seats
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271479242752
+  - m_Id: 346014845231104
+    m_Key: online.status.match_not_found
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271479242753
+  - m_Id: 346014845231105
+    m_Key: online.status.no_open_matches
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271479242754
+  - m_Id: 346014845231106
+    m_Key: online.status.join_failed
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271479242755
+  - m_Id: 349485589848064
+    m_Key: net.waiting.title
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035840
+  - m_Id: 349485963141120
+    m_Key: net.waiting.room_code
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035841
+  - m_Id: 349485963141121
+    m_Key: net.waiting.leave
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035842
+  - m_Id: 349485963141122
+    m_Key: net.waiting.save_pause
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035843
+  - m_Id: 349485963141123
+    m_Key: net.waiting.finding_host
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035844
+  - m_Id: 349485963141124
+    m_Key: net.waiting.recovery_failed
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035845
+  - m_Id: 349485963141125
+    m_Key: net.waiting.reconnecting
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035846
+  - m_Id: 349485963141126
+    m_Key: net.waiting.please_wait
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035847
+  - m_Id: 349485963141127
+    m_Key: net.seat.host_badge
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035848
+  - m_Id: 349485963141128
+    m_Key: net.seat.status.empty
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035849
+  - m_Id: 349485963141129
+    m_Key: net.seat.status.connected
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035850
+  - m_Id: 349485963141130
+    m_Key: net.seat.status.reconnecting
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035851
+  - m_Id: 349485963141131
+    m_Key: net.seat.status.disconnected
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035852
+  - m_Id: 349485963141132
+    m_Key: net.seat.status.ai_playing
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035853
+  - m_Id: 349485963141133
+    m_Key: net.seat.status.waiting_for_ai
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035854
+  - m_Id: 349485963141134
+    m_Key: net.host.keep_waiting
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035855
+  - m_Id: 349485963141135
+    m_Key: net.host.let_ai_play
+    m_Metadata:
+      m_Items:
+      - rid: 4825848271696035856
+  - m_Id: 377671954456576
+    m_Key: menu.main.reconnect
+    m_Metadata:
+      m_Items:
+      - rid: 4825848273457643520
+  - m_Id: 377671971233792
+    m_Key: online.status.reconnecting
+    m_Metadata:
+      m_Items:
+      - rid: 4825848273457643521
+  - m_Id: 377671971233793
+    m_Key: online.status.match_ended
+    m_Metadata:
+      m_Items:
+      - rid: 4825848273457643522
+  - m_Id: 410560075128832
+    m_Key: net.waiting.rejoining
+    m_Metadata:
+      m_Items:
+      - rid: 4825848275513376768
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9273,3 +9398,112 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Tap instruction shown during the felt unlock reveal.
+    - rid: 4825848271479242752
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown when joining a match fails because no disconnected or
+          AI-controlled seat is available.
+    - rid: 4825848271479242753
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown when a join code is invalid or the match no longer exists.
+    - rid: 4825848271479242754
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown when quick match cannot find an available match.
+    - rid: 4825848271479242755
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Fallback for unexpected online join or reconnect errors.
+    - rid: 4825848271696035840
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Title of the full-screen online waiting panel.
+    - rid: 4825848271696035841
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shows the room code so a player can share it with a returning
+          friend.
+    - rid: 4825848271696035842
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Button that returns the player to the front end.
+    - rid: 4825848271696035843
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Host action that saves and pauses the match while players
+          are absent.
+    - rid: 4825848271696035844
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown while waiting for Unity host migration.
+    - rid: 4825848271696035845
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown when host migration does not restore a usable
+          session.
+    - rid: 4825848271696035846
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Compact status banner with a player name and remaining grace
+          seconds.
+    - rid: 4825848271696035847
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown to a player waiting to take control from the AI.
+    - rid: 4825848271696035848
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Badge identifying the player who currently owns the host role.
+    - rid: 4825848271696035849
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown for a seat that has not been filled.
+    - rid: 4825848271696035850
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown for a connected human seat.
+    - rid: 4825848271696035851
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown during a player's grace period.
+    - rid: 4825848271696035852
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown after a player's reconnect grace expires.
+    - rid: 4825848271696035853
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown when AI is controlling a human seat.
+    - rid: 4825848271696035854
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Status shown while AI finishes a turn before handing the seat
+          back.
+    - rid: 4825848271696035855
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Host action that leaves the disconnected seat reserved.
+    - rid: 4825848271696035856
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Host action to let AI control the named absent player seat.
+    - rid: 4825848273457643520
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Main menu action for resuming the saved unfinished online
+          match. {0} is the room code.
+    - rid: 4825848273457643521
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown while the player uses the main-menu reconnect action.
+          {0} is the saved room code.
+    - rid: 4825848273457643522
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown when a saved unfinished match no longer exists.
+    - rid: 4825848275513376768
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Shown while a returning player waits for the host to restore
+          their seat and send the match welcome.

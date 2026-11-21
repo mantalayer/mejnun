@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
@@ -14,12 +17,14 @@ namespace Mejnun.Localization.Editor
     // Round trip with the translation workbook (plan §7.1, Docs/Localization.md):
     //   1. Push: write Key + en only. New keys get a row with a GOOGLETRANSLATE
     //      formula and status "auto" in every target-locale column. Existing
-    //      translations, formulas and reviewer edits are never overwritten;
-    //      when the English text of a reviewed row changes, its status becomes
-    //      "needs-review".
-    //   2. Wait until Google has finished evaluating the formulas.
+    //      translations and reviewer edits are preserved; when the English
+    //      text changes, auto rows regain formulas and reviewed rows need review.
+    //   2. Wait until Google has finished evaluating the formulas. Stuck,
+    //      loading or empty GOOGLETRANSLATE cells are translated directly as a
+    //      fallback and written back as plain text.
     //   3. Pull: copy each locale column into its String Table. Key, en and
     //      status columns are never imported; empty and error cells are skipped.
+    //      Completed GOOGLETRANSLATE formulas are then frozen as plain text.
     // Uses the OAuth client of Unity Localization's Sheets Service Provider.
     public static class LocalizationSheetsSync
     {
@@ -30,18 +35,25 @@ namespace Mejnun.Localization.Editor
         private const string KeyHeader = "Key";
         private const string StatusSuffix = " status";
         private const string LoadingValue = "Loading...";
+        private const int MaxRangesPerBatch = 1000;
+        private const int DirectTranslateDelayMilliseconds = 100;
 
         public struct Result
         {
             public int RowsAdded;
             public int SourcesUpdated;
             public int FormulasAdded;
+            public int FormulasFrozen;
+            public int FormulasRetried;
+            public int DirectTranslated;
             public int TranslationsPulled;
             public bool TimedOut;
 
             public override string ToString() =>
                 $"{RowsAdded} rows added, {SourcesUpdated} English cells updated, {FormulasAdded} formulas added, " +
-                $"{TranslationsPulled} translations pulled{(TimedOut ? " (timed out waiting for GOOGLETRANSLATE; re-run later)" : string.Empty)}";
+                $"{TranslationsPulled} translations pulled, {FormulasFrozen} formulas frozen, {FormulasRetried} stuck formulas retried, " +
+                $"{DirectTranslated} translations recovered directly" +
+                (TimedOut ? " (timed out waiting for GOOGLETRANSLATE; re-run later)" : string.Empty);
         }
 
         [MenuItem("Mejnun/Localization/Sync with Google Sheets (Push + Translate + Pull)", priority = 30)]
@@ -92,6 +104,7 @@ namespace Mejnun.Localization.Editor
 
                 Progress($"Pushing {collectionName}", 0.1f);
                 EnsureTab(service, settings.SpreadsheetId, tab);
+                RetryStuck(service, settings, tab, null, ref result);
                 Push(service, settings, tab, collection, ref result);
             }
 
@@ -104,8 +117,10 @@ namespace Mejnun.Localization.Editor
 
                 Progress($"Waiting for GOOGLETRANSLATE ({collectionName})", 0.5f);
                 var sheet = WaitForTranslations(service, settings, tab, deadline, ref result);
+                DirectTranslate(settings, tab, sheet, ref result);
                 Progress($"Pulling {collectionName}", 0.8f);
                 Pull(settings, sheet, collection, ref result);
+                Freeze(service, settings, tab, sheet, ref result);
                 HandwrittenTranslationApplier.ApplyCollection(collectionName);
             }
 
@@ -282,6 +297,17 @@ namespace Mejnun.Localization.Editor
                         continue;
                     }
 
+                    // Frozen auto translations are plain text. If their source
+                    // changes, restore the formula so Google can refresh them.
+                    if (sourceChanged && (status == StatusAuto || string.IsNullOrEmpty(status)))
+                    {
+                        SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode], Formula(row + 1, locale.GoogleLanguageCode));
+                        if (string.IsNullOrEmpty(status))
+                            SetCell(updates, tab, row, formulas.Columns[locale.LocaleCode + StatusSuffix], StatusAuto);
+                        result.FormulasAdded++;
+                        continue;
+                    }
+
                     // Fill only empty cells (a new language column, or a row
                     // added by hand). Plain-text reviewer edits are kept.
                     if (string.IsNullOrWhiteSpace(cell))
@@ -294,8 +320,61 @@ namespace Mejnun.Localization.Editor
                 }
             }
 
-            var batch = new BatchUpdateValuesRequest { ValueInputOption = "USER_ENTERED", Data = updates };
-            service.Spreadsheets.Values.BatchUpdate(batch, settings.SpreadsheetId).Execute();
+            WriteBatch(service, settings.SpreadsheetId, updates);
+        }
+
+        private static void WriteBatch(SheetsService service, string spreadsheetId, List<ValueRange> updates)
+        {
+            for (int i = 0; i < updates.Count; i += MaxRangesPerBatch)
+            {
+                var batch = new BatchUpdateValuesRequest
+                {
+                    ValueInputOption = "USER_ENTERED",
+                    Data = updates.GetRange(i, Math.Min(MaxRangesPerBatch, updates.Count - i)),
+                };
+                service.Spreadsheets.Values.BatchUpdate(batch, spreadsheetId).Execute();
+            }
+        }
+
+        private static bool IsTranslateFormula(string formula) =>
+            formula.IndexOf("GOOGLETRANSLATE", StringComparison.OrdinalIgnoreCase) >= 0;
+
+        private static bool IsPending(string value) =>
+            value.Trim() == LoadingValue || LocalizationValidator.IsSheetError(value);
+
+        // Google does not retry a GOOGLETRANSLATE cell that it left on
+        // "Loading..." or an error (usually translate throttling). Clearing the
+        // cell and writing the formula again forces a fresh evaluation.
+        private static int RetryStuck(SheetsService service, LocalizationPipelineSettings settings, string tab,
+            SheetData values, ref Result result)
+        {
+            values ??= Read(service, settings.SpreadsheetId, tab,
+                SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMATTEDVALUE);
+            var formulas = Read(service, settings.SpreadsheetId, tab,
+                SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMULA);
+            var clears = new List<ValueRange>();
+            var writes = new List<ValueRange>();
+            for (int row = 1; row < formulas.Rows.Count && row < values.Rows.Count; row++)
+            {
+                foreach (var locale in settings.TargetLocales)
+                {
+                    if (!formulas.Columns.TryGetValue(locale.LocaleCode, out int column))
+                        continue;
+                    if (!IsTranslateFormula(formulas.Cell(row, locale.LocaleCode)) || !IsPending(values.Cell(row, locale.LocaleCode)))
+                        continue;
+
+                    SetCell(clears, tab, row, column, string.Empty);
+                    SetCell(writes, tab, row, column, Formula(row + 1, locale.GoogleLanguageCode));
+                }
+            }
+
+            if (writes.Count == 0)
+                return 0;
+
+            WriteBatch(service, settings.SpreadsheetId, clears);
+            WriteBatch(service, settings.SpreadsheetId, writes);
+            result.FormulasRetried += writes.Count;
+            return writes.Count;
         }
 
         // Values are written USER_ENTERED so formulas evaluate; a leading
@@ -346,6 +425,218 @@ namespace Mejnun.Localization.Editor
 
                 Thread.Sleep(3000);
             }
+        }
+
+        private static void DirectTranslate(LocalizationPipelineSettings settings, string tab, SheetData values,
+            ref Result result)
+        {
+            var formulas = Read(settings.SheetsServiceProvider.Service, settings.SpreadsheetId, tab,
+                SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMULA);
+            var updates = new List<ValueRange>();
+            for (int row = 1; row < formulas.Rows.Count && row < values.Rows.Count; row++)
+            {
+                string source = values.Cell(row, Loc.ProjectLocaleCode);
+                if (string.IsNullOrWhiteSpace(source))
+                    continue;
+
+                foreach (var locale in settings.TargetLocales)
+                {
+                    string formula = formulas.Cell(row, locale.LocaleCode);
+                    string current = values.Cell(row, locale.LocaleCode);
+                    if (!IsTranslateFormula(formula) || (!string.IsNullOrWhiteSpace(current) && !IsPending(current)))
+                        continue;
+                    if (!formulas.Columns.TryGetValue(locale.LocaleCode, out int column))
+                        continue;
+
+                    try
+                    {
+                        string translated = RequestDirectTranslation(source, locale.GoogleLanguageCode);
+                        if (string.IsNullOrWhiteSpace(translated))
+                            throw new InvalidDataException("The translation response was empty.");
+
+                        SetText(updates, tab, row, column, translated);
+                        var rowValues = values.Rows[row];
+                        while (rowValues.Count <= column)
+                            rowValues.Add(string.Empty);
+                        rowValues[column] = translated;
+                        result.DirectTranslated++;
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.LogWarning($"Direct translation failed for '{values.Cell(row, KeyHeader)}' ({locale.LocaleCode}): {exception.Message}");
+                    }
+
+                    Thread.Sleep(DirectTranslateDelayMilliseconds);
+                }
+            }
+
+            WriteBatch(settings.SheetsServiceProvider.Service, settings.SpreadsheetId, updates);
+        }
+
+        private static string RequestDirectTranslation(string source, string targetLanguage)
+        {
+            string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=" +
+                         Uri.EscapeDataString(targetLanguage) + "&dt=t&q=" + Uri.EscapeDataString(source);
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            request.Timeout = 15000;
+            request.ReadWriteTimeout = 15000;
+            request.UserAgent = "Mozilla/5.0 (compatible; MejnunLocalizationSync/1.0)";
+            using var response = (HttpWebResponse)request.GetResponse();
+            using var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            return ParseDirectTranslation(reader.ReadToEnd());
+        }
+
+        private static string ParseDirectTranslation(string json)
+        {
+            int index = 0;
+            SkipJsonWhitespace(json, ref index);
+            ExpectJsonCharacter(json, ref index, '[');
+            SkipJsonWhitespace(json, ref index);
+            ExpectJsonCharacter(json, ref index, '[');
+
+            var translated = new StringBuilder();
+            while (true)
+            {
+                SkipJsonWhitespace(json, ref index);
+                if (index >= json.Length)
+                    throw new InvalidDataException("The translation response ended unexpectedly.");
+                if (json[index] == ']')
+                    break;
+
+                ExpectJsonCharacter(json, ref index, '[');
+                SkipJsonWhitespace(json, ref index);
+                translated.Append(ReadJsonString(json, ref index));
+                SkipJsonWhitespace(json, ref index);
+                while (index < json.Length && json[index] == ',')
+                {
+                    index++;
+                    SkipJsonValue(json, ref index);
+                    SkipJsonWhitespace(json, ref index);
+                }
+                ExpectJsonCharacter(json, ref index, ']');
+                SkipJsonWhitespace(json, ref index);
+                if (index < json.Length && json[index] == ',')
+                    index++;
+            }
+
+            return translated.ToString();
+        }
+
+        private static string ReadJsonString(string json, ref int index)
+        {
+            ExpectJsonCharacter(json, ref index, '"');
+            var value = new StringBuilder();
+            while (index < json.Length)
+            {
+                char character = json[index++];
+                if (character == '"')
+                    return value.ToString();
+                if (character != '\\')
+                {
+                    value.Append(character);
+                    continue;
+                }
+
+                if (index >= json.Length)
+                    break;
+                character = json[index++];
+                switch (character)
+                {
+                    case '"': value.Append('"'); break;
+                    case '\\': value.Append('\\'); break;
+                    case '/': value.Append('/'); break;
+                    case 'b': value.Append('\b'); break;
+                    case 'f': value.Append('\f'); break;
+                    case 'n': value.Append('\n'); break;
+                    case 'r': value.Append('\r'); break;
+                    case 't': value.Append('\t'); break;
+                    case 'u':
+                        if (index + 4 > json.Length || !ushort.TryParse(json.Substring(index, 4), System.Globalization.NumberStyles.HexNumber,
+                                System.Globalization.CultureInfo.InvariantCulture, out ushort codePoint))
+                            throw new InvalidDataException("The translation response contains an invalid Unicode escape.");
+                        value.Append((char)codePoint);
+                        index += 4;
+                        break;
+                    default:
+                        throw new InvalidDataException("The translation response contains an invalid escape sequence.");
+                }
+            }
+
+            throw new InvalidDataException("The translation response contains an unterminated string.");
+        }
+
+        private static void SkipJsonValue(string json, ref int index)
+        {
+            SkipJsonWhitespace(json, ref index);
+            if (index >= json.Length)
+                throw new InvalidDataException("The translation response ended unexpectedly.");
+            if (json[index] == '"')
+            {
+                ReadJsonString(json, ref index);
+                return;
+            }
+            if (json[index] == '[' || json[index] == '{')
+            {
+                char closing = json[index++] == '[' ? ']' : '}';
+                SkipJsonWhitespace(json, ref index);
+                while (index < json.Length && json[index] != closing)
+                {
+                    SkipJsonValue(json, ref index);
+                    SkipJsonWhitespace(json, ref index);
+                    if (index < json.Length && json[index] == ',')
+                    {
+                        index++;
+                        SkipJsonWhitespace(json, ref index);
+                    }
+                    else if (index >= json.Length || json[index] != closing)
+                        throw new InvalidDataException("The translation response contains malformed JSON.");
+                }
+                ExpectJsonCharacter(json, ref index, closing);
+                return;
+            }
+
+            while (index < json.Length && json[index] != ',' && json[index] != ']' && json[index] != '}' && !char.IsWhiteSpace(json[index]))
+                index++;
+        }
+
+        private static void SkipJsonWhitespace(string json, ref int index)
+        {
+            while (index < json.Length && char.IsWhiteSpace(json[index]))
+                index++;
+        }
+
+        private static void ExpectJsonCharacter(string json, ref int index, char expected)
+        {
+            if (index >= json.Length || json[index] != expected)
+                throw new InvalidDataException($"The translation response is not in the expected format (expected '{expected}').");
+            index++;
+        }
+
+        private static void Freeze(SheetsService service, LocalizationPipelineSettings settings, string tab,
+            SheetData values, ref Result result)
+        {
+            var formulas = Read(service, settings.SpreadsheetId, tab,
+                SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMULA);
+            var updates = new List<ValueRange>();
+            for (int row = 1; row < formulas.Rows.Count && row < values.Rows.Count; row++)
+            {
+                foreach (var locale in settings.TargetLocales)
+                {
+                    string formula = formulas.Cell(row, locale.LocaleCode);
+                    if (!IsTranslateFormula(formula))
+                        continue;
+
+                    string value = values.Cell(row, locale.LocaleCode);
+                    if (string.IsNullOrWhiteSpace(value) || IsPending(value))
+                        continue;
+
+                    SetText(updates, tab, row, formulas.Columns[locale.LocaleCode], value);
+                    result.FormulasFrozen++;
+                }
+            }
+
+            WriteBatch(service, settings.SpreadsheetId, updates);
         }
 
         private static void Pull(LocalizationPipelineSettings settings, SheetData sheet,

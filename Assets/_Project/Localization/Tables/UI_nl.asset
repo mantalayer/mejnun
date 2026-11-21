@@ -758,7 +758,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282621
   - m_Id: 6548985208854
-    m_Localized: Elke set is geschikt.
+    m_Localized: Elke set is toegestaan.
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208855
@@ -837,8 +837,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208873
-    m_Localized: "Een viertal werkt nog steeds met drie. Sleep de 5\u2665 uit de
-      vijven naar 3\u2665 4\u2665."
+    m_Localized: "Vier dezelfde kaarten werken nog steeds met drie. Sleep de 5\u2665
+      uit de vijven naar 3\u2665 4\u2665."
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208874
@@ -921,7 +921,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403139
-    m_Localized: Lege ladestapel
+    m_Localized: Lege lade
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403141
@@ -953,7 +953,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403148
-    m_Localized: De winnaar begint als eerste in de volgende wedstrijd.
+    m_Localized: De winnaar begint als eerste aan de volgende wedstrijd.
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403149
@@ -2439,7 +2439,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763293
-    m_Localized: Laatste adem
+    m_Localized: Laatste ademtocht
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763294
@@ -2518,8 +2518,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763314
-    m_Localized: Win zonder de functies Ongedaan maken, Terugdraaien of Bord repareren
-      te gebruiken.
+    m_Localized: Win zonder Ongedaan maken, Terugdraaien of Bord repareren te gebruiken.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763315
@@ -2604,7 +2603,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957585
-    m_Localized: Je wordt tien keer als eerste gekozen door de vraag te beantwoorden.
+    m_Localized: Je wordt tien keer gekozen om als eerste aan de beurt te komen door
+      de vraag te beantwoorden.
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957586
@@ -2656,7 +2656,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957600
-    m_Localized: Blueeyedrat Classic Contrast 4-kleuren 1
+    m_Localized: Blueeydrat Classic Contrast 4-kleuren 1
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957602
@@ -2680,7 +2680,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957608
-    m_Localized: Blueeyedrat Classic Light 4 kleuren 1
+    m_Localized: Blueeyedrat Classic Light 4-kleuren 1
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957609
@@ -2692,7 +2692,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957612
-    m_Localized: Blueeyedrat Classic Sepia 2-kleuren 1
+    m_Localized: Blueeydrat Classic Sepia 2-kleuren 1
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957614
@@ -3077,7 +3077,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346259
-    m_Localized: Bevestig het trekken van een kaart.
+    m_Localized: Bevestig dat je een kaart trekt.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346261
@@ -3085,7 +3085,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346262
-    m_Localized: Vraag eerst of u ongeldige kaarten terug in uw hand kunt krijgen.
+    m_Localized: Vraag eerst of u ongeldige kaarten terug in uw hand wilt krijgen.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346264
@@ -3186,8 +3186,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346291
-    m_Localized: Hiermee pas je aan hoe ver kaarten omhoog komen wanneer ze geselecteerd
-      of met de muis eroverheen bewogen worden.
+    m_Localized: Hiermee kunt u aanpassen hoe ver kaarten omhoog komen wanneer ze
+      worden geselecteerd of wanneer u er met de muis overheen beweegt.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346292
@@ -3282,7 +3282,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540481
-    m_Localized: Stelt het volume van de kaart- en interface-effecten in.
+    m_Localized: Stelt het volume van de geluidskaart en interface-effecten in.
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540482
@@ -3379,9 +3379,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540503
-    m_Localized: "Speel als eerste je kaarten leeg om te winnen. Een spel bestaat
-      uit \xE9\xE9n ronde; de \u200B\u200Bwinnaar begint als eerste in het volgende
-      spel."
+    m_Localized: "Speel als eerste je hand leeg om te winnen. Een spel bestaat uit
+      \xE9\xE9n ronde; de \u200B\u200Bwinnaar begint als eerste in het volgende spel."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540504
@@ -3428,9 +3427,10 @@ MonoBehaviour:
       Met Opnieuw uitvoeren pas je een ongedaan gemaakte zet in dezelfde beurt opnieuw
       toe. Nieuwe zetten en acties die de beurt be\xEBindigen, wissen Opnieuw uitvoeren.
       Bord repareren probeert geldige kaarten uit je hand te behouden terwijl het
-      bord wordt hersteld; kaarten die niet gebruikt kunnen worden, gaan terug naar
-      je hand. Terugzetten herstelt het bord naar de beginstand en geeft je gespeelde
-      kaarten terug naar je hand. Destructieve acties kunnen je om bevestiging vragen."
+      bord wordt gerepareerd; kaarten die niet gebruikt kunnen worden, gaan terug
+      naar je hand. Terugzetten herstelt het bord naar de beginstand van de beurt
+      en geeft je gespeelde kaarten terug naar je hand. Destructieve acties kunnen
+      je om bevestiging vragen."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540511
@@ -4029,6 +4029,112 @@ MonoBehaviour:
     m_Localized: Tik om verder te gaan
     m_Metadata:
       m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: 'Kamercode: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 346014409023488
+    m_Localized: Voor deze wedstrijd zijn geen vrije plaatsen meer beschikbaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: We konden geen overeenkomst vinden met die code.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: Er zijn momenteel geen overeenkomsten beschikbaar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: Het lukte niet om deel te nemen aan de wedstrijd. Probeer het later
+      opnieuw.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: Wachten op spelers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141121
+    m_Localized: Verlaat de wedstrijd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Opslaan en pauzeren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: De host is offline, er wordt een nieuwe host gezocht...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: De wedstrijd kon niet meer worden ingehaald.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} maakt opnieuw verbinding\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 349485963141126
+    m_Localized: Even geduld, de AI rondt deze beurt af.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: Gastheer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: Wachten op speler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: Aangesloten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Opnieuw contact leggen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: Verbinding verbroken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: AI speelt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: Wachten op AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Blijf wachten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: Laat AI spelen voor {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 377671954456576
+    m_Localized: Maak opnieuw verbinding met kamer {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 377671971233792
+    m_Localized: "Opnieuw verbinding maken met kamer {0}\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 377671971233793
+    m_Localized: Die wedstrijd is afgelopen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "De wedstrijd weer oppakken\u2026"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4103,3 +4209,8 @@ MonoBehaviour:
         - id: 6549039734799
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

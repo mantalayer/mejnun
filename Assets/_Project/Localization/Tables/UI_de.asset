@@ -474,8 +474,8 @@ MonoBehaviour:
     m_Localized: "Ziehen (oder Passen, wenn der Stapel leer ist) ist immer verf\xFCgbar.
       Dadurch wird das Spielbrett auf den Anfang deines Zuges zur\xFCckgesetzt, deine
       gespielten Karten werden auf die Hand zur\xFCckgenommen, du ziehst gegebenenfalls
-      eine Karte und dein Zug endet. Zug beenden kannst du, wenn das Spielbrett g\xFCltig
-      ist und du eine Handkarte gespielt oder Karten abgelegt hast."
+      eine Karte und dein Zug endet. Zug beenden ist verf\xFCgbar, wenn das Spielbrett
+      g\xFCltig ist und du eine Handkarte gespielt oder Karten abgelegt hast."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540510
@@ -721,7 +721,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548985208852
     m_Localized: "Du kannst deinen Zug beenden, wenn alle auf dem Tisch liegenden
-      Sets g\xFCltig sind und du mindestens eine Karte aus deiner Hand gespielt hast."
+      Kartenpaare g\xFCltig sind und du mindestens eine Karte aus deiner Hand gespielt
+      hast."
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208853
@@ -926,8 +927,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548989403144
     m_Localized: "\u201EFix board\u201C versucht, alle Spielz\xFCge g\xFCltig zu
-      machen und deine Z\xFCge beizubehalten. \u201ERevert\u201C stellt das gesamte
-      Spielfeld auf den Zustand zu Beginn deines Zuges zur\xFCck."
+      machen und deine Z\xFCge beizubehalten. \u201ERevert\u201C versetzt das gesamte
+      Spielfeld in den Zustand zu Beginn deines Zuges zur\xFCck."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403145
@@ -1001,7 +1002,8 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282616
   - m_Id: 6548989403162
-    m_Localized: "Die niedrigste Kartenanzahl war gleich. W\xE4hle, wer beginnt."
+    m_Localized: "Die Punktzahl mit den wenigsten Karten war gleich. W\xE4hle aus,
+      wer beginnt."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403163
@@ -1826,7 +1828,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549001986049
-    m_Localized: Ambre
+    m_Localized: Bernstein
     m_Metadata:
       m_Items: []
   - m_Id: 6549001986052
@@ -2465,7 +2467,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763296
-    m_Localized: "Gewinnen, wenn man 20 oder mehr Karten h\xE4lt."
+    m_Localized: Gewinne, sobald du 20 oder mehr Karten hast.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763297
@@ -2598,7 +2600,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957580
-    m_Localized: Gib es weiter
+    m_Localized: Weitergeben
     m_Metadata:
       m_Items: []
   - m_Id: 6549022957581
@@ -3126,7 +3128,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346260
-    m_Localized: "Fragen Sie vor dem Ziehen oder Weitergeben, wenn m\xF6glich."
+    m_Localized: "Fragen Sie, bevor Sie zeichnen oder weitergeben, sofern m\xF6glich."
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346261
@@ -3463,10 +3465,10 @@ MonoBehaviour:
       begrenzt. L\xE4uft die Zeit ab, bleibt das Spielbrett g\xFCltig und du ziehst
       eine Karte; ist das Spielbrett ung\xFCltig und liegt keine Handkarte mehr auf
       dem Brett, ziehst du ebenfalls eine Karte. Hast du Handkarten gespielt und
-      das Spielbrett ist g\xFCltig, endet dein Zug ohne Ziehen einer Karte. Ist das
-      Spielbrett ung\xFCltig, werden deine Z\xFCge r\xFCckg\xE4ngig gemacht, bis
-      es wieder g\xFCltig ist; du ziehst nur dann eine Karte, wenn keine Handkarte
-      mehr auf dem Spielbrett liegt."
+      das Spielbrett ist g\xFCltig, endet dein Zug ohne Ziehen. Ist es ung\xFCltig,
+      werden deine Z\xFCge r\xFCckg\xE4ngig gemacht, bis es wieder g\xFCltig ist;
+      du ziehst nur dann eine Karte, wenn keine Handkarte mehr auf dem Spielbrett
+      liegt."
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540513
@@ -3647,7 +3649,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540566
-    m_Localized: Nimm alle deine Karten wieder auf die Hand?
+    m_Localized: Nehmen Sie alle Ihre Karten wieder auf die Hand?
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540567
@@ -4046,6 +4048,111 @@ MonoBehaviour:
     m_Localized: "Neues Gef\xFChl, freigeschaltet"
     m_Metadata:
       m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: 'Zimmercode: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 346014409023488
+    m_Localized: "F\xFCr dieses Spiel sind keine Pl\xE4tze mehr frei."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: "Wir konnten mit diesem Code keine \xDCbereinstimmung finden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: "Es sind derzeit keine Spiele verf\xFCgbar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: Ich konnte dem Spiel nicht beitreten. Bitte versuchen Sie es erneut.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: Warten auf die Spieler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141121
+    m_Localized: Spiel verlassen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Speichern & pausieren
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: "Hostverbindung unterbrochen, Suche nach neuem Host\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: Das Spiel konnte nicht mehr gerettet werden.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} stellt die Verbindung wieder her\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 349485963141126
+    m_Localized: Bitte warten Sie, die KI beendet gerade ihren Zug.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: Gastgeber
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: Warten auf Spieler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: Verbunden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Wiederverbindung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: Getrennt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: KI spielt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: Warten auf KI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Warten Sie weiter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: "Lass die KI f\xFCr {0} spielen"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 377671954456576
+    m_Localized: Verbindung zu Raum {0} wiederherstellen
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 377671971233792
+    m_Localized: "Verbindung zu Raum {0} wird wiederhergestellt\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 377671971233793
+    m_Localized: Das Spiel ist beendet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "Verbindung zum Spiel wird wiederhergestellt\u2026"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4120,3 +4227,8 @@ MonoBehaviour:
         - id: 6549039734798
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

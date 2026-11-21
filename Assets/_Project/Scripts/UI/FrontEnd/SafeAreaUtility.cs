@@ -6,7 +6,7 @@ namespace Mejnun.UI.FrontEnd
     public static class SafeAreaUtility
     {
         public static void Apply(VisualElement root, Rect safeArea, int screenWidth, int screenHeight,
-            float cornerMargin = 0f)
+            float cornerMargin = 0f, float bottomInset = 0f)
         {
             if (root == null)
             {
@@ -25,7 +25,7 @@ namespace Mejnun.UI.FrontEnd
 
             var left = Mathf.Max(0f, safeArea.xMin) * scaleX + cornerMargin;
             var right = Mathf.Max(0f, screenWidth - safeArea.xMax) * scaleX + cornerMargin;
-            var bottom = Mathf.Max(0f, safeArea.yMin) * scaleY + cornerMargin;
+            var bottom = Mathf.Max(Mathf.Max(0f, safeArea.yMin) * scaleY + cornerMargin, bottomInset);
             var top = Mathf.Max(0f, screenHeight - safeArea.yMax) * scaleY + cornerMargin;
             root.style.paddingLeft = left;
             root.style.paddingRight = right;

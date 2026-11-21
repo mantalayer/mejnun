@@ -10,7 +10,7 @@ namespace Mejnun.Net.Unity
         public static bool HasPending => pendingLaunch != null;
 
         public static void Set(UgsOnlineService service, ISession session, bool isHost, string displayName,
-            string sessionCode = null, bool startedEarly = false)
+            string sessionCode = null, bool startedEarly = false, bool joinedStartedMatch = false)
         {
             if (service == null)
             {
@@ -23,7 +23,7 @@ namespace Mejnun.Net.Unity
             }
 
             pendingLaunch = new OnlineSessionLaunch(service, session, isHost,
-                service.AuthenticationId, displayName, sessionCode, startedEarly);
+                service.AuthenticationId, displayName, sessionCode, startedEarly, joinedStartedMatch);
         }
 
         public static bool TryTake(out OnlineSessionLaunch launch)
@@ -36,13 +36,18 @@ namespace Mejnun.Net.Unity
 
     public sealed class OnlineSessionLaunch
     {
+        private readonly bool startedAsHost;
+        private readonly ISession initialSession;
+
         internal OnlineSessionLaunch(UgsOnlineService service, ISession session, bool isHost,
-            string authenticationId, string displayName, string sessionCode, bool startedEarly)
+            string authenticationId, string displayName, string sessionCode, bool startedEarly,
+            bool joinedStartedMatch)
         {
             Service = service;
-            Session = session;
-            IsHost = isHost;
+            initialSession = session;
+            startedAsHost = isHost;
             StartedEarly = startedEarly;
+            JoinedStartedMatch = joinedStartedMatch;
             AuthenticationId = authenticationId;
             DisplayName = displayName;
             SessionCode = !string.IsNullOrWhiteSpace(session.Code)
@@ -53,9 +58,10 @@ namespace Mejnun.Net.Unity
         }
 
         public UgsOnlineService Service { get; }
-        public ISession Session { get; }
-        public bool IsHost { get; }
+        public ISession Session => Service.Session ?? initialSession;
+        public bool IsHost => Session == null ? startedAsHost : Session.IsHost;
         public bool StartedEarly { get; }
+        public bool JoinedStartedMatch { get; }
         public string AuthenticationId { get; }
         public string DisplayName { get; }
         public string SessionCode { get; }
