@@ -151,11 +151,6 @@
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.resume" />
                 </Bindings>
             </ui:Button>
-            <ui:Button name="restart-button" class="hud-button">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.restart" />
-                </Bindings>
-            </ui:Button>
             <ui:Button name="settings-button" class="hud-button">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.settings" />

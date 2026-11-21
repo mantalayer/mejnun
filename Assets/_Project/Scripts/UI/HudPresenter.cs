@@ -1195,7 +1195,6 @@ namespace Mejnun.UI
             root.Q<Button>("confirm-cancel-button").clicked += CancelConfirmation;
             root.Q<Button>("confirm-accept-button").clicked += AcceptConfirmation;
             root.Q<Button>("resume-button").clicked += Resume;
-            root.Q<Button>("restart-button").clicked += RequestRestart;
             root.Q<Button>("settings-button").clicked += OpenSettings;
             root.Q<Button>("help-close-button").clicked += ToggleHelp;
         }
@@ -2850,17 +2849,6 @@ namespace Mejnun.UI
                 {
                     Resume();
                     matchFlow.ReturnToMenu();
-                });
-        }
-
-        private void RequestRestart()
-        {
-            RequestConfirmation(() => Loc.Get("hud.confirm.restart"),
-                () => GameSettings.ConfirmLeave, value => GameSettings.ConfirmLeave = value,
-                () =>
-                {
-                    Resume();
-                    matchFlow?.RestartMatch();
                 });
         }
 
