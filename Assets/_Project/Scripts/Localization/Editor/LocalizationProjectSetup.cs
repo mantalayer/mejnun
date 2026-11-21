@@ -29,6 +29,7 @@ namespace Mejnun.Localization.Editor
             ("hy", "hy"),
             ("es", "es"),
             ("de", "de"),
+            ("el", "el"),
             ("it", "it"),
             ("fr", "fr"),
             ("ja", "ja"),

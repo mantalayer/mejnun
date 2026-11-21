@@ -59,6 +59,8 @@ MonoBehaviour:
     GoogleLanguageCode: sw
   - LocaleCode: th
     GoogleLanguageCode: th
+  - LocaleCode: el
+    GoogleLanguageCode: el
   SyncBeforeBuild: 1
   FailBuildOnIssues: 0
   TranslationWaitSeconds: 120

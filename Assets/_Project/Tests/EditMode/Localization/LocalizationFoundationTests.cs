@@ -18,7 +18,7 @@ namespace Mejnun.Localization.Tests
     {
         private static readonly string[] Shipped =
         {
-            "en", "ar", "fa", "hy", "es", "de", "it", "fr", "ja", "zh-Hans",
+            "en", "ar", "fa", "hy", "es", "de", "el", "it", "fr", "ja", "zh-Hans",
             "pt-BR", "ko", "zh-Hant", "vi", "nl", "pt-PT", "ru", "hi", "sw", "th"
         };
 
@@ -42,6 +42,7 @@ namespace Mejnun.Localization.Tests
         [TestCase("fa-IR", "fa")]
         [TestCase("hy-AM", "hy")]
         [TestCase("ar-EG", "ar")]
+        [TestCase("el-GR", "el")]
         public void LocaleMatcherMapsPlatformTagsToShippedLocales(string tag, string expected)
         {
             Assert.That(LocaleMatcher.MatchOne(tag, Shipped), Is.EqualTo(expected));
@@ -50,6 +51,7 @@ namespace Mejnun.Localization.Tests
         [TestCase(SystemLanguage.Vietnamese, "vi")]
         [TestCase(SystemLanguage.Hindi, "hi")]
         [TestCase(SystemLanguage.Thai, "th")]
+        [TestCase(SystemLanguage.Greek, "el")]
         public void SystemLanguageMapsNewLanguagesToLocaleCodes(SystemLanguage language, string expected)
         {
             Assert.That(DeviceLanguageInfo.FromSystemLanguage(language), Is.EqualTo(expected));
@@ -76,6 +78,7 @@ namespace Mejnun.Localization.Tests
         [TestCase("portuguese", "pt-PT")]
         [TestCase("latam", "es-419")]
         [TestCase("arabic", "ar")]
+        [TestCase("greek", "el")]
         [TestCase("koreana", "ko")]
         public void SteamApiLanguagesMapToLanguageTags(string steam, string expected)
         {
@@ -88,6 +91,7 @@ namespace Mejnun.Localization.Tests
             Assert.That(LocaleMatcher.MatchOne(SteamLanguageCodes.ToLanguageTag("brazilian"), Shipped), Is.EqualTo("pt-BR"));
             Assert.That(LocaleMatcher.MatchOne(SteamLanguageCodes.ToLanguageTag("portuguese"), Shipped), Is.EqualTo("pt-PT"));
             Assert.That(LocaleMatcher.MatchOne(SteamLanguageCodes.ToLanguageTag("tchinese"), Shipped), Is.EqualTo("zh-Hant"));
+            Assert.That(LocaleMatcher.MatchOne(SteamLanguageCodes.ToLanguageTag("greek"), Shipped), Is.EqualTo("el"));
             Assert.That(SteamLanguageCodes.IsSupportedBySteam("fa-IR"), Is.False);
             Assert.That(SteamLanguageCodes.IsSupportedBySteam("hy"), Is.False);
             Assert.That(SteamLanguageCodes.IsSupportedBySteam("hi-IN"), Is.False);
