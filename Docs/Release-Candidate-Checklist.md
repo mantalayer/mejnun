@@ -7,7 +7,7 @@
 - [ ] Confirm the Hindi `unlock.requirement.achievement` placeholder is `{0}` and the Persian wording reads naturally. Check all handwritten entries in `HandwrittenTranslations.csv` are present and marked reviewed in the workbook.
 - [ ] Review all six Arabic plural forms (`zero|one|two|few|many|other`) with an Arabic speaker; verify pluralized timer, bot-fill and unlock text at 0, 1, 2, 3–10, 11–99 and 100+.
 - [ ] Have native speakers review the Arabic and Persian front-end, HUD, settings, dialogs, dealer questions and narrow/mobile layouts. Record the reviewer, locale, build and disposition of each issue.
-- [ ] Switch through all 20 locales in Settings. Check representative strings and nicknames with Latin, Arabic, Persian, Armenian, Japanese, Chinese, Korean, Vietnamese, Devanagari, Swahili and Thai characters.
+- [ ] Switch through all 21 locales in Settings. Check representative strings and nicknames with Latin, Arabic, Persian, Armenian, Greek, Japanese, Chinese, Korean, Vietnamese, Devanagari, Swahili and Thai characters.
 - [ ] On `ar` and `fa`, confirm menus, HUD, dialogs, settings and navigation controls use the expected reading order while cards, board, hand and card art stay left-to-right. Check Arabic/Persian digits in timers and counts; verify nicknames/codes retain their typed digits.
 - [ ] Verify `NotoSans` and the base fallback chain are assigned to both panel settings. For each CJK locale, confirm its addressable font group loads with no missing-font warnings and that the app remains playable when an optional font location is unavailable.
 - [ ] Launch a player offline after the first download and confirm localized UI works without runtime translation requests or an API key.

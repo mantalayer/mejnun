@@ -385,8 +385,8 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 
 ## 7. Localization
 - `com.unity.localization` from the start. All UI strings and the dealer questions go into String Tables, and Smart Strings handle plurals ("3 cards left"). Arabic has six plural forms, and Smart Strings' plural rules cover that.
-- **Launch languages (20)**: English, Arabic, Persian, Armenian, Spanish, German, Italian, French, Japanese, Simplified Chinese, Brazilian Portuguese, Korean, Traditional Chinese, Vietnamese, Dutch, European Portuguese, Russian, Hindi, Swahili and Thai.
-  - Locale codes are `en`, `ar`, `fa`, `hy`, `es`, `de`, `it`, `fr`, `ja`, `zh-Hans`, `pt-BR`, `ko`, `zh-Hant`, `vi`, `nl`, `pt-PT`, `ru`, `hi`, `sw` and `th`.
+- **Launch languages (21)**: English, Arabic, Persian, Armenian, Spanish, German, Greek, Italian, French, Japanese, Simplified Chinese, Brazilian Portuguese, Korean, Traditional Chinese, Vietnamese, Dutch, European Portuguese, Russian, Hindi, Swahili and Thai.
+  - Locale codes are `en`, `ar`, `fa`, `hy`, `es`, `de`, `el`, `it`, `fr`, `ja`, `zh-Hans`, `pt-BR`, `ko`, `zh-Hant`, `vi`, `nl`, `pt-PT`, `ru`, `hi`, `sw` and `th`.
   - The game follows the device language, with a picker in Settings.
 - **Fonts** (dynamic font assets with a fallback chain, all OFL-licensed):
   - Noto Sans for Latin text (accents for es/de/it/fr/pt and Vietnamese).
@@ -414,6 +414,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
   | `hy` | `hy` | Armenian |
   | `es` | `es` | Spanish |
   | `de` | `de` | German |
+  | `el` | `el` | Greek |
   | `it` | `it` | Italian |
   | `fr` | `fr` | French |
   | `ja` | `ja` | Japanese |
@@ -454,7 +455,7 @@ Nothing exists yet. This is the order to do it in, ideally before M7, so review 
 | **M6** | Cosmetics & progression ✅ | Catalog, inventory, XP/levels, achievements (local), unlock UI, main menu and shared Settings, deck/felt Table picker, Gallery, `TableFeltCatalog` with free Green and Burgundy felts, Pixel Pastel via Addressables | From a cold boot, a player can browse the Gallery, change settings, pick two decks and a felt, and play a game that uses them; a locked item shows its requirement and progress. *Met: full PlayMode 103/103; M6-focused EditMode 22/22; Core EditMode 165/165* |
 | **M7** | Online ✅ | Spike, anonymous auth, UGS sessions (codes and quick match), NGO host-authoritative sync with live turn mirroring (§4.1.1), reconnect, AI takeover, save & pause, migration data handler | Six-device soak test; killing any client or the host recovers per §4.4; every client sees each in-turn move, Undo, Redo, Revert and Fix board as it happens; shared Cloud Code save/resume. *Met: closed by Brennan (2026-11-19). Closed. Friends/platform invites remain a follow-up* |
 | **M8** | Platforms & monetization (in progress) | Port the platform layer and Steam uploader, Build Profiles, Steam achievements and rich presence, iOS/Android Wwise plugins, LevelPlay ads + consent, Unity IAP Remove ads + restore, mobile Build & Upload window + fastlane lanes, Game Center / Play Games | Steam beta-branch upload from the editor. One-click TestFlight and Play internal builds. *In progress: platform layer, Steam backend/uploader tooling and achievement/stat bridge done (Platform EditMode 4/4); store accounts, Build Profiles, ads/IAP, fastlane and mobile platform services pending* |
-| **M9** | Localization & polish (in progress; store listings deferred) | Google Sheets sync and String Tables for 20 locales; licensed font chain, RTL mirroring and locale digits; accessibility options; idle/battery frame-rate governor; Unity Cloud Diagnostics reporting; RC checklist. Localized store listings remain deferred with M8 store setup. | Every String Table entry is non-empty in all locales; Smart String placeholders and Arabic plural forms are checked after pull; release-candidate checklist and native-speaker review for `ar` and `fa` RTL screens |
+| **M9** | Localization & polish (in progress; store listings deferred) | Google Sheets sync and String Tables for 21 locales; licensed font chain, RTL mirroring and locale digits; accessibility options; idle/battery frame-rate governor; Unity Cloud Diagnostics reporting; RC checklist. Localized store listings remain deferred with M8 store setup. | Every String Table entry is non-empty in all locales; Smart String placeholders and Arabic plural forms are checked after pull; release-candidate checklist and native-speaker review for `ar` and `fa` RTL screens |
 
 Suggested order: M1 → M2 → M3 → M4/M5 in parallel → M6 → M7 → M8 → M9. M7 can start after M2, since it only depends on Core and the views.
 Start the §5.5 store accounts during M3–M4, and enable the Advanced Text Generator plus one RTL test locale (`ar`) in M4, so right-to-left layout issues show up early rather than in M9.
@@ -472,7 +473,7 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 
 **M8 next steps (as store accounts become available):** create the Steam app and replace dev App ID 480 in `Assets/Resources/PlatformSettings.asset`; fill the app/depot IDs in `SteamUploadConfig`; create the Steam Build Profiles (with `MEJNUN_STEAM`) in the Build Profiles window and compile the Steam assembly; define the six achievements and two stats in Steamworks; then do a beta-branch upload from the editor. On mobile: review and commit the iOS/Android Wwise plugins, add LevelPlay ads + consent, Unity IAP Remove ads + restore (wired to `EntitlementId.RemoveAds`), the mobile Build & Upload window and fastlane lanes, and Game Center / Play Games backends.
 
-**M9 localization foundation (2026-11-19, in progress):** Installed `com.unity.localization` 1.5.14 with 20 locales and the `UI` and `DealerQuestions` tables. All player-facing text in UXML/C# is table-backed; the validator, raw-string scanner, CSV importer, Sheets sync and pre-build hook are in place. The startup language follows the Settings choice, then platform language APIs. The 2026-11-20 sync pushed six accessibility rows, but Google Sheets left 114 new-locale formulas in `Loading...` through the configured 600-second wait; the report has no source, placeholder or plural errors. The Hindi achievement placeholder and Persian requirement wording are maintained in the handwritten override file. Full EditMode tests pass 388/388; PlayMode is 128/136 with the same eight baseline failures. Native-speaker review remains pending.
+**M9 localization foundation (2026-11-19, in progress):** Installed `com.unity.localization` 1.5.14 with 21 locales and the `UI` and `DealerQuestions` tables. All player-facing text in UXML/C# is table-backed; the validator, raw-string scanner, CSV importer, Sheets sync and pre-build hook are in place. The startup language follows the Settings choice, then platform language APIs. The 2026-11-20 sync pushed six accessibility rows, but Google Sheets left 114 new-locale formulas in `Loading...` through the configured 600-second wait; the report has no source, placeholder or plural errors. The Hindi achievement placeholder and Persian requirement wording are maintained in the handwritten override file. Full EditMode tests pass 388/388; PlayMode is 128/136 with the same eight baseline failures. Native-speaker review remains pending.
 
 **M9 fonts, RTL and polish (2026-11-20):** Added OFL font sources and dynamic multi-atlas assets for Latin, Arabic/Persian, Armenian, Devanagari, Thai and CJK; the CJK fonts are in locale-specific Addressables groups and load with the active locale first. Both UI panel settings share the font chain. UI roots apply advanced text generation, `.rtl` layout and direction on locale changes; cards, board and hand remain LTR per the Q-D default. Arabic/Persian digit formatting, six-form Arabic plural validation and handwritten translation overrides are implemented. Added four-colour deck and left-handed options, a mobile idle/Battery Saver frame-rate governor, and enabled Unity Cloud Diagnostics reporting. The RC checklist records remaining on-device frame/battery and crash-dashboard verification, native-speaker review and the pending 114 Sheets translations; localized store listings are excluded and remain deferred.
 
@@ -503,7 +504,7 @@ The Google Sheets hookup can also start alongside the `ar` RTL test locale, so s
 | 5 | Steam | No Steam app yet. Use dev App ID 480 until it's created; demo later | §5.2, §5.5 |
 | 6 | Mobile automation | Local fastlane driven from an editor window (recommended), set up together in M8 | §5.2 |
 | 7 | Minimum OS | iOS 15, Android 8, Windows 10, macOS 12 | §5.4 |
-| 8 | Languages | en, ar, fa, hy, es, de, it, fr, ja, zh-Hans, zh-Hant, pt-BR, pt-PT, ko, vi, nl, ru, hi, sw, th | §7 |
+| 8 | Languages | en, ar, fa, hy, es, de, el, it, fr, ja, zh-Hans, zh-Hant, pt-BR, pt-PT, ko, vi, nl, ru, hi, sw, th | §7 |
 | 9 | Mobile editions | One free app with a "Remove ads" IAP; Steam is paid | §5.3 |
 | 10 | Card faces | Two distinct faces per game, originally chosen at random from the players' owned faces; superseded by #23 | §3.6 |
 | 11 | Bots in pass-and-play | Yes, mixed freely | §2 |

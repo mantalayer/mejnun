@@ -84,6 +84,7 @@ namespace Mejnun.Platform
                 case SystemLanguage.Arabic: return "ar";
                 case SystemLanguage.Spanish: return "es";
                 case SystemLanguage.German: return "de";
+                case SystemLanguage.Greek: return "el";
                 case SystemLanguage.Italian: return "it";
                 case SystemLanguage.French: return "fr";
                 case SystemLanguage.Japanese: return "ja";
