@@ -298,6 +298,11 @@ namespace Mejnun.Game.Tests
             Assert.That(root.style.paddingTop.value.value, Is.EqualTo(120f));
             Assert.That(root.ClassListContains("landscape-layout"), Is.True);
             Assert.That(root.ClassListContains("portrait-layout"), Is.False);
+            SafeAreaUtility.Apply(root, new Rect(100f, 60f, 800f, 420f), 1000, 600, 12f);
+            Assert.That(root.style.paddingLeft.value.value, Is.EqualTo(112f));
+            Assert.That(root.style.paddingRight.value.value, Is.EqualTo(112f));
+            Assert.That(root.style.paddingBottom.value.value, Is.EqualTo(72f));
+            Assert.That(root.style.paddingTop.value.value, Is.EqualTo(132f));
             SafeAreaUtility.Apply(root, new Rect(0f, 40f, 400f, 700f), 400, 800);
             Assert.That(root.ClassListContains("portrait-layout"), Is.True);
         }

@@ -713,7 +713,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208858
-    m_Localized: "Non \xE8 ancora un set"
+    m_Localized: Non ancora un set
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208859
@@ -1017,7 +1017,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403177
-    m_Localized: Lasciamo che l'IA prenda il controllo
+    m_Localized: Lascia che l'IA prenda il controllo
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403178
@@ -1258,7 +1258,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403245
-    m_Localized: Theo
+    m_Localized: Teo
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403246
@@ -2066,7 +2066,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180375
-    m_Localized: Fatima
+    m_Localized: Fatina
     m_Metadata:
       m_Items: []
   - m_Id: 6549006180376
@@ -2350,7 +2350,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763270
-    m_Localized: Gioca una partita con sei posti.
+    m_Localized: Organizza una partita con sei posti.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763271
@@ -3405,7 +3405,7 @@ MonoBehaviour:
     m_Localized: "Le combinazioni dello stesso tipo contengono 3-4 carte dello stesso
       valore, con ogni seme diverso. Le scale contengono da 3 a 13 carte consecutive
       dello stesso seme, senza ripetizione di valore. Un asso pu\xF2 essere basso
-      (A-2-3) o alto (Q-K-A), ma mai entrambi; K-A-2 non \xE8 ammesso. Ogni combinazione
+      (A-2-3) o alto (Q-K-A), ma mai entrambi; K-A-2 non \xE8 consentito. Ogni combinazione
       sul tavolo deve essere valida; le combinazioni di una o due carte non sono
       valide."
     m_Metadata:
@@ -3459,7 +3459,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540513
-    m_Localized: Mazzo vuoto e stalli
+    m_Localized: Mazzo di sorteggio vuoto e stalli
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540514
@@ -4032,6 +4032,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 74274328010776
     m_Localized: Giocare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397712580608
+    m_Localized: Tocca per continuare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397158932480
+    m_Localized: Nuovo feltro sbloccato
     m_Metadata:
       m_Items: []
   references:

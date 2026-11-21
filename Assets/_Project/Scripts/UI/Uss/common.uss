@@ -66,6 +66,14 @@
     color: rgb(248, 250, 238);
 }
 
+.unity-base-field:focus > .unity-base-field__label,
+.unity-base-field:focus:enabled > .unity-base-field__label,
+.unity-base-field:hover:enabled > .unity-base-field__label,
+.unity-base-field:active:enabled > .unity-base-field__label,
+.unity-base-field:checked > .unity-base-field__label {
+    color: rgb(225, 232, 222);
+}
+
 .unity-base-text-field__input {
     color: rgb(248, 250, 238);
     background-color: rgb(47, 91, 62);

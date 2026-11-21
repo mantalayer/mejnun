@@ -80,8 +80,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548989403142
     m_Localized: "Dans les jeux chronom\xE9tr\xE9s, un chronom\xE8tre d\xE9compte
-      chaque tour. Quand le temps est \xE9coul\xE9 \u2014 Hale ! \u2014, le tour
-      valide se termine ; sinon, vos cartes retournent dans le jeu et vous piochez."
+      chaque tour. Quand le temps est \xE9coul\xE9 \u2014 Hale ! \u2014 le tour valide
+      se termine ; sinon, vos cartes retournent dans le jeu et vous piochez."
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403152
@@ -773,7 +773,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6548985208857
     m_Localized: "Appuyez longuement sur le 10\u2665 et faites-le glisser vers la
-      zone vide du tableau. Le 10\u2665 J\u2665 sera inclus."
+      table vide. Le 10\u2665 J\u2665 sera inclus."
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208858
@@ -1564,7 +1564,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548993597512
-    m_Localized: Hao Yu
+    m_Localized: Haoyu
     m_Metadata:
       m_Items: []
   - m_Id: 6548993597513
@@ -2468,7 +2468,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763289
-    m_Localized: Nettoyage complet
+    m_Localized: Balayage complet
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763290
@@ -2505,7 +2505,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763299
-    m_Localized: Route Royale
+    m_Localized: Route royale
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763300
@@ -2537,7 +2537,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763308
-    m_Localized: "S\xE9parez une quinte et terminez le tour avec une donne valide."
+    m_Localized: "S\xE9parez une suite et terminez le tour avec une donne valide."
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763309
@@ -2895,7 +2895,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346190
-    m_Localized: Rejoignez-nous par code
+    m_Localized: Se connecter par code
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346192
@@ -3243,8 +3243,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346295
-    m_Localized: "Disposez les couverts en une grille bien ordonn\xE9e plut\xF4t
-      que de fa\xE7on organique sur la table."
+    m_Localized: "Disposez les couverts en une grille bien ordonn\xE9e au lieu de
+      les r\xE9partir de fa\xE7on organique sur la table."
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346296
@@ -3256,7 +3256,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346298
-    m_Localized: "d\xE9sordre des cartes"
+    m_Localized: "D\xE9sordre des cartes"
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346299
@@ -3392,8 +3392,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6549035540498
     m_Localized: "Mejnun utilise deux jeux de 52 cartes standard m\xE9lang\xE9s\_:
-      104 cartes au total, sans joker. Les cartes identiques des deux jeux forment
-      des doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
+      104 cartes au total, sans joker. Les cartes identiques des deux jeux sont des
+      doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
       d'une montre (vers la gauche)."
     m_Metadata:
       m_Items: []
@@ -3510,7 +3510,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540524
-    m_Localized: Tableau de fixation
+    m_Localized: carte de fixation
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540525
@@ -4032,6 +4032,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 74274328010776
     m_Localized: Jouer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397158932480
+    m_Localized: "Nouvelle sensation d\xE9verrouill\xE9e"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397712580608
+    m_Localized: Appuyez pour continuer
     m_Metadata:
       m_Items: []
   references:

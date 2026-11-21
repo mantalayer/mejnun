@@ -884,7 +884,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548989403140
-    m_Localized: Wakati rundo la droo likiisha, droo inakuwa Pasi. Ikiwa kila mtu
+    m_Localized: Wakati rundo la droo likiisha, Droo inakuwa Pasi. Ikiwa kila mtu
       atapiga pasi mfululizo, mchezaji mwenye kadi chache zaidi atashinda. Sare ni
       Sare.
     m_Metadata:
@@ -2455,8 +2455,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763294
-    m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako huku rundo la kuteka
-      likiwa tupu.
+    m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako huku rundo la droo likiwa
+      tupu.
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763296
@@ -2935,7 +2935,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346216
-    m_Localized: Boti ngumu
+    m_Localized: Roboti ngumu
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346218
@@ -2976,7 +2976,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282629
   - m_Id: 6549031346229
-    m_Localized: Chagua fanicha ya meza
+    m_Localized: Chagua fulana ya meza
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346230
@@ -3181,7 +3181,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346289
-    m_Localized: Hudhibiti jinsi jedwali linavyokuza haraka wakati wa kusogeza.
+    m_Localized: Hudhibiti jinsi jedwali linavyokuza kwa kasi wakati wa kusogeza.
     m_Metadata:
       m_Items: []
   - m_Id: 6549031346292
@@ -3390,8 +3390,8 @@ MonoBehaviour:
     m_Localized: Tendua hatua nyuma kupitia hatua zako; Rudia tena hatua isiyotekelezwa
       katika zamu ile ile. Hatua mpya na vitendo vya kugeuza huondoa Rudia. Bodi
       ya Kurekebisha hujaribu kuweka michezo halali kutoka kwa mkono wako wakati
-      wa kurekebisha ubao; kadi ambazo haziwezi kutumia hurudi kwenye mkono wako.
-      Revert hurejesha ubao katika hali yake ya kuanza kugeuka na hurudisha kadi
+      wa kurekebisha bodi; kadi ambazo haziwezi kutumia hurudi kwenye mkono wako.
+      Revert hurejesha bodi katika hali yake ya kuanza kugeuza na kurudisha kadi
       zako zilizochezwa kwenye mkono wako. Vitendo vya uharibifu vinaweza kukuomba
       uthibitishe.
     m_Metadata:
@@ -3401,7 +3401,7 @@ MonoBehaviour:
       au kuzima kipima muda katika michezo ya nje ya mtandao. Michezo ya mtandaoni
       hupangwa kila wakati. Wakati unapoisha, ubao halali usio na michezo ya mkono
       huwekwa na unachora; ubao batili usio na michezo ya mkono hurejeshwa na unachora.
-      Ukicheza kadi za mkono na ubao ni halali, zamu yako huisha bila sare. Ikiwa
+      Ukicheza kadi za mkono na ubao ni halali, zamu yako inaisha bila sare. Ikiwa
       ni batili, mienendo yako hutenduliwa hadi iwe halali; unachora tu ikiwa hakuna
       kadi ya mkono iliyobaki kwenye ubao.
     m_Metadata:
@@ -3951,7 +3951,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 74274328010762
-    m_Localized: Mkubwa sana...
+    m_Localized: Duuuh kubwa...
     m_Metadata:
       m_Items: []
   - m_Id: 74274328010763
@@ -4010,6 +4010,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 74274328010776
     m_Localized: Cheza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397158932480
+    m_Localized: Kitambaa kipya kimefunguliwa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 312397712580608
+    m_Localized: Gusa ili kuendelea
     m_Metadata:
       m_Items: []
   references:

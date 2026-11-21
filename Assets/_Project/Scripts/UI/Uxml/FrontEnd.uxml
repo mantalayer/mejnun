@@ -248,7 +248,7 @@
                     </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="gallery-screen" class="frontend-screen" style="display: none;">
+            <ui:VisualElement name="gallery-screen" class="frontend-screen gallery-screen" style="display: none;">
                 <ui:Label class="frontend-page-title">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="gallery.title"/>

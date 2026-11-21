@@ -24,7 +24,7 @@ A deliberate exception (a glyph such as `×`, the "MEJNUN!" logo word) is marked
 
 - `UI`: all interface text. `DealerQuestions`: the opening questions (`dq.001`, `dq.002`, …).
 - Keys are lowercase, dot-separated `area.screen.item`, with words joined by `_`: `menu.main.play`, `hud.button.end_turn`, `settings.audio.master_volume`, `achievement.ten_wins.name`.
-- Areas in use: `app`, `common`, `menu`, `setup`, `online`, `picker`, `gallery`, `settings`, `rules`, `credits`, `hud`, `flavor`, `flow`, `results`, `table`, `deck_unlock`, `tutorial`, `match`, `save`, `dealer`, `bot`, `net`, `achievement`, `cosmetic`, `unlock`, `profile`.
+- Areas in use: `app`, `common`, `menu`, `setup`, `online`, `picker`, `gallery`, `settings`, `rules`, `credits`, `hud`, `flavor`, `flow`, `results`, `table`, `deck_unlock`, `felt_unlock`, `tutorial`, `match`, `save`, `dealer`, `bot`, `net`, `achievement`, `cosmetic`, `unlock`, `profile`.
 - `common.*` holds only generic words used in many places (`common.ok`, `common.cancel`, `common.back`, `common.close`, `common.on`, `common.off`, `common.yes`, `common.no`, `common.continue`, `common.done`, `common.locked`, `common.loading`). Anything with screen-specific meaning gets its own key, even if the English is the same: translations often differ by context.
 - Never rename or reuse a key once it has shipped to the sheet. If the meaning changes, add a new key and delete the old one.
 - Add a **comment** to every entry whose context is not obvious (what the placeholders are, where the text appears, length limits). Comments go into the entry's `Comment` metadata and help reviewers.

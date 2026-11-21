@@ -322,6 +322,90 @@
     font-size: 16px;
     -unity-text-align: middle-center;
 }
+
+.felt-unlock-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(5, 12, 9, 0.96);
+}
+
+.felt-unlock-caption {
+    position: absolute;
+    top: 6%;
+    width: 100%;
+    color: rgb(255, 227, 144);
+    font-size: 19px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.felt-unlock-name {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    color: rgb(255, 235, 178);
+    font-size: 32px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.felt-unlock-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.felt-unlock-swatch {
+    border-radius: 12px;
+}
+
+.felt-unlock-glow-outer,
+.felt-unlock-glow-inner {
+    position: absolute;
+    border-radius: 20px;
+}
+
+.felt-unlock-glow-outer {
+    background-color: rgba(255, 194, 49, 0.22);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-left-color: rgb(255, 196, 60);
+    border-right-color: rgb(255, 196, 60);
+    border-top-color: rgb(255, 196, 60);
+    border-bottom-color: rgb(255, 196, 60);
+}
+
+.felt-unlock-glow-inner {
+    background-color: rgba(255, 221, 110, 0.18);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(255, 239, 157);
+    border-right-color: rgb(255, 239, 157);
+    border-top-color: rgb(255, 239, 157);
+    border-bottom-color: rgb(255, 239, 157);
+}
+
+.felt-unlock-hint {
+    position: absolute;
+    bottom: 6%;
+    width: 100%;
+    color: rgb(225, 225, 207);
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
 :root {
     -unity-text-generator: advanced;
 }

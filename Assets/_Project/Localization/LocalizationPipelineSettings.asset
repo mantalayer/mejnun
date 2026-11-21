@@ -61,4 +61,4 @@ MonoBehaviour:
     GoogleLanguageCode: th
   SyncBeforeBuild: 1
   FailBuildOnIssues: 0
-  TranslationWaitSeconds: 600
+  TranslationWaitSeconds: 120

@@ -1270,15 +1270,19 @@ namespace Mejnun.UI
                             : new StyleLength(StyleKeyword.Auto);
                         fastForwardDock.style.left = StyleKeyword.Auto;
                         fastForwardDock.style.right = 12f;
-                        fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;
+                        fastForwardDock.style.bottom = statusPanel != null && statusPanel.worldBound.height > 0f
+                            ? root.worldBound.yMax - statusPanel.worldBound.yMax
+                            : root.worldBound.yMax - bottomBar.worldBound.yMin + 8f;
                         fastForwardDock.style.height = dockHeight;
                     }
                     else
                     {
                         fastForwardDock.style.left = bottomBar.worldBound.xMax - root.worldBound.xMin + 8f;
                         fastForwardDock.style.right = StyleKeyword.Auto;
-                        fastForwardDock.style.bottom = root.worldBound.yMax - bottomBar.worldBound.yMax;
-                        fastForwardDock.style.height = dockHeight;
+                        var hasStatusPanel = statusPanel != null && statusPanel.worldBound.height > 0f;
+                        var alignBounds = hasStatusPanel ? statusPanel.worldBound : bottomBar.worldBound;
+                        fastForwardDock.style.bottom = root.worldBound.yMax - alignBounds.yMax;
+                        fastForwardDock.style.height = alignBounds.height;
                     }
                 }
             }
@@ -1728,6 +1732,7 @@ namespace Mejnun.UI
             }
 
             var popupParent = goodMovePopup.parent;
+            FitGoodMovePopupToText(popupParent);
             if (goodMoveMeldId < 0 || root == null || root.panel == null || popupParent == null ||
                 tableView == null || tableView.ViewCamera == null ||
                 !tableView.TryGetMeldAnchor(goodMoveMeldId, out var world))
@@ -1764,6 +1769,49 @@ namespace Mejnun.UI
             goodMovePopup.EnableInClassList("good-move-popup--centered", false);
             goodMovePopup.style.left = left;
             goodMovePopup.style.top = localPosition.y - 16f;
+        }
+
+        // An absolutely positioned auto-width label keeps its single-line height when max-width wraps the text,
+        // so size the panel explicitly from the wrapped text measurement.
+        private void FitGoodMovePopupToText(VisualElement popupParent)
+        {
+            var parentWidth = popupParent != null ? popupParent.contentRect.width : float.NaN;
+            if (!IsFinite(parentWidth) || parentWidth <= 0f || string.IsNullOrEmpty(goodMovePopup.text))
+            {
+                goodMovePopup.style.width = StyleKeyword.Null;
+                goodMovePopup.style.height = StyleKeyword.Null;
+                return;
+            }
+
+            var resolved = goodMovePopup.resolvedStyle;
+            var horizontalPadding = resolved.paddingLeft + resolved.paddingRight +
+                                    resolved.borderLeftWidth + resolved.borderRightWidth;
+            var verticalPadding = resolved.paddingTop + resolved.paddingBottom +
+                                  resolved.borderTopWidth + resolved.borderBottomWidth;
+            var maxContentWidth = Mathf.Max(1f, parentWidth * 0.6f - horizontalPadding);
+            var natural = goodMovePopup.MeasureTextSize(goodMovePopup.text, 0f, VisualElement.MeasureMode.Undefined,
+                0f, VisualElement.MeasureMode.Undefined);
+            var contentWidth = IsFinite(natural.x) && natural.x > 0f
+                ? Mathf.Min(Mathf.Ceil(natural.x) + 1f, maxContentWidth)
+                : maxContentWidth;
+            var wrapped = goodMovePopup.MeasureTextSize(goodMovePopup.text, contentWidth,
+                VisualElement.MeasureMode.Exactly, 0f, VisualElement.MeasureMode.Undefined);
+            if (!IsFinite(wrapped.y) || wrapped.y <= 0f)
+            {
+                return;
+            }
+
+            var width = contentWidth + horizontalPadding;
+            var height = Mathf.Ceil(wrapped.y) + verticalPadding;
+            if (!Mathf.Approximately(goodMovePopup.resolvedStyle.width, width))
+            {
+                goodMovePopup.style.width = width;
+            }
+
+            if (!Mathf.Approximately(goodMovePopup.resolvedStyle.height, height))
+            {
+                goodMovePopup.style.height = height;
+            }
         }
 
         private void ClearDownRevealTag()
@@ -2606,6 +2654,7 @@ namespace Mejnun.UI
                 confirmDontAsk.style.display = setEnabled == null ? DisplayStyle.None : DisplayStyle.Flex;
             }
             SetVisible(confirmDialog, true);
+            confirmDialog?.BringToFront();
             confirmPaused = true;
             ApplyPause();
         }

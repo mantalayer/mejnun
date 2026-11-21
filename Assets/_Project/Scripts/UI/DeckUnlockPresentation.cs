@@ -26,6 +26,30 @@ namespace Mejnun.UI
 
     public sealed class DeckUnlockPresentation
     {
+        public struct GridLayout
+        {
+            public readonly int Columns;
+            public readonly int Rows;
+            public readonly float CardWidth;
+            public readonly float CardHeight;
+            public readonly float GapX;
+            public readonly float GapY;
+            public readonly float Left;
+            public readonly float Top;
+
+            public GridLayout(int columns, int rows, float cardWidth, float cardHeight, float gapX, float gapY, float left, float top)
+            {
+                Columns = columns;
+                Rows = rows;
+                CardWidth = cardWidth;
+                CardHeight = cardHeight;
+                GapX = gapX;
+                GapY = gapY;
+                Left = left;
+                Top = top;
+            }
+        }
+
         private const float DealDuration = 0.75f;
         private const float DealStagger = 0.01f;
         private const float HoldDuration = 0.3f;
@@ -118,6 +142,50 @@ namespace Mejnun.UI
         public bool IsSquared { get; private set; }
         public bool AreFacesShowing { get; private set; }
         public IReadOnlyList<Image> Cards => cards;
+
+        public static GridLayout ComputeGridLayout(float width, float height, int cardCount)
+        {
+            const float aspect = 0.72f;
+            const float gapRatio = 0.08f;
+            var isPortrait = height > width;
+            var availableWidth = width * (isPortrait ? 0.92f : 0.9f);
+            var availableHeight = height * (isPortrait ? 0.68f : 0.76f);
+            var verticalOffset = height * (isPortrait ? 0.05f : 0.04f);
+            if (cardCount <= 0 || width <= 0f || height <= 0f)
+            {
+                return new GridLayout(0, 0, 0f, 0f, 0f, 0f, width * 0.5f, height * 0.5f);
+            }
+
+            // Keep the established 13-by-4 presentation in landscape; portrait layouts
+            // search for the widest cards that fit both available dimensions.
+            var bestColumns = isPortrait ? 1 : Mathf.Min(13, cardCount);
+            var bestRows = Mathf.CeilToInt(cardCount / (float)bestColumns);
+            var bestCardWidth = 0f;
+            var firstColumn = isPortrait ? 1 : bestColumns;
+            var lastColumn = isPortrait ? cardCount : bestColumns;
+            for (var columns = firstColumn; columns <= lastColumn; columns++)
+            {
+                var rows = Mathf.CeilToInt(cardCount / (float)columns);
+                var widthPerCard = availableWidth / (columns + (columns - 1) * gapRatio);
+                var heightPerCard = availableHeight * aspect / (rows + (rows - 1) * gapRatio);
+                var cardWidth = Mathf.Min(widthPerCard, heightPerCard);
+                if (cardWidth > bestCardWidth)
+                {
+                    bestColumns = columns;
+                    bestRows = rows;
+                    bestCardWidth = cardWidth;
+                }
+            }
+
+            var cardHeight = bestCardWidth / aspect;
+            var gapX = bestCardWidth * gapRatio;
+            var gapY = cardHeight * gapRatio;
+            var totalWidth = bestCardWidth * bestColumns + gapX * (bestColumns - 1);
+            var totalHeight = cardHeight * bestRows + gapY * (bestRows - 1);
+            var left = (width - totalWidth) * 0.5f;
+            var top = (height - totalHeight) * 0.5f + verticalOffset;
+            return new GridLayout(bestColumns, bestRows, bestCardWidth, cardHeight, gapX, gapY, left, top);
+        }
 
         public void Play(IReadOnlyList<DeckUnlockPresentationItem> unlockedDecks, Action finished)
         {
@@ -277,26 +345,21 @@ namespace Mejnun.UI
             }
 
             const float aspect = 0.72f;
-            var gridWidth = Mathf.Min(width * 0.9f / 13f, height * 0.76f / 4f * aspect);
-            var gridHeight = gridWidth / aspect;
-            var gridGapX = gridWidth * 0.08f;
-            var gridGapY = gridHeight * 0.08f;
-            var gridTotalWidth = gridWidth * 13 + gridGapX * 12;
-            var gridTotalHeight = gridHeight * 4 + gridGapY * 3;
-            var gridLeft = (width - gridTotalWidth) * 0.5f;
-            var verticalOffset = height * 0.04f;
-            var gridTop = (height - gridTotalHeight) * 0.5f + verticalOffset;
-            var deckWidth = Mathf.Min(width * 0.26f, height * 0.42f * aspect);
+            var isPortrait = height > width;
+            var grid = ComputeGridLayout(width, height, cards.Count);
+            var deckWidth = Mathf.Min(width * (isPortrait ? 0.45f : 0.26f), height * 0.42f * aspect);
             var deckHeight = deckWidth / aspect;
             var deckLeft = (width - deckWidth) * 0.5f;
-            var deckTop = (height - deckHeight) * 0.5f + verticalOffset;
+            var deckTop = (height - deckHeight) * 0.5f + height * (isPortrait ? 0.05f : 0.04f);
 
             for (var index = 0; index < cards.Count; index++)
             {
-                var column = index % 13;
-                var row = index / 13;
-                var targetX = gridLeft + column * (gridWidth + gridGapX);
-                var targetY = gridTop + row * (gridHeight + gridGapY);
+                var row = index / grid.Columns;
+                var column = index % grid.Columns;
+                var rowCount = Mathf.Min(grid.Columns, cards.Count - row * grid.Columns);
+                var rowLeft = grid.Left + (grid.Columns - rowCount) * (grid.CardWidth + grid.GapX) * 0.5f;
+                var targetX = rowLeft + column * (grid.CardWidth + grid.GapX);
+                var targetY = grid.Top + row * (grid.CardHeight + grid.GapY);
                 var stackOffset = (Card.CardsPerDeck - index - 1) * 0.035f;
                 var stackX = deckLeft + stackOffset;
                 var stackY = deckTop + stackOffset;
@@ -306,8 +369,8 @@ namespace Mejnun.UI
                 var squareProgress = EaseInOutCubic((elapsed - SquareStart - index * SquareStagger) / SquareDuration);
                 var currentX = Mathf.Lerp(dealX, stackX, squareProgress);
                 var currentY = Mathf.Lerp(dealY, stackY, squareProgress);
-                var currentWidth = Mathf.Lerp(deckWidth, gridWidth, dealProgress);
-                var currentHeight = Mathf.Lerp(deckHeight, gridHeight, dealProgress);
+                var currentWidth = Mathf.Lerp(deckWidth, grid.CardWidth, dealProgress);
+                var currentHeight = Mathf.Lerp(deckHeight, grid.CardHeight, dealProgress);
                 currentWidth = Mathf.Lerp(currentWidth, deckWidth, squareProgress);
                 currentHeight = Mathf.Lerp(currentHeight, deckHeight, squareProgress);
 

@@ -46,7 +46,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6547928244229
-    m_Localized: Qui a son anniversaire le plus proche d'aujourd'hui ?
+    m_Localized: Qui a l'anniversaire le plus proche d'aujourd'hui ?
     m_Metadata:
       m_Items: []
   - m_Id: 6547928244230
@@ -86,8 +86,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 74276131561478
     m_Localized: "Si vous \xE9tiez coinc\xE9 sur une \xEEle d\xE9serte avec seulement
-      un \xE9cureuil et deux cure-dents\u2026 Qui attraperait l\u2019\xE9cureuil,
-      par exemple\_?"
+      un \xE9cureuil et deux cure-dents... Qui attraperait l'\xE9cureuil, ou quelque
+      chose comme \xE7a ?"
     m_Metadata:
       m_Items: []
   - m_Id: 74276131561479
@@ -204,7 +204,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 74276131561506
-    m_Localized: Qui n'a pas envie d'y aller du tout ?
+    m_Localized: Qui n'a pas du tout envie d'y aller ?
     m_Metadata:
       m_Items: []
   - m_Id: 74276131561507
