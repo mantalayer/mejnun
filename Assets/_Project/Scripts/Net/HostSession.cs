@@ -15,8 +15,10 @@ namespace Mejnun.Net
 
     public sealed class HostSession
     {
-        private readonly Seat[] seats;
+        public const double MigrationReconnectGraceSeconds = 60;
+        private readonly SeatRoster roster;
         private readonly ISnapshotStore snapshotStore;
+        private readonly int[] lastGraceSeconds;
         private double turnElapsed;
         private double botElapsed;
 
@@ -24,42 +26,45 @@ namespace Mejnun.Net
         {
             Game = game ?? throw new ArgumentNullException(nameof(game));
             this.snapshotStore = snapshotStore ?? new InMemorySnapshotStore();
-            seats = new Seat[game.Setup.SeatCount];
-            for (var index = 0; index < seats.Length; index++)
+            roster = new SeatRoster(game.Setup.SeatCount);
+            lastGraceSeconds = new int[game.Setup.SeatCount];
+            for (var index = 0; index < lastGraceSeconds.Length; index++)
             {
-                seats[index] = new Seat();
+                lastGraceSeconds[index] = -1;
             }
         }
 
-        private HostSession(MejnunGame game, ISnapshotStore snapshotStore, SeatRecord[] restoredSeats, bool paused)
+        private HostSession(MejnunGame game, ISnapshotStore snapshotStore, SeatRecord[] restoredSeats,
+            PauseReason pauseReason)
             : this(game, snapshotStore)
         {
-            for (var index = 0; index < Math.Min(seats.Length, restoredSeats.Length); index++)
+            for (var index = 0; index < Math.Min(roster.SeatCount, restoredSeats.Length); index++)
             {
-                seats[index].AuthenticationId = restoredSeats[index].AuthenticationId;
-                seats[index].DisplayName = restoredSeats[index].DisplayName;
-                seats[index].Connected = restoredSeats[index].Connected;
-                seats[index].IsBot = restoredSeats[index].IsBot;
-                seats[index].Difficulty = restoredSeats[index].Difficulty;
+                roster.Restore(index, restoredSeats[index]);
             }
 
-            IsPaused = paused;
+            PauseReason = pauseReason;
+            RefreshPresencePauseReason();
         }
 
         public MejnunGame Game { get; private set; }
-        public bool IsPaused { get; private set; }
+        public PauseReason PauseReason { get; private set; }
+        public bool IsPaused => PauseReason != Mejnun.Net.PauseReason.None;
+        public SeatRoster Roster => roster;
         public ISnapshotStore SnapshotStore => snapshotStore;
         public event Action<string, NetMessage> MessageSent;
         public event Action<MejnunGame> StateChanged;
         public event Action<SeatStatusMessage> SeatStatusChanged;
+        public event Action<int> SeatExpired;
+        public event Action<PauseReason> PauseReasonChanged;
 
         public bool AreAllSeatsConnected
         {
             get
             {
-                for (var index = 0; index < seats.Length; index++)
+                for (var index = 0; index < roster.SeatCount; index++)
                 {
-                    if (!seats[index].Connected && !seats[index].IsBot)
+                    if (!roster.HasReadySeat(index))
                     {
                         return false;
                     }
@@ -83,59 +88,44 @@ namespace Mejnun.Net
                 throw new InvalidDataException("Session record seat count does not match the game setup.");
             }
 
-            return new HostSession(game, snapshotStore, seatRecords, record.Paused);
+            return new HostSession(game, snapshotStore, seatRecords, record.PauseReason);
         }
 
         public int Join(string authenticationId, string displayName)
         {
             if (string.IsNullOrWhiteSpace(authenticationId))
             {
-                Send(authenticationId, new RejectedMessage("Authentication id is required."));
+                Send(authenticationId, new RejectedMessage(JoinRejectReason.MissingAuthentication,
+                    "Authentication id is required."));
                 return -1;
             }
 
-            var seat = FindSeat(authenticationId);
+            var seat = roster.Claim(authenticationId, displayName, Game.State.CurrentSeat, out _);
             if (seat < 0)
             {
-                seat = FindOpenSeat();
-                if (seat < 0)
-                {
-                    Send(authenticationId, new RejectedMessage("No open seats."));
-                    return -1;
-                }
-
-                seats[seat].AuthenticationId = authenticationId;
+                Send(authenticationId, new RejectedMessage(JoinRejectReason.NoFreeSeat, "No open seats."));
+                return -1;
             }
 
-            var entry = seats[seat];
-            entry.DisplayName = displayName ?? string.Empty;
-            entry.Connected = true;
-            entry.IsBot = false;
             Send(authenticationId, new WelcomeMessage(seat, SnapshotSerializer.WriteForSeat(Game, seat)));
+            RefreshPresencePauseReason();
+            Send(authenticationId, new PausedMessage(PauseReason));
             BroadcastSeatStatuses();
             return seat;
         }
 
         public void AddBot(int seat, string displayName, BotDifficulty difficulty = BotDifficulty.Medium)
         {
-            ValidateSeat(seat);
-            if (seats[seat].Connected || !string.IsNullOrEmpty(seats[seat].AuthenticationId))
-            {
-                throw new InvalidOperationException("The seat is already assigned.");
-            }
-
-            seats[seat].DisplayName = displayName ?? "Bot";
-            seats[seat].IsBot = true;
-            seats[seat].Difficulty = difficulty;
+            roster.AddBot(seat, displayName, difficulty);
             BroadcastSeatStatuses();
         }
 
         public bool SubmitCommands(string authenticationId, IReadOnlyList<GameCommand> commands)
         {
             var seat = FindSeat(authenticationId);
-            if (seat < 0 || !seats[seat].Connected || seats[seat].IsBot)
+            if (seat < 0 || !roster.IsConnected(authenticationId))
             {
-                Send(authenticationId, new RejectedMessage("The sender has no connected player seat."));
+                Send(authenticationId, new RejectedMessage(null, "The sender has no connected player seat."));
                 return false;
             }
 
@@ -145,51 +135,100 @@ namespace Mejnun.Net
         public bool Disconnect(string authenticationId, DisconnectChoice choice)
         {
             var seat = FindSeat(authenticationId);
-            if (seat < 0 || !seats[seat].Connected)
+            if (seat < 0 || !roster.IsConnected(authenticationId))
             {
                 return false;
             }
 
-            var entry = seats[seat];
-            entry.Connected = false;
-            ApplyDisconnectChoice(authenticationId, entry, choice);
+            roster.MarkDropped(authenticationId);
+            if (choice == DisconnectChoice.SaveAndPause)
+            {
+                SetPauseReason(PauseReason.SavedByHost);
+                SaveSnapshot();
+            }
+
+            RefreshPresencePauseReason();
             BroadcastSeatStatuses();
             StateChanged?.Invoke(Game);
             return true;
+        }
+
+        public void MarkAway(string authenticationId)
+        {
+            roster.MarkAway(authenticationId);
+            RefreshPresencePauseReason();
+            BroadcastSeatStatuses();
+        }
+
+        public int PrepareForPromotion(string authenticationId)
+        {
+            var localSeat = FindSeat(authenticationId);
+            if (localSeat < 0)
+            {
+                return -1;
+            }
+
+            for (var seat = 0; seat < roster.SeatCount; seat++)
+            {
+                if (seat == localSeat)
+                {
+                    continue;
+                }
+
+                var state = roster.Get(seat);
+                if (!string.IsNullOrWhiteSpace(state.AuthenticationId) && state.Presence != SeatPresence.Bot)
+                {
+                    roster.MarkAway(state.AuthenticationId, MigrationReconnectGraceSeconds);
+                }
+            }
+
+            var localState = roster.Get(localSeat);
+            roster.Claim(authenticationId, localState.DisplayName, Game.State.CurrentSeat, out _);
+            if (PauseReason == Mejnun.Net.PauseReason.HostAway)
+            {
+                SetPauseReason(Mejnun.Net.PauseReason.None);
+            }
+
+            RefreshPresencePauseReason();
+            BroadcastSeatStatuses();
+            return localSeat;
         }
 
         public bool ResolveDisconnect(string authenticationId, DisconnectChoice choice)
         {
             var seat = FindSeat(authenticationId);
-            if (seat < 0 || seats[seat].Connected)
+            if (seat < 0 || roster.Get(seat).Presence != SeatPresence.Disconnected)
             {
                 return false;
             }
 
-            ApplyDisconnectChoice(authenticationId, seats[seat], choice);
-            BroadcastSeatStatuses();
-            StateChanged?.Invoke(Game);
-            return true;
-        }
-
-        private void ApplyDisconnectChoice(string authenticationId, Seat entry, DisconnectChoice choice)
-        {
             switch (choice)
             {
                 case DisconnectChoice.Wait:
                     break;
                 case DisconnectChoice.TakeOverWithBot:
-                    entry.IsBot = true;
-                    entry.Difficulty = BotDifficulty.Medium;
+                    roster.SetBotControl(seat, BotDifficulty.Medium);
                     break;
                 case DisconnectChoice.SaveAndPause:
-                    IsPaused = true;
+                    SetPauseReason(PauseReason.SavedByHost);
                     SaveSnapshot();
-                    SendAll(new PausedMessage(true, "A player disconnected; the match is saved and paused."));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(choice));
             }
+
+            RefreshPresencePauseReason();
+            BroadcastSeatStatuses();
+            StateChanged?.Invoke(Game);
+            return true;
+        }
+
+        public void SetBotControl(int seat, BotDifficulty difficulty)
+        {
+            roster.SetBotControl(seat, difficulty);
+            RefreshPresencePauseReason();
+            BroadcastSeatStatuses();
+            StateChanged?.Invoke(Game);
         }
 
         public void Resume()
@@ -199,34 +238,55 @@ namespace Mejnun.Net
                 return;
             }
 
-            IsPaused = false;
             turnElapsed = 0;
+            if (PauseReason == Mejnun.Net.PauseReason.SavedByHost ||
+                PauseReason == Mejnun.Net.PauseReason.HostAway)
+            {
+                SetPauseReason(Mejnun.Net.PauseReason.None);
+            }
+
+            RefreshPresencePauseReason();
             SaveSnapshot();
-            SendAll(new PausedMessage(false, string.Empty));
             StateChanged?.Invoke(Game);
             BroadcastStates();
         }
 
         public void Tick(double elapsedSeconds)
         {
-            if (elapsedSeconds < 0)
+            if (elapsedSeconds < 0 || double.IsNaN(elapsedSeconds) || double.IsInfinity(elapsedSeconds))
             {
                 throw new ArgumentOutOfRangeException(nameof(elapsedSeconds));
             }
 
-            if (IsPaused || Game.State.Phase != GamePhase.Playing)
+            var expiredSeats = roster.Tick(elapsedSeconds);
+            if (expiredSeats.Count > 0)
+            {
+                RefreshPresencePauseReason();
+                BroadcastSeatStatuses();
+                for (var index = 0; index < expiredSeats.Count; index++)
+                {
+                    SeatExpired?.Invoke(expiredSeats[index]);
+                }
+            }
+            else if (HasGraceCountdownChanged())
+            {
+                BroadcastSeatStatuses();
+            }
+
+            if (IsPaused || roster.HasBlockingAbsence || Game.State.Phase != GamePhase.Playing)
             {
                 return;
             }
 
             var currentSeat = Game.State.CurrentSeat;
-            if (seats[currentSeat].IsBot)
+            var current = roster.Get(currentSeat);
+            if (current.Presence == SeatPresence.Bot || current.Presence == SeatPresence.BotControlled)
             {
                 botElapsed += elapsedSeconds;
                 if (botElapsed >= 0.5)
                 {
                     botElapsed = 0;
-                    var plan = BotBrain.PlanTurn(Game, seats[currentSeat].Difficulty,
+                    var plan = BotBrain.PlanTurn(Game, current.Difficulty,
                         Game.State.Rng.State ^ (ulong)Game.State.TurnNumber);
                     if (plan.Commands.Count > 0)
                     {
@@ -253,15 +313,15 @@ namespace Mejnun.Net
 
         public SessionRecord CreateRecord()
         {
-            var seatRecords = new SeatRecord[seats.Length];
-            for (var index = 0; index < seats.Length; index++)
+            var seatRecords = new SeatRecord[roster.SeatCount];
+            for (var index = 0; index < roster.SeatCount; index++)
             {
-                var seat = seats[index];
-                seatRecords[index] = new SeatRecord(seat.AuthenticationId, seat.DisplayName, seat.Connected,
-                    seat.IsBot, seat.Difficulty);
+                var seat = roster.Get(index);
+                seatRecords[index] = new SeatRecord(seat.AuthenticationId, seat.DisplayName, seat.Presence,
+                    seat.PendingHandBack, seat.Difficulty);
             }
 
-            return new SessionRecord(SnapshotSerializer.Write(Game), seatRecords, IsPaused);
+            return new SessionRecord(SnapshotSerializer.Write(Game), seatRecords, PauseReason);
         }
 
         public void SaveSnapshot()
@@ -272,9 +332,9 @@ namespace Mejnun.Net
         public SeatRecord GetSeat(int seat)
         {
             ValidateSeat(seat);
-            var entry = seats[seat];
-            return new SeatRecord(entry.AuthenticationId, entry.DisplayName, entry.Connected, entry.IsBot,
-                entry.Difficulty);
+            var entry = roster.Get(seat);
+            return new SeatRecord(entry.AuthenticationId, entry.DisplayName, entry.Presence,
+                entry.PendingHandBack, entry.Difficulty);
         }
 
         private bool ApplyGroup(int seat, IReadOnlyList<GameCommand> commands, string senderId)
@@ -285,7 +345,7 @@ namespace Mejnun.Net
                 return false;
             }
 
-            if (IsPaused)
+            if (IsPaused || roster.HasBlockingAbsence)
             {
                 Reject(senderId, "The match is paused.");
                 return false;
@@ -327,7 +387,9 @@ namespace Mejnun.Net
             {
                 turnElapsed = 0;
                 botElapsed = 0;
+                roster.CompleteHandBacks(Game.State.CurrentSeat);
                 SaveSnapshot();
+                BroadcastSeatStatuses();
             }
 
             StateChanged?.Invoke(Game);
@@ -337,9 +399,9 @@ namespace Mejnun.Net
 
         private void Reject(string authenticationId, string reason)
         {
-            Send(authenticationId, new RejectedMessage(reason));
+            Send(authenticationId, new RejectedMessage(null, reason));
             var seat = FindSeat(authenticationId);
-            if (seat >= 0 && seats[seat].Connected)
+            if (seat >= 0 && IsMessageRecipient(seat))
             {
                 Send(authenticationId, new StateUpdateMessage(SnapshotSerializer.WriteForSeat(Game, seat)));
             }
@@ -347,11 +409,12 @@ namespace Mejnun.Net
 
         private void BroadcastStates()
         {
-            for (var seat = 0; seat < seats.Length; seat++)
+            for (var seat = 0; seat < roster.SeatCount; seat++)
             {
-                if (seats[seat].Connected && !string.IsNullOrEmpty(seats[seat].AuthenticationId))
+                var entry = roster.Get(seat);
+                if (IsMessageRecipient(seat) && !string.IsNullOrEmpty(entry.AuthenticationId))
                 {
-                    Send(seats[seat].AuthenticationId,
+                    Send(entry.AuthenticationId,
                         new StateUpdateMessage(SnapshotSerializer.WriteForSeat(Game, seat)));
                 }
             }
@@ -359,23 +422,27 @@ namespace Mejnun.Net
 
         private void BroadcastSeatStatuses()
         {
-            for (var seat = 0; seat < seats.Length; seat++)
+            for (var seat = 0; seat < roster.SeatCount; seat++)
             {
-                var entry = seats[seat];
+                var entry = roster.Get(seat);
                 var message = new SeatStatusMessage(seat, entry.AuthenticationId, entry.DisplayName,
-                    entry.Connected, entry.IsBot);
+                    entry.Presence, entry.PendingHandBack, (float)entry.GraceRemaining);
                 SeatStatusChanged?.Invoke(message);
                 SendAll(message);
+                lastGraceSeconds[seat] = entry.Presence == SeatPresence.Reconnecting
+                    ? (int)Math.Ceiling(entry.GraceRemaining)
+                    : -1;
             }
         }
 
         private void SendAll(NetMessage message)
         {
-            for (var seat = 0; seat < seats.Length; seat++)
+            for (var seat = 0; seat < roster.SeatCount; seat++)
             {
-                if (seats[seat].Connected && !string.IsNullOrEmpty(seats[seat].AuthenticationId))
+                var entry = roster.Get(seat);
+                if (IsMessageRecipient(seat) && !string.IsNullOrEmpty(entry.AuthenticationId))
                 {
-                    Send(seats[seat].AuthenticationId, message);
+                    Send(entry.AuthenticationId, message);
                 }
             }
         }
@@ -395,9 +462,9 @@ namespace Mejnun.Net
                 return -1;
             }
 
-            for (var seat = 0; seat < seats.Length; seat++)
+            for (var seat = 0; seat < roster.SeatCount; seat++)
             {
-                if (string.Equals(seats[seat].AuthenticationId, authenticationId, StringComparison.Ordinal))
+                if (string.Equals(roster.Get(seat).AuthenticationId, authenticationId, StringComparison.Ordinal))
                 {
                     return seat;
                 }
@@ -406,34 +473,74 @@ namespace Mejnun.Net
             return -1;
         }
 
-        private int FindOpenSeat()
+        private bool IsMessageRecipient(int seat)
         {
-            for (var seat = 0; seat < seats.Length; seat++)
-            {
-                if (string.IsNullOrEmpty(seats[seat].AuthenticationId) && !seats[seat].IsBot)
-                {
-                    return seat;
-                }
-            }
-
-            return -1;
+            var entry = roster.Get(seat);
+            return entry.Presence == SeatPresence.Connected || entry.PendingHandBack;
         }
 
         private void ValidateSeat(int seat)
         {
-            if (seat < 0 || seat >= seats.Length)
+            if (seat < 0 || seat >= roster.SeatCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(seat));
             }
         }
 
-        private sealed class Seat
+        private bool HasGraceCountdownChanged()
         {
-            public string AuthenticationId = string.Empty;
-            public string DisplayName = string.Empty;
-            public bool Connected;
-            public bool IsBot;
-            public BotDifficulty Difficulty = BotDifficulty.Medium;
+            for (var seat = 0; seat < roster.SeatCount; seat++)
+            {
+                var entry = roster.Get(seat);
+                var seconds = entry.Presence == SeatPresence.Reconnecting
+                    ? (int)Math.Ceiling(entry.GraceRemaining)
+                    : -1;
+                if (seconds != lastGraceSeconds[seat])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void RefreshPresencePauseReason()
+        {
+            if (PauseReason == Mejnun.Net.PauseReason.SavedByHost ||
+                PauseReason == Mejnun.Net.PauseReason.HostAway)
+            {
+                return;
+            }
+
+            SetPauseReason(roster.HasBlockingAbsence
+                ? Mejnun.Net.PauseReason.WaitingForPlayers
+                : Mejnun.Net.PauseReason.None);
+        }
+
+        public void SetPauseReason(PauseReason reason)
+        {
+            if (!Enum.IsDefined(typeof(PauseReason), reason))
+            {
+                throw new ArgumentOutOfRangeException(nameof(reason));
+            }
+
+            if (reason == Mejnun.Net.PauseReason.None && roster.HasBlockingAbsence)
+            {
+                reason = Mejnun.Net.PauseReason.WaitingForPlayers;
+            }
+
+            if (PauseReason == reason)
+            {
+                return;
+            }
+
+            PauseReason = reason;
+            PauseReasonChanged?.Invoke(reason);
+            SendAll(new PausedMessage(reason));
+            if (reason == Mejnun.Net.PauseReason.SavedByHost)
+            {
+                SaveSnapshot();
+            }
         }
     }
 }

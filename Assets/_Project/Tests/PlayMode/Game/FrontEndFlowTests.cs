@@ -307,6 +307,55 @@ namespace Mejnun.Game.Tests
             Assert.That(root.ClassListContains("portrait-layout"), Is.True);
         }
 
+        [Test]
+        public void SafeAreaUtilityUsesLargerBottomInset()
+        {
+            var root = new VisualElement();
+            var safeArea = new Rect(100f, 60f, 800f, 420f);
+
+            SafeAreaUtility.Apply(root, safeArea, 1000, 600, 12f, 200f);
+            Assert.That(root.style.paddingBottom.value.value, Is.EqualTo(200f));
+
+            SafeAreaUtility.Apply(root, safeArea, 1000, 600, 12f, 50f);
+            Assert.That(root.style.paddingBottom.value.value, Is.EqualTo(72f));
+        }
+
+        [Test]
+        public void SoftKeyboardInsetConvertsKeyboardHeightToPanelUnits()
+        {
+            var inset = SoftKeyboardInset.ToPanelUnits(true, new Rect(0f, 0f, 1000f, 400f), 1000, 500f);
+
+            Assert.That(inset, Is.EqualTo(200f));
+        }
+
+        [Test]
+        public void SoftKeyboardInsetReturnsZeroWhenKeyboardIsHidden()
+        {
+            var inset = SoftKeyboardInset.ToPanelUnits(false, new Rect(0f, 0f, 1000f, 400f), 1000, 500f);
+
+            Assert.That(inset, Is.Zero);
+        }
+
+        [Test]
+        public void SoftKeyboardInsetUsesFallbackWhenVisibleAreaIsEmpty()
+        {
+            var inset = SoftKeyboardInset.ToPanelUnits(true, Rect.zero, 1000, 500f);
+
+            Assert.That(inset, Is.EqualTo(200f));
+        }
+
+        [Test]
+        public void SoftKeyboardInsetFindsTextFieldFromInnerElement()
+        {
+            var root = new VisualElement();
+            var textField = new TextField();
+            var innerElement = new VisualElement();
+            textField.Add(innerElement);
+            root.Add(textField);
+
+            Assert.That(SoftKeyboardInset.FindTextField(innerElement), Is.SameAs(textField));
+        }
+
         private static void DeleteIfExists(string path)
         {
             if (!string.IsNullOrEmpty(path) && File.Exists(path))

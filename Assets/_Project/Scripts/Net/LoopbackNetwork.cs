@@ -32,7 +32,11 @@ namespace Mejnun.Net
             }
 
             connected.Add(authenticationId);
-            host.Join(authenticationId, displayName);
+            if (host.Join(authenticationId, displayName) < 0)
+            {
+                connected.Remove(authenticationId);
+            }
+
             return client;
         }
 
@@ -46,6 +50,24 @@ namespace Mejnun.Net
             var wasConnected = connected.Remove(authenticationId);
             var result = host.Disconnect(authenticationId, choice);
             return wasConnected && result;
+        }
+
+        public void MarkAway(string authenticationId)
+        {
+            if (connected.Contains(authenticationId))
+            {
+                host.MarkAway(authenticationId);
+            }
+        }
+
+        public bool Drop(string authenticationId)
+        {
+            return Disconnect(authenticationId, DisconnectChoice.Wait);
+        }
+
+        public ClientSession Rejoin(string authenticationId, string displayName)
+        {
+            return Connect(authenticationId, displayName);
         }
 
         public void Dispose()

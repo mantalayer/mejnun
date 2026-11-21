@@ -1,0 +1,9 @@
+table,key,en,comment
+UI,online.status.no_free_seats,This match has no free seats,Shown when joining a match fails because no disconnected or AI-controlled seat is available.
+UI,online.status.match_not_found,We couldn't find a match with that code,Shown when a join code is invalid or the match no longer exists.
+UI,online.status.no_open_matches,No matches are available right now,Shown when quick match cannot find an available match.
+UI,online.status.join_failed,Couldn't join the match. Please try again.,Fallback for unexpected online join or reconnect errors.
+UI,menu.main.reconnect,Reconnect to room {0},Main menu action for resuming the saved unfinished online match. {0} is the room code.
+UI,online.status.reconnecting,Reconnecting to room {0}…,Shown while the player uses the main-menu reconnect action. {0} is the saved room code.
+UI,net.waiting.rejoining,Reconnecting to the match…,Shown while a returning player waits for the host to restore their seat and send the match welcome.
+UI,online.status.match_ended,That match has ended.,Shown when a saved unfinished match no longer exists.

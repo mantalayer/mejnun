@@ -9,8 +9,11 @@ namespace Mejnun.Net.Unity
 {
     public sealed class NgoNetTransport : MonoBehaviour
     {
-        private const string MessageName = "mejnun.session.v1";
+        private const string MessageName = "mejnun.session.v2";
         private const int MaximumPayloadBytes = 1024 * 1024 + 65536;
+        private const double MembershipRefreshIntervalSeconds = 2;
+        private const int MaximumJoinRetries = 6;
+        private const double JoinRetryDelaySeconds = 2;
 
         [SerializeField] private NetworkManager networkManager;
 
@@ -23,11 +26,54 @@ namespace Mejnun.Net.Unity
         private string localDisplayName;
         private bool isHost;
         private bool handlerRegistered;
+        private CustomMessagingManager registeredMessagingManager;
         private bool joinSent;
+        private bool membershipRefreshInProgress;
+        private int joinRetryCount;
+        private double nextMembershipRefreshAt;
+        private double nextJoinAttemptAt;
+        private readonly PendingJoinGate pendingJoinGate = new PendingJoinGate();
 
         public event Action<string> PlayerDisconnected;
         public event Action HostDisconnected;
         public event Action<Exception> TransportError;
+        public bool IsHost => isHost;
+
+        public bool HasActivePlayer(string authenticationId)
+        {
+            if (string.IsNullOrWhiteSpace(authenticationId))
+            {
+                return false;
+            }
+
+            return (clientByAuthentication.TryGetValue(authenticationId, out var clientId) &&
+                    networkManager != null && networkManager.ConnectedClients.ContainsKey(clientId)) ||
+                   pendingJoinGate.ContainsAuthentication(authenticationId);
+        }
+
+        public void SendAway()
+        {
+            if (isHost)
+            {
+                host?.SetPauseReason(PauseReason.HostAway);
+                return;
+            }
+
+            SendToServer(new AwayMessage());
+        }
+
+        public void RejoinClientSeat()
+        {
+            if (isHost || client == null)
+            {
+                return;
+            }
+
+            joinSent = false;
+            joinRetryCount = 0;
+            nextJoinAttemptAt = 0;
+            SendJoinIfConnected();
+        }
 
         public void PrepareForHostMigration()
         {
@@ -84,6 +130,7 @@ namespace Mejnun.Net.Unity
         {
             EnsureRegistered();
             SendJoinIfConnected();
+            ProcessPendingJoins();
         }
 
         private void OnDestroy()
@@ -92,11 +139,9 @@ namespace Mejnun.Net.Unity
             {
                 networkManager.OnClientConnectedCallback -= OnClientConnected;
                 networkManager.OnClientDisconnectCallback -= OnClientDisconnected;
-                if (handlerRegistered && networkManager.CustomMessagingManager != null)
-                {
-                    networkManager.CustomMessagingManager.UnregisterNamedMessageHandler(MessageName);
-                }
             }
+
+            UnregisterMessageHandler();
 
             if (host != null)
             {
@@ -122,6 +167,13 @@ namespace Mejnun.Net.Unity
                 throw new ArgumentNullException(nameof(ugsSession));
             }
 
+            if (networkManager != null && !ReferenceEquals(networkManager, manager))
+            {
+                networkManager.OnClientConnectedCallback -= OnClientConnected;
+                networkManager.OnClientDisconnectCallback -= OnClientDisconnected;
+                UnregisterMessageHandler();
+            }
+
             networkManager = manager;
             session = ugsSession;
             localAuthenticationId = authenticationId ?? string.Empty;
@@ -134,18 +186,58 @@ namespace Mejnun.Net.Unity
 
         private void EnsureRegistered()
         {
-            if (handlerRegistered || networkManager == null || networkManager.CustomMessagingManager == null)
+            var messagingManager = networkManager == null ? null : networkManager.CustomMessagingManager;
+            if (messagingManager == null ||
+                handlerRegistered && ReferenceEquals(messagingManager, registeredMessagingManager))
             {
                 return;
             }
 
-            networkManager.CustomMessagingManager.RegisterNamedMessageHandler(MessageName, ReceiveMessage);
+            var isNewNetworkSession = !ReferenceEquals(messagingManager, registeredMessagingManager);
+            UnregisterMessageHandler();
+            registeredMessagingManager = messagingManager;
+            if (isNewNetworkSession)
+            {
+                ResetNetworkSessionState();
+            }
+
+            registeredMessagingManager.RegisterNamedMessageHandler(MessageName, ReceiveMessage);
             handlerRegistered = true;
+        }
+
+        private void UnregisterMessageHandler()
+        {
+            if (handlerRegistered && registeredMessagingManager != null)
+            {
+                registeredMessagingManager.UnregisterNamedMessageHandler(MessageName);
+            }
+
+            handlerRegistered = false;
+            registeredMessagingManager = null;
+        }
+
+        private void ResetNetworkSessionState()
+        {
+            joinSent = false;
+            joinRetryCount = 0;
+            nextJoinAttemptAt = 0;
+            nextMembershipRefreshAt = 0;
+            membershipRefreshInProgress = false;
+            authenticationByClient.Clear();
+            clientByAuthentication.Clear();
+            pendingJoinGate.Clear();
         }
 
         private void OnClientConnected(ulong clientId)
         {
             EnsureRegistered();
+            if (!isHost && networkManager != null && clientId == networkManager.LocalClientId)
+            {
+                joinSent = false;
+                joinRetryCount = 0;
+                nextJoinAttemptAt = 0;
+            }
+
             SendJoinIfConnected();
         }
 
@@ -154,13 +246,24 @@ namespace Mejnun.Net.Unity
             if (isHost && authenticationByClient.TryGetValue(clientId, out var authenticationId))
             {
                 authenticationByClient.Remove(clientId);
-                clientByAuthentication.Remove(authenticationId);
-                PlayerDisconnected?.Invoke(authenticationId);
+                if (clientByAuthentication.TryGetValue(authenticationId, out var currentClientId) &&
+                    currentClientId == clientId)
+                {
+                    clientByAuthentication.Remove(authenticationId);
+                    PlayerDisconnected?.Invoke(authenticationId);
+                }
+            }
+
+            if (isHost)
+            {
+                pendingJoinGate.Remove(clientId);
             }
 
             if (!isHost && networkManager != null && clientId == networkManager.LocalClientId)
             {
                 joinSent = false;
+                joinRetryCount = 0;
+                nextJoinAttemptAt = 0;
                 HostDisconnected?.Invoke();
             }
         }
@@ -168,7 +271,8 @@ namespace Mejnun.Net.Unity
         private void SendJoinIfConnected()
         {
             if (isHost || joinSent || client == null || networkManager == null || !networkManager.IsClient ||
-                networkManager.IsHost || !networkManager.IsConnectedClient || !handlerRegistered)
+                networkManager.IsHost || !networkManager.IsConnectedClient || !handlerRegistered ||
+                Time.realtimeSinceStartupAsDouble < nextJoinAttemptAt)
             {
                 return;
             }
@@ -225,7 +329,7 @@ namespace Mejnun.Net.Unity
                         }
                     }
 
-                    networkManager.CustomMessagingManager.SendNamedMessage(MessageName, clientId, writer,
+                    registeredMessagingManager.SendNamedMessage(MessageName, clientId, writer,
                         NetworkDelivery.ReliableFragmentedSequenced);
                 }
             }
@@ -261,7 +365,7 @@ namespace Mejnun.Net.Unity
                 }
                 else
                 {
-                    client?.Receive(message);
+                    ReceiveClientMessage(message);
                 }
             }
             catch (Exception exception)
@@ -272,19 +376,38 @@ namespace Mejnun.Net.Unity
 
         private void ReceiveHostMessage(ulong senderClientId, NetMessage message)
         {
+            if (message is AwayMessage)
+            {
+                if (authenticationByClient.TryGetValue(senderClientId, out var awayAuthenticationId))
+                {
+                    host.MarkAway(awayAuthenticationId);
+                }
+                else
+                {
+                    Send(senderClientId, new RejectedMessage(JoinRejectReason.MissingAuthentication,
+                        "The sender has not authenticated."));
+                }
+
+                return;
+            }
+
             if (message is JoinMessage join)
             {
-                if (!session.HasPlayer(join.AuthenticationId) ||
-                    clientByAuthentication.TryGetValue(join.AuthenticationId, out var existingClient) &&
-                    existingClient != senderClientId)
+                if (string.IsNullOrWhiteSpace(join.AuthenticationId))
                 {
-                    Send(senderClientId, new RejectedMessage("The sender is not an available session member."));
+                    Send(senderClientId, new RejectedMessage(JoinRejectReason.MissingAuthentication,
+                        "The sender did not provide an authentication id."));
                     return;
                 }
 
-                authenticationByClient[senderClientId] = join.AuthenticationId;
-                clientByAuthentication[join.AuthenticationId] = senderClientId;
-                host.Join(join.AuthenticationId, join.DisplayName);
+                if (!session.HasPlayer(join.AuthenticationId))
+                {
+                    pendingJoinGate.Add(senderClientId, join, Time.realtimeSinceStartupAsDouble);
+                    ProcessPendingJoins();
+                    return;
+                }
+
+                AcceptJoin(senderClientId, join);
                 return;
             }
 
@@ -295,7 +418,110 @@ namespace Mejnun.Net.Unity
                 return;
             }
 
-            Send(senderClientId, new RejectedMessage("Unexpected message from the connected client."));
+            Send(senderClientId, new RejectedMessage(null, "Unexpected message from the connected client."));
+        }
+
+        private void AcceptJoin(ulong senderClientId, JoinMessage join)
+        {
+            if (clientByAuthentication.TryGetValue(join.AuthenticationId, out var existingClient) &&
+                existingClient != senderClientId)
+            {
+                clientByAuthentication.Remove(join.AuthenticationId);
+                authenticationByClient.Remove(existingClient);
+                if (networkManager.ConnectedClients.ContainsKey(existingClient))
+                {
+                    networkManager.DisconnectClient(existingClient);
+                }
+            }
+
+            authenticationByClient[senderClientId] = join.AuthenticationId;
+            clientByAuthentication[join.AuthenticationId] = senderClientId;
+            if (host.Join(join.AuthenticationId, join.DisplayName) >= 0)
+            {
+                return;
+            }
+
+            authenticationByClient.Remove(senderClientId);
+            if (clientByAuthentication.TryGetValue(join.AuthenticationId, out var currentClient) &&
+                currentClient == senderClientId)
+            {
+                clientByAuthentication.Remove(join.AuthenticationId);
+            }
+        }
+
+        private void ProcessPendingJoins()
+        {
+            if (!isHost || pendingJoinGate.Count == 0 || session == null)
+            {
+                return;
+            }
+
+            var now = Time.realtimeSinceStartupAsDouble;
+            PendingJoinGateResult result;
+            try
+            {
+                result = pendingJoinGate.Evaluate(now,
+                    request => session.HasPlayer(request.AuthenticationId));
+            }
+            catch (Exception exception)
+            {
+                TransportError?.Invoke(exception);
+                return;
+            }
+
+            for (var index = 0; index < result.Accepted.Count; index++)
+            {
+                var request = result.Accepted[index];
+                AcceptJoin(request.ClientId, request.Message);
+            }
+
+            for (var index = 0; index < result.Expired.Count; index++)
+            {
+                var request = result.Expired[index];
+                Send(request.ClientId, new RejectedMessage(JoinRejectReason.NotSessionMember,
+                    "The sender did not become a session member before the join request expired."));
+            }
+
+            if (pendingJoinGate.Count > 0 && !membershipRefreshInProgress && now >= nextMembershipRefreshAt)
+            {
+                nextMembershipRefreshAt = now + MembershipRefreshIntervalSeconds;
+                RefreshSessionAsync();
+            }
+        }
+
+        private async void RefreshSessionAsync()
+        {
+            membershipRefreshInProgress = true;
+            try
+            {
+                await session.RefreshAsync();
+            }
+            catch (Exception exception)
+            {
+                TransportError?.Invoke(exception);
+            }
+            finally
+            {
+                membershipRefreshInProgress = false;
+            }
+        }
+
+        private void ReceiveClientMessage(NetMessage message)
+        {
+            if (message is WelcomeMessage)
+            {
+                joinRetryCount = 0;
+                nextJoinAttemptAt = 0;
+            }
+            else if (message is RejectedMessage rejected &&
+                     rejected.Code == JoinRejectReason.NotSessionMember && joinRetryCount < MaximumJoinRetries)
+            {
+                joinRetryCount++;
+                joinSent = false;
+                nextJoinAttemptAt = Time.realtimeSinceStartupAsDouble + JoinRetryDelaySeconds;
+            }
+
+            client?.Receive(message);
         }
     }
 }

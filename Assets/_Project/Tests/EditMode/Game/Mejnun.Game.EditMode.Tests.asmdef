@@ -5,6 +5,7 @@
     "Mejnun.Core",
     "Mejnun.AI",
     "Mejnun.Game",
+    "Mejnun.UI",
     "Mejnun.Platform"
   ],
   "includePlatforms": [

@@ -1,0 +1,190 @@
+.online-waiting-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(2, 8, 6, 0);
+}
+
+.online-waiting-overlay.full-waiting {
+    background-color: rgba(2, 8, 6, 0.78);
+}
+
+.online-reconnecting-banner {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 8%;
+    align-items: center;
+    padding: 10px 16px;
+    background-color: rgba(13, 30, 23, 0.96);
+    border-radius: 10px;
+}
+
+.online-reconnecting-message,
+.online-handback-message,
+.online-recovery-message,
+.online-recovery-failure,
+.online-room-code {
+    color: rgb(248, 248, 240);
+    font-size: 17px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.online-waiting-panel {
+    width: 78%;
+    max-width: 680px;
+    max-height: 88%;
+    align-items: stretch;
+    padding: 22px;
+    background-color: rgb(18, 30, 25);
+    border-radius: 14px;
+    border-width: 1px;
+    border-color: rgba(190, 213, 192, 0.35);
+}
+
+.online-waiting-title {
+    color: rgb(248, 248, 240);
+    font-size: 26px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+}
+
+.online-recovery-message {
+    color: rgb(244, 208, 122);
+    margin-bottom: 8px;
+}
+
+.online-recovery-failure {
+    color: rgb(255, 160, 140);
+    margin-bottom: 8px;
+}
+
+.online-room-code {
+    margin-bottom: 14px;
+    -unity-font-style: bold;
+}
+
+.online-seat-list-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 100px;
+    margin-bottom: 14px;
+}
+
+.online-seat-list {
+    flex-direction: column;
+}
+
+.online-seat-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 48px;
+    padding: 6px 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 213, 192, 0.18);
+}
+
+.online-seat-identity {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.online-seat-name {
+    color: rgb(248, 248, 240);
+    flex-grow: 1;
+    flex-shrink: 0;
+    min-width: 80px;
+    white-space: normal;
+}
+
+.online-host-badge {
+    color: rgb(22, 32, 24);
+    background-color: rgb(239, 195, 92);
+    border-radius: 8px;
+    padding: 2px 8px;
+    margin-left: 8px;
+    -unity-font-style: bold;
+}
+
+.online-seat-status {
+    color: rgb(195, 211, 199);
+    min-width: 112px;
+    margin-left: 10px;
+    -unity-text-align: middle-right;
+}
+
+.online-seat-status.reconnecting {
+    color: rgb(244, 208, 122);
+}
+
+.online-seat-status.disconnected {
+    color: rgb(255, 160, 140);
+}
+
+.online-seat-actions,
+.online-waiting-actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.online-seat-actions .unity-button,
+.online-waiting-actions .unity-button {
+    min-height: 40px;
+    margin: 4px;
+}
+
+.online-handback-panel {
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: 16%;
+    align-items: center;
+    padding: 14px 18px;
+    background-color: rgba(13, 30, 23, 0.96);
+    border-radius: 10px;
+}
+
+.rtl .online-seat-row,
+.rtl .online-seat-identity {
+    flex-direction: row-reverse;
+}
+
+.rtl .online-seat-status {
+    margin-left: 0;
+    margin-right: 10px;
+    -unity-text-align: middle-left;
+}
+
+.rtl .online-host-badge {
+    margin-left: 0;
+    margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+    .online-waiting-panel {
+        width: 94%;
+        max-height: 92%;
+        padding: 14px;
+    }
+
+    .online-seat-row {
+        flex-wrap: wrap;
+    }
+
+    .online-seat-status {
+        min-width: 0;
+    }
+
+    .online-seat-actions {
+        width: 100%;
+    }
+}

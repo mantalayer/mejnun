@@ -7,6 +7,7 @@ using Mejnun.Game;
 using Mejnun.Localization;
 using Mejnun.Net.Unity;
 using Mejnun.UI;
+using Unity.Services.Lobbies;
 using Unity.Services.Multiplayer;
 using UnityEngine.UIElements;
 
@@ -57,8 +58,10 @@ namespace Mejnun.UI.FrontEnd
         private string pendingOnlineName;
         private string pendingOnlineCode;
         private string pendingOnlineHostId;
+        private bool pendingJoinedStartedMatch;
         private bool onlineStartRequested;
         private bool onlineMatchLaunched;
+        private bool reconnectingUnfinishedMatch;
         private bool suppressScreenTransitions;
         private bool tableTransitionStarted;
 
@@ -74,7 +77,7 @@ namespace Mejnun.UI.FrontEnd
             settingsRoot = root.Q<VisualElement>("settings-panel");
             onlineRoot = root.Q<VisualElement>("online-screen");
             mainMenu = new MainMenuScreen(root, catalog, OpenSetup, ResumeMatch, () => OpenGallery(), OpenSettings,
-                StartTutorial, OpenOnline, loader);
+                StartTutorial, OpenOnline, loader, ReconnectOnline);
             tablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader);
             onlineTablePicker = new TablePickerScreen(root, catalog, ProgressionService.Instance, OpenGallery, loader,
                 "online-setup", "online-");
@@ -229,6 +232,22 @@ namespace Mejnun.UI.FrontEnd
             onlineScreen.RefreshNickname();
             onlineScreen.SetStatus(string.Empty);
             Push(FrontEndScreen.Online);
+        }
+
+        private void ReconnectOnline()
+        {
+            var sessionCode = UgsOnlineService.LastSessionCode;
+            if (!UgsOnlineService.HasUnfinishedMatch || string.IsNullOrWhiteSpace(sessionCode))
+            {
+                UgsOnlineService.ClearUnfinishedMatch();
+                mainMenu.RefreshReconnectOption();
+                return;
+            }
+
+            OpenOnline();
+            onlineScreen.SetLocalizedStatus(() => Loc.Format("online.status.reconnecting", sessionCode));
+            reconnectingUnfinishedMatch = true;
+            HandleOnlineRequest(OnlineAction.JoinByCode, GameSettings.OnlineNickname, sessionCode);
         }
 
         private void OnSetupNext(MatchRequest request)
@@ -477,9 +496,50 @@ namespace Mejnun.UI.FrontEnd
                             playerProperties: CreateOnlinePlayerProperties());
                         break;
                     case OnlineAction.JoinByCode:
-                        session = await onlineService.JoinByCodeAsync(sessionCode,
-                            CreateOnlinePlayerProperties());
+                    {
+                        var joinCode = sessionCode == null ? string.Empty : sessionCode.Trim();
+                        string reconnectSessionId;
+                        try
+                        {
+                            reconnectSessionId = await onlineService.FindRejoinSessionIdAsync(joinCode);
+                        }
+                        catch (Exception lookupException)
+                        {
+                            UnityEngine.Debug.LogWarning("Looking up the previous online session failed: " +
+                                                         lookupException.Message);
+                            reconnectSessionId = string.Empty;
+                        }
+
+                        if (!string.IsNullOrEmpty(reconnectSessionId))
+                        {
+                            try
+                            {
+                                session = await onlineService.ReconnectAsync(reconnectSessionId);
+                                if (session.IsHost && IsSessionStarted(session))
+                                {
+                                    UnityEngine.Debug.LogWarning(
+                                        "The saved session still identifies this player as host; leaving and joining by code to recover as a client.");
+                                    session = await onlineService.RejoinByCodeAsync(joinCode,
+                                        CreateOnlinePlayerProperties());
+                                }
+                            }
+                            catch (Exception reconnectException)
+                            {
+                                UnityEngine.Debug.LogWarning(
+                                    "Reconnect by saved session failed; falling back to the join code. " +
+                                    reconnectException.Message);
+                                session = await onlineService.RejoinByCodeAsync(joinCode,
+                                    CreateOnlinePlayerProperties());
+                            }
+                        }
+                        else
+                        {
+                            session = await onlineService.JoinByCodeAsync(joinCode,
+                                CreateOnlinePlayerProperties());
+                        }
+
                         break;
+                    }
                     case OnlineAction.QuickMatch:
                         session = await onlineService.QuickMatchAsync(onlineScreen.SeatCount,
                             playerProperties: CreateOnlinePlayerProperties());
@@ -490,10 +550,23 @@ namespace Mejnun.UI.FrontEnd
 
                 EnterLobby(session, displayName,
                     action == OnlineAction.JoinByCode ? sessionCode : session.Code);
+                reconnectingUnfinishedMatch = false;
             }
             catch (Exception exception)
             {
-                onlineScreen.SetStatus(exception.Message);
+                if (reconnectingUnfinishedMatch &&
+                    ResolveOnlineErrorKey(exception) == "online.status.match_not_found")
+                {
+                    UgsOnlineService.ClearUnfinishedMatch();
+                    mainMenu.RefreshReconnectOption();
+                    onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.match_ended"));
+                }
+                else
+                {
+                    SetOnlineFailureStatus(exception);
+                }
+
+                reconnectingUnfinishedMatch = false;
             }
             finally
             {
@@ -501,6 +574,8 @@ namespace Mejnun.UI.FrontEnd
                 {
                     onlineScreen.SetBusy(false);
                 }
+
+                reconnectingUnfinishedMatch = false;
             }
         }
 
@@ -521,6 +596,7 @@ namespace Mejnun.UI.FrontEnd
             pendingOnlineName = displayName;
             pendingOnlineCode = string.IsNullOrWhiteSpace(session.Code) ? sessionCode : session.Code;
             pendingOnlineHostId = session.Host;
+            pendingJoinedStartedMatch = IsSessionStarted(session);
             onlineStartRequested = false;
             onlineMatchLaunched = false;
             SubscribeOnlineSession(session);
@@ -689,7 +765,7 @@ namespace Mejnun.UI.FrontEnd
             {
                 onlineStartRequested = false;
                 onlineScreen.SetBusy(false);
-                onlineScreen.SetStatus(exception.Message);
+                SetOnlineFailureStatus(exception);
             }
         }
 
@@ -740,8 +816,62 @@ namespace Mejnun.UI.FrontEnd
             }
             catch (Exception exception)
             {
-                onlineScreen.SetStatus(exception.Message);
+                SetOnlineFailureStatus(exception);
             }
+        }
+
+        private void SetOnlineFailureStatus(Exception exception)
+        {
+            switch (ResolveOnlineErrorKey(exception))
+            {
+                case "online.status.no_free_seats":
+                    onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.no_free_seats"));
+                    break;
+                case "online.status.match_not_found":
+                    onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.match_not_found"));
+                    break;
+                case "online.status.no_open_matches":
+                    onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.no_open_matches"));
+                    break;
+                default:
+                    onlineScreen.SetLocalizedStatus(() => Loc.Get("online.status.join_failed"));
+                    break;
+            }
+        }
+
+        private static string ResolveOnlineErrorKey(Exception exception)
+        {
+            for (var current = exception; current != null; current = current.InnerException)
+            {
+                if (current is LobbyServiceException lobbyException)
+                {
+                    switch (lobbyException.Reason)
+                    {
+                        case LobbyExceptionReason.LobbyFull:
+                        case LobbyExceptionReason.LobbyLocked:
+                            return "online.status.no_free_seats";
+                        case LobbyExceptionReason.LobbyNotFound:
+                        case LobbyExceptionReason.InvalidJoinCode:
+                            return "online.status.match_not_found";
+                        case LobbyExceptionReason.NoOpenLobbies:
+                            return "online.status.no_open_matches";
+                    }
+                }
+
+                if (current is SessionException sessionException)
+                {
+                    switch (sessionException.Error)
+                    {
+                        case SessionError.SessionNotFound:
+                        case SessionError.SessionDeleted:
+                        case SessionError.InvalidSessionIdentifier:
+                        case SessionError.NotInLobby:
+                            return "online.status.match_not_found";
+                    }
+                }
+            }
+
+            return "online.status.join_failed";
         }
 
         private async void CancelOnlineLobby()
@@ -772,6 +902,7 @@ namespace Mejnun.UI.FrontEnd
             pendingOnlineName = null;
             pendingOnlineCode = null;
             pendingOnlineHostId = null;
+            pendingJoinedStartedMatch = false;
             onlineStartRequested = false;
         }
 
@@ -784,8 +915,10 @@ namespace Mejnun.UI.FrontEnd
 
             onlineMatchLaunched = true;
             UnsubscribeOnlineSession();
+            var joinedStartedMatch = pendingJoinedStartedMatch;
             ClearPendingOnlineSession();
-            OnlineLaunch.Set(onlineService, session, session.IsHost, displayName, sessionCode, startedEarly);
+            OnlineLaunch.Set(onlineService, session, session.IsHost, displayName, sessionCode, startedEarly,
+                joinedStartedMatch);
             var seatCount = Math.Max(2, Math.Min(6, session.MaxPlayers));
             var seats = new SeatConfig[seatCount];
             seats[0] = SeatConfig.Human(displayName);

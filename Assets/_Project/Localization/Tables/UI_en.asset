@@ -4004,6 +4004,111 @@ MonoBehaviour:
     m_Localized: Tap to continue
     m_Metadata:
       m_Items: []
+  - m_Id: 346014409023488
+    m_Localized: This match has no free seats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231104
+    m_Localized: We couldn't find a match with that code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231105
+    m_Localized: No matches are available right now
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346014845231106
+    m_Localized: Couldn't join the match. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485589848064
+    m_Localized: Waiting for players
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141120
+    m_Localized: 'Room code: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 349485963141121
+    m_Localized: Leave match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141122
+    m_Localized: Save & pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141123
+    m_Localized: "Host disconnected, finding a new host\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141124
+    m_Localized: Couldn't recover the match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141125
+    m_Localized: "{0} is reconnecting\u2026 {1}s"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 349485963141126
+    m_Localized: Please wait, the AI is finishing this turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141127
+    m_Localized: Host
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141128
+    m_Localized: Waiting for player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141129
+    m_Localized: Connected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141130
+    m_Localized: Reconnecting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141131
+    m_Localized: Disconnected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141132
+    m_Localized: AI playing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141133
+    m_Localized: Waiting for AI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141134
+    m_Localized: Keep waiting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349485963141135
+    m_Localized: Let AI play for {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 377671954456576
+    m_Localized: Reconnect to room {0}
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 377671971233792
+    m_Localized: "Reconnecting to room {0}\u2026"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 377671971233793
+    m_Localized: That match has ended.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410560075128832
+    m_Localized: "Reconnecting to the match\u2026"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4078,3 +4183,8 @@ MonoBehaviour:
         - id: 6549039734799
         - id: 6549039734802
         - id: 999999999999999
+        - id: 349485963141120
+        - id: 349485963141125
+        - id: 349485963141135
+        - id: 377671954456576
+        - id: 377671971233792

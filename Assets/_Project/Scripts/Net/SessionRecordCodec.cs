@@ -9,7 +9,7 @@ namespace Mejnun.Net
     public static class SessionRecordCodec
     {
         private const uint Magic = 0x4D4A5352;
-        private const int Version = 1;
+        private const int Version = 2;
         private const int MaximumSnapshotBytes = 1024 * 1024;
         private const int MaximumSeats = 6;
         private const int MaximumStringLength = 256;
@@ -37,7 +37,7 @@ namespace Mejnun.Net
             {
                 writer.Write(Magic);
                 writer.Write(Version);
-                writer.Write(record.Paused);
+                writer.Write((byte)record.PauseReason);
                 writer.Write(record.Snapshot.Length);
                 writer.Write(record.Snapshot);
                 writer.Write(seats.Length);
@@ -46,8 +46,8 @@ namespace Mejnun.Net
                     var seat = seats[index];
                     WriteString(writer, seat.AuthenticationId);
                     WriteString(writer, seat.DisplayName);
-                    writer.Write(seat.Connected);
-                    writer.Write(seat.IsBot);
+                    writer.Write((byte)seat.Presence);
+                    writer.Write(seat.PendingHandBack);
                     writer.Write((byte)seat.Difficulty);
                 }
 
@@ -70,12 +70,20 @@ namespace Mejnun.Net
             using (var stream = new MemoryStream(bytes, false))
             using (var reader = new BinaryReader(stream, Encoding.UTF8))
             {
-                if (reader.ReadUInt32() != Magic || reader.ReadInt32() != Version)
+                if (reader.ReadUInt32() != Magic)
                 {
                     throw new InvalidDataException("Invalid session record header.");
                 }
 
-                var paused = reader.ReadBoolean();
+                var version = reader.ReadInt32();
+                if (version < 1 || version > Version)
+                {
+                    throw new InvalidDataException("Invalid session record version.");
+                }
+
+                var pauseReason = version == 1
+                    ? reader.ReadBoolean() ? PauseReason.SavedByHost : PauseReason.None
+                    : ReadEnum<PauseReason>(reader, "pause reason");
                 var snapshotLength = reader.ReadInt32();
                 if (snapshotLength < 0 || snapshotLength > MaximumSnapshotBytes)
                 {
@@ -100,8 +108,10 @@ namespace Mejnun.Net
                 {
                     var authenticationId = ReadString(reader);
                     var displayName = ReadString(reader);
-                    var connected = reader.ReadBoolean();
-                    var isBot = reader.ReadBoolean();
+                    var presence = version == 1
+                        ? ReadLegacyPresence(reader, authenticationId)
+                        : ReadEnum<SeatPresence>(reader, "seat presence");
+                    var pendingHandBack = version > 1 && reader.ReadBoolean();
                     var difficultyValue = reader.ReadByte();
                     var difficulty = (BotDifficulty)difficultyValue;
                     if (!Enum.IsDefined(typeof(BotDifficulty), difficulty))
@@ -109,7 +119,7 @@ namespace Mejnun.Net
                         throw new InvalidDataException("Invalid bot difficulty in session record.");
                     }
 
-                    seats[index] = new SeatRecord(authenticationId, displayName, connected, isBot,
+                    seats[index] = new SeatRecord(authenticationId, displayName, presence, pendingHandBack,
                         difficulty);
                 }
 
@@ -118,8 +128,45 @@ namespace Mejnun.Net
                     throw new InvalidDataException("Unexpected trailing data in session record.");
                 }
 
-                return new SessionRecord(snapshot, seats, paused);
+                return new SessionRecord(snapshot, seats, pauseReason);
             }
+        }
+
+        public static bool TryRead(byte[] bytes, out SessionRecord record)
+        {
+            record = null;
+            if (bytes == null || bytes.Length == 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                record = Read(bytes);
+                return true;
+            }
+            catch (Exception)
+            {
+                record = null;
+                return false;
+            }
+        }
+
+        private static SeatPresence ReadLegacyPresence(BinaryReader reader, string authenticationId)
+        {
+            var connected = reader.ReadBoolean();
+            var isBot = reader.ReadBoolean();
+            if (isBot)
+            {
+                return SeatPresence.Bot;
+            }
+
+            if (string.IsNullOrEmpty(authenticationId))
+            {
+                return SeatPresence.Empty;
+            }
+
+            return connected ? SeatPresence.Reconnecting : SeatPresence.Disconnected;
         }
 
         private static void WriteString(BinaryWriter writer, string value)
@@ -142,6 +189,18 @@ namespace Mejnun.Net
             }
 
             return value;
+        }
+
+        private static T ReadEnum<T>(BinaryReader reader, string description) where T : struct
+        {
+            var value = reader.ReadByte();
+            var enumValue = Enum.ToObject(typeof(T), value);
+            if (!Enum.IsDefined(typeof(T), enumValue))
+            {
+                throw new InvalidDataException("Invalid " + description + " in session record.");
+            }
+
+            return (T)enumValue;
         }
     }
 }

@@ -303,16 +303,13 @@ Rule: `Core` must not reference `UnityEngine`. That keeps it fast to unit-test, 
 - Optional linking to **Apple / Google Play Games / Steam / Unity Player Accounts**, which keeps unlocks and inventory across devices through Cloud Save.
 
 ### 4.4 Disconnects, pause/resume, host migration
-- **A client drops**: their seat goes into the *disconnected* state, and their turns auto-time-out at the lobby's turn timer (online is always timed, §4.5). The **host gets a prompt** with three choices:
-  1. **Wait / auto-pass** (the default while waiting).
-  2. **Let AI take over** the seat. The bot difficulty is chosen by the host, and the player gets the seat back if they reconnect.
-  3. **Save & pause**: the full snapshot is stored, everyone is returned to the lobby or menu, and the game can be resumed later from "Paused games".
-- **Reconnect**: the player rejoins with the same auth id, gets a fresh snapshot (their own hand only) and takes the seat back.
-- **The host drops**: a new host is needed. The plan is as follows:
-  - After every turn, the host writes an **authoritative snapshot** (full state, including hands) to **UGS Cloud Code / Cloud Save private data** keyed by session id. Only server-side code can read it, so no other client can see hands.
-  - The session or lobby **host migration** elects a new host, for example the next seat clockwise. The new host starts NGO, fetches the snapshot through Cloud Code, and the others reconnect. At most the in-progress turn is lost; that turn is replayed from its start.
-  - The same snapshot store backs **Save & pause / resume later**.
-  - ⚠ The first task of M7 is a **spike** to confirm how far Multiplayer Services host migration and Cloud Code snapshot storage support this flow. If they don't, the fallback is an "end game, save snapshot, the remaining players re-create the session from the snapshot" flow.
+- **Presence and grace**: each seat is Empty, Connected, Reconnecting, Disconnected, AI-controlled, or a permanent Bot. An app-away notice or transport drop starts a 20-second Reconnecting grace period. The match, turn timer, and bot moves freeze, with a compact countdown banner. After grace, the seat becomes Disconnected and everyone sees the waiting screen with the room code and each seat's status.
+- **Seat claims**: the same authentication ID reclaims its seat during grace, after expiry, or from AI control. A different account may claim a Disconnected or AI-controlled seat, then an Empty seat; seats in grace remain reserved. A joining client only receives its own hand snapshot.
+- **Host choices**: the host can Keep waiting or Let AI play for each Disconnected seat. The match resumes when no blocking absence remains. If a player claims a seat the AI is currently playing, the AI finishes its turn first and the player sees a Please wait message until the next turn begins. Save & pause remains available; a paused-games discovery menu is not part of this flow.
+- **Host migration**: clients freeze and show that a new host is being found. UGS elects a host; the promoted host restores the migration record and marks other human seats Reconnecting. If no record is available or recovery takes more than 45 seconds, the game shows a recovery failure with a Leave action. A returning former host reconnects as a client if another player now owns the host role.
+- **Suspend and rejoin**: mobile operating systems may suspend the app and drop Relay, so a live socket cannot be guaranteed. Going away never leaves the session; on resume the client reconnects by saved session ID first, then falls back to the room code. After a Disconnected seat expires, the host removes its lobby member to free a slot for code-based rejoins.
+- **Protocol and operations**: the custom wire channel is `mejnun.session.v2`; clients send status/reason enums rather than localized text. The bounded `SessionRecordCodec` writes v2 and reads v1 records. See `Docs/M7-Online-Spike.md` for recommended UGS lobby timings and the manual live-test checklist.
+- Shared Cloud Code snapshot storage, a Paused games menu, native mobile background tasks, and the multi-device soak test remain outside this reconnect implementation.
 
 ### 4.5 Online rules & timer
 - Online games are **always timed**, so nobody can stall a live game. The host picks **30 / 60 / 90 / 120 s**, and the default is **90 s**. "Off" is only available offline.

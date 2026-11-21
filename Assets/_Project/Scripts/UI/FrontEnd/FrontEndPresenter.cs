@@ -22,6 +22,10 @@ namespace Mejnun.UI.FrontEnd
         private int lastWidth;
         private int lastHeight;
         private Vector2 lastPanelSize;
+        private float lastKeyboardInset;
+        private TextField lastFocusedTextField;
+        private TextField pendingScrollTextField;
+        private int pendingScrollFrame;
         private bool lastPhoneLayout;
         private bool destinationTransitionPending;
         private readonly SoftKeyboardBackGuard keyboardBackGuard = new SoftKeyboardBackGuard();
@@ -106,7 +110,23 @@ namespace Mejnun.UI.FrontEnd
             var focusedElement = uiDocument == null || uiDocument.rootVisualElement.panel == null
                 ? null
                 : uiDocument.rootVisualElement.panel.focusController.focusedElement as VisualElement;
+            var focusedTextField = SoftKeyboardInset.FindTextField(focusedElement);
             keyboardBackGuard.Track(focusedElement, TouchScreenKeyboard.visible, Time.unscaledTime);
+
+            var keyboardInset = GetKeyboardInset();
+            var keyboardInsetChanged = !Mathf.Approximately(keyboardInset, lastKeyboardInset);
+            if (TouchScreenKeyboard.visible && focusedTextField != null &&
+                (keyboardInsetChanged || focusedTextField != lastFocusedTextField))
+            {
+                pendingScrollTextField = focusedTextField;
+                pendingScrollFrame = Time.frameCount + 1;
+            }
+            else if (!TouchScreenKeyboard.visible)
+            {
+                pendingScrollTextField = null;
+            }
+
+            lastFocusedTextField = focusedTextField;
 
             var keyboard = Keyboard.current;
             var gamepad = Gamepad.current;
@@ -124,10 +144,13 @@ namespace Mejnun.UI.FrontEnd
             }
 
             if (Screen.width != lastWidth || Screen.height != lastHeight || Screen.safeArea != lastSafeArea ||
-                GetPanelSize() != lastPanelSize || DeviceProfile.IsPhoneLayout != lastPhoneLayout)
+                GetPanelSize() != lastPanelSize || DeviceProfile.IsPhoneLayout != lastPhoneLayout ||
+                keyboardInsetChanged)
             {
                 ApplySafeArea();
             }
+
+            ScrollFocusedTextFieldIfReady();
         }
 
         private void OnDestroy()
@@ -155,13 +178,44 @@ namespace Mejnun.UI.FrontEnd
             }
 
             var phoneLayout = DeviceProfile.IsPhoneLayout;
+            var keyboardInset = GetKeyboardInset();
             SafeAreaUtility.Apply(safeAreaRoot, Screen.safeArea, Screen.width, Screen.height,
-                phoneLayout ? 12f : 0f);
+                phoneLayout ? 12f : 0f, keyboardInset);
             lastSafeArea = Screen.safeArea;
             lastWidth = Screen.width;
             lastHeight = Screen.height;
             lastPanelSize = GetPanelSize();
+            lastKeyboardInset = keyboardInset;
             lastPhoneLayout = phoneLayout;
+        }
+
+        private float GetKeyboardInset()
+        {
+            return SoftKeyboardInset.ToPanelUnits(TouchScreenKeyboard.visible, TouchScreenKeyboard.area, Screen.height,
+                GetPanelSize().y);
+        }
+
+        private void ScrollFocusedTextFieldIfReady()
+        {
+            if (pendingScrollTextField == null || Time.frameCount < pendingScrollFrame)
+            {
+                return;
+            }
+
+            var textField = pendingScrollTextField;
+            pendingScrollTextField = null;
+            if (!TouchScreenKeyboard.visible || textField.panel == null)
+            {
+                return;
+            }
+
+            var ancestor = textField.parent;
+            while (ancestor != null && !(ancestor is ScrollView))
+            {
+                ancestor = ancestor.parent;
+            }
+
+            (ancestor as ScrollView)?.ScrollTo(textField);
         }
 
         private Vector2 GetPanelSize()

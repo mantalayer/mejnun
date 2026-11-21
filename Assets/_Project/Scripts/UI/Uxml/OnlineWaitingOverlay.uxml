@@ -1,0 +1,46 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="../Uss/online-waiting-overlay.uss" />
+    <ui:VisualElement name="online-waiting-overlay" class="online-waiting-overlay" style="display: none">
+        <ui:VisualElement name="reconnecting-banner" class="online-reconnecting-banner" style="display: none">
+            <ui:Label name="reconnecting-message" class="online-reconnecting-message" />
+        </ui:VisualElement>
+        <ui:VisualElement name="handback-message-panel" class="online-handback-panel" style="display: none">
+            <ui:Label class="online-handback-message">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="net.waiting.please_wait" />
+                </Bindings>
+            </ui:Label>
+        </ui:VisualElement>
+        <ui:VisualElement name="full-waiting-panel" class="online-waiting-panel" style="display: none">
+            <ui:Label class="online-waiting-title">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="net.waiting.title" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label name="host-recovery-message" class="online-recovery-message" style="display: none" />
+            <ui:Label name="host-recovery-failure" class="online-recovery-failure" style="display: none" />
+            <ui:Label name="room-code" class="online-room-code" />
+            <ui:ScrollView name="seat-list-scroll" class="online-seat-list-scroll"
+                           horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto">
+                <ui:VisualElement name="seat-list" class="online-seat-list" />
+            </ui:ScrollView>
+            <ui:VisualElement name="waiting-actions" class="online-waiting-actions">
+                <ui:Button name="save-pause-button" class="hud-button online-save-pause-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="net.waiting.save_pause" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="resume-button" class="hud-button primary-button online-resume-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.resume" />
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="leave-button" class="hud-button online-leave-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="net.waiting.leave" />
+                    </Bindings>
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
