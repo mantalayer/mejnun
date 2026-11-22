@@ -205,6 +205,19 @@
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label">
                     <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_scroll_width" />
+                    </Bindings>
+                </ui:Label>
+                <ui:Slider name="edge-scroll-width-slider" low-value="0" high-value="0.25">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_scroll_width.tooltip" />
+                    </Bindings>
+                </ui:Slider>
+                <ui:Label name="edge-scroll-width-value" class="setting-value" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label">
+                    <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_speed" />
                     </Bindings>
                 </ui:Label>
@@ -227,6 +240,19 @@
                     </Bindings>
                 </ui:Slider>
                 <ui:Label name="long-press-seconds-value" class="setting-value" />
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-row">
+                <ui:Label class="setting-label">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.pan_start_speed" />
+                    </Bindings>
+                </ui:Label>
+                <ui:Slider name="pan-start-speed-slider" low-value="50" high-value="400">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.pan_start_speed.tooltip" />
+                    </Bindings>
+                </ui:Slider>
+                <ui:Label name="pan-start-speed-value" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="settings-row">
                 <ui:Label class="setting-label">

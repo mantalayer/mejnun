@@ -155,6 +155,41 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void EdgeScrollWidthSliderIsBoundAndSettingIsClamped()
+        {
+            var hadSetting = PlayerPrefs.HasKey(GameSettings.EdgeScrollWidthKey);
+            var previousValue = PlayerPrefs.GetFloat(GameSettings.EdgeScrollWidthKey,
+                GameSettings.DefaultEdgeScrollWidth);
+            var root = new VisualElement();
+            var slider = new Slider { name = "edge-scroll-width-slider", lowValue = 0f, highValue = 0.25f };
+            root.Add(slider);
+            var document = AttachToRuntimePanel(root);
+            var panel = new SettingsPanel();
+
+            try
+            {
+                GameSettings.EdgeScrollWidth = 0.1f;
+                panel.Initialize(root);
+                Assert.That(slider.value, Is.EqualTo(0.1f).Within(0.001f));
+
+                slider.value = 0.2f;
+                Assert.That(GameSettings.EdgeScrollWidth, Is.EqualTo(0.2f).Within(0.001f));
+
+                GameSettings.EdgeScrollWidth = -0.1f;
+                Assert.That(GameSettings.EdgeScrollWidth, Is.EqualTo(0f));
+                GameSettings.EdgeScrollWidth = 0.5f;
+                Assert.That(GameSettings.EdgeScrollWidth, Is.EqualTo(0.25f));
+            }
+            finally
+            {
+                panel.Dispose();
+                DestroyRuntimePanel(document);
+                RestoreFloatSetting(GameSettings.EdgeScrollWidthKey, hadSetting, previousValue);
+                PlayerPrefs.Save();
+            }
+        }
+
+        [Test]
         public void LongPressSliderUsesScriptableDefaultAndClampsSetting()
         {
             var previousDefaults = SettingsDefaults.Active;
@@ -194,6 +229,45 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void PanStartSpeedSliderUsesScriptableDefaultAndClampsSetting()
+        {
+            var previousDefaults = SettingsDefaults.Active;
+            var defaults = ScriptableObject.CreateInstance<SettingsDefaults>();
+            defaults.TouchPanStartSpeed = 230f;
+            var hadSetting = PlayerPrefs.HasKey(GameSettings.TouchPanStartSpeedKey);
+            var previousValue = PlayerPrefs.GetFloat(GameSettings.TouchPanStartSpeedKey, 150f);
+            var root = new VisualElement();
+            var slider = new Slider { name = "pan-start-speed-slider", lowValue = 50f, highValue = 400f };
+            root.Add(slider);
+            var document = AttachToRuntimePanel(root);
+            var panel = new SettingsPanel();
+
+            try
+            {
+                SettingsDefaults.Active = defaults;
+                PlayerPrefs.DeleteKey(GameSettings.TouchPanStartSpeedKey);
+                panel.Initialize(root);
+                Assert.That(slider.value, Is.EqualTo(230f).Within(0.001f));
+
+                slider.value = 325f;
+                Assert.That(GameSettings.TouchPanStartSpeed, Is.EqualTo(325f).Within(0.001f));
+
+                GameSettings.TouchPanStartSpeed = 0f;
+                Assert.That(GameSettings.TouchPanStartSpeed, Is.EqualTo(50f));
+                GameSettings.TouchPanStartSpeed = 500f;
+                Assert.That(GameSettings.TouchPanStartSpeed, Is.EqualTo(400f));
+            }
+            finally
+            {
+                panel.Dispose();
+                DestroyRuntimePanel(document);
+                RestoreFloatSetting(GameSettings.TouchPanStartSpeedKey, hadSetting, previousValue);
+                SettingsDefaults.Active = previousDefaults;
+                Object.DestroyImmediate(defaults);
+            }
+        }
+
+        [Test]
         public void ResetButtonRestoresScriptableDefaultsAndKeepsPersonalSettings()
         {
             const string languageKey = "settings.language";
@@ -204,13 +278,20 @@ namespace Mejnun.Game.Tests
             defaults.ConfirmRevert = false;
             defaults.EdgePanWidthMobile = 0.17f;
             defaults.EdgePanWidthDesktop = 0.17f;
+            defaults.EdgeScrollWidthMobile = 0.12f;
+            defaults.EdgeScrollWidthDesktop = 0.12f;
             defaults.LongPressSeconds = 0.23f;
+            defaults.TouchPanStartSpeed = 220f;
             var hadConfirmRevert = PlayerPrefs.HasKey("settings.confirm.revert");
             var previousConfirmRevert = PlayerPrefs.GetInt("settings.confirm.revert");
             var hadEdgePan = PlayerPrefs.HasKey(GameSettings.EdgePanWidthKey);
             var previousEdgePan = PlayerPrefs.GetFloat(GameSettings.EdgePanWidthKey, 0.08f);
+            var hadEdgeScroll = PlayerPrefs.HasKey(GameSettings.EdgeScrollWidthKey);
+            var previousEdgeScroll = PlayerPrefs.GetFloat(GameSettings.EdgeScrollWidthKey, 0.08f);
             var hadLongPress = PlayerPrefs.HasKey(GameSettings.LongPressSecondsKey);
             var previousLongPress = PlayerPrefs.GetFloat(GameSettings.LongPressSecondsKey, 0.35f);
+            var hadPanStartSpeed = PlayerPrefs.HasKey(GameSettings.TouchPanStartSpeedKey);
+            var previousPanStartSpeed = PlayerPrefs.GetFloat(GameSettings.TouchPanStartSpeedKey, 150f);
             var hadLanguage = PlayerPrefs.HasKey(languageKey);
             var previousLanguage = PlayerPrefs.GetString(languageKey);
             var hadNickname = PlayerPrefs.HasKey(nicknameKey);
@@ -220,9 +301,12 @@ namespace Mejnun.Game.Tests
             var root = new VisualElement();
             var toggle = new Toggle { name = "confirm-revert-toggle" };
             var slider = new Slider { name = "long-press-seconds-slider", lowValue = 0.1f, highValue = 0.8f };
+            var panStartSpeedSlider = new Slider
+                { name = "pan-start-speed-slider", lowValue = 50f, highValue = 400f };
             var resetButton = new Button { name = "settings-reset-button" };
             root.Add(toggle);
             root.Add(slider);
+            root.Add(panStartSpeedSlider);
             root.Add(resetButton);
             var document = AttachToRuntimePanel(root);
             var panel = new SettingsPanel();
@@ -233,7 +317,9 @@ namespace Mejnun.Game.Tests
                 panel.Initialize(root);
                 GameSettings.ConfirmRevert = true;
                 GameSettings.EdgePanWidth = 0.2f;
+                GameSettings.EdgeScrollWidth = 0.22f;
                 GameSettings.LongPressSeconds = 0.3f;
+                GameSettings.TouchPanStartSpeed = 300f;
                 GameSettings.Language = "pt-BR";
                 GameSettings.OnlineNickname = "Player";
                 GameSettings.TutorialCompleted = true;
@@ -242,9 +328,13 @@ namespace Mejnun.Game.Tests
 
                 Assert.That(GameSettings.ConfirmRevert, Is.False);
                 Assert.That(GameSettings.EdgePanWidth, Is.EqualTo(0.17f).Within(0.001f));
+                Assert.That(GameSettings.EdgeScrollWidth, Is.EqualTo(0.12f).Within(0.001f));
+                Assert.That(GameSettings.EdgePanWidth, Is.Not.EqualTo(GameSettings.EdgeScrollWidth));
                 Assert.That(GameSettings.LongPressSeconds, Is.EqualTo(0.23f).Within(0.001f));
+                Assert.That(GameSettings.TouchPanStartSpeed, Is.EqualTo(220f).Within(0.001f));
                 Assert.That(toggle.value, Is.False);
                 Assert.That(slider.value, Is.EqualTo(0.23f).Within(0.001f));
+                Assert.That(panStartSpeedSlider.value, Is.EqualTo(220f).Within(0.001f));
                 Assert.That(GameSettings.Language, Is.EqualTo("pt-BR"));
                 Assert.That(GameSettings.OnlineNickname, Is.EqualTo("Player"));
                 Assert.That(GameSettings.TutorialCompleted, Is.True);
@@ -255,7 +345,9 @@ namespace Mejnun.Game.Tests
                 DestroyRuntimePanel(document);
                 RestoreIntSetting("settings.confirm.revert", hadConfirmRevert, previousConfirmRevert);
                 RestoreFloatSetting(GameSettings.EdgePanWidthKey, hadEdgePan, previousEdgePan);
+                RestoreFloatSetting(GameSettings.EdgeScrollWidthKey, hadEdgeScroll, previousEdgeScroll);
                 RestoreFloatSetting(GameSettings.LongPressSecondsKey, hadLongPress, previousLongPress);
+                RestoreFloatSetting(GameSettings.TouchPanStartSpeedKey, hadPanStartSpeed, previousPanStartSpeed);
                 RestoreStringSetting(languageKey, hadLanguage, previousLanguage);
                 RestoreStringSetting(nicknameKey, hadNickname, previousNickname);
                 RestoreIntSetting(tutorialKey, hadTutorial, previousTutorial);

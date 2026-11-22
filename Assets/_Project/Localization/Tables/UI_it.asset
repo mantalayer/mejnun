@@ -4197,6 +4197,43 @@ MonoBehaviour:
       una scheda verso il bordo dello schermo."
     m_Metadata:
       m_Items: []
+  - m_Id: 686715395104768
+    m_Localized: Affrettarsi!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687680
+    m_Localized: Sbrigati ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 686715407687681
+    m_Localized: AFFRETTARSI!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687682
+    m_Localized: "velocit\xE0 di avvio panoramica"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687683
+    m_Localized: "Trascinando pi\xF9 velocemente si sposta il cursore sul tavolo;
+      trascinando pi\xF9 lentamente si selezionano le carte. Regola la velocit\xE0
+      di selezione in base al tuo stile di tocco."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687684
+    m_Localized: '{0:0} mm/s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 749811656548352
+    m_Localized: area di scorrimento laterale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749811673325568
+    m_Localized: Regola la larghezza della zona del bordo dello schermo per lo scorrimento
+      della scacchiera mentre tieni premuta una carta.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4278,3 +4315,5 @@ MonoBehaviour:
         - id: 377671971233792
         - id: 410560075128833
         - id: 500000000000002
+        - id: 686715407687680
+        - id: 686715407687684

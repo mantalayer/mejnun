@@ -4199,6 +4199,43 @@ MonoBehaviour:
       glisser une carte vers le bord de l'\xE9cran."
     m_Metadata:
       m_Items: []
+  - m_Id: 686715395104768
+    m_Localized: "D\xE9p\xEAche-toi!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687680
+    m_Localized: "D\xE9p\xEAche-toi ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 686715407687681
+    m_Localized: "D\xC9P\xCACHE-TOI!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687682
+    m_Localized: "vitesse de d\xE9marrage Pan"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687683
+    m_Localized: "Un glissement rapide permet de faire d\xE9filer la table\_; un
+      glissement plus lent permet de s\xE9lectionner des cartes. Ajustez la distance
+      de d\xE9clenchement selon votre style de toucher."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687684
+    m_Localized: '{0:0} mm/s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 749811656548352
+    m_Localized: "zone de d\xE9filement p\xE9riph\xE9rique"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749811673325568
+    m_Localized: "Ajustez la largeur de la zone de d\xE9filement du plateau en bordure
+      d'\xE9cran lorsque vous y maintenez une carte."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4280,3 +4317,5 @@ MonoBehaviour:
         - id: 377671971233792
         - id: 410560075128833
         - id: 500000000000002
+        - id: 686715407687680
+        - id: 686715407687684

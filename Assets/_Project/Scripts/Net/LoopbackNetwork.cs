@@ -30,6 +30,7 @@ namespace Mejnun.Net
                 client.CommandsReady += message => host.SubmitCommands(capturedId, message.Commands);
                 client.RematchRequested += _ => host.RequestRematch(capturedId);
                 client.FirstPlayerVoteRequested += message => host.CastFirstPlayerVote(capturedId, message.Choice);
+                client.HurryUpRequested += _ => host.RequestHurryUp(capturedId);
                 clients.Add(authenticationId, client);
             }
 

@@ -18,6 +18,8 @@ namespace Mejnun.UI
         private const int OnlineWaitingFadeMilliseconds = 180;
         private const float TableEdgeOffscreenMargin = 24f;
         private const float OpponentHandTuckDuration = 0.25f;
+        private const float HurryUpDelaySeconds = 20f;
+        private const float HurryUpCooldownSeconds = 20f;
 
         private enum TableEdge
         {
@@ -76,6 +78,7 @@ namespace Mejnun.UI
         private Button compactBoardButton;
         private Button hintButton;
         private Button fastForwardButton;
+        private Button hurryUpButton;
         private Button markSetButton;
         private Button pauseButton;
         private Button menuButton;
@@ -85,6 +88,7 @@ namespace Mejnun.UI
         private OnlineWaitingOverlayPresenter onlineWaitingOverlay;
         private Label turnPopup;
         private Label halasPopup;
+        private Label hurryUpPopup;
         private Label timerLabel;
         private Label goneDownPopup;
         private Label goodMovePopup;
@@ -99,6 +103,7 @@ namespace Mejnun.UI
         private IVisualElementScheduledItem goodMovePopupHide;
         private IVisualElementScheduledItem goneDownTagHide;
         private IVisualElementScheduledItem halasHide;
+        private IVisualElementScheduledItem hurryUpPopupHide;
         private IVisualElementScheduledItem invalidMoveHide;
         private readonly List<TableEdgeOffset> tableEdgeAnimations = new List<TableEdgeOffset>();
         private readonly Dictionary<int, OpponentHandTuckState> opponentHandTuckStates =
@@ -117,7 +122,7 @@ namespace Mejnun.UI
         private IReadOnlyList<int> revealedDownMeldIds;
         private int revealedDownSeat = -1;
         private int revealedDownTurnNumber = -1;
-        private MejnunGame announcedGame;
+        private ulong announcedSeed;
         private int announcedTurnNumber = -1;
         private bool hasAnnouncedTurn;
         private bool goneDownTagShown;
@@ -159,6 +164,10 @@ namespace Mejnun.UI
         private int lastMoveFlavorFrame = -1;
         private int announcedSeat = -1;
         private float nextBadgePulse;
+        private float nextHurryUpRequestAt;
+        private int hurryUpTurnNumber = -1;
+        private int hurryUpTurnSeat = -1;
+        private float hurryUpTurnStartedAt;
         private bool badgePulse;
         private bool menuPaused;
         private bool confirmPaused;
@@ -235,6 +244,11 @@ namespace Mejnun.UI
                 fastForwardButton.text = matchFlow != null && matchFlow.FastForward
                     ? Loc.Get("hud.button.fast_forward_stop")
                     : Loc.Get("hud.button.fast_forward");
+            }
+
+            if (hurryUpButton != null)
+            {
+                hurryUpButton.text = Loc.Get("hud.button.hurry_up");
             }
         }
 
@@ -500,6 +514,7 @@ namespace Mejnun.UI
                 matchFlow.ScreenChanged += OnMatchFlowScreenChanged;
                 matchFlow.OnlineSeatsChanged += OnOnlineSeatsChanged;
                 matchFlow.OnlineNotice += OnOnlineNotice;
+                matchFlow.HurryUpReceived += OnHurryUpReceived;
                 if (matchFlow.TurnTimer != null)
                 {
                     matchFlow.TurnTimer.TimedOut += OnTimedOut;
@@ -557,6 +572,7 @@ namespace Mejnun.UI
                 matchFlow.ScreenChanged -= OnMatchFlowScreenChanged;
                 matchFlow.OnlineSeatsChanged -= OnOnlineSeatsChanged;
                 matchFlow.OnlineNotice -= OnOnlineNotice;
+                matchFlow.HurryUpReceived -= OnHurryUpReceived;
                 if (matchFlow.TurnTimer != null)
                 {
                     matchFlow.TurnTimer.TimedOut -= OnTimedOut;
@@ -574,6 +590,8 @@ namespace Mejnun.UI
             goodMovePopupHide?.Pause();
             goneDownTagHide?.Pause();
             halasHide?.Pause();
+            hurryUpPopupHide?.Pause();
+            hurryUpPopup?.RemoveFromClassList("hurry-up-visible");
             invalidMoveHide?.Pause();
         }
 
@@ -1168,6 +1186,8 @@ namespace Mejnun.UI
             turnPanel = root.Q<VisualElement>("turn-panel");
             markerLayer = root.Q<VisualElement>("marker-layer");
             fastForwardButton = root.Q<Button>("fast-forward-button");
+            hurryUpButton = root.Q<Button>("hurry-up-button");
+            hurryUpPopup = root.Q<Label>("hurry-up-popup");
             markSetButton = root.Q<Button>("mark-set-button");
             skipTutorialButton = root.Q<Button>("skip-tutorial-button");
             roomCodeLabel = root.Q<Label>("room-code-label");
@@ -1187,6 +1207,7 @@ namespace Mejnun.UI
             if (compactBoardButton != null) compactBoardButton.clicked += CompactBoard;
             if (hintButton != null) hintButton.clicked += ToggleHints;
             if (fastForwardButton != null) fastForwardButton.clicked += ToggleFastForward;
+            if (hurryUpButton != null) hurryUpButton.clicked += RequestHurryUp;
             if (markSetButton != null) markSetButton.clicked += ToggleMarkMode;
             if (pauseButton != null) pauseButton.clicked += TogglePause;
             if (menuButton != null) menuButton.clicked += RequestLeave;
@@ -1284,21 +1305,44 @@ namespace Mejnun.UI
 
         private void UpdateFastForwardButton()
         {
-            if (fastForwardButton == null)
+            if (fastForwardButton == null && hurryUpButton == null)
             {
                 return;
             }
 
             var phoneLayout = root != null && root.ClassListContains("phone-layout");
-            if (fastForwardDock != null && fastForwardButton.parent != fastForwardDock)
+            if (fastForwardDock != null && fastForwardButton != null && fastForwardButton.parent != fastForwardDock)
             {
                 fastForwardDock.Add(fastForwardButton);
             }
 
-            var visible = GameSettings.ShowFastForward &&
-                          (tableController != null && tableController.IsAutoFixing ||
-                           matchFlow != null && matchFlow.BotDriver != null && matchFlow.BotDriver.IsPlaying);
-            fastForwardButton.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (fastForwardDock != null && hurryUpButton != null && hurryUpButton.parent != fastForwardDock)
+            {
+                fastForwardDock.Add(hurryUpButton);
+            }
+
+            var isOnline = matchFlow != null && matchFlow.IsOnline;
+            var hurryUpDelayElapsed = HasHurryUpDelayElapsed();
+            var showHurryUp = isOnline && hurryUpDelayElapsed && matchFlow.CanRequestHurryUp;
+            var showFastForward = !isOnline && GameSettings.ShowFastForward &&
+                                  (tableController != null && tableController.IsAutoFixing ||
+                                   matchFlow != null && matchFlow.BotDriver != null && matchFlow.BotDriver.IsPlaying);
+            var visible = showHurryUp || showFastForward;
+            if (fastForwardButton != null)
+            {
+                fastForwardButton.style.display = showFastForward ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+
+            if (hurryUpButton != null)
+            {
+                hurryUpButton.style.display = showHurryUp ? DisplayStyle.Flex : DisplayStyle.None;
+                var cooldownRemaining = Mathf.Max(0f, nextHurryUpRequestAt - Time.unscaledTime);
+                hurryUpButton.text = cooldownRemaining > 0f
+                    ? Loc.Format("hud.button.hurry_up_cooldown", Mathf.CeilToInt(cooldownRemaining))
+                    : Loc.Get("hud.button.hurry_up");
+                hurryUpButton.SetEnabled(showHurryUp && cooldownRemaining <= 0f);
+            }
+
             if (fastForwardDock != null)
             {
                 fastForwardDock.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1329,9 +1373,34 @@ namespace Mejnun.UI
                 }
             }
 
-            fastForwardButton.text = matchFlow != null && matchFlow.FastForward
-                ? Loc.Get("hud.button.fast_forward_stop")
-                : Loc.Get("hud.button.fast_forward");
+            if (fastForwardButton != null)
+            {
+                fastForwardButton.text = matchFlow != null && matchFlow.FastForward
+                    ? Loc.Get("hud.button.fast_forward_stop")
+                    : Loc.Get("hud.button.fast_forward");
+            }
+        }
+
+        private bool HasHurryUpDelayElapsed()
+        {
+            var game = matchFlow == null || !matchFlow.IsOnline ? null : matchFlow.Game;
+            if (game == null || game.State.Phase != GamePhase.Playing)
+            {
+                hurryUpTurnNumber = -1;
+                hurryUpTurnSeat = -1;
+                return false;
+            }
+
+            var turnNumber = game.State.TurnNumber;
+            var seat = game.State.CurrentSeat;
+            if (hurryUpTurnNumber != turnNumber || hurryUpTurnSeat != seat)
+            {
+                hurryUpTurnNumber = turnNumber;
+                hurryUpTurnSeat = seat;
+                hurryUpTurnStartedAt = Time.unscaledTime;
+            }
+
+            return Time.unscaledTime - hurryUpTurnStartedAt >= HurryUpDelaySeconds;
         }
 
         private void UpdateSetMarkers()
@@ -1711,17 +1780,18 @@ namespace Mejnun.UI
             }
 
             var game = tableController.Game;
-            if (hasAnnouncedTurn && announcedGame == game && announcedTurnNumber == state.TurnNumber)
+            if (hasAnnouncedTurn && announcedSeed == game.Setup.Seed &&
+                announcedTurnNumber == state.TurnNumber && announcedSeat == state.CurrentSeat)
             {
                 return;
             }
 
-            announcedGame = game;
+            announcedSeed = game.Setup.Seed;
             announcedTurnNumber = state.TurnNumber;
+            announcedSeat = state.CurrentSeat;
             hasAnnouncedTurn = true;
             if (turnPopup != null)
             {
-                announcedSeat = state.CurrentSeat;
                 turnPopup.text = TurnPopupText(state.CurrentSeat);
                 turnPopupHide = ShowPopup(turnPopup, turnPopupHide,
                     root != null && root.ClassListContains("phone-layout") ? 2600 : 1600);
@@ -2910,6 +2980,35 @@ namespace Mejnun.UI
                 matchFlow.FastForward = !matchFlow.FastForward;
                 UpdateFastForwardButton();
             }
+        }
+
+        private void RequestHurryUp()
+        {
+            if (matchFlow == null || !matchFlow.CanRequestHurryUp ||
+                !HasHurryUpDelayElapsed() || Time.unscaledTime < nextHurryUpRequestAt)
+            {
+                return;
+            }
+
+            nextHurryUpRequestAt = Time.unscaledTime + HurryUpCooldownSeconds;
+            matchFlow.RequestHurryUp();
+            UpdateFastForwardButton();
+        }
+
+        private void OnHurryUpReceived(int fromSeat)
+        {
+            if (hurryUpPopup == null)
+            {
+                return;
+            }
+
+            hurryUpPopupHide?.Pause();
+            hurryUpPopup.AddToClassList("hurry-up-visible");
+            hurryUpPopupHide = hurryUpPopup.schedule.Execute(() =>
+            {
+                hurryUpPopup.RemoveFromClassList("hurry-up-visible");
+                hurryUpPopupHide = null;
+            }).StartingIn(1800);
         }
 
         private void ToggleMarkMode()

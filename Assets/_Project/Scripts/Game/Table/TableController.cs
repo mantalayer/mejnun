@@ -139,6 +139,7 @@ namespace Mejnun.Game
             if (pointerRouter != null)
             {
                 pointerRouter.Gesture += HandlePointerGesture;
+                pointerRouter.LongPressSecondsResolver = GetLongPressSeconds;
             }
 
             if (tableView != null)
@@ -154,6 +155,7 @@ namespace Mejnun.Game
             if (pointerRouter != null)
             {
                 pointerRouter.Gesture -= HandlePointerGesture;
+                pointerRouter.LongPressSecondsResolver = null;
             }
 
             if (tableView != null)
@@ -187,16 +189,24 @@ namespace Mejnun.Game
                 : (byte?)null);
         }
 
+        private float GetLongPressSeconds(Vector2 position)
+        {
+            var boardSeconds = GameSettings.LongPressSeconds;
+            return tableView == null
+                ? boardSeconds
+                : PointerRouter.GetLongPressSeconds(tableView.HitTest(position).Kind, boardSeconds);
+        }
+
         private void UpdateEdgePan()
         {
             if (!dragActive || sweepSelectActive || (!InputEnabled && !HandInputEnabled) || !edgePanArmed ||
-                tableView == null || GameSettings.EdgePanWidth <= 0f)
+                tableView == null || GameSettings.EdgeScrollWidth <= 0f)
             {
                 return;
             }
 
             var direction = PointerRouter.GetEdgePanDirection(lastDragPosition, Screen.width, Screen.height,
-                GameSettings.EdgePanWidth, tableView.EdgePanBottomInset * Screen.height);
+                GameSettings.EdgeScrollWidth, tableView.EdgePanBottomInset * Screen.height);
             if (direction.sqrMagnitude <= 0f)
             {
                 return;
@@ -247,7 +257,7 @@ namespace Mejnun.Game
         {
             var bottomInset = tableView == null ? 0f : tableView.EdgePanBottomInset * Screen.height;
             return PointerRouter.GetEdgePanDirection(position, Screen.width, Screen.height,
-                GameSettings.EdgePanWidth, bottomInset).sqrMagnitude > 0f;
+                GameSettings.EdgeScrollWidth, bottomInset).sqrMagnitude > 0f;
         }
 
         private void ResetEdgePanDrag()
@@ -1464,8 +1474,21 @@ namespace Mejnun.Game
                 var isSelectedBoardCard = dragHit.Kind == GestureHitKind.BoardCard &&
                                           gestureInterpreter.IsBoardSelection &&
                                           gestureInterpreter.IsSelected(dragHit.CardId);
-                if (PointerRouter.ShouldPanBoardDrag(pointerGesture.IsTouch, pointerGesture.IsLongPress,
-                        isSelectedBoardCard) &&
+                var isFastStart = !InputEnabled || PointerRouter.IsFastDragStart(
+                    pointerGesture.StartSpeedMillimetersPerSecond,
+                    GameSettings.TouchPanStartSpeed);
+                var shouldPanBoardDrag = PointerRouter.ShouldPanBoardDrag(pointerGesture.IsTouch,
+                    pointerGesture.IsLongPress, isSelectedBoardCard,
+                    isFastStart || dragHit.Kind == GestureHitKind.MeldGrip);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (pointerGesture.IsTouch && dragHit.Kind == GestureHitKind.BoardCard)
+                {
+                    Debug.Log($"Board drag start: {pointerGesture.StartSpeedMillimetersPerSecond:F0} mm/s, " +
+                              $"threshold {GameSettings.TouchPanStartSpeed:F0} mm/s, " +
+                              $"{(shouldPanBoardDrag ? "pan" : "pickup")}.");
+                }
+#endif
+                if (shouldPanBoardDrag &&
                     (dragHit.Kind == GestureHitKind.BoardCard || dragHit.Kind == GestureHitKind.MeldGrip))
                 {
                     dragHit = GestureHit.EmptyBoard();

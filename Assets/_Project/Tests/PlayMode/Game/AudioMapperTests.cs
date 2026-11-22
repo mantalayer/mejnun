@@ -97,6 +97,20 @@ namespace Mejnun.Game.Tests
         }
 
         [Test]
+        public void RemoteCardMovePlaysDropSoundOnNextFrame()
+        {
+            var game = new MejnunGame(new GameSetup(2, 42UL));
+            var audio = new RecordingAudioService();
+            var mapper = new GameAudioMapper(audio);
+            mapper.Bind(game);
+
+            mapper.ReportRemoteCardMoved();
+            mapper.AdvanceFrame(1f / 60f);
+
+            Assert.That(audio.Posts.FindAll(eventName => eventName == AudioIds.PlayCardDrop).Count, Is.EqualTo(1));
+        }
+
+        [Test]
         public void WentDownAndRevealInOneFrameProduceOneSound()
         {
             var game = new MejnunGame(new GameSetup(2, 41UL));

@@ -147,6 +147,7 @@ namespace Mejnun.Net.Unity
             {
                 clientSession.StateChanged -= OnClientStateChanged;
                 clientSession.StatusChanged -= OnClientStatusChanged;
+                clientSession.HurryUpReceived -= matchFlow.ReceiveHurryUp;
             }
 
             if (subscribedSession != null)
@@ -167,6 +168,7 @@ namespace Mejnun.Net.Unity
             {
                 matchFlow.OnlineRematchRequested -= OnOnlineRematchRequested;
                 matchFlow.OnlineFirstPlayerVoteCast -= OnOnlineFirstPlayerVoteCast;
+                matchFlow.OnlineHurryUpRequested -= OnOnlineHurryUpRequested;
                 if (matchFlow.Controller != null)
                 {
                     matchFlow.Controller.SetCommandRelay(null);
@@ -359,11 +361,13 @@ namespace Mejnun.Net.Unity
             {
                 clientSession.StateChanged -= OnClientStateChanged;
                 clientSession.StatusChanged -= OnClientStatusChanged;
+                clientSession.HurryUpReceived -= matchFlow.ReceiveHurryUp;
             }
 
             clientSession = new ClientSession();
             clientSession.StateChanged += OnClientStateChanged;
             clientSession.StatusChanged += OnClientStatusChanged;
+            clientSession.HurryUpReceived += matchFlow.ReceiveHurryUp;
             localSeat = -1;
             matchFlow.OnlineIsHost = false;
             matchFlow.SetOnlineAuthority(true, localSeat);
@@ -398,6 +402,8 @@ namespace Mejnun.Net.Unity
                 matchFlow.OnlineRematchRequested += OnOnlineRematchRequested;
                 matchFlow.OnlineFirstPlayerVoteCast -= OnOnlineFirstPlayerVoteCast;
                 matchFlow.OnlineFirstPlayerVoteCast += OnOnlineFirstPlayerVoteCast;
+                matchFlow.OnlineHurryUpRequested -= OnOnlineHurryUpRequested;
+                matchFlow.OnlineHurryUpRequested += OnOnlineHurryUpRequested;
 
                 transport = GetComponent<NgoNetTransport>();
                 if (transport == null)
@@ -421,6 +427,7 @@ namespace Mejnun.Net.Unity
                     clientSession = new ClientSession();
                     clientSession.StateChanged += OnClientStateChanged;
                     clientSession.StatusChanged += OnClientStatusChanged;
+                    clientSession.HurryUpReceived += matchFlow.ReceiveHurryUp;
                     matchFlow.SetOnlineFirstPlayerVote(false, null, null, null);
                 }
 
@@ -501,6 +508,7 @@ namespace Mejnun.Net.Unity
             hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
             hostSession.RematchStatusChanged += OnHostRematchStatusChanged;
             hostSession.FirstPlayerVoteChanged += OnHostFirstPlayerVoteChanged;
+            hostSession.HurryUpSent += OnHostHurryUpSent;
             hostSession.PauseReasonChanged += OnHostPauseReasonChanged;
             hostSession.SeatExpired += OnSeatExpired;
             if (hostSession.Game.State.Phase == GamePhase.ChoosingDealer)
@@ -556,6 +564,7 @@ namespace Mejnun.Net.Unity
             hostSession.SeatStatusChanged -= OnHostSeatStatusChanged;
             hostSession.RematchStatusChanged -= OnHostRematchStatusChanged;
             hostSession.FirstPlayerVoteChanged -= OnHostFirstPlayerVoteChanged;
+            hostSession.HurryUpSent -= OnHostHurryUpSent;
             hostSession.PauseReasonChanged -= OnHostPauseReasonChanged;
             hostSession.SeatExpired -= OnSeatExpired;
         }
@@ -575,6 +584,14 @@ namespace Mejnun.Net.Unity
             UpdateHostReadiness();
             PublishRosterChanged();
             QueueMigrationUpload();
+        }
+
+        private void OnHostHurryUpSent(int targetSeat, int fromSeat)
+        {
+            if (targetSeat == localSeat)
+            {
+                matchFlow.ReceiveHurryUp(fromSeat);
+            }
         }
 
         private void OnClientStateChanged(MejnunGame game)
@@ -712,6 +729,18 @@ namespace Mejnun.Net.Unity
             else
             {
                 clientSession?.SubmitRematch();
+            }
+        }
+
+        private void OnOnlineHurryUpRequested()
+        {
+            if (hostSession != null)
+            {
+                hostSession.RequestHurryUp(launch.AuthenticationId);
+            }
+            else
+            {
+                clientSession?.SubmitHurryUp();
             }
         }
 
@@ -1251,6 +1280,7 @@ namespace Mejnun.Net.Unity
             {
                 clientSession.StateChanged -= OnClientStateChanged;
                 clientSession.StatusChanged -= OnClientStatusChanged;
+                clientSession.HurryUpReceived -= matchFlow.ReceiveHurryUp;
                 clientSession = null;
             }
 
@@ -1261,6 +1291,7 @@ namespace Mejnun.Net.Unity
             hostSession.SeatStatusChanged += OnHostSeatStatusChanged;
             hostSession.RematchStatusChanged += OnHostRematchStatusChanged;
             hostSession.FirstPlayerVoteChanged += OnHostFirstPlayerVoteChanged;
+            hostSession.HurryUpSent += OnHostHurryUpSent;
             hostSession.PauseReasonChanged += OnHostPauseReasonChanged;
             hostSession.SeatExpired += OnSeatExpired;
             localSeat = hostSession.PrepareForPromotion(launch.AuthenticationId);

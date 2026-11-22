@@ -34,7 +34,10 @@ MonoBehaviour:
   HideOpponentHandsDesktop: 0
   EdgePanWidthMobile: 0.14
   EdgePanWidthDesktop: 0.08
+  EdgeScrollWidthMobile: 0.14
+  EdgeScrollWidthDesktop: 0.08
   EdgePanSpeed: 1
+  TouchPanStartSpeed: 150
   LongPressSeconds: 0.35
   ZoomSensitivity: 5
   OverlapSets: 1

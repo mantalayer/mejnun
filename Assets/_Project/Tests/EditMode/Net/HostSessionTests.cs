@@ -22,6 +22,106 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
+        public void NetCodec_RoundTripsHurryUpMessage()
+        {
+            var decoded = (HurryUpMessage)NetCodec.Decode(NetCodec.Encode(new HurryUpMessage(2)));
+
+            Assert.That(decoded.FromSeat, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void Host_RelaysHurryUpToCurrentSeatWithSenderSeat()
+        {
+            var host = NewHost();
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+                var targetSeat = host.Game.State.CurrentSeat;
+                var targetClient = targetSeat == 0 ? clientA : clientB;
+                var senderClient = targetSeat == 0 ? clientB : clientA;
+                var senderSeat = targetSeat == 0 ? 1 : 0;
+                var receivedFromSeat = -1;
+                targetClient.HurryUpReceived += seat => receivedFromSeat = seat;
+
+                host.Tick(HostSession.HurryUpDelaySeconds);
+                senderClient.SubmitHurryUp();
+
+                Assert.That(receivedFromSeat, Is.EqualTo(senderSeat));
+            }
+        }
+
+        [Test]
+        public void Host_RejectsHurryUpFromCurrentSeatAndEnforcesCooldown()
+        {
+            var host = NewHost();
+            host.Join("player-a", "A");
+            host.Join("player-b", "B");
+            var targetSeat = host.Game.State.CurrentSeat;
+            var currentPlayerId = targetSeat == 0 ? "player-a" : "player-b";
+            var waitingPlayerId = targetSeat == 0 ? "player-b" : "player-a";
+
+            Assert.That(host.RequestHurryUp(currentPlayerId), Is.False);
+            host.Tick(HostSession.HurryUpDelaySeconds);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.True);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.False);
+
+            host.Tick(HostSession.HurryUpCooldownSeconds - 1);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.False);
+
+            host.Tick(1);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.True);
+        }
+
+        [Test]
+        public void Host_RejectsHurryUpUntilCurrentTurnHasLastedTwentySeconds()
+        {
+            var host = NewHost();
+            host.Join("player-a", "A");
+            host.Join("player-b", "B");
+            var targetSeat = host.Game.State.CurrentSeat;
+            var waitingPlayerId = targetSeat == 0 ? "player-b" : "player-a";
+
+            host.Tick(HostSession.HurryUpDelaySeconds - 1);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.False);
+
+            host.Tick(1);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.True);
+        }
+
+        [Test]
+        public void Host_RaisesHurryUpSentWhenCurrentSeatIsHostLocalSeat()
+        {
+            var host = NewHost();
+            var targetSeat = host.Game.State.CurrentSeat;
+            const string hostAuthenticationId = "host-player";
+            const string waitingPlayerId = "waiting-player";
+            if (targetSeat == 0)
+            {
+                host.Join(hostAuthenticationId, "Host");
+                host.Join(waitingPlayerId, "Player");
+            }
+            else
+            {
+                host.Join(waitingPlayerId, "Player");
+                host.Join(hostAuthenticationId, "Host");
+            }
+
+            var eventTargetSeat = -1;
+            var eventFromSeat = -1;
+            host.HurryUpSent += (seat, fromSeat) =>
+            {
+                eventTargetSeat = seat;
+                eventFromSeat = fromSeat;
+            };
+
+            host.Tick(HostSession.HurryUpDelaySeconds);
+            Assert.That(host.RequestHurryUp(waitingPlayerId), Is.True);
+            Assert.That(eventTargetSeat, Is.EqualTo(targetSeat));
+            Assert.That(eventFromSeat, Is.EqualTo(1 - targetSeat));
+        }
+
+        [Test]
         public void Host_AppliesCommandGroupsAtomicallyAndMirrorsState()
         {
             var host = NewHost();

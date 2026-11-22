@@ -17,7 +17,8 @@ namespace Mejnun.Net
         Rematch,
         RematchStatus,
         FirstPlayerVote,
-        FirstPlayerVoteStatus
+        FirstPlayerVoteStatus,
+        HurryUp
     }
 
     public abstract class NetMessage
@@ -276,5 +277,21 @@ namespace Mejnun.Net
         public string QuestionKey { get; }
         public bool[] Candidates => (bool[])candidates.Clone();
         public int[] Votes => (int[])votes.Clone();
+    }
+
+    public sealed class HurryUpMessage : NetMessage
+    {
+        public HurryUpMessage(int fromSeat)
+            : base(NetMessageKind.HurryUp)
+        {
+            if (fromSeat < -1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(fromSeat));
+            }
+
+            FromSeat = fromSeat;
+        }
+
+        public int FromSeat { get; }
     }
 }

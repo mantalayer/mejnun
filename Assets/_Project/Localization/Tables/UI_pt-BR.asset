@@ -4189,6 +4189,43 @@ MonoBehaviour:
       arrasta um cart\xE3o para a borda da tela."
     m_Metadata:
       m_Items: []
+  - m_Id: 686715395104768
+    m_Localized: Se apresse!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687680
+    m_Localized: Depressa ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 686715407687681
+    m_Localized: SE APRESSE!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687682
+    m_Localized: velocidade inicial da panela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687683
+    m_Localized: "Arrastar mais r\xE1pido move a tela para percorrer a mesa; arrastar
+      mais devagar seleciona as cartas. Ajuste o limite de acordo com seu estilo
+      de toque."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687684
+    m_Localized: '{0:0} mm/s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 749811656548352
+    m_Localized: "\xE1rea de rolagem de borda"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749811673325568
+    m_Localized: "Ajuste a largura da zona da borda da tela para rolar o tabuleiro
+      enquanto voc\xEA segura um cart\xE3o ali."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4270,3 +4307,5 @@ MonoBehaviour:
         - id: 377671971233792
         - id: 410560075128833
         - id: 500000000000002
+        - id: 686715407687680
+        - id: 686715407687684

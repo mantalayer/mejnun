@@ -32,10 +32,13 @@ MonoBehaviour:
   OpponentCardScale: 1
   HideOpponentHandsMobile: 1
   HideOpponentHandsDesktop: 0
-  EdgePanWidthMobile: 0.14
+  EdgePanWidthMobile: 0.08
   EdgePanWidthDesktop: 0.08
+  EdgeScrollWidthMobile: 0.14
+  EdgeScrollWidthDesktop: 0.08
   EdgePanSpeed: 1
-  LongPressSeconds: 0.15
+  TouchPanStartSpeed: 50
+  LongPressSeconds: 0.2
   ZoomSensitivity: 5
   OverlapSets: 1
   OrganicBoard: 1

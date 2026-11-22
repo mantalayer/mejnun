@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using Mejnun.Audio;
 using Mejnun.Core;
 using UnityEngine;
@@ -19,6 +20,12 @@ namespace Mejnun.Game
         private bool onlineTurnSoundKnown;
         private int lastOnlineSoundSeat = -1;
         private int lastOnlineSoundTurn = -1;
+        private bool remoteMoveSnapshotKnown;
+        private ulong lastRemoteMoveSeed;
+        private int lastRemoteMoveTurn = -1;
+        private int lastRemoteMoveSeat = -1;
+        private MejnunGame lastRemoteMoveGame;
+        private string lastRemoteMoveFingerprint;
         private bool audioInitializationWarningLogged;
         private bool volumesAppliedAfterInitialization;
         private float audioInitializationStartedAt;
@@ -189,6 +196,7 @@ namespace Mejnun.Game
 
             SyncTurnTimer();
             matchFlow.ScreenChanged += OnScreenChanged;
+            matchFlow.HurryUpReceived += OnHurryUpReceived;
             if (matchFlow.Controller != null)
             {
                 matchFlow.Controller.Synchronized += OnSynchronized;
@@ -215,6 +223,7 @@ namespace Mejnun.Game
             if (matchFlow != null)
             {
                 matchFlow.ScreenChanged -= OnScreenChanged;
+                matchFlow.HurryUpReceived -= OnHurryUpReceived;
                 if (matchFlow.Controller != null)
                 {
                     matchFlow.Controller.Synchronized -= OnSynchronized;
@@ -223,6 +232,7 @@ namespace Mejnun.Game
 
             matchFlow = null;
             onlineTurnSoundKnown = false;
+            ResetRemoteMoveTracking();
         }
 
         private void SyncTurnTimer()
@@ -250,6 +260,11 @@ namespace Mejnun.Game
             ReportTimeout();
         }
 
+        private void OnHurryUpReceived(int fromSeat)
+        {
+            audioService?.Post(AudioIds.PlayTimerWarning);
+        }
+
         private void OnScreenChanged(MatchFlowScreen screen)
         {
             BindGame(matchFlow == null ? null : matchFlow.Game);
@@ -261,6 +276,16 @@ namespace Mejnun.Game
             if (matchFlow != null)
             {
                 BindGame(matchFlow.Game);
+            }
+
+            if (matchFlow != null && matchFlow.IsOnline && matchFlow.Game != null &&
+                state != null && state.Phase == GamePhase.Playing)
+            {
+                TrackRemoteCardMoves(matchFlow.Game, state);
+            }
+            else
+            {
+                ResetRemoteMoveTracking();
             }
 
             if (matchFlow != null && matchFlow.IsOnline && state != null && state.Phase == GamePhase.Playing)
@@ -280,6 +305,66 @@ namespace Mejnun.Game
             }
 
             audioService.SetRtpc(AudioIds.BoardComplexity, Mathf.Clamp01(state.Board.Count / 6f));
+        }
+
+        private void TrackRemoteCardMoves(MejnunGame game, GameState state)
+        {
+            if (state.CurrentSeat < 0 || state.CurrentSeat >= state.Hands.Count)
+            {
+                ResetRemoteMoveTracking();
+                return;
+            }
+
+            var seed = game.Setup.Seed;
+            var fingerprint = CreateBoardFingerprint(state);
+            if (remoteMoveSnapshotKnown && lastRemoteMoveSeed == seed &&
+                lastRemoteMoveTurn == state.TurnNumber && lastRemoteMoveSeat == state.CurrentSeat &&
+                lastRemoteMoveGame != game && lastRemoteMoveFingerprint != fingerprint &&
+                !matchFlow.IsLocalSeat(state.CurrentSeat))
+            {
+                mapper.ReportRemoteCardMoved();
+            }
+
+            remoteMoveSnapshotKnown = true;
+            lastRemoteMoveSeed = seed;
+            lastRemoteMoveTurn = state.TurnNumber;
+            lastRemoteMoveSeat = state.CurrentSeat;
+            lastRemoteMoveGame = game;
+            lastRemoteMoveFingerprint = fingerprint;
+        }
+
+        private static string CreateBoardFingerprint(GameState state)
+        {
+            var fingerprint = new StringBuilder();
+            fingerprint.Append(state.Board.Count).Append('|');
+            for (var meldIndex = 0; meldIndex < state.Board.Count; meldIndex++)
+            {
+                var meld = state.Board[meldIndex];
+                fingerprint.Append(meld.Id).Append(':');
+                for (var cardIndex = 0; cardIndex < meld.Cards.Count; cardIndex++)
+                {
+                    fingerprint.Append(meld.Cards[cardIndex].Id).Append(',');
+                }
+
+                fingerprint.Append(';');
+            }
+
+            fingerprint.Append('|').Append(state.Hands.Count).Append(':');
+            for (var seat = 0; seat < state.Hands.Count; seat++)
+            {
+                fingerprint.Append(state.Hands[seat].Count).Append(',');
+            }
+
+            return fingerprint.ToString();
+        }
+
+        private void ResetRemoteMoveTracking()
+        {
+            remoteMoveSnapshotKnown = false;
+            lastRemoteMoveTurn = -1;
+            lastRemoteMoveSeat = -1;
+            lastRemoteMoveGame = null;
+            lastRemoteMoveFingerprint = null;
         }
 
         private void BindGame(MejnunGame game)

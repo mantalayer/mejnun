@@ -4392,6 +4392,45 @@ MonoBehaviour:
       m\xE0n h\xECnh."
     m_Metadata:
       m_Items: []
+  - m_Id: 686715395104768
+    m_Localized: "Nhanh l\xEAn!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687680
+    m_Localized: "Nhanh l\xEAn ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 686715407687681
+    m_Localized: "NHANH L\xCAN!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687682
+    m_Localized: "T\u1ED1c \u0111\u1ED9 kh\u1EDFi \u0111\u1ED9ng c\u1EE7a Pan"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687683
+    m_Localized: "Thao t\xE1c k\xE9o nhanh s\u1EBD di chuy\u1EC3n b\xE0n; thao t\xE1c
+      k\xE9o ch\u1EADm s\u1EBD nh\u1EB7t c\xE1c qu\xE2n b\xE0i. \u0110i\u1EC1u ch\u1EC9nh
+      \u0111i\u1EC3m c\u1EAFt cho ph\xF9 h\u1EE3p v\u1EDBi phong c\xE1ch ch\u1EA1m
+      c\u1EE7a b\u1EA1n."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687684
+    m_Localized: '{0:0} mm/s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 749811656548352
+    m_Localized: "V\xF9ng cu\u1ED9n c\u1EA1nh"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749811673325568
+    m_Localized: "\u0110i\u1EC1u ch\u1EC9nh \u0111\u1ED9 r\u1ED9ng c\u1EE7a v\xF9ng
+      vi\u1EC1n m\xE0n h\xECnh \u0111\u1EC3 cu\u1ED9n b\u1EA3ng trong khi b\u1EA1n
+      \u0111ang gi\u1EEF m\u1ED9t l\xE1 b\xE0i \u1EDF \u0111\xF3."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4473,3 +4512,5 @@ MonoBehaviour:
         - id: 377671971233792
         - id: 410560075128833
         - id: 500000000000002
+        - id: 686715407687680
+        - id: 686715407687684

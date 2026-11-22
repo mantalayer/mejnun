@@ -113,8 +113,14 @@ namespace Mejnun.Game
         public event Action OnlineRematchRequested;
         public event Action OnlineFirstPlayerVoteChanged;
         public event Action<int> OnlineFirstPlayerVoteCast;
+        public event Action OnlineHurryUpRequested;
+        public event Action<int> HurryUpReceived;
 
         public string OnlineWaitingMessage => onlineWaitingMessage;
+        public bool CanRequestHurryUp => IsOnline && Game != null &&
+                                         Game.State.Phase == GamePhase.Playing &&
+                                         onlineLocalSeat >= 0 && Game.State.CurrentSeat != onlineLocalSeat &&
+                                         !IsBotSeat(Game.State.CurrentSeat) && !matchPaused && !applicationPaused;
         public bool IsOnlineFirstPlayerVoteOpen => IsOnline && onlineFirstPlayerVoteOpen;
         public bool CanVoteOnlineFirstPlayer => IsOnlineFirstPlayerVoteOpen && !matchPaused &&
                                                 IsOnlineFirstPlayerVoteCandidate(onlineLocalSeat);
@@ -594,6 +600,26 @@ namespace Mejnun.Game
 
             tableController?.SetInputPaused(paused || !string.IsNullOrEmpty(onlineWaitingMessage));
             OnlineFirstPlayerVoteChanged?.Invoke();
+        }
+
+        public void RequestHurryUp()
+        {
+            if (CanRequestHurryUp)
+            {
+                OnlineHurryUpRequested?.Invoke();
+            }
+        }
+
+        public void ReceiveHurryUp(int fromSeat)
+        {
+            if (!IsOnline || Game == null || Game.State.Phase != GamePhase.Playing ||
+                Game.State.CurrentSeat != onlineLocalSeat || fromSeat < 0 || fromSeat >= seats.Length ||
+                fromSeat == onlineLocalSeat || matchPaused || applicationPaused)
+            {
+                return;
+            }
+
+            HurryUpReceived?.Invoke(fromSeat);
         }
 
         /// <summary>Leaves the tutorial: it counts as completed, nothing is saved, and the menu is shown.</summary>

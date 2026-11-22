@@ -4205,6 +4205,42 @@ MonoBehaviour:
       Sie eine Karte an einen Bildschirmrand ziehen."
     m_Metadata:
       m_Items: []
+  - m_Id: 686715395104768
+    m_Localized: Beeil dich!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687680
+    m_Localized: Beeil dich ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 686715407687681
+    m_Localized: BEEIL DICH!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687682
+    m_Localized: Startgeschwindigkeit der Pfanne
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687683
+    m_Localized: "Schnelleres Ziehen verschiebt die Tabelle; langsameres Ziehen w\xE4hlt
+      Karten aus. Passen Sie den Grenzwert an Ihre Ber\xFChrungspr\xE4ferenz an."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687684
+    m_Localized: '{0:0} mm/s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 749811656548352
+    m_Localized: Randscrollbereich
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749811673325568
+    m_Localized: "Passen Sie die Breite des Bildschirmrandbereichs zum Scrollen des
+      Spielbretts an, w\xE4hrend Sie dort eine Karte halten."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4286,3 +4322,5 @@ MonoBehaviour:
         - id: 377671971233792
         - id: 410560075128833
         - id: 500000000000002
+        - id: 686715407687680
+        - id: 686715407687684

@@ -17,3 +17,6 @@ UI,net.seat.status.ai_playing,AI playing,Status shown when AI is controlling a h
 UI,net.seat.status.waiting_for_ai,Waiting for AI,Status shown while AI finishes a turn before handing the seat back.
 UI,net.host.keep_waiting,Keep waiting,Host action that leaves the disconnected seat reserved.
 UI,net.host.let_ai_play,Let AI play for {0},Host action to let AI control the named absent player seat.
+UI,hud.button.hurry_up,Hurry up!,Button that nudges the player taking a turn in an online match.
+UI,hud.button.hurry_up_cooldown,Hurry up ({0}),Hurry-up button label while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.popup.hurry_up,HURRY UP!,Popup shown to the player receiving a hurry-up request.

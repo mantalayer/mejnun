@@ -37,7 +37,10 @@ namespace Mejnun.Game
         public bool HideOpponentHandsDesktop;
         public float EdgePanWidthMobile = 0.14f;
         [FormerlySerializedAs("EdgePanWidth")] public float EdgePanWidthDesktop = 0.08f;
+        public float EdgeScrollWidthMobile = 0.14f;
+        public float EdgeScrollWidthDesktop = 0.08f;
         public float EdgePanSpeed = 1f;
+        public float TouchPanStartSpeed = 150f;
         [FormerlySerializedAs("QuickPickupSeconds")] public float LongPressSeconds = 0.35f;
         public float ZoomSensitivity = 5f;
         public bool OverlapSets = true;

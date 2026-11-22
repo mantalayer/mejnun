@@ -14,6 +14,47 @@ namespace Mejnun.Game.EditMode.Tests
             Assert.That(PointerRouter.MillimetersToPixels(millimeters, dpi), Is.EqualTo(expected).Within(0.001f));
         }
 
+        [TestCase(100f, 0.1f, 100f, 254f)]
+        [TestCase(100f, 0.1f, 0f, 158.75f)]
+        public void GetStartSpeedMillimetersPerSecondUsesDeviceDpiOrFallback(float distancePixels,
+            float elapsedSeconds, float dpi, float expected)
+        {
+            Assert.That(PointerRouter.GetStartSpeedMillimetersPerSecond(distancePixels, elapsedSeconds, dpi),
+                Is.EqualTo(expected).Within(0.001f));
+        }
+
+        [Test]
+        public void GetStartSpeedMillimetersPerSecondTreatsNonPositiveElapsedTimeAsFast()
+        {
+            Assert.That(PointerRouter.GetStartSpeedMillimetersPerSecond(10f, 0f, 160f),
+                Is.EqualTo(float.PositiveInfinity));
+        }
+
+        [TestCase(150f, 150f, true)]
+        [TestCase(149.9f, 150f, false)]
+        public void IsFastDragStartUsesConfiguredThreshold(float speed, float threshold, bool expected)
+        {
+            Assert.That(PointerRouter.IsFastDragStart(speed, threshold), Is.EqualTo(expected));
+        }
+
+        [TestCase(GestureHitKind.HandCard)]
+        [TestCase(GestureHitKind.HandArea)]
+        [TestCase(GestureHitKind.HandSlot)]
+        public void GetLongPressSecondsUsesFixedHandDuration(GestureHitKind hitKind)
+        {
+            Assert.That(PointerRouter.GetLongPressSeconds(hitKind, 0.6f), Is.EqualTo(0.35f));
+        }
+
+        [TestCase(GestureHitKind.None)]
+        [TestCase(GestureHitKind.BoardCard)]
+        [TestCase(GestureHitKind.MeldGrip)]
+        [TestCase(GestureHitKind.MeldGap)]
+        [TestCase(GestureHitKind.EmptyBoard)]
+        public void GetLongPressSecondsUsesConfiguredDurationOutsideHand(GestureHitKind hitKind)
+        {
+            Assert.That(PointerRouter.GetLongPressSeconds(hitKind, 0.6f), Is.EqualTo(0.6f));
+        }
+
         [Test]
         public void GetEdgePanDirectionUsesAllScreenEdges()
         {
@@ -55,14 +96,15 @@ namespace Mejnun.Game.EditMode.Tests
                 Is.EqualTo(new Vector2(0f, -1f)));
         }
 
-        [TestCase(true, false, false, true)]
-        [TestCase(true, false, true, false)]
-        [TestCase(true, true, false, false)]
-        [TestCase(false, false, false, false)]
-        public void ShouldPanBoardDragRequiresUnselectedTouchWithoutLongPress(bool isTouch, bool isLongPress,
-            bool isSelectedCard, bool expected)
+        [TestCase(true, false, false, true, true)]
+        [TestCase(true, false, false, false, false)]
+        [TestCase(true, false, true, true, false)]
+        [TestCase(true, true, false, true, false)]
+        [TestCase(false, false, false, true, false)]
+        public void ShouldPanBoardDragRequiresFastUnselectedTouchWithoutLongPress(bool isTouch, bool isLongPress,
+            bool isSelectedCard, bool isFastStart, bool expected)
         {
-            Assert.That(PointerRouter.ShouldPanBoardDrag(isTouch, isLongPress, isSelectedCard),
+            Assert.That(PointerRouter.ShouldPanBoardDrag(isTouch, isLongPress, isSelectedCard, isFastStart),
                 Is.EqualTo(expected));
         }
 

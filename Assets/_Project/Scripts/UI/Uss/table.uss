@@ -101,6 +101,34 @@
     font-size: 46px;
 }
 
+.hurry-up-popup {
+    position: absolute;
+    left: 50%;
+    top: 43%;
+    width: 86%;
+    max-width: 90%;
+    translate: -50% -50%;
+    color: rgb(255, 246, 238);
+    background-color: rgba(130, 24, 24, 0.96);
+    border-radius: 14px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 48px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    opacity: 0;
+    scale: 0.78 0.78;
+    transition-property: opacity, scale;
+    transition-duration: 160ms;
+}
+
+.hurry-up-visible {
+    opacity: 1;
+    scale: 1.08 1.08;
+}
+
 .gone-down-tag {
     position: absolute;
     min-width: 200px;

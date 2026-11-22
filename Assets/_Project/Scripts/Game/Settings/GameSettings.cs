@@ -23,8 +23,10 @@ namespace Mejnun.Game
         public const string OpponentCardScaleKey = "settings.opponents.cardScale";
         public const string HideOpponentHandsKey = "settings.opponents.hideIdle";
         public const string EdgePanWidthKey = "settings.camera.edgePanWidth";
+        public const string EdgeScrollWidthKey = "settings.camera.edgeScrollWidth";
         public const string EdgePanSpeedKey = "settings.camera.edgePanSpeed";
         public const string LongPressSecondsKey = "settings.input.longPress";
+        public const string TouchPanStartSpeedKey = "settings.input.panStartSpeed";
         private const string ZoomSensitivityKey = "settings.camera.zoomSensitivity";
         private const string UiScaleKey = "settings.ui.scale";
         private const string CpuSpeedKey = "settings.cpu.speed.v2";
@@ -175,6 +177,16 @@ namespace Mejnun.Game
             ? SettingsDefaults.Active.EdgePanWidthMobile
             : SettingsDefaults.Active.EdgePanWidthDesktop;
 
+        public static float EdgeScrollWidth
+        {
+            get => Mathf.Clamp(Get(EdgeScrollWidthKey, DefaultEdgeScrollWidth), 0f, 0.25f);
+            set => Set(EdgeScrollWidthKey, Mathf.Clamp(value, 0f, 0.25f));
+        }
+
+        public static float DefaultEdgeScrollWidth => DeviceProfile.IsMobilePlatform
+            ? SettingsDefaults.Active.EdgeScrollWidthMobile
+            : SettingsDefaults.Active.EdgeScrollWidthDesktop;
+
         public static float EdgePanSpeed
         {
             get => Mathf.Clamp(Get(EdgePanSpeedKey, SettingsDefaults.Active.EdgePanSpeed), 0.25f, 3f);
@@ -185,6 +197,12 @@ namespace Mejnun.Game
         {
             get => Mathf.Clamp(Get(LongPressSecondsKey, SettingsDefaults.Active.LongPressSeconds), 0.1f, 0.8f);
             set => Set(LongPressSecondsKey, Mathf.Clamp(value, 0.1f, 0.8f));
+        }
+
+        public static float TouchPanStartSpeed
+        {
+            get => Mathf.Clamp(Get(TouchPanStartSpeedKey, SettingsDefaults.Active.TouchPanStartSpeed), 50f, 400f);
+            set => Set(TouchPanStartSpeedKey, Mathf.Clamp(value, 50f, 400f));
         }
 
         public static float ZoomSensitivity
@@ -319,7 +337,9 @@ namespace Mejnun.Game
                 HintBoardMovesKey, HintJiggleKey, CardHoverHighlightKey, ReducedMotionKey, HapticsKey,
                 FourColourDeckKey, LeftHandedKey, BatterySaverKey,
                 HandArcAmountKey, HandSpreadKey, HandCardScaleKey, HandLiftKey,
-                OpponentCardScaleKey, HideOpponentHandsKey, EdgePanWidthKey, EdgePanSpeedKey, LongPressSecondsKey,
+                OpponentCardScaleKey, HideOpponentHandsKey, EdgePanWidthKey, EdgeScrollWidthKey, EdgePanSpeedKey,
+                LongPressSecondsKey,
+                TouchPanStartSpeedKey,
                 ZoomSensitivityKey, UiScaleKey, CpuSpeedKey, LegacyCpuSpeedKey, ShowFastForwardKey,
                 OverlapSetsKey, OrganicBoardKey, BoardCardSpreadKey, CardMessinessKey, EasyOpeningDealKey,
                 VolumeMasterKey, VolumeMusicKey, VolumeSfxKey, VolumeVoiceKey, QuickMatchBotFillKey
@@ -358,8 +378,10 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(OpponentCardScaleKey);
             PlayerPrefs.DeleteKey(HideOpponentHandsKey);
             PlayerPrefs.DeleteKey(EdgePanWidthKey);
+            PlayerPrefs.DeleteKey(EdgeScrollWidthKey);
             PlayerPrefs.DeleteKey(EdgePanSpeedKey);
             PlayerPrefs.DeleteKey(LongPressSecondsKey);
+            PlayerPrefs.DeleteKey(TouchPanStartSpeedKey);
             PlayerPrefs.DeleteKey(ZoomSensitivityKey);
             PlayerPrefs.DeleteKey(UiScaleKey);
             PlayerPrefs.DeleteKey(CpuSpeedKey);

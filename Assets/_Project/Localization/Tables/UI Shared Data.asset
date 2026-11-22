@@ -4980,6 +4980,46 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848289759592449
+  - m_Id: 686715395104768
+    m_Key: hud.button.hurry_up
+    m_Metadata:
+      m_Items:
+      - rid: 4825848292772937728
+  - m_Id: 686715407687680
+    m_Key: hud.button.hurry_up_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848292772937729
+  - m_Id: 686715407687681
+    m_Key: hud.popup.hurry_up
+    m_Metadata:
+      m_Items:
+      - rid: 4825848292772937730
+  - m_Id: 686715407687682
+    m_Key: settings.table.pan_start_speed
+    m_Metadata:
+      m_Items:
+      - rid: 4825848292772937731
+  - m_Id: 686715407687683
+    m_Key: settings.table.pan_start_speed.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848292772937732
+  - m_Id: 686715407687684
+    m_Key: settings.value.millimeters_per_second
+    m_Metadata:
+      m_Items:
+      - rid: 4825848292772937733
+  - m_Id: 749811656548352
+    m_Key: settings.table.edge_scroll_width
+    m_Metadata:
+      m_Items:
+      - rid: 4825848296716632064
+  - m_Id: 749811673325568
+    m_Key: settings.table.edge_scroll_width.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848296716632065
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9606,9 +9646,46 @@ MonoBehaviour:
     - rid: 4825848289759592450
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_CommentText: Settings slider that adjusts board pan speed while dragging
-          a card near a screen edge.
+        m_CommentText: Settings slider controlling board pan speed while dragging
+          a card near an edge.
     - rid: 4825848289759592451
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Explains the edge scroll speed multiplier.
+    - rid: 4825848292772937728
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Button that nudges the player taking a turn in an online match.
+    - rid: 4825848292772937729
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Hurry-up button label while its cooldown is active; {0} is
+          whole seconds remaining.
+    - rid: 4825848292772937730
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Popup shown to the player receiving a hurry-up request.
+    - rid: 4825848292772937731
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Label for the touch-drag speed cutoff between panning the
+          table and picking up a board card.
+    - rid: 4825848292772937732
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains how the threshold affects touch drags that start
+          on a board card.
+    - rid: 4825848292772937733
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Speed shown beside the touch pan start speed slider; {0} is
+          the selected threshold in millimeters per second.
+    - rid: 4825848296716632064
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Settings slider controlling the width of the screen-edge zone
+          that scrolls the board while holding a card.
+    - rid: 4825848296716632065
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Explains the edge scroll area width.

@@ -74,6 +74,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="fast-forward-dock" class="fast-forward-dock hud-bar" picking-mode="Ignore" style="display: none">
             <ui:Button name="fast-forward-button" class="hud-button" style="display: none" />
+            <ui:Button name="hurry-up-button" class="hud-button" style="display: none" />
         </ui:VisualElement>
         <ui:VisualElement name="opponents-strip" class="opponents-strip" picking-mode="Ignore">
             <ui:VisualElement name="left-opponents" class="opponent-side opponent-left" picking-mode="Ignore" />
@@ -82,6 +83,11 @@
         <ui:VisualElement name="top-opponents" class="opponents-top" picking-mode="Ignore" />
         <ui:VisualElement name="popup-layer" class="popup-layer" picking-mode="Ignore">
             <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
+            <ui:Label name="hurry-up-popup" class="hurry-up-popup" picking-mode="Ignore">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.popup.hurry_up" />
+                </Bindings>
+            </ui:Label>
             <ui:Label name="online-notice" class="online-notice" picking-mode="Ignore" />
             <ui:Label name="online-waiting" class="online-waiting" picking-mode="Ignore" />
             <ui:Label name="halas-popup" class="halas-popup" picking-mode="Ignore">

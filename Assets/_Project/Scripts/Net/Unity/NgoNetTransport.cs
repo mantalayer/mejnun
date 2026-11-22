@@ -90,6 +90,7 @@ namespace Mejnun.Net.Unity
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
                 client.FirstPlayerVoteRequested -= SendToServer;
+                client.HurryUpRequested -= SendToServer;
                 client = null;
             }
 
@@ -120,6 +121,7 @@ namespace Mejnun.Net.Unity
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
                 client.FirstPlayerVoteRequested -= SendToServer;
+                client.HurryUpRequested -= SendToServer;
             }
 
             Configure(manager, ugsSession, authenticationId, displayName);
@@ -128,6 +130,7 @@ namespace Mejnun.Net.Unity
             client.CommandsReady += SendToServer;
             client.RematchRequested += SendToServer;
             client.FirstPlayerVoteRequested += SendToServer;
+            client.HurryUpRequested += SendToServer;
             EnsureRegistered();
             SendJoinIfConnected();
         }
@@ -159,6 +162,7 @@ namespace Mejnun.Net.Unity
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
                 client.FirstPlayerVoteRequested -= SendToServer;
+                client.HurryUpRequested -= SendToServer;
             }
         }
 
@@ -447,6 +451,13 @@ namespace Mejnun.Net.Unity
                 authenticationByClient.TryGetValue(senderClientId, out authenticationId))
             {
                 host.CastFirstPlayerVote(authenticationId, vote.Choice);
+                return;
+            }
+
+            if (message is HurryUpMessage &&
+                authenticationByClient.TryGetValue(senderClientId, out authenticationId))
+            {
+                host.RequestHurryUp(authenticationId);
                 return;
             }
 

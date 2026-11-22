@@ -216,6 +216,11 @@ namespace Mejnun.Game
             audio.Post(AudioIds.PlayCardDrop);
         }
 
+        public void ReportRemoteCardMoved()
+        {
+            cardMovedPending = true;
+        }
+
         private void OnDealerChosen(int seat)
         {
             audio.Post(AudioIds.PlayDealerChosen);

@@ -16,9 +16,12 @@ namespace Mejnun.Net
     public sealed class HostSession
     {
         public const double MigrationReconnectGraceSeconds = 60;
+        public const double HurryUpDelaySeconds = 20;
+        public const double HurryUpCooldownSeconds = 20;
         private readonly SeatRoster roster;
         private readonly ISnapshotStore snapshotStore;
         private readonly int[] lastGraceSeconds;
+        private readonly Dictionary<string, double> lastHurryUpAt = new Dictionary<string, double>();
         private bool[] rematchVotes;
         private bool isRematchPending;
         private int? pendingRematchFirstPlayer;
@@ -29,6 +32,10 @@ namespace Mejnun.Net
         private readonly Random firstPlayerVoteRandom = new Random();
         private double turnElapsed;
         private double botElapsed;
+        private double hurryUpElapsed;
+        private int hurryUpTurnNumber = -1;
+        private int hurryUpTurnSeat = -1;
+        private double hurryUpTurnStartedAt;
 
         public HostSession(MejnunGame game, ISnapshotStore snapshotStore = null)
         {
@@ -71,6 +78,7 @@ namespace Mejnun.Net
         public event Action<PauseReason> PauseReasonChanged;
         public event Action<RematchStatusMessage> RematchStatusChanged;
         public event Action<FirstPlayerVoteStatusMessage> FirstPlayerVoteChanged;
+        public event Action<int, int> HurryUpSent;
 
         public bool AreAllSeatsConnected
         {
@@ -262,6 +270,41 @@ namespace Mejnun.Net
             return true;
         }
 
+        public bool RequestHurryUp(string authenticationId)
+        {
+            SyncHurryUpTurn();
+            var senderSeat = FindSeat(authenticationId);
+            var targetSeat = Game.State.CurrentSeat;
+            if (senderSeat < 0 || !roster.IsConnected(authenticationId) || IsPaused ||
+                roster.HasBlockingAbsence || Game.State.Phase != GamePhase.Playing ||
+                targetSeat < 0 || targetSeat >= roster.SeatCount || targetSeat == senderSeat)
+            {
+                return false;
+            }
+
+            var target = roster.Get(targetSeat);
+            if (target.Presence != SeatPresence.Connected)
+            {
+                return false;
+            }
+
+            if (hurryUpElapsed - hurryUpTurnStartedAt < HurryUpDelaySeconds)
+            {
+                return false;
+            }
+
+            if (lastHurryUpAt.TryGetValue(authenticationId, out var lastRequestedAt) &&
+                hurryUpElapsed - lastRequestedAt < HurryUpCooldownSeconds)
+            {
+                return false;
+            }
+
+            lastHurryUpAt[authenticationId] = hurryUpElapsed;
+            Send(target.AuthenticationId, new HurryUpMessage(senderSeat));
+            HurryUpSent?.Invoke(targetSeat, senderSeat);
+            return true;
+        }
+
         public bool SubmitCommands(string authenticationId, IReadOnlyList<GameCommand> commands)
         {
             var seat = FindSeat(authenticationId);
@@ -410,6 +453,8 @@ namespace Mejnun.Net
                 throw new ArgumentOutOfRangeException(nameof(elapsedSeconds));
             }
 
+            SyncHurryUpTurn();
+            hurryUpElapsed += elapsedSeconds;
             var expiredSeats = roster.Tick(elapsedSeconds);
             if (expiredSeats.Count > 0)
             {
@@ -461,6 +506,28 @@ namespace Mejnun.Net
                 turnElapsed = 0;
                 ApplyGroup(currentSeat, new[] { GameCommand.TimeoutTurn(currentSeat) }, null);
             }
+        }
+
+        private void SyncHurryUpTurn()
+        {
+            if (Game.State.Phase != GamePhase.Playing)
+            {
+                hurryUpTurnNumber = -1;
+                hurryUpTurnSeat = -1;
+                hurryUpTurnStartedAt = hurryUpElapsed;
+                return;
+            }
+
+            var turnNumber = Game.State.TurnNumber;
+            var seat = Game.State.CurrentSeat;
+            if (hurryUpTurnNumber == turnNumber && hurryUpTurnSeat == seat)
+            {
+                return;
+            }
+
+            hurryUpTurnNumber = turnNumber;
+            hurryUpTurnSeat = seat;
+            hurryUpTurnStartedAt = hurryUpElapsed;
         }
 
         public SessionRecord CreateRecord()

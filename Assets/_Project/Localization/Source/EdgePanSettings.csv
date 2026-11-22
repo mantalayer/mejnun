@@ -1,3 +1,5 @@
 table,key,en,comment
 UI,settings.table.edge_pan_speed,Edge scroll speed,Settings slider controlling board pan speed while dragging a card near an edge.
 UI,settings.table.edge_pan_speed.tooltip,"Adjust how quickly the board pans while you drag a card into a screen edge.",Explains the edge scroll speed multiplier.
+UI,settings.table.edge_scroll_width,Edge scroll area,Settings slider controlling the width of the screen-edge zone that scrolls the board while holding a card.
+UI,settings.table.edge_scroll_width.tooltip,"Adjust how wide the screen-edge zone is for scrolling the board while you hold a card there.",Explains the edge scroll area width.

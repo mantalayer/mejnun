@@ -4185,6 +4185,43 @@ MonoBehaviour:
       una tarjeta hacia el borde de la pantalla.
     m_Metadata:
       m_Items: []
+  - m_Id: 686715395104768
+    m_Localized: "\xA1Apres\xFArate!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687680
+    m_Localized: Date prisa ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 686715407687681
+    m_Localized: "\xA1APRES\xDARATE!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687682
+    m_Localized: "Velocidad de inicio de la sart\xE9n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687683
+    m_Localized: "Los gestos m\xE1s r\xE1pidos mueven la mesa; los gestos m\xE1s
+      lentos recogen las cartas. Ajusta el punto de corte para que coincida con tu
+      estilo de toque."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686715407687684
+    m_Localized: '{0:0} mm/s'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 749811656548352
+    m_Localized: "\xC1rea de desplazamiento del borde"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749811673325568
+    m_Localized: "Ajusta el ancho de la zona del borde de la pantalla para desplazarte
+      por el tablero mientras mantienes una carta en esa posici\xF3n."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4266,3 +4303,5 @@ MonoBehaviour:
         - id: 377671971233792
         - id: 410560075128833
         - id: 500000000000002
+        - id: 686715407687680
+        - id: 686715407687684

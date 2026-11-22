@@ -113,10 +113,14 @@ namespace Mejnun.UI
                 value => GameSettings.OpponentCardScale = value, RefreshTable);
             BindSlider("edge-pan-width-slider", () => GameSettings.EdgePanWidth,
                 value => GameSettings.EdgePanWidth = value);
+            BindSlider("edge-scroll-width-slider", () => GameSettings.EdgeScrollWidth,
+                value => GameSettings.EdgeScrollWidth = value);
             BindSlider("edge-pan-speed-slider", () => GameSettings.EdgePanSpeed,
                 value => GameSettings.EdgePanSpeed = value);
             BindSlider("long-press-seconds-slider", () => GameSettings.LongPressSeconds,
                 value => GameSettings.LongPressSeconds = value);
+            BindSlider("pan-start-speed-slider", () => GameSettings.TouchPanStartSpeed,
+                value => GameSettings.TouchPanStartSpeed = value);
             BindSlider("zoom-sensitivity-slider", () => GameSettings.ZoomSensitivity,
                 value => GameSettings.ZoomSensitivity = value);
             BindSlider("board-card-spread-slider", () => GameSettings.BoardCardSpread,
@@ -482,8 +486,10 @@ namespace Mejnun.UI
             SetSlider("hand-lift-slider", GameSettings.HandLift);
             SetSlider("opponent-card-scale-slider", GameSettings.OpponentCardScale);
             SetSlider("edge-pan-width-slider", GameSettings.EdgePanWidth);
+            SetSlider("edge-scroll-width-slider", GameSettings.EdgeScrollWidth);
             SetSlider("edge-pan-speed-slider", GameSettings.EdgePanSpeed);
             SetSlider("long-press-seconds-slider", GameSettings.LongPressSeconds);
+            SetSlider("pan-start-speed-slider", GameSettings.TouchPanStartSpeed);
             SetSlider("zoom-sensitivity-slider", GameSettings.ZoomSensitivity);
             SetSlider("board-card-spread-slider", GameSettings.BoardCardSpread);
             SetSlider("card-messiness-slider", GameSettings.CardMessiness);
@@ -524,10 +530,14 @@ namespace Mejnun.UI
             }
 
             var isPercent = name.StartsWith("volume-", StringComparison.Ordinal) || name == "card-messiness-slider" ||
-                            name == "edge-pan-width-slider";
+                            name == "edge-pan-width-slider" || name == "edge-scroll-width-slider";
             if (name == "long-press-seconds-slider")
             {
                 valueLabel.text = Loc.Format("settings.value.seconds", value);
+            }
+            else if (name == "pan-start-speed-slider")
+            {
+                valueLabel.text = Loc.Format("settings.value.millimeters_per_second", value);
             }
             else
             {
