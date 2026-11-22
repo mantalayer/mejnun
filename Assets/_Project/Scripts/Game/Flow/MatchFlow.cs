@@ -38,6 +38,7 @@ namespace Mejnun.Game
         private int lastSavedTurnNumber = -1;
         private bool resultRecorded;
         private bool matchPaused;
+        private bool onlineSessionPaused;
         private bool applicationPaused;
         private bool remoteAuthority;
         private bool onlineRematchAccepted;
@@ -50,6 +51,7 @@ namespace Mejnun.Game
         private MejnunGame deferredOnlineGame;
         private string onlineWaitingMessage = string.Empty;
         private float elapsedMatchSeconds;
+        private float localTurnSeconds;
         private MatchRequest activeRequest;
         private readonly CardTracker cardTracker = new CardTracker();
         private readonly MatchStatsTracker matchStatsTracker = new MatchStatsTracker();
@@ -64,6 +66,8 @@ namespace Mejnun.Game
         public bool IsInitializingRound { get; private set; }
         public MatchFlowScreen Screen { get; private set; } = MatchFlowScreen.Idle;
         public int SeatCount => playerNames.Length;
+        public float MatchElapsedSeconds => elapsedMatchSeconds;
+        public float LocalTurnSeconds => localTurnSeconds;
 
         /// <summary>The DealerQuestions table key of this round's question; null uses the generic question.</summary>
         public string DealerQuestionKey { get; private set; }
@@ -80,6 +84,20 @@ namespace Mejnun.Game
             : activeRequest.Mode;
         public TurnTimer TurnTimer => turnTimer;
         public int TurnSeconds { get; private set; }
+        public static string FormatDuration(float durationSeconds)
+        {
+            var totalSeconds = Mathf.Max(0, Mathf.FloorToInt(durationSeconds));
+            var zero = Loc.Number(0)[0];
+            var seconds = Loc.Number(totalSeconds % 60).PadLeft(2, zero);
+            if (totalSeconds >= 3600)
+            {
+                var minutes = Loc.Number(totalSeconds / 60 % 60).PadLeft(2, zero);
+                return $"{Loc.Number(totalSeconds / 3600)}:{minutes}:{seconds}";
+            }
+
+            return $"{Loc.Number(totalSeconds / 60)}:{seconds}";
+        }
+
         public bool IsOnline => remoteAuthority && Mode == MatchMode.Online;
         public bool OnlineIsHost { get; set; }
         public IReadOnlyList<SeatConfig> Seats => seats;
@@ -283,10 +301,18 @@ namespace Mejnun.Game
 
         private void Update()
         {
-            if (!matchPaused && !applicationPaused && Game != null && Game.State.Phase == GamePhase.Playing &&
-                !IsBotSeat(Game.State.CurrentSeat))
+            if (ShouldRunMatchClock(Mode == MatchMode.Online, matchPaused, onlineSessionPaused, applicationPaused) &&
+                Game != null && Game.State.Phase == GamePhase.Playing)
             {
-                elapsedMatchSeconds += Time.unscaledDeltaTime;
+                var deltaTime = Time.unscaledDeltaTime;
+                elapsedMatchSeconds += deltaTime;
+                var currentSeat = Game.State.CurrentSeat;
+                if (Mode == MatchMode.Online
+                        ? currentSeat == onlineLocalSeat && !IsBotSeat(currentSeat)
+                        : !IsBotSeat(currentSeat))
+                {
+                    localTurnSeconds += deltaTime;
+                }
             }
 
             if (TurnSeconds > 0 && turnTimer != null)
@@ -297,6 +323,15 @@ namespace Mejnun.Game
                     matchStatsTracker.NoteRemainingSeconds(turnTimer.RemainingSeconds);
                 }
             }
+        }
+
+        /// <summary>
+        /// Online matches keep running while the local pause menu is open; only a session-wide pause stops the clocks.
+        /// </summary>
+        public static bool ShouldRunMatchClock(bool online, bool matchPaused, bool onlineSessionPaused,
+            bool applicationPaused)
+        {
+            return !applicationPaused && !(online ? onlineSessionPaused : matchPaused);
         }
 
         private void OnDisable()
@@ -354,6 +389,7 @@ namespace Mejnun.Game
             onlineLocalSeat = localSeat;
             if (!enabled)
             {
+                onlineSessionPaused = false;
                 onlineFirstPlayerVoteOpen = false;
                 onlineFirstPlayerVoteCandidates = Array.Empty<bool>();
                 onlineFirstPlayerVotes = Array.Empty<int>();
@@ -544,6 +580,7 @@ namespace Mejnun.Game
                 GameSettings.FastForward = false;
                 matchPaused = false;
                 elapsedMatchSeconds = 0;
+                localTurnSeconds = 0;
                 RoundSeed = authoritativeGame.Setup.Seed;
                 questionRandom = new System.Random(unchecked((int)(RoundSeed ^ (RoundSeed >> 32))));
                 LastResult = null;
@@ -593,6 +630,7 @@ namespace Mejnun.Game
             }
 
             matchPaused = paused;
+            onlineSessionPaused = paused;
             if (turnTimer != null)
             {
                 turnTimer.Paused = paused;
@@ -1034,6 +1072,7 @@ namespace Mejnun.Game
 
             GameSettings.FastForward = false;
             elapsedMatchSeconds = 0f;
+            localTurnSeconds = 0f;
             matchPaused = false;
             onlineFirstPlayerVoteOpen = false;
             onlineFirstPlayerVoteCandidates = Array.Empty<bool>();

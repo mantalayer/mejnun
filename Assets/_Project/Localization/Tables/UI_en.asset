@@ -4195,6 +4195,21 @@ MonoBehaviour:
       while you hold a card there.
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Match time: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 958106090594304
+    m_Localized: 'Match time: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
+  - m_Id: 958106090594305
+    m_Localized: 'Your turns: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
   references:
     version: 2
     RefIds:
@@ -4278,3 +4293,6 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687684
         - id: 686715407687680
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305

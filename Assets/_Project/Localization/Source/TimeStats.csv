@@ -1,0 +1,4 @@
+table,key,en,comment
+UI,hud.pause.match_time,Match time: {0},Elapsed time for the current match shown in the pause menu.
+UI,results.time.match,Match time: {0},Elapsed time for the completed match shown in results.
+UI,results.time.your_turns,Your turns: {0},Total time spent on the local player's turns shown in results.

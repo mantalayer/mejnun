@@ -182,55 +182,36 @@ namespace Mejnun.Game.Tests
             Assert.That(interpreter.SelectedCardIds, Is.Empty);
         }
 
-        [TestCase(1, 3)]
-        [TestCase(3, 1)]
-        public void SelectHandRangeKeepsCardsInHandOrder(int anchorIndex, int currentIndex)
-        {
-            var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);
-            var hand = game.State.Hands[game.State.CurrentSeat];
-            var orderedHandIds = GetHandCardIds(hand);
-            var interpreter = new GestureInterpreter();
-
-            var changed = interpreter.SelectHandRange(orderedHandIds, anchorIndex, currentIndex);
-
-            Assert.That(changed, Is.True);
-            Assert.That(interpreter.SelectedCardIds,
-                Is.EqualTo(new[] { orderedHandIds[1], orderedHandIds[2], orderedHandIds[3] }));
-        }
-
         [Test]
-        public void SelectHandRangeReplacesPreviousSelection()
+        public void SelectSingleHandCardReplacesPreviousSelection()
         {
             var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);
             var hand = game.State.Hands[game.State.CurrentSeat];
-            var orderedHandIds = GetHandCardIds(hand);
+            var selectedCardId = hand[0].Id;
+            var pressedCardId = hand[2].Id;
             var interpreter = new GestureInterpreter();
             interpreter.InterpretHandGesture(new GestureInput(GestureType.Tap,
-                GestureHit.HandCard(orderedHandIds[0], 0), GestureHit.None), hand.Count);
+                GestureHit.HandCard(selectedCardId, 0), GestureHit.None), hand.Count);
 
-            var changed = interpreter.SelectHandRange(orderedHandIds, 1, 3);
+            var changed = interpreter.SelectSingleHandCard(pressedCardId);
 
             Assert.That(changed, Is.True);
-            Assert.That(interpreter.SelectedCardIds,
-                Is.EqualTo(new[] { orderedHandIds[1], orderedHandIds[2], orderedHandIds[3] }));
+            Assert.That(interpreter.SelectedCardIds, Is.EqualTo(new[] { pressedCardId }));
         }
 
         [Test]
-        public void DragFromSelectedHandRangeMovesTheWholeRangeInHandOrder()
+        public void LongPressDragAfterSelectingSingleHandCardUsesOnlyThatCard()
         {
             var game = GestureTestGameFactory.CreateGameWithStraightInHand(4, out _);
             var hand = game.State.Hands[game.State.CurrentSeat];
             var orderedHandIds = GetHandCardIds(hand);
             var interpreter = new GestureInterpreter();
-            interpreter.SelectHandRange(orderedHandIds, 1, 3);
+            interpreter.SelectSingleHandCard(orderedHandIds[2]);
 
-            var result = interpreter.Interpret(new GestureInput(GestureType.Drag,
-                GestureHit.HandCard(orderedHandIds[2], 2), GestureHit.EmptyBoard()), game.State, game.Turn);
+            var draggedCardIds = interpreter.GetLongPressCardIds(
+                GestureHit.HandCard(orderedHandIds[2], 2), game.State);
 
-            Assert.That(result.Batch.Count, Is.EqualTo(1));
-            Assert.That(result.Batch.Commands[0].Type, Is.EqualTo(CommandType.MoveCards));
-            Assert.That(result.Batch.Commands[0].CardIds,
-                Is.EqualTo(new[] { orderedHandIds[1], orderedHandIds[2], orderedHandIds[3] }));
+            Assert.That(draggedCardIds, Is.EqualTo(new[] { orderedHandIds[2] }));
         }
 
         [Test]

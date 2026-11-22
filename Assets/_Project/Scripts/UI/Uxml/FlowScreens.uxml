@@ -37,6 +37,10 @@
                 </ui:Label>
                 <ui:Label name="result-message" class="flow-copy" text="" />
                 <ui:Label name="result-counts" class="flow-copy result-counts" text="" />
+                <ui:VisualElement name="result-time" class="result-time">
+                    <ui:Label name="result-match-time" class="flow-copy" />
+                    <ui:Label name="result-local-turn-time" class="flow-copy" />
+                </ui:VisualElement>
                 <ui:Label name="result-xp-gained" class="result-reward-label" text="" />
                 <ui:Label name="result-level-up" class="result-level-up" text="" style="display: none" />
                 <ui:Label name="result-level-label" class="flow-copy" text="" />

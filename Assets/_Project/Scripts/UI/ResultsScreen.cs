@@ -19,6 +19,8 @@ namespace Mejnun.UI
         private readonly Label title;
         private readonly Label message;
         private readonly Label counts;
+        private readonly Label matchTime;
+        private readonly Label localTurnTime;
         private readonly Label mejnunBanner;
         private readonly Label xpGained;
         private readonly Label levelUp;
@@ -39,6 +41,8 @@ namespace Mejnun.UI
             title = root.Q<Label>("result-title");
             message = root.Q<Label>("result-message");
             counts = root.Q<Label>("result-counts");
+            matchTime = root.Q<Label>("result-match-time");
+            localTurnTime = root.Q<Label>("result-local-turn-time");
             mejnunBanner = root.Q<Label>("mejnun-banner");
             xpGained = root.Q<Label>("result-xp-gained");
             levelUp = root.Q<Label>("result-level-up");
@@ -92,6 +96,10 @@ namespace Mejnun.UI
             }
 
             counts.text = result.ToString();
+            matchTime.text = Loc.Format("results.time.match",
+                MatchFlow.FormatDuration(matchFlow.MatchElapsedSeconds));
+            localTurnTime.text = Loc.Format("results.time.your_turns",
+                MatchFlow.FormatDuration(matchFlow.LocalTurnSeconds));
             var tutorial = matchFlow.IsTutorial;
             rematchButton.text = tutorial ? Loc.Get("results.button.play_for_real") : Loc.Get("results.button.rematch");
             if (tutorial)

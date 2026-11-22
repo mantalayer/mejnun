@@ -256,7 +256,7 @@ namespace Mejnun.Game.Tests
         }
 
         [UnityTest]
-        public IEnumerator MatchTimeOnlyAccumulatesDuringHumanTurns()
+        public IEnumerator MatchTimeIncludesBotTurnsButLocalTurnTimeDoesNot()
         {
             SceneManager.LoadScene("Table", LoadSceneMode.Single);
             yield return null;
@@ -275,7 +275,8 @@ namespace Mejnun.Game.Tests
             Assert.That(matchFlow.IsBotSeat(matchFlow.Game.State.CurrentSeat), Is.True);
             yield return null;
             yield return null;
-            Assert.That(GetElapsedMatchSeconds(matchFlow), Is.Zero);
+            Assert.That(matchFlow.MatchElapsedSeconds, Is.GreaterThan(0f));
+            Assert.That(matchFlow.LocalTurnSeconds, Is.Zero);
 
             Assert.That(matchFlow.StartMatch(seats, 20261119UL), Is.True);
             yield return WaitForRoundInitialization(matchFlow);
@@ -284,7 +285,8 @@ namespace Mejnun.Game.Tests
             Assert.That(matchFlow.IsBotSeat(matchFlow.Game.State.CurrentSeat), Is.False);
             yield return null;
             yield return null;
-            Assert.That(GetElapsedMatchSeconds(matchFlow), Is.GreaterThan(0f));
+            Assert.That(matchFlow.MatchElapsedSeconds, Is.GreaterThan(0f));
+            Assert.That(matchFlow.LocalTurnSeconds, Is.GreaterThan(0f));
         }
 
         [Test]
@@ -393,14 +395,6 @@ namespace Mejnun.Game.Tests
                 Assert.That(HudPresenter.GetOpponentSide(relativeSeat, opponentCount),
                     Is.EqualTo(expected[relativeSeat - 1]));
             }
-        }
-
-        private static float GetElapsedMatchSeconds(MatchFlow matchFlow)
-        {
-            var field = typeof(MatchFlow).GetField("elapsedMatchSeconds",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(field, Is.Not.Null);
-            return (float)field.GetValue(matchFlow);
         }
 
         private static IEnumerator WaitForRoundInitialization(MatchFlow flow)

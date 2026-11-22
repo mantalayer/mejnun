@@ -12,6 +12,7 @@ namespace Mejnun.Game
         private const float MaxPanInertiaSpeed = 8f;
         private const float MinPanInertiaSpeed = 0.03f;
         private const float RecentPanMovementWindow = 0.08f;
+        private const float BoardPanMargin = 2f;
 
         [SerializeField] private float minOrthographicSize = 1.5f;
         [SerializeField] private float maxOrthographicSize = 20f;
@@ -148,6 +149,12 @@ namespace Mejnun.Game
 
             tableCamera.transform.position += panVelocity * deltaTime;
             FrameRateGovernor.NotifyActivity();
+            if (ClampCameraToBoard())
+            {
+                CancelPanInertia();
+                return;
+            }
+
             panVelocity *= Mathf.Exp(-deltaTime / PanInertiaTimeConstant);
             if (panVelocity.sqrMagnitude <= MinPanInertiaSpeed * MinPanInertiaSpeed)
             {
@@ -216,6 +223,48 @@ namespace Mejnun.Game
                 Mathf.Min(bottomLeft.y, bottomRight.y, topLeft.y, topRight.y),
                 Mathf.Max(bottomLeft.x, bottomRight.x, topLeft.x, topRight.x),
                 Mathf.Max(bottomLeft.y, bottomRight.y, topLeft.y, topRight.y));
+        }
+
+        public static Vector2 ClampViewCenter(Vector2 center, Vector2 halfVisible, Bounds bounds, float margin)
+        {
+            margin = Mathf.Max(0f, margin);
+            halfVisible.x = Mathf.Max(0f, halfVisible.x);
+            halfVisible.y = Mathf.Max(0f, halfVisible.y);
+            var minX = bounds.min.x - margin + halfVisible.x;
+            var maxX = bounds.max.x + margin - halfVisible.x;
+            var minY = bounds.min.y - margin + halfVisible.y;
+            var maxY = bounds.max.y + margin - halfVisible.y;
+            if (minX > maxX)
+            {
+                minX = maxX = bounds.center.x;
+            }
+
+            if (minY > maxY)
+            {
+                minY = maxY = bounds.center.y;
+            }
+
+            return new Vector2(Mathf.Clamp(center.x, minX, maxX), Mathf.Clamp(center.y, minY, maxY));
+        }
+
+        private bool ClampCameraToBoard()
+        {
+            if (!hasBoardBounds)
+            {
+                return false;
+            }
+
+            var visibleRect = GetVisibleBoardWorldRect();
+            var targetCenter = ClampViewCenter(visibleRect.center, visibleRect.size * 0.5f, boardBounds,
+                BoardPanMargin);
+            var offset = targetCenter - visibleRect.center;
+            if (offset.sqrMagnitude <= 0.000001f)
+            {
+                return false;
+            }
+
+            tableCamera.transform.position += new Vector3(offset.x, offset.y, 0f);
+            return true;
         }
 
         public void FitBoard()
@@ -433,6 +482,7 @@ namespace Mejnun.Game
                 minOrthographicSize, maxOrthographicSize);
             var worldAfter = ScreenToWorld(screenPosition);
             tableCamera.transform.position += worldBefore - worldAfter;
+            ClampCameraToBoard();
             if (markManual)
             {
                 manuallyAdjusted = true;
@@ -486,6 +536,12 @@ namespace Mejnun.Game
                 lastPanMovementTime = Time.unscaledTime;
                 hasPanMovement = true;
             }
+
+            if (ClampCameraToBoard())
+            {
+                panVelocity = Vector3.zero;
+            }
+
             if (markManual)
             {
                 manuallyAdjusted = true;

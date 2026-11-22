@@ -152,6 +152,7 @@
                 </Bindings>
             </ui:Label>
             <ui:Label name="room-code-label" class="room-code-label" text="" style="display: none; -unity-text-align: middle-center;" />
+            <ui:Label name="pause-match-time-label" class="room-code-label" style="-unity-text-align: middle-center;" />
             <ui:Button name="resume-button" class="hud-button primary-button">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.pause.resume" />

@@ -13,7 +13,6 @@ namespace Mejnun.Game
         public bool ConfirmDraw;
         public bool ConfirmFix = true;
         public bool ConfirmLeave;
-        public bool HintBoardMoves = true;
         public bool HintJiggle = true;
         public bool CardHoverHighlight = true;
         public bool ReducedMotion;

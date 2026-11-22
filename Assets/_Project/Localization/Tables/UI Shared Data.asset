@@ -5020,6 +5020,21 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848296716632065
+  - m_Id: 958105549529088
+    m_Key: hud.pause.match_time
+    m_Metadata:
+      m_Items:
+      - rid: 4825848309734965248
+  - m_Id: 958106090594304
+    m_Key: results.time.match
+    m_Metadata:
+      m_Items:
+      - rid: 4825848309734965249
+  - m_Id: 958106090594305
+    m_Key: results.time.your_turns
+    m_Metadata:
+      m_Items:
+      - rid: 4825848309734965250
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9689,3 +9704,15 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Explains the edge scroll area width.
+    - rid: 4825848309734965248
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Elapsed time for the current match shown in the pause menu.
+    - rid: 4825848309734965249
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Elapsed time for the completed match shown in results.
+    - rid: 4825848309734965250
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Total time spent on the local player's turns shown in results.

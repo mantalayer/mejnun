@@ -200,41 +200,18 @@ namespace Mejnun.Game
             return selectedCardIds.Contains(cardId);
         }
 
-        public bool SelectHandRange(IReadOnlyList<byte> orderedHandIds, int anchorIndex, int currentIndex)
+        public bool SelectSingleHandCard(byte cardId)
         {
-            if (orderedHandIds == null || anchorIndex < 0 || anchorIndex >= orderedHandIds.Count ||
-                currentIndex < 0 || currentIndex >= orderedHandIds.Count)
-            {
-                return false;
-            }
-
             var switchedFromBoard = IsBoardSelection;
-            if (switchedFromBoard)
-            {
-                selectedCardIds.Clear();
-                selectedMeldId = -1;
-            }
-
-            var firstIndex = anchorIndex < currentIndex ? anchorIndex : currentIndex;
-            var lastIndex = anchorIndex > currentIndex ? anchorIndex : currentIndex;
-            var rangeCount = lastIndex - firstIndex + 1;
-            var changed = switchedFromBoard || selectedCardIds.Count != rangeCount;
-            for (var index = 0; !changed && index < rangeCount; index++)
-            {
-                changed = selectedCardIds[index] != orderedHandIds[firstIndex + index];
-            }
-
+            var changed = switchedFromBoard || selectedCardIds.Count != 1 || selectedCardIds[0] != cardId;
             if (!changed)
             {
                 return false;
             }
 
             selectedCardIds.Clear();
-            for (var index = firstIndex; index <= lastIndex; index++)
-            {
-                selectedCardIds.Add(orderedHandIds[index]);
-            }
-
+            selectedMeldId = -1;
+            selectedCardIds.Add(cardId);
             return true;
         }
 

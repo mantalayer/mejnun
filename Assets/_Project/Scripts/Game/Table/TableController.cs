@@ -58,7 +58,6 @@ namespace Mejnun.Game
         private bool panActive;
         private bool inputPaused;
         private bool meldReorderActive;
-        private bool sweepSelectActive;
         private bool autoFixing;
         private bool markModeActive;
         private byte? hoveredCardId;
@@ -170,7 +169,7 @@ namespace Mejnun.Game
             var mouse = Mouse.current;
             if (!GameSettings.CardHoverHighlight || tableView == null || mouse == null ||
                 mouse.leftButton.isPressed || mouse.rightButton.isPressed || mouse.middleButton.isPressed ||
-                dragActive || handScrollActive || panActive || meldReorderActive || sweepSelectActive)
+                dragActive || handScrollActive || panActive || meldReorderActive)
             {
                 SetHoveredCard(null);
                 return;
@@ -199,7 +198,7 @@ namespace Mejnun.Game
 
         private void UpdateEdgePan()
         {
-            if (!dragActive || sweepSelectActive || (!InputEnabled && !HandInputEnabled) || !edgePanArmed ||
+            if (!dragActive || (!InputEnabled && !HandInputEnabled) || !edgePanArmed ||
                 tableView == null || GameSettings.EdgeScrollWidth <= 0f)
             {
                 return;
@@ -481,12 +480,6 @@ namespace Mejnun.Game
             {
                 Synchronized?.Invoke(game.State, game.Turn);
             }
-        }
-
-        public void RefreshHintOptions()
-        {
-            RefreshHints();
-            RefreshSelection();
         }
 
         public CommandResult ExecuteGesture(GestureInput input)
@@ -1257,10 +1250,6 @@ namespace Mejnun.Game
         private void RefreshHints()
         {
             hintedCardIds = hintsEnabled && InputEnabled ? PlayableHints.Find(game.State) : new HashSet<byte>();
-            if (hintsEnabled && InputEnabled && GameSettings.HintBoardMoves)
-            {
-                hintedCardIds.UnionWith(PlayableHints.FindBoardMoves(game.State));
-            }
         }
 
         private void RefreshSelection()
@@ -1320,6 +1309,16 @@ namespace Mejnun.Game
                     cardView.SetSelected(true);
                 }
             }
+        }
+
+        private void SelectLongPressedHandCard(byte cardId)
+        {
+            if (gestureInterpreter.SelectSingleHandCard(cardId))
+            {
+                Haptics.Pickup();
+            }
+
+            RefreshSelection();
         }
 
         private void BeginBoardHoldLift(GestureHit source, Vector2 position, Vector2 startPosition)
@@ -1412,28 +1411,6 @@ namespace Mejnun.Game
             boardHoldStartedAt = 0f;
         }
 
-        private void UpdateSweepSelection(Vector2 position)
-        {
-            var hit = tableView.HitTest(position);
-            if (hit.Kind != GestureHitKind.HandCard || HandSeat < 0)
-            {
-                return;
-            }
-
-            var previousSelection = new HashSet<byte>(gestureInterpreter.SelectedCardIds);
-            gestureInterpreter.SelectHandRange(tableView.HandOrder.GetCardIds(HandSeat), dragSource.Index, hit.Index);
-            var selectedCardIds = gestureInterpreter.SelectedCardIds;
-            for (var index = 0; index < selectedCardIds.Count; index++)
-            {
-                if (selectedCardIds[index] != dragSource.CardId && !previousSelection.Contains(selectedCardIds[index]))
-                {
-                    Haptics.Pickup();
-                }
-            }
-
-            RefreshSelection();
-        }
-
         private void HandlePointerGesture(PointerGesture pointerGesture)
         {
             if (game == null || tableView == null)
@@ -1500,47 +1477,12 @@ namespace Mejnun.Game
                 dragActive = false;
                 handScrollActive = false;
                 meldReorderActive = false;
-                sweepSelectActive = false;
                 panActive = false;
                 ResetEdgePanDrag();
                 tableView.EndBoardLift();
                 ResetBoardHoldLift();
                 SynchronizeViews();
                 return;
-            }
-
-            if (IsRemoteTurnBlocked() && (pointerGesture.Kind == PointerGestureKind.Tap ||
-                                          pointerGesture.Kind == PointerGestureKind.DoubleTap))
-            {
-                if (pointerGesture.Kind == PointerGestureKind.DoubleTap &&
-                    lastTapEffect == TapEffect.RemoteTurnBlocked)
-                {
-                    ClearLastTapEffect();
-                    return;
-                }
-
-                var blockedHit = tableView.HitTest(pointerGesture.Position);
-                if (blockedHit.Kind != GestureHitKind.HandCard && blockedHit.Kind != GestureHitKind.HandArea)
-                {
-                    if (pointerGesture.Kind == PointerGestureKind.Tap)
-                    {
-                        lastTapEffect = TapEffect.RemoteTurnBlocked;
-                    }
-
-                    NotifyInvalid(RuleError.NotYourTurn);
-                    return;
-                }
-            }
-
-            if (IsRemoteTurnBlocked() && pointerGesture.Kind == PointerGestureKind.DragStarted)
-            {
-                var blockedHit = dragHit;
-                if (blockedHit.Kind == GestureHitKind.BoardCard || blockedHit.Kind == GestureHitKind.MeldGrip)
-                {
-                    ResetEdgePanDrag();
-                    NotifyInvalid(RuleError.NotYourTurn);
-                    return;
-                }
             }
 
             if (markModeActive && (pointerGesture.Kind == PointerGestureKind.LongPress ||
@@ -1590,6 +1532,40 @@ namespace Mejnun.Game
                 return;
             }
 
+            if (IsRemoteTurnBlocked() && (pointerGesture.Kind == PointerGestureKind.Tap ||
+                                          pointerGesture.Kind == PointerGestureKind.DoubleTap))
+            {
+                if (pointerGesture.Kind == PointerGestureKind.DoubleTap &&
+                    lastTapEffect == TapEffect.RemoteTurnBlocked)
+                {
+                    ClearLastTapEffect();
+                    return;
+                }
+
+                var blockedHit = tableView.HitTest(pointerGesture.Position);
+                if (blockedHit.Kind != GestureHitKind.HandCard && blockedHit.Kind != GestureHitKind.HandArea)
+                {
+                    if (pointerGesture.Kind == PointerGestureKind.Tap)
+                    {
+                        lastTapEffect = TapEffect.RemoteTurnBlocked;
+                    }
+
+                    NotifyInvalid(RuleError.NotYourTurn);
+                    return;
+                }
+            }
+
+            if (IsRemoteTurnBlocked() && pointerGesture.Kind == PointerGestureKind.DragStarted)
+            {
+                var blockedHit = dragHit;
+                if (blockedHit.Kind == GestureHitKind.BoardCard || blockedHit.Kind == GestureHitKind.MeldGrip)
+                {
+                    ResetEdgePanDrag();
+                    NotifyInvalid(RuleError.NotYourTurn);
+                    return;
+                }
+            }
+
             if (pointerGesture.Kind == PointerGestureKind.DragStarted)
             {
                 SetMarkMode(false);
@@ -1600,23 +1576,23 @@ namespace Mejnun.Game
                 else
                 {
                     dragSource = dragHit;
-                    sweepSelectActive = dragSource.Kind == GestureHitKind.HandCard && pointerGesture.IsLongPress &&
-                                        (InputEnabled || HandInputEnabled);
+                    if (dragSource.Kind == GestureHitKind.HandCard && pointerGesture.IsLongPress &&
+                        (InputEnabled || HandInputEnabled))
+                    {
+                        SelectLongPressedHandCard(dragSource.CardId);
+                    }
+
                     var boardDragWhileDisabled = !InputEnabled &&
                                                  (dragSource.Kind == GestureHitKind.BoardCard ||
                                                   dragSource.Kind == GestureHitKind.MeldGrip);
                     handScrollActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.HandArea;
                     meldReorderActive = !boardDragWhileDisabled && dragSource.Kind == GestureHitKind.MeldGrip;
-                    dragActive = !sweepSelectActive && !boardDragWhileDisabled &&
+                    dragActive = !boardDragWhileDisabled &&
                                  (dragSource.Kind == GestureHitKind.HandCard ||
                                   dragSource.Kind == GestureHitKind.BoardCard);
-                    panActive = !sweepSelectActive && (boardDragWhileDisabled ||
-                                (!dragActive && !handScrollActive && !meldReorderActive));
-                    if (sweepSelectActive)
-                    {
-                        UpdateSweepSelection(pointerGesture.StartPosition);
-                    }
-                    else if (dragSource.Kind == GestureHitKind.HandCard && (InputEnabled || HandInputEnabled))
+                    panActive = boardDragWhileDisabled ||
+                                (!dragActive && !handScrollActive && !meldReorderActive);
+                    if (dragSource.Kind == GestureHitKind.HandCard && (InputEnabled || HandInputEnabled))
                     {
                         tableView.BeginHandLift(dragSource.CardId, gestureInterpreter.SelectedCardIds,
                             pointerGesture.StartPosition);
@@ -1677,7 +1653,6 @@ namespace Mejnun.Game
                 dragActive = false;
                 handScrollActive = false;
                 meldReorderActive = false;
-                sweepSelectActive = false;
                 ResetEdgePanDrag();
                 tableView.EndHandLift();
                 tableView.EndMeldLift();
@@ -1731,7 +1706,11 @@ namespace Mejnun.Game
                 case PointerGestureKind.LongPress:
                 {
                     var hit = tableView.HitTest(pointerGesture.Position);
-                    if (hit.Kind == GestureHitKind.BoardCard)
+                    if (hit.Kind == GestureHitKind.HandCard)
+                    {
+                        SelectLongPressedHandCard(hit.CardId);
+                    }
+                    else if (hit.Kind == GestureHitKind.BoardCard)
                     {
                         BeginBoardHoldLift(hit, pointerGesture.Position, pointerGesture.StartPosition);
                     }
@@ -1761,11 +1740,7 @@ namespace Mejnun.Game
 
                     break;
                 case PointerGestureKind.DragUpdated:
-                    if (sweepSelectActive)
-                    {
-                        UpdateSweepSelection(pointerGesture.Position);
-                    }
-                    else if (handScrollActive)
+                    if (handScrollActive)
                     {
                         tableView.ScrollHandByScreenDelta(pointerGesture.Delta.x);
                     }
@@ -1789,15 +1764,6 @@ namespace Mejnun.Game
                     }
                     break;
                 case PointerGestureKind.DragEnded:
-                    if (sweepSelectActive)
-                    {
-                        sweepSelectActive = false;
-                        dragActive = false;
-                        tableView.EndHandLift();
-                        RefreshSelection();
-                        break;
-                    }
-
                     if (handScrollActive)
                     {
                         handScrollActive = false;
@@ -1865,15 +1831,6 @@ namespace Mejnun.Game
 
                     break;
                 case PointerGestureKind.Cancelled:
-                    if (sweepSelectActive)
-                    {
-                        sweepSelectActive = false;
-                        dragActive = false;
-                        tableView.EndHandLift();
-                        RefreshSelection();
-                        break;
-                    }
-
                     dragActive = false;
                     handScrollActive = false;
                     meldReorderActive = false;
@@ -1925,8 +1882,19 @@ namespace Mejnun.Game
                     break;
                 }
                 case PointerGestureKind.LongPress:
-                    HandleLongPress(pointerGesture.Position, false);
+                {
+                    var hit = tableView.HitTest(pointerGesture.Position);
+                    if (hit.Kind == GestureHitKind.HandCard)
+                    {
+                        SelectLongPressedHandCard(hit.CardId);
+                    }
+                    else
+                    {
+                        HandleLongPress(pointerGesture.Position, false);
+                    }
+
                     break;
+                }
                 case PointerGestureKind.DragStarted:
                     if (dragActive)
                     {
@@ -1935,11 +1903,7 @@ namespace Mejnun.Game
 
                     break;
                 case PointerGestureKind.DragUpdated:
-                    if (sweepSelectActive)
-                    {
-                        UpdateSweepSelection(pointerGesture.Position);
-                    }
-                    else if (handScrollActive)
+                    if (handScrollActive)
                     {
                         tableView.ScrollHandByScreenDelta(pointerGesture.Delta.x);
                     }
@@ -1951,15 +1915,6 @@ namespace Mejnun.Game
 
                     break;
                 case PointerGestureKind.DragEnded:
-                    if (sweepSelectActive)
-                    {
-                        sweepSelectActive = false;
-                        dragActive = false;
-                        tableView.EndHandLift();
-                        RefreshSelection();
-                        break;
-                    }
-
                     if (handScrollActive)
                     {
                         handScrollActive = false;
@@ -1991,15 +1946,6 @@ namespace Mejnun.Game
                     tableView.ClearDropPreview();
                     break;
                 case PointerGestureKind.Cancelled:
-                    if (sweepSelectActive)
-                    {
-                        sweepSelectActive = false;
-                        dragActive = false;
-                        tableView.EndHandLift();
-                        RefreshSelection();
-                        break;
-                    }
-
                     dragActive = false;
                     handScrollActive = false;
                     tableView.EndHandLift();

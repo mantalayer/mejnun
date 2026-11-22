@@ -131,6 +131,7 @@ namespace Mejnun.UI
         private Toggle confirmDontAsk;
         private VisualElement pausePanel;
         private Label roomCodeLabel;
+        private Label pauseMatchTimeLabel;
         private VisualElement settingsPanel;
         private SettingsPanel settingsPanelBinder;
         private VisualElement helpPanel;
@@ -282,6 +283,7 @@ namespace Mejnun.UI
             }
 
             RefreshRoomCode();
+            RefreshMatchTime();
             UpdateTimerLabel();
             tutorialOverlay?.RefreshLanguage();
         }
@@ -748,6 +750,7 @@ namespace Mejnun.UI
             if (pausePanel != null && pausePanel.resolvedStyle.display == DisplayStyle.Flex)
             {
                 RefreshRoomCode();
+                RefreshMatchTime();
             }
 
             RefreshIfInputStateChanged();
@@ -1191,6 +1194,7 @@ namespace Mejnun.UI
             markSetButton = root.Q<Button>("mark-set-button");
             skipTutorialButton = root.Q<Button>("skip-tutorial-button");
             roomCodeLabel = root.Q<Label>("room-code-label");
+            pauseMatchTimeLabel = root.Q<Label>("pause-match-time-label");
         }
 
         private void RegisterButtons()
@@ -2816,6 +2820,7 @@ namespace Mejnun.UI
             SetVisible(skipTutorialButton, matchFlow != null && matchFlow.Tutorial != null &&
                                            matchFlow.Tutorial.IsRunning);
             RefreshRoomCode();
+            RefreshMatchTime();
         }
 
         private void RefreshRoomCode()
@@ -2831,6 +2836,17 @@ namespace Mejnun.UI
             }
 
             SetVisible(roomCodeLabel, !string.IsNullOrWhiteSpace(roomCode));
+        }
+
+        private void RefreshMatchTime()
+        {
+            if (pauseMatchTimeLabel == null)
+            {
+                return;
+            }
+
+            var elapsedSeconds = matchFlow == null ? 0f : matchFlow.MatchElapsedSeconds;
+            pauseMatchTimeLabel.text = Loc.Format("hud.pause.match_time", MatchFlow.FormatDuration(elapsedSeconds));
         }
 
         private void RequestSkipTutorial()

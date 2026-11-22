@@ -8,7 +8,6 @@ namespace Mejnun.Game
         private const string ConfirmDrawKey = "settings.confirm.draw";
         private const string ConfirmFixKey = "settings.confirm.fix";
         private const string ConfirmLeaveKey = "settings.confirm.leave";
-        private const string HintBoardMovesKey = "settings.hints.boardMoves";
         private const string HintJiggleKey = "settings.hints.jiggle";
         private const string CardHoverHighlightKey = "settings.cards.hoverHighlight";
         private const string ReducedMotionKey = "settings.reducedMotion";
@@ -72,12 +71,6 @@ namespace Mejnun.Game
         {
             get => Get(ConfirmLeaveKey, SettingsDefaults.Active.ConfirmLeave);
             set => Set(ConfirmLeaveKey, value);
-        }
-
-        public static bool HintBoardMoves
-        {
-            get => Get(HintBoardMovesKey, SettingsDefaults.Active.HintBoardMoves);
-            set => Set(HintBoardMovesKey, value);
         }
 
         public static bool HintJiggle
@@ -334,7 +327,7 @@ namespace Mejnun.Game
             var changedKeys = new[]
             {
                 ConfirmRevertKey, ConfirmDrawKey, ConfirmFixKey, ConfirmLeaveKey,
-                HintBoardMovesKey, HintJiggleKey, CardHoverHighlightKey, ReducedMotionKey, HapticsKey,
+                HintJiggleKey, CardHoverHighlightKey, ReducedMotionKey, HapticsKey,
                 FourColourDeckKey, LeftHandedKey, BatterySaverKey,
                 HandArcAmountKey, HandSpreadKey, HandCardScaleKey, HandLiftKey,
                 OpponentCardScaleKey, HideOpponentHandsKey, EdgePanWidthKey, EdgeScrollWidthKey, EdgePanSpeedKey,
@@ -363,7 +356,6 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(ConfirmDrawKey);
             PlayerPrefs.DeleteKey(ConfirmFixKey);
             PlayerPrefs.DeleteKey(ConfirmLeaveKey);
-            PlayerPrefs.DeleteKey(HintBoardMovesKey);
             PlayerPrefs.DeleteKey(HintJiggleKey);
             PlayerPrefs.DeleteKey(CardHoverHighlightKey);
             PlayerPrefs.DeleteKey(ReducedMotionKey);

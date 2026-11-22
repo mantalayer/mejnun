@@ -313,12 +313,6 @@
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.hints.section" />
                 </Bindings>
             </ui:Label>
-            <ui:Toggle name="hint-board-moves-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.hints.board_moves" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.hints.board_moves.tooltip" />
-                </Bindings>
-            </ui:Toggle>
             <ui:Toggle name="hint-jiggle-toggle">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.hints.jiggle" />

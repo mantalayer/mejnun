@@ -76,8 +76,6 @@ namespace Mejnun.UI
                 value => GameSettings.EasyOpeningDeal = value);
             BindToggle("show-fast-forward-toggle", () => GameSettings.ShowFastForward,
                 value => GameSettings.ShowFastForward = value);
-            BindToggle("hint-board-moves-toggle", () => GameSettings.HintBoardMoves,
-                value => GameSettings.HintBoardMoves = value);
             BindToggle("hint-jiggle-toggle", () => GameSettings.HintJiggle,
                 value => GameSettings.HintJiggle = value);
             BindToggle("hover-highlight-toggle", () => GameSettings.CardHoverHighlight,
@@ -416,10 +414,6 @@ namespace Mejnun.UI
         private void OnSettingsChanged(string key)
         {
             RefreshValues();
-            if (key == "settings.hints.boardMoves")
-            {
-                tableController?.RefreshHintOptions();
-            }
         }
 
         private void BindSettingsTab(string key)
@@ -468,7 +462,6 @@ namespace Mejnun.UI
             SetToggle("confirm-leave-toggle", GameSettings.ConfirmLeave);
             SetToggle("easy-opening-deal-toggle", GameSettings.EasyOpeningDeal);
             SetToggle("show-fast-forward-toggle", GameSettings.ShowFastForward);
-            SetToggle("hint-board-moves-toggle", GameSettings.HintBoardMoves);
             SetToggle("hint-jiggle-toggle", GameSettings.HintJiggle);
             SetToggle("hover-highlight-toggle", GameSettings.CardHoverHighlight);
             SetToggle("reduced-motion-toggle", GameSettings.ReducedMotion);

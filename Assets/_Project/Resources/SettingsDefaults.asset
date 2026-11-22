@@ -16,7 +16,6 @@ MonoBehaviour:
   ConfirmDraw: 0
   ConfirmFix: 1
   ConfirmLeave: 0
-  HintBoardMoves: 1
   HintJiggle: 1
   CardHoverHighlight: 1
   ReducedMotion: 0

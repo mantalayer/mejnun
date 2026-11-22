@@ -535,13 +535,18 @@ namespace Mejnun.Game
                 shadowRenderer = shadowObject.AddComponent<SpriteRenderer>();
                 shadowRenderer.sharedMaterial = GetHintMaterial();
                 shadowRenderer.sortingLayerID = spriteRenderer.sortingLayerID;
+                shadowRenderer.sortingOrder = spriteRenderer.sortingOrder - 2;
             }
 
             if (shadowRenderer != null)
             {
                 var settings = CardShadowSettings.Active;
                 shadowRenderer.sprite = spriteRenderer.sprite;
-                shadowRenderer.transform.localPosition = new Vector3(settings.Offset.x, settings.Offset.y, 0.01f);
+                var normalizingScale = spriteRenderer.sprite == null || spriteRenderer.sprite.bounds.size.y <= 0f
+                    ? 1f
+                    : 0.92f / spriteRenderer.sprite.bounds.size.y;
+                shadowRenderer.transform.localPosition = new Vector3(settings.Offset.x / normalizingScale,
+                    settings.Offset.y / normalizingScale, 0.01f);
                 shadowRenderer.transform.localScale = Vector3.one * settings.Scale;
                 shadowRenderer.color = settings.Color;
                 shadowRenderer.enabled = settings.IsEnabled && spriteRenderer.sprite != null;
