@@ -577,7 +577,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282614
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 695204831232
@@ -629,14 +629,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: Bem-vindo(a) a Mejnun
+    m_Localized: Bem-vindo(a) ao {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6548981014528
-    m_Localized: "Mejnun \xE9 jogado com dois baralhos completos: 104 cartas. Cada
-      jogador recebe 11 cartas. O primeiro a esvaziar a m\xE3o na mesa vence."
+    m_Localized: "{app.name} \xE9 jogado com dois baralhos completos: 104 cartas.
+      Cada jogador recebe 11 cartas. O primeiro a esvaziar a m\xE3o na mesa vence."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6548981014529
     m_Localized: Conjuntos
     m_Metadata:
@@ -880,9 +882,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6548985208889
     m_Localized: "Voc\xEA apostou todas as suas fichas e ganhou. Algumas outras coisas
       que \xE9 bom saber."
@@ -2316,9 +2319,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: Primeiro MEJNUN
+    m_Localized: Primeiro {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6549018763265
     m_Localized: "Dez vit\xF3rias"
     m_Metadata:
@@ -2364,9 +2368,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: Mestre de MEJNUN
+    m_Localized: Mestre de {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6549018763278
     m_Localized: Ganhe 200 jogos.
     m_Metadata:
@@ -2396,9 +2401,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6549018763288
     m_Localized: "Ganhe 10 partidas esvaziando sua m\xE3o."
     m_Metadata:
@@ -2759,9 +2765,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282614
   - m_Id: 6549027151885
-    m_Localized: "\xC9 novo em Mejnun?"
+    m_Localized: "\xC9 novo(a) no {app.name}?"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6549031346176
     m_Localized: "Um breve jogo guiado ensina todas as regras atrav\xE9s da brincadeira."
     m_Metadata:
@@ -3335,11 +3342,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun utiliza dois baralhos padr\xE3o de 52 cartas embaralhados:
+    m_Localized: "{app.name} utiliza dois baralhos padr\xE3o de 52 cartas embaralhados:
       104 cartas no total, sem curingas. Cartas iguais dos dois baralhos s\xE3o chamadas
       de pares. Jogue com 2 a 6 jogadores, no sentido hor\xE1rio (para a esquerda)."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6549035540499
     m_Localized: "Quem come\xE7a e como lidar com isso"
     m_Metadata:
@@ -3736,9 +3744,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282614
   - m_Id: 6549035540594
     m_Localized: Conquistas
     m_Metadata:
@@ -4226,6 +4235,26 @@ MonoBehaviour:
       enquanto voc\xEA segura um cart\xE3o ali."
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Tempo de partida: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 958106090594304
+    m_Localized: 'Tempo de partida: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 958106090594305
+    m_Localized: 'Suas jogadas: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
   references:
     version: 2
     RefIds:
@@ -4309,3 +4338,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

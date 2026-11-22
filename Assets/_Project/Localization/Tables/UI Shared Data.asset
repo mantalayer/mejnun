@@ -5035,6 +5035,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848309734965250
+  - m_Id: 958106090594306
+    m_Key: menu.main.title
+    m_Metadata:
+      m_Items:
+      - rid: 4825848309734965251
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -5049,7 +5054,9 @@ MonoBehaviour:
     - rid: 4825848249852887076
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_CommentText: The app name on the home screen / store. Keep short.
+        m_CommentText: 'The game''s name: the one place it is written. Other strings
+          show it with {app.name} or {app.name:upper}. Also the home screen / store
+          name and the desktop product name. Keep short.'
     - rid: 4825848249896665088
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
@@ -9716,3 +9723,8 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Total time spent on the local player's turns shown in results.
+    - rid: 4825848309734965251
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Game title shown on the main menu, in capitals. Keep
+          the {app.name:upper} placeholder.

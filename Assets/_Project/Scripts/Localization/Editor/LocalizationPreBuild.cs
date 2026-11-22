@@ -25,6 +25,7 @@ namespace Mejnun.Localization.Editor
 
         public void OnPreprocessBuild(BuildReport report)
         {
+            LocalizationProjectSetup.SyncProductName();
             CosmeticNameSync.SyncAll();
             var settings = LocalizationPipelineSettings.Load();
             var validation = LocalizationValidator.Validate();

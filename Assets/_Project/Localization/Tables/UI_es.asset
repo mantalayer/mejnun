@@ -20,13 +20,14 @@ MonoBehaviour:
     - rid: 4825848250703282625
   m_TableData:
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: Bienvenido a Mejnun
+    m_Localized: Bienvenido a {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6548985208832
     m_Localized: '{0} va primero. Mira lo que hace.'
     m_Metadata:
@@ -360,9 +361,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: Maestro de MEJNUN
+    m_Localized: Maestro de {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6549018763282
     m_Localized: Alcanza el nivel 25.
     m_Metadata:
@@ -671,10 +673,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548981014528
-    m_Localized: 'Mejnun se juega con dos barajas completas: 104 cartas. A cada jugador
-      se le reparten 11. Gana el primero que se quede sin cartas sobre la mesa.'
+    m_Localized: '{app.name} se juega con dos barajas completas: 104 cartas. A cada
+      jugador se le reparten 11. Gana el primero que se quede sin cartas sobre la
+      mesa.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6548981014529
     m_Localized: Conjuntos
     m_Metadata:
@@ -924,9 +928,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: "\xA1MEJNUN!"
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6548985208889
     m_Localized: "Te quedaste sin cartas y ganaste. Hay algunas cosas m\xE1s que
       conviene saber."
@@ -2354,9 +2359,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: Primer MEJNUN
+    m_Localized: Primero {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6549018763264
     m_Localized: Gana vaciando tu mano.
     m_Metadata:
@@ -2431,9 +2437,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6549018763288
     m_Localized: Gana 10 partidas vaciando tu mano.
     m_Metadata:
@@ -2781,9 +2788,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282625
   - m_Id: 6549027151885
-    m_Localized: "\xBFEres nuevo en Mejnun?"
+    m_Localized: "\xBFEres nuevo en {app.name}?"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6549031346176
     m_Localized: "Un breve juego guiado te ense\xF1a todas las reglas jugando."
     m_Metadata:
@@ -3340,12 +3348,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun utiliza dos barajas est\xE1ndar de 52 cartas, barajadas
-      entre s\xED: 104 cartas en total, sin comodines. Las cartas iguales de ambas
-      barajas son dobles. Se juega con 2 a 6 jugadores, en sentido horario (hacia
-      la izquierda)."
+    m_Localized: "{app.name} utiliza dos barajas est\xE1ndar de 52 cartas barajadas:
+      104 cartas en total, sin comodines. Las cartas iguales de ambas barajas son
+      dobles. Se juega con 2 a 6 jugadores, en sentido horario (hacia la izquierda)."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6549035540499
     m_Localized: "\xBFQui\xE9n va primero y qui\xE9n reparte?"
     m_Metadata:
@@ -3740,9 +3748,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: "\xA1MEJNUN!"
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282625
   - m_Id: 6549035540594
     m_Localized: Logros
     m_Metadata:
@@ -4222,6 +4231,26 @@ MonoBehaviour:
       por el tablero mientras mantienes una carta en esa posici\xF3n."
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Hora del partido: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 958106090594304
+    m_Localized: 'Hora del partido: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 958106090594305
+    m_Localized: 'Tus turnos: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
   references:
     version: 2
     RefIds:
@@ -4305,3 +4334,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

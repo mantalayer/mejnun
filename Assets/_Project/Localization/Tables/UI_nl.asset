@@ -20,7 +20,7 @@ MonoBehaviour:
     - rid: 4825848250703282621
   m_TableData:
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 1656690302984
@@ -652,15 +652,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: Welkom bij Mejnun
+    m_Localized: Welkom bij {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6548981014528
-    m_Localized: 'Mejnun wordt gespeeld met twee volledige decks: 104 kaarten. Iedereen
-      krijgt er 11 gedeeld. Wie als eerste al zijn kaarten op tafel heeft liggen,
+    m_Localized: '{app.name} wordt gespeeld met twee volledige decks: 104 kaarten.
+      Iedereen krijgt 11 kaarten. Wie als eerste al zijn kaarten op tafel heeft liggen,
       wint.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6548981014529
     m_Localized: Sets
     m_Metadata:
@@ -888,9 +890,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6548985208889
     m_Localized: Je hebt al je kaarten uit je hand gespeeld en gewonnen. Nog een
       paar dingen die handig zijn om te weten.
@@ -2335,9 +2338,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: Eerste MEJNUN
+    m_Localized: Eerste {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6549018763265
     m_Localized: Tien overwinningen
     m_Metadata:
@@ -2379,9 +2383,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: Meester van MEJNUN
+    m_Localized: Meester van {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6549018763278
     m_Localized: Win 200 wedstrijden.
     m_Metadata:
@@ -2419,9 +2424,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6549018763288
     m_Localized: Win 10 spellen door al je kaarten weg te spelen.
     m_Metadata:
@@ -2778,9 +2784,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282621
   - m_Id: 6549027151885
-    m_Localized: Ben je nieuw bij Mejnun?
+    m_Localized: Nieuw bij {app.name}?
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6549031346176
     m_Localized: Een kort, begeleid spel leert je alle regels spelenderwijs.
     m_Metadata:
@@ -3350,11 +3357,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: 'Mejnun gebruikt twee geschudde standaard kaartspellen van 52 kaarten:
-      in totaal 104 kaarten, zonder jokers. Kaarten uit beide spellen tellen dubbel.
-      Het spel wordt gespeeld met 2 tot 6 spelers, met de klok mee (naar links).'
+    m_Localized: '{app.name} gebruikt twee geschudde standaard kaartspellen van 52
+      kaarten: in totaal 104 kaarten, zonder jokers. Kaarten uit beide spellen tellen
+      dubbel. Speel met 2 tot 6 spelers, met de klok mee (naar links).'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6549035540499
     m_Localized: Wie gaat er eerst en hoe wordt ermee omgegaan?
     m_Metadata:
@@ -3745,9 +3753,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282621
   - m_Id: 6549035540594
     m_Localized: Prestaties
     m_Metadata:
@@ -4221,6 +4230,26 @@ MonoBehaviour:
       bord terwijl je daar een kaart vasthoudt.
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Wedstrijdtijd: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 958106090594304
+    m_Localized: 'Wedstrijdtijd: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 958106090594305
+    m_Localized: 'Aan de beurt: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 958106090594306
+    m_Localized: '{appnaam:boven}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
   references:
     version: 2
     RefIds:
@@ -4304,3 +4333,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

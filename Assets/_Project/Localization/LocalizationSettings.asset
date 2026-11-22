@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: LocalizationSettings
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Settings.LocalizationSettings
   m_StartupSelectors:
-  - rid: 4825848269831405570
-  - rid: 4825848269831405571
-  - rid: 4825848269831405572
+  - rid: 4825848313931104256
+  - rid: 4825848313931104257
+  - rid: 4825848313931104258
   m_AvailableLocales:
     rid: 4825848249852887043
   m_AssetDatabase:
@@ -74,6 +74,7 @@ MonoBehaviour:
         m_Sources:
         - rid: 4825848249852887049
         - rid: 4825848249852887050
+        - rid: 4825848249852887090
         - rid: 4825848249852887051
         - rid: 4825848249852887052
         - rid: 4825848249852887053
@@ -88,6 +89,7 @@ MonoBehaviour:
         - rid: 4825848249852887060
         - rid: 4825848249852887061
         - rid: 4825848249852887062
+        - rid: 4825848249852887091
         - rid: 4825848249852887063
     - rid: 4825848249852887047
       type: {class: SmartSettings, ns: UnityEngine.Localization.SmartFormat.Core.Settings, asm: Unity.Localization}
@@ -264,14 +266,22 @@ MonoBehaviour:
           m_FallbackState: 0
           m_WaitForCompletion: 0
           m_LocalVariables: []
-    - rid: 4825848269831405570
+    - rid: 4825848249852887090
+      type: {class: AppNameSource, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data: 
+    - rid: 4825848249852887091
+      type: {class: UpperCaseFormatter, ns: Mejnun.Localization, asm: Mejnun.Localization}
+      data:
+        m_Names:
+        - upper
+    - rid: 4825848313931104256
       type: {class: CommandLineLocaleSelector, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
       data:
         m_CommandLineArgument: -language=
-    - rid: 4825848269831405571
+    - rid: 4825848313931104257
       type: {class: PlatformLocaleSelector, ns: Mejnun.Localization, asm: Mejnun.Localization}
       data: 
-    - rid: 4825848269831405572
+    - rid: 4825848313931104258
       type: {class: SpecificLocaleSelector, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
       data:
         m_LocaleId:

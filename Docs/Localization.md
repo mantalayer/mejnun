@@ -12,13 +12,13 @@ How player-facing text works in Mejnun, the rules every change must follow, and 
 | Text set from C# | `Loc.Get("key")` or `Loc.Format("key", args…)` (see §4) |
 | Content lists (dealer questions) | Their own table; code picks keys with `Loc.KeysOf(Loc.DealerQuestionsTable)` |
 | Data assets (deck, felt and achievement names) | A key derived from the stable ID (`cosmetic.deck.<id>.name`), resolved where it is shown |
-| App name on the home screen / store | `UI/app.name` (written into iOS `Info.plist` and Android `strings.xml` at build time by the `AppInfo` metadata) |
+| The game's name, anywhere | `UI/app.name` only; other strings embed it with `{app.name}` / `{app.name:upper}` (see §4.1) |
 
 Not localized: log and exception messages, editor tools (`*/Editor/*`), USS class and element names, PlayerPrefs and save keys, Wwise event names, network payloads, and anything the player typed (nicknames). Card ranks and suits are images. Language names in the language picker are endonyms (`Loc.NativeName`), so they are intentionally not translated.
 
 **Never send localized text over the network or save it.** Send and store keys or IDs, and let each client resolve them in its own language.
 
-A deliberate exception (a glyph such as `×`, the "MEJNUN!" logo word) is marked `// loc-ignore` at the end of the C# line or with the `loc-ignore` USS class on the UXML element. Use this sparingly; reviewers should challenge every one.
+A deliberate exception (a glyph such as `×`) is marked `// loc-ignore` at the end of the C# line or with the `loc-ignore` USS class on the UXML element. Use this sparingly; reviewers should challenge every one.
 
 ## 2. Tables and keys
 
@@ -61,6 +61,15 @@ question.text = Loc.GetFrom(Loc.DealerQuestionsTable, questionKey);
 - Placeholders are positional: `{0}`, `{1}`. Plurals use Smart String plural syntax: `{0:plural:{} card|{} cards}` (Arabic has six forms; the reviewer writes them by hand).
 - Text set from code must refresh when the language changes: subscribe to `Loc.LanguageChanged` and re-run the presenter's refresh, and unsubscribe when the presenter is disposed.
 - Engine-free assemblies (`Mejnun.Core`, `Mejnun.AI`, `Mejnun.Net`) cannot use `Loc`. They expose keys or enums, and the UI layer resolves them.
+
+### 4.1 The game's name
+
+The player-facing name (currently **Majnunay**) is written in exactly one place: the English value of `UI/app.name`. To rename the game, change that entry and nothing else.
+
+- Every other string refers to it with a Smart String placeholder: `Welcome to {app.name}`, `{app.name:upper}!`. Never type the name into an entry. `AppNameSource` resolves `{app.name}` to the `app.name` entry of the locale being formatted, so each language shows its own form (translators may transliterate; Arabic uses the actual word *Majnuneh*). `UpperCaseFormatter` adds `:upper`, which uses the locale's casing rules and leaves scripts without case unchanged. Both are registered in `LocalizationSettings` (Smart Format sources/formatters) by **Set Up Project**.
+- The iOS `Info.plist` and Android `strings.xml` names come from `app.name` through the `AppInfo` metadata.
+- `PlayerSettings.productName` (desktop window/app title, build file names) is copied from the English `app.name` by `LocalizationPreBuild` before every build and by **Set Up Project**. Unity also uses it in the desktop save/PlayerPrefs path, so a rename moves where desktop settings are stored.
+- Store pages, Steam achievement names and other console text are managed outside the game and must be renamed there.
 
 ## 5. Adding a string
 

@@ -266,9 +266,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6549018763307
     m_Localized: "\u5916\u79D1\u533B\u751F"
     m_Metadata:
@@ -469,7 +470,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1341120512
-    m_Localized: "\u9EA6\u5409\u52AA\u6069"
+    m_Localized: "\u9A6C\u5409\u52AA\u5948"
     m_Metadata:
       m_Items: []
   - m_Id: 1656669331456
@@ -521,14 +522,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: "\u6B22\u8FCE\u6765\u5230\u6885\u52AA\u6069"
+    m_Localized: "\u6B22\u8FCE\u4F7F\u7528 {app.name}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6548981014528
-    m_Localized: "Mejnun \u6E38\u620F\u4F7F\u7528\u4E24\u526F\u5B8C\u6574\u7684\u724C\uFF1A\u5171
-      104 \u5F20\u724C\u3002\u6BCF\u4F4D\u73A9\u5BB6\u53D1 11 \u5F20\u724C\u3002\u6700\u5148\u5C06\u624B\u4E2D\u7684\u724C\u5168\u90E8\u5012\u5728\u684C\u9762\u4E0A\u7684\u4EBA\u83B7\u80DC\u3002"
+    m_Localized: "{app.name} \u6E38\u620F\u4F7F\u7528\u4E24\u526F\u5B8C\u6574\u7684\u724C\uFF1A\u5171
+      104 \u5F20\u724C\u3002\u6BCF\u4F4D\u73A9\u5BB6\u53D1 11 \u5F20\u724C\u3002\u6700\u5148\u5C06\u624B\u4E2D\u7684\u724C\u5168\u90E8\u51FA\u5B8C\u7684\u73A9\u5BB6\u83B7\u80DC\u3002"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6548981014529
     m_Localized: "\u5957"
     m_Metadata:
@@ -748,9 +751,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: "\u6885\u6770\u52AA\u6069\uFF01"
+    m_Localized: "{app.name:upper}\uFF01"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6548985208891
     m_Localized: "\u76F4\u7684"
     m_Metadata:
@@ -2265,9 +2269,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: "\u7B2C\u4E00\u9EA6\u6770\u52AA\u6069"
+    m_Localized: "\u7B2C\u4E00 {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6549018763264
     m_Localized: "\u7528\u7A7A\u624B\u53D6\u80DC\u3002"
     m_Metadata:
@@ -2317,9 +2322,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: "\u6885\u6770\u52AA\u6069\u5927\u5E08"
+    m_Localized: "\u7CBE\u901A {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6549018763278
     m_Localized: "\u8D62\u5F97 200 \u573A\u6BD4\u8D5B\u3002"
     m_Metadata:
@@ -2727,9 +2733,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282623
   - m_Id: 6549027151885
-    m_Localized: "\u521D\u6B21\u63A5\u89E6Mejnun\uFF1F"
+    m_Localized: "\u9996\u6B21\u4F7F\u7528 {app.name}\uFF1F"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6549031346176
     m_Localized: "\u4E00\u4E2A\u7B80\u77ED\u7684\u5F15\u5BFC\u6E38\u620F\u4F1A\u901A\u8FC7\u6E38\u620F\u7684\u65B9\u5F0F\u6559\u4F1A\u4F60\u6240\u6709\u89C4\u5219\u3002"
     m_Metadata:
@@ -3312,11 +3319,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun \u4F7F\u7528\u4E24\u526F\u6D17\u597D\u7684\u6807\u51C6 52
-      \u5F20\u6251\u514B\u724C\uFF0C\u5171 104 \u5F20\u724C\uFF0C\u4E0D\u542B\u5927\u5C0F\u738B\u3002\u4E24\u526F\u724C\u4E2D\u76F8\u540C\u7684\u724C\u79F0\u4E3A\u5BF9\u5B50\u3002\u6E38\u620F\u4EBA\u6570\u4E3A
+    m_Localized: "{app.name} \u4F7F\u7528\u4E24\u526F\u6D17\u597D\u7684\u6807\u51C6
+      52 \u5F20\u6251\u514B\u724C\uFF1A\u5171 104 \u5F20\u724C\uFF0C\u4E0D\u542B\u5927\u5C0F\u738B\u3002\u4E24\u526F\u724C\u4E2D\u76F8\u540C\u7684\u724C\u79F0\u4E3A\u5BF9\u5B50\u3002\u6E38\u620F\u4EBA\u6570\u4E3A
       2 \u81F3 6 \u4EBA\uFF0C\u6309\u987A\u65F6\u9488\uFF08\u5411\u5DE6\uFF09\u65B9\u5411\u8FDB\u884C\u3002"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6549035540500
     m_Localized: "\u7535\u8111\u53D1\u724C\u3002\u5982\u679C\u4E0A\u4E00\u5C40\u7684\u83B7\u80DC\u8005\u4ECD\u5728\u6E38\u620F\u4E2D\uFF0C\u5219\u4ED6/\u5979\u5148\u624B\u3002\u5426\u5219\uFF0C\u73A9\u5BB6\u901A\u8FC7\u63D0\u95EE\u6765\u51B3\u5B9A\u8C01\u5148\u624B\uFF1A\u70B9\u51FB\u672C\u5730\u5EA7\u4F4D\u6216\u4E0E\u7535\u8111\u5BF9\u6218\uFF0C\u6216\u5728\u7EBF\u6295\u7968\u3002\u5728\u7EBF\u6295\u7968\u6301\u7EED20\u79D2\uFF1B\u5982\u679C\u51FA\u73B0\u5E73\u5C40\uFF0C\u5219\u968F\u673A\u51B3\u51FA\u80DC\u8D1F\u3002"
     m_Metadata:
@@ -3644,9 +3652,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: "\u6885\u6770\u52AA\u6069\uFF01"
+    m_Localized: "{app.name:upper}\uFF01"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282623
   - m_Id: 6549039734784
     m_Localized: "\u753B\u5ECA\u65B0\u4E0A\u67B6"
     m_Metadata:
@@ -4117,6 +4126,26 @@ MonoBehaviour:
     m_Localized: "\u8C03\u6574\u5C4F\u5E55\u8FB9\u7F18\u533A\u57DF\u7684\u5BBD\u5EA6\uFF0C\u4EE5\u4FBF\u5728\u5C06\u5361\u7247\u653E\u5728\u8BE5\u533A\u57DF\u65F6\u6EDA\u52A8\u9762\u677F\u3002"
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: "\u6BD4\u8D5B\u65F6\u95F4\uFF1A{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282623
+  - m_Id: 958106090594304
+    m_Localized: "\u6BD4\u8D5B\u65F6\u95F4\uFF1A{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282623
+  - m_Id: 958106090594305
+    m_Localized: "\u4F60\u7684\u56DE\u5408\u6570\uFF1A{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282623
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282623
   references:
     version: 2
     RefIds:
@@ -4200,3 +4229,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

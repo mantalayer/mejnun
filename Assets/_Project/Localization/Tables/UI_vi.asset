@@ -24,12 +24,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548981014528
-    m_Localized: "Tr\xF2 ch\u01A1i Mejnun s\u1EED d\u1EE5ng hai b\u1ED9 b\xE0i \u0111\u1EA7y
-      \u0111\u1EE7: 104 l\xE1. M\u1ED7i ng\u01B0\u1EDDi ch\u01A1i \u0111\u01B0\u1EE3c
-      chia 11 l\xE1. Ai l\xE0 ng\u01B0\u1EDDi \u0111\u1EA7u ti\xEAn h\u1EBFt b\xE0i
-      tr\xEAn tay s\u1EBD th\u1EAFng."
+    m_Localized: "Tr\xF2 ch\u01A1i {app.name} \u0111\u01B0\u1EE3c ch\u01A1i v\u1EDBi
+      hai b\u1ED9 b\xE0i \u0111\u1EA7y \u0111\u1EE7: 104 l\xE1. M\u1ED7i ng\u01B0\u1EDDi
+      ch\u01A1i \u0111\u01B0\u1EE3c chia 11 l\xE1. Ai l\xE0 ng\u01B0\u1EDDi \u0111\u1EA7u
+      ti\xEAn h\u1EBFt b\xE0i tr\xEAn tay s\u1EBD th\u1EAFng."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6548985208839
     m_Localized: "Ti\u1EBFp t\u1EE5c n\xE0o\u2014ho\xE0n th\xE0nh vi\u1EC7c \u0111\u1EB7t
       c\u1EA3 ba l\xE1 b\xE0i t\u1EEB tay b\u1EA1n xu\u1ED1ng theo chi\u1EC1u \xFAp."
@@ -463,9 +464,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549027151885
-    m_Localized: "B\u1EA1n m\u1EDBi \u0111\u1EBFn v\u1EDBi Mejnun?"
+    m_Localized: "B\u1EA1n m\u1EDBi s\u1EED d\u1EE5ng {app.name}?"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6549031346176
     m_Localized: "M\u1ED9t tr\xF2 ch\u01A1i h\u01B0\u1EDBng d\u1EABn ng\u1EAFn s\u1EBD
       d\u1EA1y b\u1EA1n m\u1ECDi lu\u1EADt ch\u01A1i th\xF4ng qua vi\u1EC7c ch\u01A1i."
@@ -665,7 +667,7 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282619
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 695204831232
@@ -717,9 +719,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: "Ch\xE0o m\u1EEBng \u0111\u1EBFn v\u1EDBi Mejnun!"
+    m_Localized: "Ch\xE0o m\u1EEBng b\u1EA1n \u0111\u1EBFn v\u1EDBi {app.name}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6548981014529
     m_Localized: "B\u1ED9"
     m_Metadata:
@@ -981,9 +984,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6548985208889
     m_Localized: "B\u1EA1n \u0111\xE3 d\u1ED1c h\u1EBFt s\u1EE9c m\xECnh v\xE0 gi\xE0nh
       chi\u1EBFn th\u1EAFng. C\xF2n m\u1ED9t v\xE0i \u0111i\u1EC1u n\u1EEFa c\u1EA7n
@@ -2425,9 +2429,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: "MEJNUN \u0111\u1EA7u ti\xEAn"
+    m_Localized: "\u0110\u1EA7u ti\xEAn {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6549018763264
     m_Localized: "Th\u1EAFng b\u1EB1ng c\xE1ch r\xFAt h\u1EBFt b\xE0i tr\xEAn tay."
     m_Metadata:
@@ -2477,9 +2482,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: "Th\u1EA1c s\u0129 MEJNUN"
+    m_Localized: "Th\u1EA1c s\u0129 {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6549018763278
     m_Localized: "Th\u1EAFng 200 tr\u1EADn."
     m_Metadata:
@@ -2514,9 +2520,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6549018763288
     m_Localized: "Th\u1EAFng 10 v\xE1n b\u1EB1ng c\xE1ch r\xFAt h\u1EBFt b\xE0i tr\xEAn
       tay."
@@ -3479,14 +3486,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun s\u1EED d\u1EE5ng hai b\u1ED9 b\xE0i ti\xEAu chu\u1EA9n
+    m_Localized: "{app.name} s\u1EED d\u1EE5ng hai b\u1ED9 b\xE0i ti\xEAu chu\u1EA9n
       52 l\xE1 \u0111\xE3 \u0111\u01B0\u1EE3c x\xE1o tr\u1ED9n: t\u1ED5ng c\u1ED9ng
-      104 l\xE1 b\xE0i, kh\xF4ng c\xF3 l\xE1 Joker. C\xE1c l\xE1 b\xE0i gi\u1ED1ng
+      104 l\xE1 b\xE0i, kh\xF4ng c\xF3 qu\xE2n Joker. C\xE1c l\xE1 b\xE0i gi\u1ED1ng
       nhau t\u1EEB hai b\u1ED9 b\xE0i \u0111\u01B0\u1EE3c t\xEDnh l\xE0 \u0111\xF4i.
-      Ch\u01A1i v\u1EDBi 2\u20136 ng\u01B0\u1EDDi, theo chi\u1EC1u kim \u0111\u1ED3ng
-      h\u1ED3 (sang tr\xE1i)."
+      Ch\u01A1i v\u1EDBi 2\u20136 ng\u01B0\u1EDDi ch\u01A1i, theo chi\u1EC1u kim
+      \u0111\u1ED3ng h\u1ED3 (sang tr\xE1i)."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6549035540499
     m_Localized: "Ai \u0111i tr\u01B0\u1EDBc v\xE0 c\xE1ch gi\u1EA3i quy\u1EBFt v\u1EA5n
       \u0111\u1EC1"
@@ -3915,9 +3923,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282619
   - m_Id: 6549035540594
     m_Localized: "Th\xE0nh t\u1EF1u"
     m_Metadata:
@@ -4431,6 +4440,26 @@ MonoBehaviour:
       \u0111ang gi\u1EEF m\u1ED9t l\xE1 b\xE0i \u1EDF \u0111\xF3."
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: "Th\u1EDDi gian tr\u1EADn \u0111\u1EA5u: {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 958106090594304
+    m_Localized: "Th\u1EDDi gian tr\u1EADn \u0111\u1EA5u: {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 958106090594305
+    m_Localized: "L\u01B0\u1EE3t c\u1EE7a b\u1EA1n: {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
   references:
     version: 2
     RefIds:
@@ -4514,3 +4543,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

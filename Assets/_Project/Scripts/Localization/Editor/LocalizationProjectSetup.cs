@@ -19,7 +19,10 @@ namespace Mejnun.Localization.Editor
         public const string LocalesFolder = Root + "/Locales";
         public const string TablesFolder = Root + "/Tables";
         public const string SettingsPath = Root + "/LocalizationSettings.asset";
-        public const string AppNameKey = "app.name";
+        // The game's name lives only in this entry (English source; translators
+        // may transliterate). Other strings use "{app.name}" / "{app.name:upper}",
+        // and PlayerSettings.productName is synced from it before every build.
+        public const string AppNameKey = AppNameSource.AppNameKey;
 
         // Unity locale code -> GOOGLETRANSLATE language code (plan §7.1).
         public static readonly (string Code, string Google)[] TargetLocales =
@@ -76,8 +79,13 @@ namespace Mejnun.Localization.Editor
             foreach (string collectionName in Collections)
                 EnsureCollection(collectionName, locales);
 
-            LocalizationSourceImporter.Upsert(Loc.UiTable, AppNameKey, PlayerSettings.productName,
-                "The app name on the home screen / store. Keep short.");
+            if (string.IsNullOrWhiteSpace(EnglishAppName()))
+            {
+                LocalizationSourceImporter.Upsert(Loc.UiTable, AppNameKey, PlayerSettings.productName,
+                    "The game's name, shown in text, on the home screen and in the store. Keep short.");
+            }
+
+            SyncProductName();
             ConfigureAppInfo(settings);
 
             var pipelineSettings = LocalizationPipelineSettings.LoadOrCreate();
@@ -122,6 +130,27 @@ namespace Mejnun.Localization.Editor
         public static void RunBatch()
         {
             Run();
+        }
+
+        public static string EnglishAppName()
+        {
+            var collection = LocalizationEditorSettings.GetStringTableCollection(Loc.UiTable);
+            var english = collection?.GetTable(Loc.ProjectLocaleCode) as UnityEngine.Localization.Tables.StringTable;
+            return english?.GetEntry(AppNameKey)?.Value?.Trim();
+        }
+
+        // PlayerSettings.productName (desktop window/app title, build file
+        // names) follows the English app.name so the name is edited in one place.
+        public static bool SyncProductName()
+        {
+            string name = EnglishAppName();
+            if (string.IsNullOrEmpty(name) || PlayerSettings.productName == name)
+                return false;
+
+            Debug.Log($"[Localization] Product name '{PlayerSettings.productName}' -> '{name}' (from {Loc.UiTable}/{AppNameKey}).");
+            PlayerSettings.productName = name;
+            AssetDatabase.SaveAssets();
+            return true;
         }
 
         private static LocalizationSettings EnsureSettings()
@@ -177,6 +206,13 @@ namespace Mejnun.Localization.Editor
             var database = settings.GetStringDatabase();
             database.MissingTranslationState = MissingTranslationBehavior.ShowMissingTranslationMessage;
             database.NoTranslationFoundMessage = "[{key}]";
+
+            // "{app.name}" and "{app.name:upper}" in Smart Strings.
+            var smart = database.SmartFormatter;
+            if (!smart.SourceExtensions.Exists(source => source is AppNameSource))
+                smart.SourceExtensions.Insert(0, new AppNameSource());
+            if (!smart.FormatterExtensions.Exists(formatter => formatter is UpperCaseFormatter))
+                smart.FormatterExtensions.Insert(0, new UpperCaseFormatter { Names = new[] { "upper" } });
         }
 
         private static void EnsureCollection(string name, IList<Locale> locales)

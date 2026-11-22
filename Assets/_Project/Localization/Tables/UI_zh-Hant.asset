@@ -20,7 +20,7 @@ MonoBehaviour:
     - rid: 4825848250703282626
   m_TableData:
   - m_Id: 1341120512
-    m_Localized: "\u6885\u5091\u52AA\u6069"
+    m_Localized: "\u99AC\u5409\u52AA\u5948"
     m_Metadata:
       m_Items: []
   - m_Id: 1656690302980
@@ -332,9 +332,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: "\u7B2C\u4E00\u9EA5\u5091\u52AA\u6069"
+    m_Localized: "\u7B2C\u4E00 {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6549018763266
     m_Localized: "\u8D0F10\u5834\u6BD4\u8CFD\u3002"
     m_Metadata:
@@ -344,9 +345,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: "\u6885\u5091\u52AA\u6069\u5927\u5E2B"
+    m_Localized: "\u7CBE\u901A {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6549018763280
     m_Localized: "\u9054\u523010\u7D1A\u3002"
     m_Metadata:
@@ -634,14 +636,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: "\u6B61\u8FCE\u4F86\u5230\u6885\u52AA\u6069"
+    m_Localized: "\u6B61\u8FCE\u4F7F\u7528 {app.name}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6548981014528
-    m_Localized: "Mejnun \u904A\u6232\u4F7F\u7528\u5169\u526F\u5B8C\u6574\u7684\u724C\uFF1A\u5171
-      104 \u5F35\u724C\u3002\u6BCF\u4F4D\u73A9\u5BB6\u767C 11 \u5F35\u724C\u3002\u6700\u5148\u5C07\u624B\u4E2D\u7684\u724C\u5168\u90E8\u5012\u5728\u684C\u9762\u4E0A\u7684\u4EBA\u7372\u52DD\u3002"
+    m_Localized: "{app.name} \u904A\u6232\u4F7F\u7528\u5169\u526F\u5B8C\u6574\u7684\u724C\uFF1A\u5171
+      104 \u5F35\u724C\u3002\u6BCF\u4F4D\u73A9\u5BB6\u767C 11 \u5F35\u724C\u3002\u6700\u5148\u5C07\u624B\u4E2D\u7684\u724C\u5168\u90E8\u51FA\u5B8C\u7684\u73A9\u5BB6\u7372\u52DD\u3002"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6548981014529
     m_Localized: "\u5957"
     m_Metadata:
@@ -853,9 +857,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: "\u6885\u5091\u52AA\u6069\uFF01"
+    m_Localized: "{app.name:upper}\uFF01"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6548985208889
     m_Localized: "\u4F60\u50BE\u76E1\u6240\u6709\uFF0C\u8D0F\u4E86\u3002\u9084\u6709\u4E00\u4E9B\u4E8B\u60C5\u503C\u5F97\u4E86\u89E3\u3002"
     m_Metadata:
@@ -2378,9 +2383,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6549018763288
     m_Localized: "\u7528\u5B8C\u624B\u4E2D\u7684\u6240\u6709\u724C\u8D0F\u5F97 10
       \u5C40\u904A\u6232\u3002"
@@ -2741,9 +2747,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282626
   - m_Id: 6549027151885
-    m_Localized: "\u521D\u6B21\u63A5\u89F8Mejnun\uFF1F"
+    m_Localized: "\u9996\u6B21\u4F7F\u7528 {app.name}\uFF1F"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6549031346176
     m_Localized: "\u4E00\u500B\u7C21\u77ED\u7684\u5F15\u5C0E\u904A\u6232\u6703\u900F\u904E\u904A\u6232\u7684\u65B9\u5F0F\u6559\u4F60\u6240\u6709\u898F\u5247\u3002"
     m_Metadata:
@@ -3304,11 +3311,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun \u4F7F\u7528\u5169\u526F\u6D17\u597D\u7684\u6A19\u6E96 52
-      \u5F35\u64B2\u514B\u724C\uFF0C\u5171 104 \u5F35\u724C\uFF0C\u4E0D\u542B\u5927\u5C0F\u738B\u3002\u5169\u526F\u724C\u4E2D\u76F8\u540C\u7684\u724C\u7A31\u70BA\u5C0D\u5B50\u3002\u904A\u6232\u4EBA\u6578\u70BA
+    m_Localized: "{app.name} \u4F7F\u7528\u5169\u526F\u6D17\u597D\u7684\u6A19\u6E96
+      52 \u5F35\u64B2\u514B\u724C\uFF1A\u5171 104 \u5F35\u724C\uFF0C\u4E0D\u542B\u5927\u5C0F\u738B\u3002\u5169\u526F\u724C\u4E2D\u76F8\u540C\u7684\u724C\u7A31\u70BA\u5C0D\u5B50\u3002\u904A\u6232\u4EBA\u6578\u70BA
       2 \u81F3 6 \u4EBA\uFF0C\u4F9D\u9806\u6642\u91DD\uFF08\u5411\u5DE6\uFF09\u65B9\u5411\u9032\u884C\u3002"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6549035540499
     m_Localized: "\u8AB0\u5148\u958B\u59CB\u4EE5\u53CA\u767C\u724C\u3002"
     m_Metadata:
@@ -3642,9 +3650,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: "\u6885\u5091\u52AA\u6069\uFF01"
+    m_Localized: "{app.name:upper}\uFF01"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282626
   - m_Id: 6549035540594
     m_Localized: "\u6210\u5C31"
     m_Metadata:
@@ -4122,6 +4131,26 @@ MonoBehaviour:
     m_Localized: "\u8ABF\u6574\u87A2\u5E55\u908A\u7DE3\u5340\u57DF\u7684\u5BEC\u5EA6\uFF0C\u4EE5\u4FBF\u5728\u5C07\u5361\u7247\u653E\u5728\u8A72\u5340\u57DF\u6642\u6EFE\u52D5\u9762\u677F\u3002"
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: "\u6BD4\u8CFD\u6642\u9593\uFF1A{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282626
+  - m_Id: 958106090594304
+    m_Localized: "\u6BD4\u8CFD\u6642\u9593\uFF1A{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282626
+  - m_Id: 958106090594305
+    m_Localized: "\u4F60\u7684\u56DE\u5408\u6578\uFF1A{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282626
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282626
   references:
     version: 2
     RefIds:
@@ -4205,3 +4234,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

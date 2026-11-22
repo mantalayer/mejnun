@@ -6,7 +6,11 @@
     <ui:VisualElement name="frontend-root" class="frontend-root">
         <ui:VisualElement name="safe-area" class="frontend-safe-area">
             <ui:VisualElement name="main-menu-screen" class="frontend-screen main-menu-screen">
-                <ui:Label text="MEJNUN" class="frontend-title loc-ignore"/>
+                <ui:Label class="frontend-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.title"/>
+                    </Bindings>
+                </ui:Label>
                 <ui:Label class="frontend-subtitle">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="menu.main.tagline"/>

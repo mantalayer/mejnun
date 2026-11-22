@@ -544,7 +544,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 695204831232
@@ -600,14 +600,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: Karibu Mejnun
+    m_Localized: Karibu kwenye {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6548981014528
-    m_Localized: 'Mejnun anachezwa na deki mbili kamili: kadi 104. Kila mtu anapewa
+    m_Localized: '{app.name} inachezwa na deki mbili kamili: kadi 104. Kila mtu anapewa
       11. Kuwa wa kwanza kumimina mkono wako mezani ili kushinda.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6548981014529
     m_Localized: Seti
     m_Metadata:
@@ -843,9 +845,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6548985208889
     m_Localized: Umeondoa mkono wako na ukashinda. Mambo machache zaidi ni vizuri
       kujua.
@@ -2342,9 +2345,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: MEJNUN ya kwanza
+    m_Localized: Jina la kwanza {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6549018763264
     m_Localized: Shinda kwa kuondoa vitu vyote mkononi mwako.
     m_Metadata:
@@ -2394,9 +2398,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: Mwalimu wa MEJNUN
+    m_Localized: Mwalimu wa {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6549018763278
     m_Localized: Shinda michezo 200.
     m_Metadata:
@@ -2426,9 +2431,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6549018763288
     m_Localized: Shinda michezo 10 kwa kuondoa vitu vyote mkononi mwako.
     m_Metadata:
@@ -2797,9 +2803,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282629
   - m_Id: 6549027151885
-    m_Localized: Mgeni huko Mejnun?
+    m_Localized: Mgeni kwenye {app.name}?
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6549031346176
     m_Localized: Mchezo mfupi unaoongozwa unakufundisha kila sheria kwa kucheza.
     m_Metadata:
@@ -3335,12 +3342,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun hutumia deki mbili za kawaida zenye kadi 52 zilizochanganywa:
+    m_Localized: "{app.name} hutumia deki mbili za kawaida zenye kadi 52 zilizochanganywa:
       jumla ya kadi 104, bila vichekesho. Kadi zinazolingana kutoka deki hizo mbili
-      ni za watu wawili. Cheza na wachezaji 2\u20136, ukisonga kwa mwendo wa saa
-      (kushoto)."
+      ni maradufu. Cheza na wachezaji 2\u20136, ukisonga kwa mwendo wa saa (kushoto)."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6549035540499
     m_Localized: Nani anatangulia na kushughulika
     m_Metadata:
@@ -3730,9 +3737,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282629
   - m_Id: 6549035540594
     m_Localized: Mafanikio
     m_Metadata:
@@ -4212,6 +4220,26 @@ MonoBehaviour:
       ubao huku ukishikilia kadi hapo.
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Muda wa mechi: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 958106090594304
+    m_Localized: 'Muda wa mechi: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 958106090594305
+    m_Localized: 'Zamu zako: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
   references:
     version: 2
     RefIds:
@@ -4295,3 +4323,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

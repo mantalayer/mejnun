@@ -600,7 +600,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 695204831232
@@ -652,14 +652,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: "Bienvenue \xE0 Mejnun"
+    m_Localized: Bienvenue sur {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6548981014528
-    m_Localized: "Mejnun se joue avec deux jeux complets\_: 104 cartes. Chaque joueur
-      re\xE7oit 11 cartes. Le premier \xE0 vider sa main sur la table gagne."
+    m_Localized: "{app.name} se joue avec deux jeux complets\_: 104 cartes. Chaque
+      joueur re\xE7oit 11 cartes. Le premier \xE0 vider sa main sur la table gagne."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6548981014529
     m_Localized: Ensembles
     m_Metadata:
@@ -898,9 +900,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN !
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6548985208889
     m_Localized: "Vous avez tout donn\xE9 et vous avez gagn\xE9. Quelques autres
       informations utiles."
@@ -2384,9 +2387,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: Premier MEJNUN
+    m_Localized: Premier {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6549018763265
     m_Localized: Dix victoires
     m_Metadata:
@@ -2428,9 +2432,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: "Ma\xEEtre de MEJNUN"
+    m_Localized: "Ma\xEEtre de {app.name:upper}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6549018763278
     m_Localized: Gagnez 200 parties.
     m_Metadata:
@@ -2460,9 +2465,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6549018763288
     m_Localized: Gagnez 10 parties en vidant votre main.
     m_Metadata:
@@ -2846,9 +2852,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282630
   - m_Id: 6549027151885
-    m_Localized: "Nouveau \xE0 Mejnun ?"
+    m_Localized: "Nouveau sur {app.name}\_?"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6549031346176
     m_Localized: "Un court jeu guid\xE9 vous apprend toutes les r\xE8gles en jouant."
     m_Metadata:
@@ -3391,12 +3398,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun utilise deux jeux de 52 cartes standard m\xE9lang\xE9s\_:
-      104 cartes au total, sans joker. Les cartes identiques des deux jeux forment
-      des doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens des aiguilles
-      d'une montre (vers la gauche)."
+    m_Localized: "{app.name} utilise deux jeux de 52 cartes standard m\xE9lang\xE9s\_:
+      104 cartes au total, sans joker. Les cartes identiques des deux jeux sont des
+      doubles. Jouez de 2 \xE0 6 joueurs, en tournant dans le sens horaire (vers
+      la gauche)."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6549035540499
     m_Localized: "Qui commence et comment \xE7a se passe ? Qui joue en premier et
       comment \xE7a se passe ?"
@@ -3754,9 +3762,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN !
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282630
   - m_Id: 6549035540594
     m_Localized: "R\xE9alisations"
     m_Metadata:
@@ -4236,6 +4245,26 @@ MonoBehaviour:
       d'\xE9cran lorsque vous y maintenez une carte."
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: "Dur\xE9e du match : {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 958106090594304
+    m_Localized: "Dur\xE9e du match : {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 958106090594305
+    m_Localized: "\xC0 vous de jouer : {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
   references:
     version: 2
     RefIds:
@@ -4319,3 +4348,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

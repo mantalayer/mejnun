@@ -464,12 +464,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: "Mejnun wird mit zwei gemischten Standard-Kartenspielen \xE0 52
-      Karten gespielt: insgesamt 104 Karten, ohne Joker. Gleiche Karten aus beiden
-      Kartenspielen ergeben ein Paar. Gespielt wird mit 2\u20136 Spielern im Uhrzeigersinn
-      (nach links)."
+    m_Localized: "{app.name} verwendet zwei gemischte Standard-Kartenspiele mit je
+      52 Karten: insgesamt 104 Karten, ohne Joker. Gleiche Karten aus beiden Kartenspielen
+      ergeben ein Paar. Gespielt wird mit 2\u20136 Spielern im Uhrzeigersinn (nach
+      links)."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6549035540509
     m_Localized: "Ziehen (oder Passen, wenn der Stapel leer ist) ist immer verf\xFCgbar.
       Dadurch wird das Spielbrett auf den Anfang deines Zuges zur\xFCckgesetzt, deine
@@ -566,7 +567,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 695204831232
@@ -614,15 +615,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: Willkommen bei Mejnun
+    m_Localized: Willkommen bei {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6548981014528
-    m_Localized: "Mejnun wird mit zwei vollst\xE4ndigen Kartenspielen gespielt: 104
-      Karten. Jeder Spieler erh\xE4lt 11 Karten. Wer als Erster alle seine Karten
-      auf den Tisch legt, gewinnt."
+    m_Localized: "{app.name} wird mit zwei vollst\xE4ndigen Kartenspielen gespielt:
+      104 Karten. Jeder erh\xE4lt 11 Karten. Wer als Erster alle seine Karten auf
+      den Tisch legt, gewinnt."
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6548981014530
     m_Localized: "Die Karten werden in S\xE4tzen auf den Tisch gelegt. Ein Satz besteht
       aus drei oder vier Karten desselben Wertes, aber unterschiedlichen Farben.
@@ -865,9 +868,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6548985208889
     m_Localized: Du hast deine Karten ausgespielt und gewonnen. Ein paar weitere
       Dinge sind gut zu wissen.
@@ -2344,9 +2348,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: Erste MEJNUN
+    m_Localized: Erste {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6549018763264
     m_Localized: Gewinne, indem du deine Hand leerst.
     m_Metadata:
@@ -2392,9 +2397,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: Meister von MEJNUN
+    m_Localized: Master von {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6549018763278
     m_Localized: Gewinne 200 Spiele.
     m_Metadata:
@@ -2429,9 +2435,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6549018763288
     m_Localized: Gewinne 10 Spiele, indem du deine Handkarten leerst.
     m_Metadata:
@@ -2810,9 +2817,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282616
   - m_Id: 6549027151885
-    m_Localized: Neu bei Mejnun?
+    m_Localized: Neu bei {app.name}?
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6549031346176
     m_Localized: Ein kurzes, angeleitetes Spiel vermittelt Ihnen spielerisch alle
       Regeln.
@@ -3754,9 +3762,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282616
   - m_Id: 6549035540594
     m_Localized: Erfolge
     m_Metadata:
@@ -4241,6 +4250,26 @@ MonoBehaviour:
       Spielbretts an, w\xE4hrend Sie dort eine Karte halten."
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Spielzeit: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 958106090594304
+    m_Localized: 'Spielzeit: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 958106090594305
+    m_Localized: "Ihre Z\xFCge: {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
   references:
     version: 2
     RefIds:
@@ -4324,3 +4353,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

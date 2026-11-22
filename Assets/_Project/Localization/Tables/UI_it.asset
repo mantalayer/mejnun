@@ -435,11 +435,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540498
-    m_Localized: 'Mejnun si gioca con due mazzi standard da 52 carte mescolati: 104
-      carte in totale, senza jolly. Le carte uguali provenienti dai due mazzi sono
-      doppie. Si gioca da 2 a 6 giocatori, procedendo in senso orario (verso sinistra).'
+    m_Localized: '{app.name} utilizza due mazzi standard da 52 carte mescolati: 104
+      carte in totale, senza jolly. Le carte uguali dei due mazzi sono doppie. Si
+      gioca da 2 a 6 giocatori, procedendo in senso orario (verso sinistra).'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6549035540509
     m_Localized: "Pesca (o Passa quando il mazzo \xE8 vuoto) \xE8 sempre disponibile.
       Riporta il tabellone all'inizio del tuo turno, restituisce le carte giocate
@@ -527,7 +528,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1341120512
-    m_Localized: Mejnun
+    m_Localized: Majnunay
     m_Metadata:
       m_Items: []
   - m_Id: 695204831232
@@ -579,14 +580,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548909711360
-    m_Localized: Benvenuti a Mejnun
+    m_Localized: Benvenuti in {app.name}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6548981014528
-    m_Localized: 'Mejnun si gioca con due mazzi completi: 104 carte. A ogni giocatore
+    m_Localized: '{app.name} si gioca con due mazzi completi: 104 carte. A ogni giocatore
       vengono distribuite 11 carte. Il primo a svuotare la mano sul tavolo vince.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6548981014530
     m_Localized: "Le carte vengono disposte sul tavolo in gruppi. Una combinazione
       dello stesso valore \xE8 composta da 3 o 4 carte di un seme diverso. Una scala
@@ -818,9 +821,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6548985208888
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6548985208889
     m_Localized: "Hai svuotato la mano e hai vinto. \xC8 bene sapere ancora un paio
       di cose."
@@ -2322,9 +2326,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549014568964
-    m_Localized: Primo MEJNUN
+    m_Localized: Prima {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6549018763264
     m_Localized: Vinci svuotando la mano.
     m_Metadata:
@@ -2370,9 +2375,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763277
-    m_Localized: Maestro di MEJNUN
+    m_Localized: Master di {app.name:upper}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6549018763278
     m_Localized: Vinci 200 partite.
     m_Metadata:
@@ -2407,9 +2413,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549018763287
-    m_Localized: "MEJNUN \xD710"
+    m_Localized: "{app.name:upper} \xD710"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6549018763288
     m_Localized: Vinci 10 partite svuotando la mano.
     m_Metadata:
@@ -2796,9 +2803,10 @@ MonoBehaviour:
       m_Items:
       - rid: 4825848250703282613
   - m_Id: 6549027151885
-    m_Localized: Sei nuovo a Mejnun?
+    m_Localized: Sei nuovo di {app.name}?
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6549031346176
     m_Localized: Un breve gioco guidato ti insegna tutte le regole giocando.
     m_Metadata:
@@ -3751,9 +3759,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540593
-    m_Localized: MEJNUN!
+    m_Localized: '{app.name:upper}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4825848250703282613
   - m_Id: 6549035540594
     m_Localized: Risultati conseguiti
     m_Metadata:
@@ -4234,6 +4243,26 @@ MonoBehaviour:
       della scacchiera mentre tieni premuta una carta.
     m_Metadata:
       m_Items: []
+  - m_Id: 958105549529088
+    m_Localized: 'Tempo di gioco: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 958106090594304
+    m_Localized: 'Tempo di gioco: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 958106090594305
+    m_Localized: 'Il tuo turno: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 958106090594306
+    m_Localized: '{app.name:upper}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
   references:
     version: 2
     RefIds:
@@ -4317,3 +4346,16 @@ MonoBehaviour:
         - id: 500000000000002
         - id: 686715407687680
         - id: 686715407687684
+        - id: 6548909711360
+        - id: 6548981014528
+        - id: 6548985208888
+        - id: 6549014568964
+        - id: 6549018763277
+        - id: 6549018763287
+        - id: 6549027151885
+        - id: 6549035540498
+        - id: 6549035540593
+        - id: 958105549529088
+        - id: 958106090594304
+        - id: 958106090594305
+        - id: 958106090594306

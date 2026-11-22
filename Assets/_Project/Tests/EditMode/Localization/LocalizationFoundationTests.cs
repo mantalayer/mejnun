@@ -162,6 +162,24 @@ namespace Mejnun.Localization.Tests
         }
 
         [Test]
+        public void GameNameIsReadFromTheAppNameEntry()
+        {
+            string name = Loc.Get(LocalizationProjectSetup.AppNameKey);
+            Assert.That(name, Is.Not.Empty);
+            Assert.That(Loc.Get("tutorial.step.welcome.title"), Is.EqualTo($"Welcome to {name}"));
+            Assert.That(Loc.Get("menu.tutorial_prompt.title"), Is.EqualTo($"New to {name}?"));
+            Assert.That(Loc.Get("results.banner.mejnun"), Is.EqualTo(name.ToUpperInvariant() + "!"));
+            Assert.That(Loc.Get("menu.main.title"), Is.EqualTo(name.ToUpperInvariant()));
+
+            // Translations resolve their own locale's app.name (transliterated).
+            var arabic = LocalizationSettings.AvailableLocales.GetLocale("ar");
+            Assert.That(arabic, Is.Not.Null);
+            string arabicName = LocalizationSettings.StringDatabase.GetLocalizedString(Loc.UiTable,
+                LocalizationProjectSetup.AppNameKey, arabic, FallbackBehavior.UseProjectSettings);
+            Assert.That(AppNameSource.Resolve(arabic), Is.EqualTo(arabicName));
+        }
+
+        [Test]
         public void UxmlLocalizedStringBindingResolvesTheEntry()
         {
             var tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Project/Tests/EditMode/Localization/LocBindingProbe.uxml");
