@@ -1,5 +1,9 @@
 # Mejnun project rules
 
+## Git commits
+
+Do not add co-authorship attribution to commit messages.
+
 ## Localization (mandatory for every change)
 
 Full guide: `Docs/Localization.md`. Design: `Docs/Mejnun-Plan.md` §7–§7.1.
