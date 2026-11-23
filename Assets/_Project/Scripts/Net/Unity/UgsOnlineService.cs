@@ -22,6 +22,7 @@ namespace Mejnun.Net.Unity
         private static readonly TimeSpan MigrationUploadInterval = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan MigrationTimeout = TimeSpan.FromSeconds(10);
         private const double NetworkRecoveryTimeoutSeconds = 15;
+        private const int MaxAuthenticationNameLength = 50;
 
         public ISession Session { get; private set; }
         public OnlineSessionMigrationDataHandler MigrationHandler { get; } = new OnlineSessionMigrationDataHandler();
@@ -65,10 +66,73 @@ namespace Mejnun.Net.Unity
                 await authentication.SignInAnonymouslyAsync();
             }
 
-            if (!string.IsNullOrWhiteSpace(nickname))
+            var authenticationName = ToAuthenticationName(nickname);
+            if (!string.IsNullOrEmpty(authenticationName) &&
+                !string.Equals(StripNameSuffix(authentication.PlayerName), authenticationName, StringComparison.Ordinal))
             {
-                await authentication.UpdatePlayerNameAsync(nickname.Trim());
+                try
+                {
+                    await authentication.UpdatePlayerNameAsync(authenticationName);
+                }
+                catch (Exception exception)
+                {
+                    // The lobby shows the locally typed nickname, so a rejected
+                    // service name must not block creating or joining a session.
+                    Debug.LogWarning("Updating the online player name failed: " + exception.Message);
+                }
             }
+        }
+
+        // Unity Authentication player names cannot contain whitespace and are
+        // limited to 50 characters; the service appends a "#1234" suffix.
+        public static string ToAuthenticationName(string nickname)
+        {
+            if (string.IsNullOrWhiteSpace(nickname))
+            {
+                return string.Empty;
+            }
+
+            var builder = new System.Text.StringBuilder(nickname.Length);
+            var pendingSeparator = false;
+            foreach (var character in nickname.Trim())
+            {
+                if (char.IsWhiteSpace(character) || char.IsControl(character) || character == '#')
+                {
+                    pendingSeparator = builder.Length > 0;
+                    continue;
+                }
+
+                if (pendingSeparator)
+                {
+                    builder.Append('_');
+                    pendingSeparator = false;
+                }
+
+                builder.Append(character);
+            }
+
+            var name = builder.ToString();
+            if (name.Length > MaxAuthenticationNameLength)
+            {
+                name = name.Substring(0, MaxAuthenticationNameLength);
+                if (char.IsHighSurrogate(name[name.Length - 1]))
+                {
+                    name = name.Substring(0, name.Length - 1);
+                }
+            }
+
+            return name;
+        }
+
+        private static string StripNameSuffix(string playerName)
+        {
+            if (string.IsNullOrEmpty(playerName))
+            {
+                return string.Empty;
+            }
+
+            var suffixIndex = playerName.LastIndexOf('#');
+            return suffixIndex > 0 ? playerName.Substring(0, suffixIndex) : playerName;
         }
 
         public async Task<IHostSession> CreateSessionAsync(int maxPlayers, string sessionName = "Mejnun",

@@ -554,6 +554,7 @@ namespace Mejnun.UI.FrontEnd
             }
             catch (Exception exception)
             {
+                UnityEngine.Debug.LogWarning("Online " + action + " request failed: " + exception);
                 if (reconnectingUnfinishedMatch &&
                     ResolveOnlineErrorKey(exception) == "online.status.match_not_found")
                 {

@@ -111,6 +111,8 @@
                     <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.reactions.title" />
                 </Bindings>
             </ui:Label>
+            <ui:Button name="reaction-nice-move-button" class="hud-button reaction-button reaction-positive" />
+            <ui:Button name="reaction-thank-you-button" class="hud-button reaction-button reaction-positive" />
             <ui:Button name="reaction-hurry-up-button" class="hud-button reaction-button" />
             <ui:Button name="reaction-messed-me-up-button" class="hud-button reaction-button" />
             <ui:Button name="reaction-go-down-button" class="hud-button reaction-button" />

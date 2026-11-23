@@ -31,6 +31,40 @@ namespace Mejnun.Net.Tests
             Assert.That(decoded.Reaction, Is.EqualTo(Reaction.CanYouFinish));
         }
 
+        [TestCase(Reaction.NiceMove)]
+        [TestCase(Reaction.ThankYou)]
+        public void NetCodec_RoundTripsPositiveReactions(Reaction reaction)
+        {
+            var decoded = (ReactionMessage)NetCodec.Decode(NetCodec.Encode(new ReactionMessage(1, reaction)));
+
+            Assert.That(decoded.Reaction, Is.EqualTo(reaction));
+        }
+
+        [TestCase(Reaction.NiceMove)]
+        [TestCase(Reaction.ThankYou)]
+        public void Host_BroadcastsPositiveReactionsFromAnySeat(Reaction sentReaction)
+        {
+            var host = NewHost();
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+                var receivedA = 0;
+                var receivedB = 0;
+                clientA.ReactionReceived += (_, reaction) => { if (reaction == sentReaction) receivedA++; };
+                clientB.ReactionReceived += (_, reaction) => { if (reaction == sentReaction) receivedB++; };
+
+                Assert.That(ReactionRules.IsPositive(sentReaction), Is.True);
+                Assert.That(ReactionRules.IsBroadcast(sentReaction), Is.True);
+                Assert.That(host.RequestReaction("player-a", sentReaction), Is.True);
+                Assert.That(host.RequestReaction("player-b", sentReaction), Is.True);
+                Assert.That(host.RequestReaction("player-a", sentReaction), Is.False);
+
+                Assert.That(receivedA, Is.EqualTo(1));
+                Assert.That(receivedB, Is.EqualTo(1));
+            }
+        }
+
         [Test]
         public void Host_RelaysHurryUpToCurrentSeatWithSenderSeat()
         {

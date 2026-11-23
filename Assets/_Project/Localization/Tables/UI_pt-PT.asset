@@ -4319,6 +4319,39 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282614
+  - m_Id: 1042939487707136
+    m_Localized: Boa jogada!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1042939504484352
+    m_Localized: Boa jogada! ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 1042939504484353
+    m_Localized: Obrigado!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1042939504484354
+    m_Localized: Obrigado! ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 1042939504484355
+    m_Localized: '{0}: Boa jogada!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 1042939504484356
+    m_Localized: '{0}: Obrigado!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 1042939504484357
+    m_Localized: '{0}: Depressa!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
   references:
     version: 2
     RefIds:
@@ -4423,3 +4456,8 @@ MonoBehaviour:
         - id: 1031610005708802
         - id: 1031610005708803
         - id: 1031610005708804
+        - id: 1042939504484352
+        - id: 1042939504484354
+        - id: 1042939504484355
+        - id: 1042939504484356
+        - id: 1042939504484357

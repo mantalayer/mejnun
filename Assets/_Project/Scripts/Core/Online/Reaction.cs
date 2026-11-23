@@ -8,7 +8,9 @@ namespace Mejnun.Core
         MessedMeUp,
         GoDown,
         CanYouFinish,
-        FinishThreat
+        FinishThreat,
+        NiceMove,
+        ThankYou
     }
 
     public static class ReactionRules
@@ -16,7 +18,12 @@ namespace Mejnun.Core
         public static bool IsBroadcast(Reaction reaction)
         {
             return reaction == Reaction.MessedMeUp || reaction == Reaction.CanYouFinish ||
-                   reaction == Reaction.FinishThreat;
+                   reaction == Reaction.FinishThreat || IsPositive(reaction);
+        }
+
+        public static bool IsPositive(Reaction reaction)
+        {
+            return reaction == Reaction.NiceMove || reaction == Reaction.ThankYou;
         }
 
         public static bool IsTargeted(Reaction reaction)
@@ -50,6 +57,8 @@ namespace Mejnun.Core
                 case Reaction.HurryUp:
                     return targetSeat != senderSeat;
                 case Reaction.MessedMeUp:
+                case Reaction.NiceMove:
+                case Reaction.ThankYou:
                     return true;
                 case Reaction.GoDown:
                     return targetSeat != senderSeat && state.PlayerPhases[targetSeat] == PlayerPhase.NotDown;

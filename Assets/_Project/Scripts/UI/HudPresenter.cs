@@ -755,6 +755,7 @@ namespace Mejnun.UI
             UpdateTableEdgeAnimations();
             UpdateTableExitAnimation();
             HandleKeyboardShortcuts();
+            CloseReactionsPanelOnOutsidePress();
             if (pausePanel != null && pausePanel.resolvedStyle.display == DisplayStyle.Flex)
             {
                 RefreshRoomCode();
@@ -1104,8 +1105,8 @@ namespace Mejnun.UI
         private void OnHudPointerDown(PointerDownEvent evt)
         {
             var target = evt.target as VisualElement;
-            if (reactionsPanel != null && reactionsPanel.resolvedStyle.display == DisplayStyle.Flex &&
-                (target == null || !reactionsPanel.Contains(target)))
+            if (IsReactionsPanelOpen && (target == null || !reactionsPanel.Contains(target)) &&
+                (reactionsButton == null || target == null || !reactionsButton.Contains(target)))
             {
                 CloseReactionsPanel();
             }
@@ -1211,6 +1212,8 @@ namespace Mejnun.UI
             reactionButtons.Add(Reaction.GoDown, root.Q<Button>("reaction-go-down-button"));
             reactionButtons.Add(Reaction.CanYouFinish, root.Q<Button>("reaction-can-you-finish-button"));
             reactionButtons.Add(Reaction.FinishThreat, root.Q<Button>("reaction-finish-threat-button"));
+            reactionButtons.Add(Reaction.NiceMove, root.Q<Button>("reaction-nice-move-button"));
+            reactionButtons.Add(Reaction.ThankYou, root.Q<Button>("reaction-thank-you-button"));
             hurryUpPopup = root.Q<Label>("hurry-up-popup");
             markSetButton = root.Q<Button>("mark-set-button");
             skipTutorialButton = root.Q<Button>("skip-tutorial-button");
@@ -1488,6 +1491,10 @@ namespace Mejnun.UI
                         return Loc.Format("hud.reactions.can_you_finish_cooldown", remainingSeconds);
                     case Reaction.FinishThreat:
                         return Loc.Format("hud.reactions.finish_threat_cooldown", remainingSeconds);
+                    case Reaction.NiceMove:
+                        return Loc.Format("hud.reactions.nice_move_cooldown", remainingSeconds);
+                    case Reaction.ThankYou:
+                        return Loc.Format("hud.reactions.thank_you_cooldown", remainingSeconds);
                 }
             }
 
@@ -1503,6 +1510,10 @@ namespace Mejnun.UI
                     return Loc.Get("hud.reactions.can_you_finish");
                 case Reaction.FinishThreat:
                     return Loc.Get("hud.reactions.finish_threat");
+                case Reaction.NiceMove:
+                    return Loc.Get("hud.reactions.nice_move");
+                case Reaction.ThankYou:
+                    return Loc.Get("hud.reactions.thank_you");
                 default:
                     return string.Empty;
             }
@@ -1515,7 +1526,7 @@ namespace Mejnun.UI
                 return;
             }
 
-            if (reactionsPanel.resolvedStyle.display == DisplayStyle.Flex)
+            if (IsReactionsPanelOpen)
             {
                 CloseReactionsPanel();
                 return;
@@ -1524,6 +1535,30 @@ namespace Mejnun.UI
             reactionsPanel.style.display = DisplayStyle.Flex;
             RefreshReactionButtons();
             UpdateReactionsPanelPosition();
+        }
+
+        private bool IsReactionsPanelOpen =>
+            reactionsPanel != null && reactionsPanel.resolvedStyle.display == DisplayStyle.Flex;
+
+        private void CloseReactionsPanelOnOutsidePress()
+        {
+            var pointer = Pointer.current;
+            if (!IsReactionsPanelOpen || pointer == null || !pointer.press.wasPressedThisFrame ||
+                root == null || root.panel == null)
+            {
+                return;
+            }
+
+            var screenPosition = pointer.position.ReadValue();
+            var panelPosition = RuntimePanelUtils.ScreenToPanel(root.panel,
+                new Vector2(screenPosition.x, Screen.height - screenPosition.y));
+            if (reactionsPanel.worldBound.Contains(panelPosition) ||
+                (reactionsButton != null && reactionsButton.worldBound.Contains(panelPosition)))
+            {
+                return;
+            }
+
+            CloseReactionsPanel();
         }
 
         private void CloseReactionsPanel()
@@ -1544,6 +1579,8 @@ namespace Mejnun.UI
             }
 
             var rootBounds = root.worldBound;
+            reactionsPanel.style.maxWidth = Mathf.Max(0f, rootBounds.width - 16f);
+            reactionsPanel.style.maxHeight = Mathf.Max(0f, rootBounds.height - 16f);
             var buttonBounds = reactionsButton.worldBound;
             var width = reactionsPanel.resolvedStyle.width;
             var height = reactionsPanel.resolvedStyle.height;
@@ -1616,15 +1653,19 @@ namespace Mejnun.UI
                 return;
             }
 
-            if (reactionPopupReaction == Reaction.HurryUp)
-            {
-                hurryUpPopup.text = Loc.Get("hud.popup.hurry_up");
-                return;
-            }
-
+            hurryUpPopup.EnableInClassList("reaction-popup-positive", ReactionRules.IsPositive(reactionPopupReaction));
             var playerName = matchFlow == null ? string.Empty : matchFlow.GetPlayerName(reactionPopupFromSeat);
             switch (reactionPopupReaction)
             {
+                case Reaction.HurryUp:
+                    hurryUpPopup.text = Loc.Format("hud.popup.hurry_up_from", playerName);
+                    break;
+                case Reaction.NiceMove:
+                    hurryUpPopup.text = Loc.Format("hud.popup.nice_move", playerName);
+                    break;
+                case Reaction.ThankYou:
+                    hurryUpPopup.text = Loc.Format("hud.popup.thank_you", playerName);
+                    break;
                 case Reaction.MessedMeUp:
                     hurryUpPopup.text = Loc.Format("hud.popup.messed_me_up", playerName);
                     break;

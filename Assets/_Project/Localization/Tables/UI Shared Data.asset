@@ -5110,6 +5110,41 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848314328776717
+  - m_Id: 1042939487707136
+    m_Key: hud.reactions.nice_move
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089792
+  - m_Id: 1042939504484352
+    m_Key: hud.reactions.nice_move_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089793
+  - m_Id: 1042939504484353
+    m_Key: hud.reactions.thank_you
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089794
+  - m_Id: 1042939504484354
+    m_Key: hud.reactions.thank_you_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089795
+  - m_Id: 1042939504484355
+    m_Key: hud.popup.nice_move
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089796
+  - m_Id: 1042939504484356
+    m_Key: hud.popup.thank_you
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089797
+  - m_Id: 1042939504484357
+    m_Key: hud.popup.hurry_up_from
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315037089798
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9861,3 +9896,34 @@ MonoBehaviour:
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_CommentText: Received reaction popup; {0} is the sender's player name.
+    - rid: 4825848315037089792
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Friendly reaction sent to all other players at any time.
+    - rid: 4825848315037089793
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction button while its cooldown is active; {0} is whole
+          seconds remaining.
+    - rid: 4825848315037089794
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Friendly reaction sent to all other players at any time.
+    - rid: 4825848315037089795
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction button while its cooldown is active; {0} is whole
+          seconds remaining.
+    - rid: 4825848315037089796
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received reaction popup; {0} is the sender's player name.
+    - rid: 4825848315037089797
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received reaction popup; {0} is the sender's player name.
+    - rid: 4825848315037089798
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received hurry-up popup shown to the turn taker; {0} is the
+          sender's player name.

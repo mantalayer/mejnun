@@ -13,3 +13,10 @@ UI,hud.popup.messed_me_up,{0}: You messed me up!,Received reaction popup; {0} is
 UI,hud.popup.go_down,{0}: Go down already!,Received reaction popup; {0} is the sender's player name.
 UI,hud.popup.can_you_finish,{0}: Can you finish?,Received reaction popup; {0} is the sender's player name.
 UI,hud.popup.finish_threat,{0}: I'm going to finish if you don't finish.,Received reaction popup; {0} is the sender's player name.
+UI,hud.reactions.nice_move,Nice move!,Friendly reaction sent to all other players at any time.
+UI,hud.reactions.nice_move_cooldown,Nice move! ({0}),Reaction button while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.reactions.thank_you,Thank you!,Friendly reaction sent to all other players at any time.
+UI,hud.reactions.thank_you_cooldown,Thank you! ({0}),Reaction button while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.popup.nice_move,{0}: Nice move!,Received reaction popup; {0} is the sender's player name.
+UI,hud.popup.thank_you,{0}: Thank you!,Received reaction popup; {0} is the sender's player name.
+UI,hud.popup.hurry_up_from,{0}: Hurry up!,Received hurry-up popup shown to the turn taker; {0} is the sender's player name.

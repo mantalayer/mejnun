@@ -4315,6 +4315,39 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282625
+  - m_Id: 1042939487707136
+    m_Localized: "\xA1Buen movimiento!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1042939504484352
+    m_Localized: "\xA1Buen movimiento! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1042939504484353
+    m_Localized: "\xA1Gracias!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1042939504484354
+    m_Localized: "\xA1Gracias! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1042939504484355
+    m_Localized: "{0}: \xA1Buen movimiento!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1042939504484356
+    m_Localized: "{0}: \xA1Gracias!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1042939504484357
+    m_Localized: "{0}: \xA1Date prisa!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
   references:
     version: 2
     RefIds:
@@ -4419,3 +4452,8 @@ MonoBehaviour:
         - id: 1031610005708802
         - id: 1031610005708803
         - id: 1031610005708804
+        - id: 1042939504484352
+        - id: 1042939504484354
+        - id: 1042939504484355
+        - id: 1042939504484356
+        - id: 1042939504484357
