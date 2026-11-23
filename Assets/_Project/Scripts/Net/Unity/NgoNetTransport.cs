@@ -90,7 +90,7 @@ namespace Mejnun.Net.Unity
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
                 client.FirstPlayerVoteRequested -= SendToServer;
-                client.HurryUpRequested -= SendToServer;
+                client.ReactionRequested -= SendToServer;
                 client = null;
             }
 
@@ -121,7 +121,7 @@ namespace Mejnun.Net.Unity
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
                 client.FirstPlayerVoteRequested -= SendToServer;
-                client.HurryUpRequested -= SendToServer;
+                client.ReactionRequested -= SendToServer;
             }
 
             Configure(manager, ugsSession, authenticationId, displayName);
@@ -130,7 +130,7 @@ namespace Mejnun.Net.Unity
             client.CommandsReady += SendToServer;
             client.RematchRequested += SendToServer;
             client.FirstPlayerVoteRequested += SendToServer;
-            client.HurryUpRequested += SendToServer;
+            client.ReactionRequested += SendToServer;
             EnsureRegistered();
             SendJoinIfConnected();
         }
@@ -162,7 +162,7 @@ namespace Mejnun.Net.Unity
                 client.CommandsReady -= SendToServer;
                 client.RematchRequested -= SendToServer;
                 client.FirstPlayerVoteRequested -= SendToServer;
-                client.HurryUpRequested -= SendToServer;
+                client.ReactionRequested -= SendToServer;
             }
         }
 
@@ -454,10 +454,10 @@ namespace Mejnun.Net.Unity
                 return;
             }
 
-            if (message is HurryUpMessage &&
+            if (message is ReactionMessage reaction &&
                 authenticationByClient.TryGetValue(senderClientId, out authenticationId))
             {
-                host.RequestHurryUp(authenticationId);
+                host.RequestReaction(authenticationId, reaction.Reaction);
                 return;
             }
 

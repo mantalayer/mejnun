@@ -21,7 +21,8 @@ namespace Mejnun.Net
         private readonly SeatRoster roster;
         private readonly ISnapshotStore snapshotStore;
         private readonly int[] lastGraceSeconds;
-        private readonly Dictionary<string, double> lastHurryUpAt = new Dictionary<string, double>();
+        private readonly Dictionary<string, Dictionary<Reaction, double>> lastReactionAt =
+            new Dictionary<string, Dictionary<Reaction, double>>();
         private bool[] rematchVotes;
         private bool isRematchPending;
         private int? pendingRematchFirstPlayer;
@@ -78,7 +79,7 @@ namespace Mejnun.Net
         public event Action<PauseReason> PauseReasonChanged;
         public event Action<RematchStatusMessage> RematchStatusChanged;
         public event Action<FirstPlayerVoteStatusMessage> FirstPlayerVoteChanged;
-        public event Action<int, int> HurryUpSent;
+        public event Action<int, int, Reaction> ReactionSent;
 
         public bool AreAllSeatsConnected
         {
@@ -270,39 +271,75 @@ namespace Mejnun.Net
             return true;
         }
 
-        public bool RequestHurryUp(string authenticationId)
+        public bool RequestReaction(string authenticationId, Reaction reaction)
         {
+            if (!Enum.IsDefined(typeof(Reaction), reaction))
+            {
+                return false;
+            }
+
             SyncHurryUpTurn();
             var senderSeat = FindSeat(authenticationId);
             var targetSeat = Game.State.CurrentSeat;
             if (senderSeat < 0 || !roster.IsConnected(authenticationId) || IsPaused ||
                 roster.HasBlockingAbsence || Game.State.Phase != GamePhase.Playing ||
-                targetSeat < 0 || targetSeat >= roster.SeatCount || targetSeat == senderSeat)
+                targetSeat < 0 || targetSeat >= roster.SeatCount ||
+                !ReactionRules.CanSend(reaction, Game.State, senderSeat))
             {
                 return false;
             }
 
+            var targeted = ReactionRules.IsTargeted(reaction);
             var target = roster.Get(targetSeat);
-            if (target.Presence != SeatPresence.Connected)
+            if (targeted && target.Presence != SeatPresence.Connected)
             {
                 return false;
             }
 
-            if (hurryUpElapsed - hurryUpTurnStartedAt < HurryUpDelaySeconds)
+            var delaySeconds = ReactionRules.DelaySeconds(reaction);
+            if (hurryUpElapsed - hurryUpTurnStartedAt < delaySeconds)
             {
                 return false;
             }
 
-            if (lastHurryUpAt.TryGetValue(authenticationId, out var lastRequestedAt) &&
-                hurryUpElapsed - lastRequestedAt < HurryUpCooldownSeconds)
+            if (!lastReactionAt.TryGetValue(authenticationId, out var reactionTimes))
+            {
+                reactionTimes = new Dictionary<Reaction, double>();
+                lastReactionAt.Add(authenticationId, reactionTimes);
+            }
+
+            if (reactionTimes.TryGetValue(reaction, out var lastRequestedAt) &&
+                hurryUpElapsed - lastRequestedAt < ReactionRules.CooldownSeconds(reaction))
             {
                 return false;
             }
 
-            lastHurryUpAt[authenticationId] = hurryUpElapsed;
-            Send(target.AuthenticationId, new HurryUpMessage(senderSeat));
-            HurryUpSent?.Invoke(targetSeat, senderSeat);
+            reactionTimes[reaction] = hurryUpElapsed;
+            var message = new ReactionMessage(senderSeat, reaction);
+            if (targeted)
+            {
+                Send(target.AuthenticationId, message);
+            }
+            else
+            {
+                for (var seat = 0; seat < roster.SeatCount; seat++)
+                {
+                    var recipient = roster.Get(seat);
+                    if (seat != senderSeat && IsMessageRecipient(seat) &&
+                        !string.IsNullOrEmpty(recipient.AuthenticationId))
+                    {
+                        Send(recipient.AuthenticationId, message);
+                    }
+                }
+            }
+
+            ReactionSent?.Invoke(targeted ? targetSeat : -1, senderSeat, reaction);
             return true;
+        }
+
+        public bool RequestHurryUp(string authenticationId)
+        {
+            return RequestReaction(authenticationId, Reaction.HurryUp);
         }
 
         public bool SubmitCommands(string authenticationId, IReadOnlyList<GameCommand> commands)

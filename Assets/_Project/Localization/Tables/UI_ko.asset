@@ -4484,6 +4484,73 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282618
+  - m_Id: 1031609561112576
+    m_Localized: "\uBC18\uC751"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320192
+    m_Localized: "\uBC18\uC751"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320193
+    m_Localized: "\uB124\uAC00 \uB0A0 \uB9DD\uCCD0\uB1A8\uC5B4!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514496
+    m_Localized: "\uB124\uAC00 \uB0A0 \uB9DD\uCCD0\uB1A8\uC5B4! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610001514497
+    m_Localized: "\uC5B4\uC11C \uB0B4\uB824\uAC00!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514498
+    m_Localized: "\uC5B4\uC11C \uB0B4\uB824\uAC00! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610001514499
+    m_Localized: "\uB05D\uB0BC \uC218 \uC788\uB098\uC694?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514500
+    m_Localized: "\uB9C8\uBB34\uB9AC\uD560 \uC218 \uC788\uB098\uC694? ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610001514501
+    m_Localized: "\uB124\uAC00 \uB05D\uB0B4\uC9C0 \uBABB\uD558\uBA74 \uB0B4\uAC00
+      \uB05D\uB0BC \uAC70\uC57C."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610005708800
+    m_Localized: "\uB124\uAC00 \uB05D\uB0B4\uC9C0 \uC54A\uC73C\uBA74 \uB0B4\uAC00
+      \uB05D\uB0BC \uAC70\uC57C. ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610005708801
+    m_Localized: "{0}: \uB124\uAC00 \uB0A0 \uB9DD\uCCD0\uB1A8\uC5B4!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610005708802
+    m_Localized: "{0}: \uC5B4\uC11C \uB0B4\uB824\uAC00!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610005708803
+    m_Localized: "{0}: \uB05D\uB0BC \uC218 \uC788\uB098\uC694?"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
+  - m_Id: 1031610005708804
+    m_Localized: "{0}: \uB124\uAC00 \uB05D\uB0B4\uC9C0 \uC54A\uC73C\uBA74 \uB0B4\uAC00
+      \uB05D\uB0BC \uAC70\uC57C."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282618
   references:
     version: 2
     RefIds:
@@ -4580,3 +4647,11 @@ MonoBehaviour:
         - id: 958106090594304
         - id: 958106090594305
         - id: 958106090594306
+        - id: 1031610001514496
+        - id: 1031610001514498
+        - id: 1031610001514500
+        - id: 1031610005708800
+        - id: 1031610005708801
+        - id: 1031610005708802
+        - id: 1031610005708803
+        - id: 1031610005708804

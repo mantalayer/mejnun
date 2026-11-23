@@ -1,0 +1,15 @@
+table,key,en,comment
+UI,hud.button.reactions,Reactions,Button that opens the online reactions menu.
+UI,hud.reactions.title,Reactions,Title shown above the available online reactions.
+UI,hud.reactions.messed_me_up,You messed me up!,Reaction sent to all other players.
+UI,hud.reactions.messed_me_up_cooldown,You messed me up! ({0}),Reaction button while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.reactions.go_down,Go down already!,Reaction sent only to the current turn taker if they have not gone down.
+UI,hud.reactions.go_down_cooldown,Go down already! ({0}),Reaction button while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.reactions.can_you_finish,Can you finish?,Reaction sent to all other players when the turn taker has one card left.
+UI,hud.reactions.can_you_finish_cooldown,Can you finish? ({0}),Reaction button while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.reactions.finish_threat,I'm going to finish if you don't finish.,Reaction sent to all other players when both the sender and turn taker have one card left.
+UI,hud.reactions.finish_threat_cooldown,I'm going to finish if you don't finish. ({0}),Reaction button while its cooldown is active; {0} is whole seconds remaining.
+UI,hud.popup.messed_me_up,{0}: You messed me up!,Received reaction popup; {0} is the sender's player name.
+UI,hud.popup.go_down,{0}: Go down already!,Received reaction popup; {0} is the sender's player name.
+UI,hud.popup.can_you_finish,{0}: Can you finish?,Received reaction popup; {0} is the sender's player name.
+UI,hud.popup.finish_threat,{0}: I'm going to finish if you don't finish.,Received reaction popup; {0} is the sender's player name.

@@ -74,7 +74,11 @@
         </ui:VisualElement>
         <ui:VisualElement name="fast-forward-dock" class="fast-forward-dock hud-bar" picking-mode="Ignore" style="display: none">
             <ui:Button name="fast-forward-button" class="hud-button" style="display: none" />
-            <ui:Button name="hurry-up-button" class="hud-button" style="display: none" />
+            <ui:Button name="reactions-button" class="hud-button" style="display: none">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.button.reactions" />
+                </Bindings>
+            </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="opponents-strip" class="opponents-strip" picking-mode="Ignore">
             <ui:VisualElement name="left-opponents" class="opponent-side opponent-left" picking-mode="Ignore" />
@@ -83,11 +87,7 @@
         <ui:VisualElement name="top-opponents" class="opponents-top" picking-mode="Ignore" />
         <ui:VisualElement name="popup-layer" class="popup-layer" picking-mode="Ignore">
             <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
-            <ui:Label name="hurry-up-popup" class="hurry-up-popup" picking-mode="Ignore">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.popup.hurry_up" />
-                </Bindings>
-            </ui:Label>
+            <ui:Label name="hurry-up-popup" class="hurry-up-popup" picking-mode="Ignore" />
             <ui:Label name="online-notice" class="online-notice" picking-mode="Ignore" />
             <ui:Label name="online-waiting" class="online-waiting" picking-mode="Ignore" />
             <ui:Label name="halas-popup" class="halas-popup" picking-mode="Ignore">
@@ -104,6 +104,18 @@
             <ui:Label name="gone-down-tag" class="gone-down-tag" picking-mode="Ignore" />
             <ui:Label name="invalid-move-popup" class="invalid-move-popup" picking-mode="Ignore" />
             <ui:VisualElement name="marker-layer" class="marker-layer" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="reactions-panel" class="reactions-panel" style="display: none">
+            <ui:Label name="reactions-title" class="reactions-title">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="hud.reactions.title" />
+                </Bindings>
+            </ui:Label>
+            <ui:Button name="reaction-hurry-up-button" class="hud-button reaction-button" />
+            <ui:Button name="reaction-messed-me-up-button" class="hud-button reaction-button" />
+            <ui:Button name="reaction-go-down-button" class="hud-button reaction-button" />
+            <ui:Button name="reaction-can-you-finish-button" class="hud-button reaction-button" />
+            <ui:Button name="reaction-finish-threat-button" class="hud-button reaction-button" />
         </ui:VisualElement>
         <ui:VisualElement name="tutorial-layer" class="tutorial-layer" picking-mode="Ignore" style="display: none">
             <ui:Label name="ghost-hand" class="ghost-hand" text="☝" picking-mode="Ignore" />

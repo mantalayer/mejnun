@@ -21,7 +21,7 @@ namespace Mejnun.Net
         public event Action<NetMessage> StatusChanged;
         public event Action<RematchMessage> RematchRequested;
         public event Action<FirstPlayerVoteMessage> FirstPlayerVoteRequested;
-        public event Action<HurryUpMessage> HurryUpRequested;
+        public event Action<ReactionMessage> ReactionRequested;
 
         public void Submit(IReadOnlyList<GameCommand> commands)
         {
@@ -34,7 +34,7 @@ namespace Mejnun.Net
         }
 
         public event Action<CommandsMessage> CommandsReady;
-        public event Action<int> HurryUpReceived;
+        public event Action<int, Reaction> ReactionReceived;
 
         public void SubmitRematch()
         {
@@ -46,9 +46,14 @@ namespace Mejnun.Net
             FirstPlayerVoteRequested?.Invoke(new FirstPlayerVoteMessage(choice));
         }
 
+        public void SubmitReaction(Reaction reaction)
+        {
+            ReactionRequested?.Invoke(new ReactionMessage(-1, reaction));
+        }
+
         public void SubmitHurryUp()
         {
-            HurryUpRequested?.Invoke(new HurryUpMessage(-1));
+            SubmitReaction(Reaction.HurryUp);
         }
 
         public void Receive(NetMessage message)
@@ -87,9 +92,12 @@ namespace Mejnun.Net
 
                     StatusChanged?.Invoke(message);
                     break;
-                case NetMessageKind.HurryUp:
-                    HurryUpReceived?.Invoke(((HurryUpMessage)message).FromSeat);
+                case NetMessageKind.Reaction:
+                {
+                    var reaction = (ReactionMessage)message;
+                    ReactionReceived?.Invoke(reaction.FromSeat, reaction.Reaction);
                     break;
+                }
                 case NetMessageKind.SeatStatus:
                 {
                     var status = (SeatStatusMessage)message;

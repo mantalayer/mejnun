@@ -131,14 +131,13 @@ namespace Mejnun.Game
         public event Action OnlineRematchRequested;
         public event Action OnlineFirstPlayerVoteChanged;
         public event Action<int> OnlineFirstPlayerVoteCast;
-        public event Action OnlineHurryUpRequested;
-        public event Action<int> HurryUpReceived;
+        public event Action<Reaction> OnlineReactionRequested;
+        public event Action<int, Reaction> ReactionReceived;
 
         public string OnlineWaitingMessage => onlineWaitingMessage;
-        public bool CanRequestHurryUp => IsOnline && Game != null &&
-                                         Game.State.Phase == GamePhase.Playing &&
-                                         onlineLocalSeat >= 0 && Game.State.CurrentSeat != onlineLocalSeat &&
-                                         !IsBotSeat(Game.State.CurrentSeat) && !matchPaused && !applicationPaused;
+        public bool CanShowReactions => IsOnline && Game != null && Game.State.Phase == GamePhase.Playing &&
+                                        onlineLocalSeat >= 0 && !IsBotSeat(onlineLocalSeat) && !matchPaused &&
+                                        !applicationPaused && string.IsNullOrEmpty(onlineWaitingMessage);
         public bool IsOnlineFirstPlayerVoteOpen => IsOnline && onlineFirstPlayerVoteOpen;
         public bool CanVoteOnlineFirstPlayer => IsOnlineFirstPlayerVoteOpen && !matchPaused &&
                                                 IsOnlineFirstPlayerVoteCandidate(onlineLocalSeat);
@@ -640,24 +639,40 @@ namespace Mejnun.Game
             OnlineFirstPlayerVoteChanged?.Invoke();
         }
 
-        public void RequestHurryUp()
+        public bool CanSendReaction(Reaction reaction)
         {
-            if (CanRequestHurryUp)
+            if (!CanShowReactions || !ReactionRules.CanSend(reaction, Game.State, onlineLocalSeat))
             {
-                OnlineHurryUpRequested?.Invoke();
+                return false;
+            }
+
+            return !ReactionRules.IsTargeted(reaction) || !IsBotSeat(Game.State.CurrentSeat);
+        }
+
+        public void RequestReaction(Reaction reaction)
+        {
+            if (CanSendReaction(reaction))
+            {
+                OnlineReactionRequested?.Invoke(reaction);
             }
         }
 
-        public void ReceiveHurryUp(int fromSeat)
+        public void ReceiveReaction(int fromSeat, Reaction reaction)
         {
             if (!IsOnline || Game == null || Game.State.Phase != GamePhase.Playing ||
-                Game.State.CurrentSeat != onlineLocalSeat || fromSeat < 0 || fromSeat >= seats.Length ||
-                fromSeat == onlineLocalSeat || matchPaused || applicationPaused)
+                onlineLocalSeat < 0 || fromSeat < 0 || fromSeat >= seats.Length || fromSeat == onlineLocalSeat ||
+                matchPaused || applicationPaused || !string.IsNullOrEmpty(onlineWaitingMessage) ||
+                !Enum.IsDefined(typeof(Reaction), reaction))
             {
                 return;
             }
 
-            HurryUpReceived?.Invoke(fromSeat);
+            if (ReactionRules.IsTargeted(reaction) && Game.State.CurrentSeat != onlineLocalSeat)
+            {
+                return;
+            }
+
+            ReactionReceived?.Invoke(fromSeat, reaction);
         }
 
         /// <summary>Leaves the tutorial: it counts as completed, nothing is saved, and the menu is shown.</summary>

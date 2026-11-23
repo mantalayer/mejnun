@@ -18,8 +18,7 @@ namespace Mejnun.UI
         private const int OnlineWaitingFadeMilliseconds = 180;
         private const float TableEdgeOffscreenMargin = 24f;
         private const float OpponentHandTuckDuration = 0.25f;
-        private const float HurryUpDelaySeconds = 20f;
-        private const float HurryUpCooldownSeconds = 20f;
+        private static readonly float HurryUpDelaySeconds = (float)ReactionRules.DelaySeconds(Reaction.HurryUp);
 
         private enum TableEdge
         {
@@ -78,7 +77,10 @@ namespace Mejnun.UI
         private Button compactBoardButton;
         private Button hintButton;
         private Button fastForwardButton;
-        private Button hurryUpButton;
+        private Button reactionsButton;
+        private VisualElement reactionsPanel;
+        private readonly Dictionary<Reaction, Button> reactionButtons = new Dictionary<Reaction, Button>();
+        private readonly Dictionary<Reaction, float> nextReactionRequestAt = new Dictionary<Reaction, float>();
         private Button markSetButton;
         private Button pauseButton;
         private Button menuButton;
@@ -165,10 +167,12 @@ namespace Mejnun.UI
         private int lastMoveFlavorFrame = -1;
         private int announcedSeat = -1;
         private float nextBadgePulse;
-        private float nextHurryUpRequestAt;
         private int hurryUpTurnNumber = -1;
         private int hurryUpTurnSeat = -1;
         private float hurryUpTurnStartedAt;
+        private int reactionPopupFromSeat = -1;
+        private Reaction reactionPopupReaction;
+        private bool reactionPopupVisible;
         private bool badgePulse;
         private bool menuPaused;
         private bool confirmPaused;
@@ -247,10 +251,7 @@ namespace Mejnun.UI
                     : Loc.Get("hud.button.fast_forward");
             }
 
-            if (hurryUpButton != null)
-            {
-                hurryUpButton.text = Loc.Get("hud.button.hurry_up");
-            }
+            RefreshReactionButtons();
         }
 
         private void OnLanguageChanged()
@@ -280,6 +281,11 @@ namespace Mejnun.UI
             if (confirmMessage != null && pendingConfirmMessage != null)
             {
                 confirmMessage.text = pendingConfirmMessage();
+            }
+
+            if (reactionPopupVisible)
+            {
+                ShowReactionPopupText();
             }
 
             RefreshRoomCode();
@@ -516,7 +522,7 @@ namespace Mejnun.UI
                 matchFlow.ScreenChanged += OnMatchFlowScreenChanged;
                 matchFlow.OnlineSeatsChanged += OnOnlineSeatsChanged;
                 matchFlow.OnlineNotice += OnOnlineNotice;
-                matchFlow.HurryUpReceived += OnHurryUpReceived;
+                matchFlow.ReactionReceived += OnReactionReceived;
                 if (matchFlow.TurnTimer != null)
                 {
                     matchFlow.TurnTimer.TimedOut += OnTimedOut;
@@ -534,6 +540,7 @@ namespace Mejnun.UI
         {
             uiDirection?.Dispose();
             uiDirection = null;
+            CloseReactionsPanel();
             SceneFlow.UnregisterTableExit(PlayTableExit);
             HideOnlineWaitingImmediately();
             for (var index = 0; index < tableEdgeAnimations.Count; index++)
@@ -574,7 +581,7 @@ namespace Mejnun.UI
                 matchFlow.ScreenChanged -= OnMatchFlowScreenChanged;
                 matchFlow.OnlineSeatsChanged -= OnOnlineSeatsChanged;
                 matchFlow.OnlineNotice -= OnOnlineNotice;
-                matchFlow.HurryUpReceived -= OnHurryUpReceived;
+                matchFlow.ReactionReceived -= OnReactionReceived;
                 if (matchFlow.TurnTimer != null)
                 {
                     matchFlow.TurnTimer.TimedOut -= OnTimedOut;
@@ -594,6 +601,7 @@ namespace Mejnun.UI
             halasHide?.Pause();
             hurryUpPopupHide?.Pause();
             hurryUpPopup?.RemoveFromClassList("hurry-up-visible");
+            reactionPopupVisible = false;
             invalidMoveHide?.Pause();
         }
 
@@ -1095,13 +1103,19 @@ namespace Mejnun.UI
 
         private void OnHudPointerDown(PointerDownEvent evt)
         {
+            var target = evt.target as VisualElement;
+            if (reactionsPanel != null && reactionsPanel.resolvedStyle.display == DisplayStyle.Flex &&
+                (target == null || !reactionsPanel.Contains(target)))
+            {
+                CloseReactionsPanel();
+            }
+
             if (matchFlow == null || !matchFlow.IsOnline || tableController == null || tableController.Game == null ||
                 matchFlow.IsLocalSeat(tableController.Game.State.CurrentSeat))
             {
                 return;
             }
 
-            var target = evt.target as VisualElement;
             if (IsInsideEnabledButton(target))
             {
                 return;
@@ -1189,7 +1203,14 @@ namespace Mejnun.UI
             turnPanel = root.Q<VisualElement>("turn-panel");
             markerLayer = root.Q<VisualElement>("marker-layer");
             fastForwardButton = root.Q<Button>("fast-forward-button");
-            hurryUpButton = root.Q<Button>("hurry-up-button");
+            reactionsButton = root.Q<Button>("reactions-button");
+            reactionsPanel = root.Q<VisualElement>("reactions-panel");
+            reactionButtons.Clear();
+            reactionButtons.Add(Reaction.HurryUp, root.Q<Button>("reaction-hurry-up-button"));
+            reactionButtons.Add(Reaction.MessedMeUp, root.Q<Button>("reaction-messed-me-up-button"));
+            reactionButtons.Add(Reaction.GoDown, root.Q<Button>("reaction-go-down-button"));
+            reactionButtons.Add(Reaction.CanYouFinish, root.Q<Button>("reaction-can-you-finish-button"));
+            reactionButtons.Add(Reaction.FinishThreat, root.Q<Button>("reaction-finish-threat-button"));
             hurryUpPopup = root.Q<Label>("hurry-up-popup");
             markSetButton = root.Q<Button>("mark-set-button");
             skipTutorialButton = root.Q<Button>("skip-tutorial-button");
@@ -1211,7 +1232,15 @@ namespace Mejnun.UI
             if (compactBoardButton != null) compactBoardButton.clicked += CompactBoard;
             if (hintButton != null) hintButton.clicked += ToggleHints;
             if (fastForwardButton != null) fastForwardButton.clicked += ToggleFastForward;
-            if (hurryUpButton != null) hurryUpButton.clicked += RequestHurryUp;
+            if (reactionsButton != null) reactionsButton.clicked += ToggleReactionsPanel;
+            foreach (var reactionButton in reactionButtons)
+            {
+                var reaction = reactionButton.Key;
+                if (reactionButton.Value != null)
+                {
+                    reactionButton.Value.clicked += () => RequestReaction(reaction);
+                }
+            }
             if (markSetButton != null) markSetButton.clicked += ToggleMarkMode;
             if (pauseButton != null) pauseButton.clicked += TogglePause;
             if (menuButton != null) menuButton.clicked += RequestLeave;
@@ -1309,7 +1338,7 @@ namespace Mejnun.UI
 
         private void UpdateFastForwardButton()
         {
-            if (fastForwardButton == null && hurryUpButton == null)
+            if (fastForwardButton == null && reactionsButton == null)
             {
                 return;
             }
@@ -1320,31 +1349,37 @@ namespace Mejnun.UI
                 fastForwardDock.Add(fastForwardButton);
             }
 
-            if (fastForwardDock != null && hurryUpButton != null && hurryUpButton.parent != fastForwardDock)
+            if (fastForwardDock != null && reactionsButton != null && reactionsButton.parent != fastForwardDock)
             {
-                fastForwardDock.Add(hurryUpButton);
+                fastForwardDock.Add(reactionsButton);
             }
 
             var isOnline = matchFlow != null && matchFlow.IsOnline;
-            var hurryUpDelayElapsed = HasHurryUpDelayElapsed();
-            var showHurryUp = isOnline && hurryUpDelayElapsed && matchFlow.CanRequestHurryUp;
+            var showReactions = isOnline && matchFlow.CanShowReactions;
             var showFastForward = !isOnline && GameSettings.ShowFastForward &&
                                   (tableController != null && tableController.IsAutoFixing ||
                                    matchFlow != null && matchFlow.BotDriver != null && matchFlow.BotDriver.IsPlaying);
-            var visible = showHurryUp || showFastForward;
+            var visible = showReactions || showFastForward;
             if (fastForwardButton != null)
             {
                 fastForwardButton.style.display = showFastForward ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
-            if (hurryUpButton != null)
+            if (reactionsButton != null)
             {
-                hurryUpButton.style.display = showHurryUp ? DisplayStyle.Flex : DisplayStyle.None;
-                var cooldownRemaining = Mathf.Max(0f, nextHurryUpRequestAt - Time.unscaledTime);
-                hurryUpButton.text = cooldownRemaining > 0f
-                    ? Loc.Format("hud.button.hurry_up_cooldown", Mathf.CeilToInt(cooldownRemaining))
-                    : Loc.Get("hud.button.hurry_up");
-                hurryUpButton.SetEnabled(showHurryUp && cooldownRemaining <= 0f);
+                reactionsButton.style.display = showReactions ? DisplayStyle.Flex : DisplayStyle.None;
+                reactionsButton.SetEnabled(showReactions);
+            }
+
+            if (!showReactions)
+            {
+                CloseReactionsPanel();
+            }
+            else
+            {
+                HurryUpDelayRemaining();
+                RefreshReactionButtons();
+                UpdateReactionsPanelPosition();
             }
 
             if (fastForwardDock != null)
@@ -1385,14 +1420,14 @@ namespace Mejnun.UI
             }
         }
 
-        private bool HasHurryUpDelayElapsed()
+        private float HurryUpDelayRemaining()
         {
             var game = matchFlow == null || !matchFlow.IsOnline ? null : matchFlow.Game;
             if (game == null || game.State.Phase != GamePhase.Playing)
             {
                 hurryUpTurnNumber = -1;
                 hurryUpTurnSeat = -1;
-                return false;
+                return 0f;
             }
 
             var turnNumber = game.State.TurnNumber;
@@ -1404,7 +1439,205 @@ namespace Mejnun.UI
                 hurryUpTurnStartedAt = Time.unscaledTime;
             }
 
-            return Time.unscaledTime - hurryUpTurnStartedAt >= HurryUpDelaySeconds;
+            return Mathf.Max(0f, HurryUpDelaySeconds - (Time.unscaledTime - hurryUpTurnStartedAt));
+        }
+
+        private void RefreshReactionButtons()
+        {
+            foreach (var reactionButton in reactionButtons)
+            {
+                var button = reactionButton.Value;
+                if (button == null)
+                {
+                    continue;
+                }
+
+                var reaction = reactionButton.Key;
+                var canSend = matchFlow != null && matchFlow.CanSendReaction(reaction);
+                var remaining = ReactionCooldownRemaining(reaction);
+                if (reaction == Reaction.HurryUp && canSend)
+                {
+                    remaining = Mathf.Max(remaining, HurryUpDelayRemaining());
+                }
+
+                button.text = ReactionButtonText(reaction, Mathf.CeilToInt(remaining));
+                button.SetEnabled(canSend && remaining <= 0f);
+            }
+        }
+
+        private float ReactionCooldownRemaining(Reaction reaction)
+        {
+            return nextReactionRequestAt.TryGetValue(reaction, out var nextRequestAt)
+                ? Mathf.Max(0f, nextRequestAt - Time.unscaledTime)
+                : 0f;
+        }
+
+        private static string ReactionButtonText(Reaction reaction, int remainingSeconds)
+        {
+            if (remainingSeconds > 0)
+            {
+                switch (reaction)
+                {
+                    case Reaction.HurryUp:
+                        return Loc.Format("hud.button.hurry_up_cooldown", remainingSeconds);
+                    case Reaction.MessedMeUp:
+                        return Loc.Format("hud.reactions.messed_me_up_cooldown", remainingSeconds);
+                    case Reaction.GoDown:
+                        return Loc.Format("hud.reactions.go_down_cooldown", remainingSeconds);
+                    case Reaction.CanYouFinish:
+                        return Loc.Format("hud.reactions.can_you_finish_cooldown", remainingSeconds);
+                    case Reaction.FinishThreat:
+                        return Loc.Format("hud.reactions.finish_threat_cooldown", remainingSeconds);
+                }
+            }
+
+            switch (reaction)
+            {
+                case Reaction.HurryUp:
+                    return Loc.Get("hud.button.hurry_up");
+                case Reaction.MessedMeUp:
+                    return Loc.Get("hud.reactions.messed_me_up");
+                case Reaction.GoDown:
+                    return Loc.Get("hud.reactions.go_down");
+                case Reaction.CanYouFinish:
+                    return Loc.Get("hud.reactions.can_you_finish");
+                case Reaction.FinishThreat:
+                    return Loc.Get("hud.reactions.finish_threat");
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private void ToggleReactionsPanel()
+        {
+            if (reactionsPanel == null || matchFlow == null || !matchFlow.CanShowReactions)
+            {
+                return;
+            }
+
+            if (reactionsPanel.resolvedStyle.display == DisplayStyle.Flex)
+            {
+                CloseReactionsPanel();
+                return;
+            }
+
+            reactionsPanel.style.display = DisplayStyle.Flex;
+            RefreshReactionButtons();
+            UpdateReactionsPanelPosition();
+        }
+
+        private void CloseReactionsPanel()
+        {
+            if (reactionsPanel != null)
+            {
+                reactionsPanel.style.display = DisplayStyle.None;
+            }
+        }
+
+        private void UpdateReactionsPanelPosition()
+        {
+            if (reactionsPanel == null || reactionsButton == null || root == null ||
+                reactionsPanel.resolvedStyle.display != DisplayStyle.Flex || root.worldBound.width <= 0f ||
+                root.worldBound.height <= 0f)
+            {
+                return;
+            }
+
+            var rootBounds = root.worldBound;
+            var buttonBounds = reactionsButton.worldBound;
+            var width = reactionsPanel.resolvedStyle.width;
+            var height = reactionsPanel.resolvedStyle.height;
+            if (!IsFinite(width) || width <= 0f) width = 320f;
+            if (!IsFinite(height) || height <= 0f) height = 320f;
+
+            var left = buttonBounds.center.x - rootBounds.xMin - width * 0.5f;
+            left = Mathf.Clamp(left, 8f, Mathf.Max(8f, rootBounds.width - width - 8f));
+            var top = buttonBounds.yMin - rootBounds.yMin - height - 8f;
+            if (top < 8f)
+            {
+                top = buttonBounds.yMax - rootBounds.yMin + 8f;
+            }
+
+            top = Mathf.Clamp(top, 8f, Mathf.Max(8f, rootBounds.height - height - 8f));
+            reactionsPanel.style.left = left;
+            reactionsPanel.style.top = top;
+        }
+
+        private void RequestReaction(Reaction reaction)
+        {
+            if (matchFlow == null || !matchFlow.CanSendReaction(reaction))
+            {
+                return;
+            }
+
+            var remaining = ReactionCooldownRemaining(reaction);
+            if (reaction == Reaction.HurryUp)
+            {
+                remaining = Mathf.Max(remaining, HurryUpDelayRemaining());
+            }
+
+            if (remaining > 0f)
+            {
+                return;
+            }
+
+            nextReactionRequestAt[reaction] = Time.unscaledTime +
+                                              (float)ReactionRules.CooldownSeconds(reaction);
+            matchFlow.RequestReaction(reaction);
+            CloseReactionsPanel();
+            RefreshReactionButtons();
+        }
+
+        private void OnReactionReceived(int fromSeat, Reaction reaction)
+        {
+            if (hurryUpPopup == null)
+            {
+                return;
+            }
+
+            reactionPopupFromSeat = fromSeat;
+            reactionPopupReaction = reaction;
+            reactionPopupVisible = true;
+            ShowReactionPopupText();
+            hurryUpPopupHide?.Pause();
+            hurryUpPopup.AddToClassList("hurry-up-visible");
+            hurryUpPopupHide = hurryUpPopup.schedule.Execute(() =>
+            {
+                hurryUpPopup.RemoveFromClassList("hurry-up-visible");
+                reactionPopupVisible = false;
+                hurryUpPopupHide = null;
+            }).StartingIn(1800);
+        }
+
+        private void ShowReactionPopupText()
+        {
+            if (hurryUpPopup == null)
+            {
+                return;
+            }
+
+            if (reactionPopupReaction == Reaction.HurryUp)
+            {
+                hurryUpPopup.text = Loc.Get("hud.popup.hurry_up");
+                return;
+            }
+
+            var playerName = matchFlow == null ? string.Empty : matchFlow.GetPlayerName(reactionPopupFromSeat);
+            switch (reactionPopupReaction)
+            {
+                case Reaction.MessedMeUp:
+                    hurryUpPopup.text = Loc.Format("hud.popup.messed_me_up", playerName);
+                    break;
+                case Reaction.GoDown:
+                    hurryUpPopup.text = Loc.Format("hud.popup.go_down", playerName);
+                    break;
+                case Reaction.CanYouFinish:
+                    hurryUpPopup.text = Loc.Format("hud.popup.can_you_finish", playerName);
+                    break;
+                case Reaction.FinishThreat:
+                    hurryUpPopup.text = Loc.Format("hud.popup.finish_threat", playerName);
+                    break;
+            }
         }
 
         private void UpdateSetMarkers()
@@ -2998,35 +3231,6 @@ namespace Mejnun.UI
             }
         }
 
-        private void RequestHurryUp()
-        {
-            if (matchFlow == null || !matchFlow.CanRequestHurryUp ||
-                !HasHurryUpDelayElapsed() || Time.unscaledTime < nextHurryUpRequestAt)
-            {
-                return;
-            }
-
-            nextHurryUpRequestAt = Time.unscaledTime + HurryUpCooldownSeconds;
-            matchFlow.RequestHurryUp();
-            UpdateFastForwardButton();
-        }
-
-        private void OnHurryUpReceived(int fromSeat)
-        {
-            if (hurryUpPopup == null)
-            {
-                return;
-            }
-
-            hurryUpPopupHide?.Pause();
-            hurryUpPopup.AddToClassList("hurry-up-visible");
-            hurryUpPopupHide = hurryUpPopup.schedule.Execute(() =>
-            {
-                hurryUpPopup.RemoveFromClassList("hurry-up-visible");
-                hurryUpPopupHide = null;
-            }).StartingIn(1800);
-        }
-
         private void ToggleMarkMode()
         {
             if (tableController == null)
@@ -3067,7 +3271,12 @@ namespace Mejnun.UI
 
             if (keyboard.escapeKey.wasPressedThisFrame)
             {
-                if (confirmDialog != null && confirmDialog.resolvedStyle.display == DisplayStyle.Flex)
+                if (reactionsPanel != null && reactionsPanel.resolvedStyle.display == DisplayStyle.Flex)
+                {
+                    CloseReactionsPanel();
+                    return;
+                }
+                else if (confirmDialog != null && confirmDialog.resolvedStyle.display == DisplayStyle.Flex)
                 {
                     CancelConfirmation();
                     return;

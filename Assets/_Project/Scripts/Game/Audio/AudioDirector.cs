@@ -196,7 +196,7 @@ namespace Mejnun.Game
 
             SyncTurnTimer();
             matchFlow.ScreenChanged += OnScreenChanged;
-            matchFlow.HurryUpReceived += OnHurryUpReceived;
+            matchFlow.ReactionReceived += OnReactionReceived;
             if (matchFlow.Controller != null)
             {
                 matchFlow.Controller.Synchronized += OnSynchronized;
@@ -223,7 +223,7 @@ namespace Mejnun.Game
             if (matchFlow != null)
             {
                 matchFlow.ScreenChanged -= OnScreenChanged;
-                matchFlow.HurryUpReceived -= OnHurryUpReceived;
+                matchFlow.ReactionReceived -= OnReactionReceived;
                 if (matchFlow.Controller != null)
                 {
                     matchFlow.Controller.Synchronized -= OnSynchronized;
@@ -260,9 +260,12 @@ namespace Mejnun.Game
             ReportTimeout();
         }
 
-        private void OnHurryUpReceived(int fromSeat)
+        private void OnReactionReceived(int fromSeat, Reaction reaction)
         {
-            audioService?.Post(AudioIds.PlayTimerWarning);
+            if (reaction == Reaction.HurryUp)
+            {
+                audioService?.Post(AudioIds.PlayTimerWarning);
+            }
         }
 
         private void OnScreenChanged(MatchFlowScreen screen)

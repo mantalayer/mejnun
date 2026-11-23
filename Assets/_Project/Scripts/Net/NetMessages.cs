@@ -18,7 +18,7 @@ namespace Mejnun.Net
         RematchStatus,
         FirstPlayerVote,
         FirstPlayerVoteStatus,
-        HurryUp
+        Reaction
     }
 
     public abstract class NetMessage
@@ -279,19 +279,26 @@ namespace Mejnun.Net
         public int[] Votes => (int[])votes.Clone();
     }
 
-    public sealed class HurryUpMessage : NetMessage
+    public sealed class ReactionMessage : NetMessage
     {
-        public HurryUpMessage(int fromSeat)
-            : base(NetMessageKind.HurryUp)
+        public ReactionMessage(int fromSeat, Mejnun.Core.Reaction reaction)
+            : base(NetMessageKind.Reaction)
         {
             if (fromSeat < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(fromSeat));
             }
 
+            if (!Enum.IsDefined(typeof(Mejnun.Core.Reaction), reaction))
+            {
+                throw new ArgumentOutOfRangeException(nameof(reaction));
+            }
+
             FromSeat = fromSeat;
+            Reaction = reaction;
         }
 
         public int FromSeat { get; }
+        public Mejnun.Core.Reaction Reaction { get; }
     }
 }

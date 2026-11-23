@@ -4263,6 +4263,70 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282613
+  - m_Id: 1031609561112576
+    m_Localized: Reazioni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320192
+    m_Localized: Reazioni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320193
+    m_Localized: Mi hai confuso!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514496
+    m_Localized: Mi hai confuso! ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610001514497
+    m_Localized: Scendi subito!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514498
+    m_Localized: Scendi subito! ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610001514499
+    m_Localized: Riesci a finire?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514500
+    m_Localized: Puoi finire? ({0})
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610001514501
+    m_Localized: "Se tu non finisci, finir\xF2 io."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610005708800
+    m_Localized: "Se tu non finisci, finir\xF2 io. ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610005708801
+    m_Localized: '{0}: Mi hai confuso!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610005708802
+    m_Localized: '{0}: Scendi subito!'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610005708803
+    m_Localized: '{0}: Puoi finire?'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 1031610005708804
+    m_Localized: '{0}: Se tu non finisci, finisco io.'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
   references:
     version: 2
     RefIds:
@@ -4359,3 +4423,11 @@ MonoBehaviour:
         - id: 958106090594304
         - id: 958106090594305
         - id: 958106090594306
+        - id: 1031610001514496
+        - id: 1031610001514498
+        - id: 1031610001514500
+        - id: 1031610005708800
+        - id: 1031610005708801
+        - id: 1031610005708802
+        - id: 1031610005708803
+        - id: 1031610005708804

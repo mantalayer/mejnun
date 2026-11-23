@@ -5040,6 +5040,76 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848309734965251
+  - m_Id: 1031609561112576
+    m_Key: hud.button.reactions
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776704
+  - m_Id: 1031609997320192
+    m_Key: hud.reactions.title
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776705
+  - m_Id: 1031609997320193
+    m_Key: hud.reactions.messed_me_up
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776706
+  - m_Id: 1031610001514496
+    m_Key: hud.reactions.messed_me_up_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776707
+  - m_Id: 1031610001514497
+    m_Key: hud.reactions.go_down
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776708
+  - m_Id: 1031610001514498
+    m_Key: hud.reactions.go_down_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776709
+  - m_Id: 1031610001514499
+    m_Key: hud.reactions.can_you_finish
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776710
+  - m_Id: 1031610001514500
+    m_Key: hud.reactions.can_you_finish_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776711
+  - m_Id: 1031610001514501
+    m_Key: hud.reactions.finish_threat
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776712
+  - m_Id: 1031610005708800
+    m_Key: hud.reactions.finish_threat_cooldown
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776713
+  - m_Id: 1031610005708801
+    m_Key: hud.popup.messed_me_up
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776714
+  - m_Id: 1031610005708802
+    m_Key: hud.popup.go_down
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776715
+  - m_Id: 1031610005708803
+    m_Key: hud.popup.can_you_finish
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776716
+  - m_Id: 1031610005708804
+    m_Key: hud.popup.finish_threat
+    m_Metadata:
+      m_Items:
+      - rid: 4825848314328776717
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9726,5 +9796,68 @@ MonoBehaviour:
     - rid: 4825848309734965251
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_CommentText: Game title shown on the main menu, in capitals. Keep
-          the {app.name:upper} placeholder.
+        m_CommentText: Game title shown on the main menu, in capitals. Keep the {app.name:upper}
+          placeholder.
+    - rid: 4825848314328776704
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Button that opens the online reactions menu.
+    - rid: 4825848314328776705
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Title shown above the available online reactions.
+    - rid: 4825848314328776706
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction sent to all other players.
+    - rid: 4825848314328776707
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction button while its cooldown is active; {0} is whole
+          seconds remaining.
+    - rid: 4825848314328776708
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction sent only to the current turn taker if they have
+          not gone down.
+    - rid: 4825848314328776709
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction button while its cooldown is active; {0} is whole
+          seconds remaining.
+    - rid: 4825848314328776710
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction sent to all other players when the turn taker has
+          one card left.
+    - rid: 4825848314328776711
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction button while its cooldown is active; {0} is whole
+          seconds remaining.
+    - rid: 4825848314328776712
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction sent to all other players when both the sender and
+          turn taker have one card left.
+    - rid: 4825848314328776713
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Reaction button while its cooldown is active; {0} is whole
+          seconds remaining.
+    - rid: 4825848314328776714
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received reaction popup; {0} is the sender's player name.
+    - rid: 4825848314328776715
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received reaction popup; {0} is the sender's player name.
+    - rid: 4825848314328776716
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received reaction popup; {0} is the sender's player name.
+    - rid: 4825848314328776717
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Received reaction popup; {0} is the sender's player name.

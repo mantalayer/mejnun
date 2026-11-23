@@ -4460,6 +4460,72 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282619
+  - m_Id: 1031609561112576
+    m_Localized: "Ph\u1EA3n \u1EE9ng"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320192
+    m_Localized: "Ph\u1EA3n \u1EE9ng"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320193
+    m_Localized: "B\u1EA1n \u0111\xE3 l\xE0m t\xF4i r\u1ED1i b\u1EDDi!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514496
+    m_Localized: "B\u1EA1n l\xE0m t\xF4i r\u1ED1i tung l\xEAn! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610001514497
+    m_Localized: "Xu\u1ED1ng \u0111i n\xE0o!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514498
+    m_Localized: "Xu\u1ED1ng \u0111i n\xE0o! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610001514499
+    m_Localized: "B\u1EA1n c\xF3 th\u1EC3 ho\xE0n th\xE0nh kh\xF4ng?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514500
+    m_Localized: "B\u1EA1n c\xF3 th\u1EC3 ho\xE0n th\xE0nh kh\xF4ng? ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610001514501
+    m_Localized: "N\u1EBFu anh kh\xF4ng l\xE0m xong, t\xF4i s\u1EBD l\xE0m n\u1ED1t."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610005708800
+    m_Localized: "T\xF4i s\u1EBD ho\xE0n th\xE0nh n\u1EBFu b\u1EA1n kh\xF4ng ho\xE0n
+      th\xE0nh. ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610005708801
+    m_Localized: "{0}: B\u1EA1n \u0111\xE3 l\xE0m t\xF4i r\u1ED1i tung l\xEAn!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610005708802
+    m_Localized: "{0}: Xu\u1ED1ng \u0111i!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610005708803
+    m_Localized: "{0}: B\u1EA1n c\xF3 th\u1EC3 ho\xE0n th\xE0nh kh\xF4ng?"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
+  - m_Id: 1031610005708804
+    m_Localized: "{0}: T\xF4i s\u1EBD ho\xE0n th\xE0nh n\u1EBFu b\u1EA1n kh\xF4ng
+      ho\xE0n th\xE0nh."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282619
   references:
     version: 2
     RefIds:
@@ -4556,3 +4622,11 @@ MonoBehaviour:
         - id: 958106090594304
         - id: 958106090594305
         - id: 958106090594306
+        - id: 1031610001514496
+        - id: 1031610001514498
+        - id: 1031610001514500
+        - id: 1031610005708800
+        - id: 1031610005708801
+        - id: 1031610005708802
+        - id: 1031610005708803
+        - id: 1031610005708804

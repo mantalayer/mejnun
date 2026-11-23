@@ -118,9 +118,13 @@ namespace Mejnun.Net
 
                         break;
                     }
-                    case NetMessageKind.HurryUp:
-                        writer.Write(((HurryUpMessage)message).FromSeat);
+                    case NetMessageKind.Reaction:
+                    {
+                        var reaction = (ReactionMessage)message;
+                        writer.Write(reaction.FromSeat);
+                        writer.Write((byte)reaction.Reaction);
                         break;
+                    }
                     default:
                         throw new InvalidDataException("Unsupported network message.");
                 }
@@ -227,8 +231,8 @@ namespace Mejnun.Net
                         message = new FirstPlayerVoteStatusMessage(isOpen, questionKey, candidates, votes);
                         break;
                     }
-                    case NetMessageKind.HurryUp:
-                        message = new HurryUpMessage(reader.ReadInt32());
+                    case NetMessageKind.Reaction:
+                        message = new ReactionMessage(reader.ReadInt32(), ReadEnum<Reaction>(reader, "reaction"));
                         break;
                     default:
                         throw new InvalidDataException("Unsupported network message.");

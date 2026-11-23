@@ -4251,6 +4251,70 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282625
+  - m_Id: 1031609561112576
+    m_Localized: Reacciones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320192
+    m_Localized: Reacciones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031609997320193
+    m_Localized: "\xA1Me has fastidiado!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514496
+    m_Localized: "\xA1Me has fastidiado! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610001514497
+    m_Localized: "\xA1Baja ya!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514498
+    m_Localized: "\xA1Baja ya! ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610001514499
+    m_Localized: "\xBFPuedes terminar?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610001514500
+    m_Localized: "\xBFPuedes terminar? ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610001514501
+    m_Localized: "Voy a terminar si t\xFA no terminas."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1031610005708800
+    m_Localized: "Voy a terminar si t\xFA no terminas. ({0})"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610005708801
+    m_Localized: "{0}: \xA1Me has fastidiado!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610005708802
+    m_Localized: "{0}: \xA1Baja ya!"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610005708803
+    m_Localized: "{0}: \xBFPuedes terminar?"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 1031610005708804
+    m_Localized: "{0}: Voy a terminar si t\xFA no terminas."
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
   references:
     version: 2
     RefIds:
@@ -4347,3 +4411,11 @@ MonoBehaviour:
         - id: 958106090594304
         - id: 958106090594305
         - id: 958106090594306
+        - id: 1031610001514496
+        - id: 1031610001514498
+        - id: 1031610001514500
+        - id: 1031610005708800
+        - id: 1031610005708801
+        - id: 1031610005708802
+        - id: 1031610005708803
+        - id: 1031610005708804

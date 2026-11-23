@@ -22,11 +22,13 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
-        public void NetCodec_RoundTripsHurryUpMessage()
+        public void NetCodec_RoundTripsReactionMessage()
         {
-            var decoded = (HurryUpMessage)NetCodec.Decode(NetCodec.Encode(new HurryUpMessage(2)));
+            var decoded = (ReactionMessage)NetCodec.Decode(NetCodec.Encode(
+                new ReactionMessage(2, Reaction.CanYouFinish)));
 
             Assert.That(decoded.FromSeat, Is.EqualTo(2));
+            Assert.That(decoded.Reaction, Is.EqualTo(Reaction.CanYouFinish));
         }
 
         [Test]
@@ -42,13 +44,113 @@ namespace Mejnun.Net.Tests
                 var senderClient = targetSeat == 0 ? clientB : clientA;
                 var senderSeat = targetSeat == 0 ? 1 : 0;
                 var receivedFromSeat = -1;
-                targetClient.HurryUpReceived += seat => receivedFromSeat = seat;
+                var receivedReaction = (Reaction?)null;
+                targetClient.ReactionReceived += (seat, reaction) =>
+                {
+                    receivedFromSeat = seat;
+                    receivedReaction = reaction;
+                };
 
                 host.Tick(HostSession.HurryUpDelaySeconds);
-                senderClient.SubmitHurryUp();
+                senderClient.SubmitReaction(Reaction.HurryUp);
 
                 Assert.That(receivedFromSeat, Is.EqualTo(senderSeat));
+                Assert.That(receivedReaction, Is.EqualTo(Reaction.HurryUp));
             }
+        }
+
+        [Test]
+        public void Host_BroadcastsMessedMeUpToOtherPlayersWhenSentOnCurrentTurn()
+        {
+            var host = NewHost();
+            using (var network = new LoopbackNetwork(host))
+            {
+                var clientA = network.Connect("player-a", "A");
+                var clientB = network.Connect("player-b", "B");
+                var senderSeat = host.Game.State.CurrentSeat;
+                var senderClient = senderSeat == 0 ? clientA : clientB;
+                var senderReceives = 0;
+                var otherReceives = 0;
+                var receivedFromSeat = -1;
+
+                clientA.ReactionReceived += (fromSeat, reaction) =>
+                {
+                    if (reaction == Reaction.MessedMeUp)
+                    {
+                        if (senderSeat == 0) senderReceives++;
+                        else
+                        {
+                            otherReceives++;
+                            receivedFromSeat = fromSeat;
+                        }
+                    }
+                };
+                clientB.ReactionReceived += (fromSeat, reaction) =>
+                {
+                    if (reaction == Reaction.MessedMeUp)
+                    {
+                        if (senderSeat == 1) senderReceives++;
+                        else
+                        {
+                            otherReceives++;
+                            receivedFromSeat = fromSeat;
+                        }
+                    }
+                };
+
+                senderClient.SubmitReaction(Reaction.MessedMeUp);
+
+                Assert.That(senderReceives, Is.Zero);
+                Assert.That(otherReceives, Is.EqualTo(1));
+                Assert.That(receivedFromSeat, Is.EqualTo(senderSeat));
+            }
+        }
+
+        [Test]
+        public void Host_RejectsGoDownReactionWhenCurrentPlayerHasAlreadyGoneDown()
+        {
+            var host = NewHost();
+            host.Join("player-a", "A");
+            host.Join("player-b", "B");
+            var targetSeat = host.Game.State.CurrentSeat;
+            var senderId = targetSeat == 0 ? "player-b" : "player-a";
+
+            host.Game.State.PlayerPhases[targetSeat] = PlayerPhase.Down;
+
+            Assert.That(host.RequestReaction(senderId, Reaction.GoDown), Is.False);
+        }
+
+        [Test]
+        public void Host_AllowsCanYouFinishOnlyWhenCurrentPlayerHasOneCard()
+        {
+            var host = NewHost();
+            host.Join("player-a", "A");
+            host.Join("player-b", "B");
+            var targetSeat = host.Game.State.CurrentSeat;
+            var senderId = targetSeat == 0 ? "player-b" : "player-a";
+
+            SetHandCount(host.Game, targetSeat, 2);
+            Assert.That(host.RequestReaction(senderId, Reaction.CanYouFinish), Is.False);
+
+            SetHandCount(host.Game, targetSeat, 1);
+            Assert.That(host.RequestReaction(senderId, Reaction.CanYouFinish), Is.True);
+        }
+
+        [Test]
+        public void Host_AllowsFinishThreatOnlyWhenSenderAndCurrentPlayerHaveOneCardEach()
+        {
+            var host = NewHost();
+            host.Join("player-a", "A");
+            host.Join("player-b", "B");
+            var targetSeat = host.Game.State.CurrentSeat;
+            var senderSeat = 1 - targetSeat;
+            var senderId = senderSeat == 0 ? "player-a" : "player-b";
+
+            SetHandCount(host.Game, targetSeat, 1);
+            Assert.That(host.RequestReaction(senderId, Reaction.FinishThreat), Is.False);
+
+            SetHandCount(host.Game, senderSeat, 1);
+            Assert.That(host.RequestReaction(senderId, Reaction.FinishThreat), Is.True);
         }
 
         [Test]
@@ -90,7 +192,7 @@ namespace Mejnun.Net.Tests
         }
 
         [Test]
-        public void Host_RaisesHurryUpSentWhenCurrentSeatIsHostLocalSeat()
+        public void Host_RaisesReactionSentWhenCurrentSeatIsHostLocalSeat()
         {
             var host = NewHost();
             var targetSeat = host.Game.State.CurrentSeat;
@@ -109,16 +211,19 @@ namespace Mejnun.Net.Tests
 
             var eventTargetSeat = -1;
             var eventFromSeat = -1;
-            host.HurryUpSent += (seat, fromSeat) =>
+            var eventReaction = (Reaction?)null;
+            host.ReactionSent += (seat, fromSeat, reaction) =>
             {
                 eventTargetSeat = seat;
                 eventFromSeat = fromSeat;
+                eventReaction = reaction;
             };
 
             host.Tick(HostSession.HurryUpDelaySeconds);
             Assert.That(host.RequestHurryUp(waitingPlayerId), Is.True);
             Assert.That(eventTargetSeat, Is.EqualTo(targetSeat));
             Assert.That(eventFromSeat, Is.EqualTo(1 - targetSeat));
+            Assert.That(eventReaction, Is.EqualTo(Reaction.HurryUp));
         }
 
         [Test]
@@ -765,6 +870,15 @@ namespace Mejnun.Net.Tests
         private static MejnunGame NewGame(int turnSeconds)
         {
             return new MejnunGame(new GameSetup(2, 71UL, dealer: 1, turnSeconds: turnSeconds));
+        }
+
+        private static void SetHandCount(MejnunGame game, int seat, int count)
+        {
+            var hand = game.State.Hands[seat];
+            while (hand.Count > count)
+            {
+                hand.RemoveAt(hand.Count - 1);
+            }
         }
 
         private static byte[] FindValidMeld(MejnunGame game, int seat)
