@@ -2668,6 +2668,14 @@ MonoBehaviour:
     m_Localized: Join by code
     m_Metadata:
       m_Items: []
+  - m_Id: 1048174142676993
+    m_Localized: Join session
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676994
+    m_Localized: Join by session code
+    m_Metadata:
+      m_Items: []
   - m_Id: 6549031346191
     m_Localized: Quick match
     m_Metadata:
@@ -3385,6 +3393,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6549035540519
     m_Localized: Thanks for playing!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676995
+    m_Localized: Game Design
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676996
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676997
+    m_Localized: Special Thanks
     m_Metadata:
       m_Items: []
   - m_Id: 6549035540520
@@ -4321,6 +4341,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262618112
+  - m_Id: 1048174142676992
+    m_Localized: '- {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262618112
   references:
     version: 2
     RefIds:
@@ -4430,3 +4455,4 @@ MonoBehaviour:
         - id: 1042939504484355
         - id: 1042939504484356
         - id: 1042939504484357
+        - id: 1048174142676992

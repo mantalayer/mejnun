@@ -4367,6 +4367,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282616
+  - m_Id: 1048174142676992
+    m_Localized: '- {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282616
+  - m_Id: 1048174142676993
+    m_Localized: Sitzung beitreten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676994
+    m_Localized: Mit dem Sitzungscode beitreten
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676995
+    m_Localized: Spieldesign
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676996
+    m_Localized: Musik
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676997
+    m_Localized: Besonderer Dank
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4476,3 +4501,4 @@ MonoBehaviour:
         - id: 1042939504484355
         - id: 1042939504484356
         - id: 1042939504484357
+        - id: 1048174142676992

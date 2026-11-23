@@ -128,11 +128,6 @@
                                 <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.action.create"/>
                             </Bindings>
                         </ui:Button>
-                        <ui:TextField name="online-code-field" class="online-field">
-                            <Bindings>
-                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="online.field.session_code"/>
-                            </Bindings>
-                        </ui:TextField>
                         <ui:Button name="online-join-button" class="frontend-button">
                             <Bindings>
                                 <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.action.join"/>
@@ -145,10 +140,36 @@
                         </ui:Button>
                     </ui:VisualElement>
                 </ui:VisualElement>
+                <ui:VisualElement name="online-join-code" class="setup-content online-join-code" style="display: none;">
+                    <ui:Label class="flow-title">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.join_code.title"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:VisualElement class="setup-fields">
+                        <ui:TextField name="online-code-field" class="online-field">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="online.field.session_code"/>
+                            </Bindings>
+                        </ui:TextField>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="frontend-actions">
+                        <ui:Button name="online-join-code-back-button" class="flow-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.back"/>
+                            </Bindings>
+                        </ui:Button>
+                        <ui:Button name="online-join-code-submit-button" class="flow-button primary-flow-button">
+                            <Bindings>
+                                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="online.action.join_session"/>
+                            </Bindings>
+                        </ui:Button>
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:Label name="online-session-code" class="online-session-code" style="display: none;"/>
                 <ui:Label name="online-lobby-players" class="online-lobby-players" style="display: none;"/>
                 <ui:Label name="online-status" class="flow-error online-status"/>
-                <ui:VisualElement class="frontend-actions">
+                <ui:VisualElement name="online-main-actions" class="frontend-actions">
                     <ui:Button name="online-back-button" class="flow-button"/>
                     <ui:Button name="online-continue-button" class="flow-button primary-flow-button"/>
                 </ui:VisualElement>

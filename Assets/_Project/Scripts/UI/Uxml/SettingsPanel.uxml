@@ -596,32 +596,31 @@
         </ui:ScrollView>
 
         <ui:ScrollView name="settings-page-credits" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.title" />
-                </Bindings>
-            </ui:Label>
             <ui:Label class="settings-credit-role">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.design" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.game_design" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label class="settings-body-text loc-ignore" text="Brennan Anderson" />
+            <ui:Label class="settings-body-text loc-ignore" text="Natalie Gedeon" />
+            <ui:Label class="settings-credit-role">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.music" />
                 </Bindings>
             </ui:Label>
             <ui:Label class="settings-body-text loc-ignore" text="Brennan Anderson" />
             <ui:Label class="settings-credit-role">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.made_with" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.special_thanks" />
                 </Bindings>
             </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.made_with.body" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.thanks" />
-                </Bindings>
-            </ui:Label>
+            <ui:Label class="settings-body-text loc-ignore" text="Fred Gedeon" />
+            <ui:Label class="settings-body-text loc-ignore" text="Sue Gedeon" />
+            <ui:Label class="settings-body-text loc-ignore" text="Stan Gedeon" />
+            <ui:Label class="settings-body-text loc-ignore" text="Sandra Gedeon" />
+            <ui:Label class="settings-body-text loc-ignore" text="Ann Gedeon" />
+            <ui:Label class="settings-body-text loc-ignore" text="Anthony Gedeon" />
+            <ui:Label class="settings-body-text loc-ignore" text="Dina Bassio" />
         </ui:ScrollView>
         </ui:VisualElement>
         <ui:Label name="settings-tooltip" class="settings-tooltip" picking-mode="Ignore" />

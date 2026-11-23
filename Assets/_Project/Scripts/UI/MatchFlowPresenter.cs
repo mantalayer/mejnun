@@ -65,6 +65,11 @@ namespace Mejnun.UI
             Loc.LanguageChanged -= OnLanguageChanged;
             StopWaitingForResultCollection();
             CompleteTableExit();
+            if (matchFlow != null && matchFlow.Table != null)
+            {
+                matchFlow.Table.DealHeld = false;
+            }
+
             if (matchFlow != null)
             {
                 matchFlow.ScreenChanged -= ShowScreen;
@@ -131,6 +136,12 @@ namespace Mejnun.UI
             currentScreen = screen;
             hasCurrentScreen = true;
             var dealerQuestion = screen == MatchFlowScreen.DealerQuestion;
+            var table = matchFlow == null ? null : matchFlow.Table;
+            if (table != null)
+            {
+                table.DealHeld = dealerQuestion;
+            }
+
             flowRoot.style.display = screen == MatchFlowScreen.Turn || screen == MatchFlowScreen.Idle
                 ? DisplayStyle.None
                 : DisplayStyle.Flex;

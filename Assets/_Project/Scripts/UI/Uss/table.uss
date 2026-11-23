@@ -103,10 +103,11 @@
 
 .hurry-up-popup {
     position: absolute;
+    flex-direction: column;
     left: 50%;
     top: 43%;
-    width: 86%;
-    max-width: 90%;
+    width: auto;
+    max-width: 80%;
     translate: -50% -50%;
     color: rgb(255, 246, 238);
     background-color: rgba(130, 24, 24, 0.96);
@@ -125,6 +126,26 @@
     transition-duration: 160ms;
 }
 
+.reaction-popup-message {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-center;
+}
+
+.reaction-popup-sender {
+    margin-top: -4px;
+    margin-bottom: 0;
+    margin-left: 12px;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 23px;
+    opacity: 0.75;
+    -unity-font-style: normal;
+    -unity-text-align: middle-right;
+}
+
 .hurry-up-visible {
     opacity: 1;
     scale: 1.08 1.08;
@@ -136,16 +157,18 @@
 }
 
 .phone-layout .hurry-up-popup {
-    width: auto;
-    left: 5%;
-    right: 5%;
-    max-width: none;
-    translate: 0 -50%;
+    max-width: 90%;
     padding-left: 14px;
     padding-right: 14px;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 26px;
+}
+
+.phone-layout .reaction-popup-sender {
+    margin-top: -2px;
+    margin-left: 8px;
+    font-size: 14px;
 }
 
 .phone-layout .hurry-up-visible {

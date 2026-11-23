@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Mejnun.Core;
 using Mejnun.Game;
 using Mejnun.Localization;
 using UnityEngine;
@@ -9,12 +11,16 @@ namespace Mejnun.UI
     public sealed class DealerQuestionScreen
     {
         private const float TransitionDuration = 0.45f;
+        private const float WinnerWaitDuration = 1.5f;
+        private const float WinnerRevealDuration = 1f;
+        private const float WinnerBounceDuration = 0.6f;
         private readonly VisualElement root;
         private readonly MatchFlow matchFlow;
         private readonly Label questionLabel;
         private readonly VisualElement seatOptions;
         private readonly VisualElement randomVoteMarks;
         private readonly Button randomButton;
+        private readonly Dictionary<int, Button> seatButtons = new Dictionary<int, Button>();
         private IVisualElementScheduledItem transition;
         private bool waitingForGeometry;
         private bool listeningForLanguage;
@@ -44,6 +50,7 @@ namespace Mejnun.UI
         public void PlayEntrance()
         {
             CancelTransition();
+            ClearWinnerStyles();
             if (!TryGetTopOffset(out var offset))
             {
                 waitingForGeometry = true;
@@ -69,18 +76,14 @@ namespace Mejnun.UI
             }
 
             root.pickingMode = PickingMode.Ignore;
-            Animate(0f, -offset, () =>
-            {
-                root.style.translate = StyleKeyword.Null;
-                root.pickingMode = PickingMode.Position;
-                SetVisible(false);
-                completed?.Invoke();
-            });
+            RevealWinnerThenExit(offset, completed);
         }
 
         public void Refresh()
         {
             questionLabel.text = matchFlow.DealerQuestion;
+            ClearWinnerStyles();
+            seatButtons.Clear();
             seatOptions.Clear();
             var onlineVote = matchFlow.IsOnlineFirstPlayerVoteOpen;
             for (var seat = 0; seat < matchFlow.SeatCount; seat++)
@@ -96,6 +99,7 @@ namespace Mejnun.UI
                     text = matchFlow.GetPlayerName(seat)
                 };
                 button.AddToClassList("seat-choice");
+                seatButtons[seat] = button;
                 button.SetEnabled(!onlineVote || matchFlow.CanVoteOnlineFirstPlayer);
                 if (onlineVote && matchFlow.OnlineFirstPlayerLocalVote == seat)
                 {
@@ -209,6 +213,98 @@ namespace Mejnun.UI
             offset = Mathf.Max(root.worldBound.yMax - root.parent.worldBound.yMin + 1f,
                 root.worldBound.height);
             return offset > 0f;
+        }
+
+        private void RevealWinnerThenExit(float offset, Action completed)
+        {
+            var startedAt = Time.unscaledTime;
+            var revealedAt = 0f;
+            var winningSeat = -1;
+            FrameRateGovernor.NotifyActivity();
+            transition = root.schedule.Execute(() =>
+            {
+                if (root.panel == null)
+                {
+                    CancelTransition();
+                    completed?.Invoke();
+                    return;
+                }
+
+                FrameRateGovernor.NotifyActivity();
+                var now = Time.unscaledTime;
+                if (winningSeat < 0)
+                {
+                    if (TryGetWinningSeat(out winningSeat))
+                    {
+                        revealedAt = now;
+                    }
+                    else if (now - startedAt >= WinnerWaitDuration)
+                    {
+                        SlideOut(offset, completed);
+                        return;
+                    }
+                }
+
+                if (winningSeat < 0)
+                {
+                    return;
+                }
+
+                if (seatButtons.TryGetValue(winningSeat, out var winnerButton))
+                {
+                    winnerButton.AddToClassList("seat-choice--winner");
+                    var bounceProgress = Mathf.Clamp01((now - revealedAt) / WinnerBounceDuration);
+                    if (bounceProgress < 1f)
+                    {
+                        var bounce = Mathf.Sin(bounceProgress * Mathf.PI * 4f) *
+                                     Mathf.Exp(-4f * bounceProgress) * 0.22f;
+                        winnerButton.style.scale = new Scale(new Vector3(1f + bounce, 1f + bounce, 1f));
+                    }
+                    else
+                    {
+                        winnerButton.style.scale = StyleKeyword.Null;
+                    }
+                }
+
+                if (now - revealedAt >= WinnerRevealDuration)
+                {
+                    SlideOut(offset, completed);
+                }
+            }).Every(0);
+        }
+
+        private bool TryGetWinningSeat(out int seat)
+        {
+            seat = -1;
+            var game = matchFlow.Game;
+            if (game == null || game.State.Phase == GamePhase.ChoosingDealer)
+            {
+                return false;
+            }
+
+            seat = game.State.CurrentSeat;
+            return seat >= 0 && seatButtons.ContainsKey(seat);
+        }
+
+        private void SlideOut(float offset, Action completed)
+        {
+            CancelTransition();
+            Animate(0f, -offset, () =>
+            {
+                root.style.translate = StyleKeyword.Null;
+                root.pickingMode = PickingMode.Position;
+                SetVisible(false);
+                completed?.Invoke();
+            });
+        }
+
+        private void ClearWinnerStyles()
+        {
+            foreach (var button in seatButtons.Values)
+            {
+                button.RemoveFromClassList("seat-choice--winner");
+                button.style.scale = StyleKeyword.Null;
+            }
         }
 
         private void Animate(float fromY, float toY, Action completed)

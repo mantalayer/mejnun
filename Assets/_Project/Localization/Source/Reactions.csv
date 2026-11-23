@@ -20,3 +20,4 @@ UI,hud.reactions.thank_you_cooldown,Thank you! ({0}),Reaction button while its c
 UI,hud.popup.nice_move,{0}: Nice move!,Received reaction popup; {0} is the sender's player name.
 UI,hud.popup.thank_you,{0}: Thank you!,Received reaction popup; {0} is the sender's player name.
 UI,hud.popup.hurry_up_from,{0}: Hurry up!,Received hurry-up popup shown to the turn taker; {0} is the sender's player name.
+UI,hud.popup.reaction_sender,- {0},Sender attribution shown below a received reaction message; {0} is the sender's player name.

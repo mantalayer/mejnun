@@ -1,0 +1,3 @@
+table,key,en,comment
+UI,online.join_code.title,Join by session code,Title shown above the session code field when joining an online match by code.
+UI,online.action.join_session,Join session,Button that submits the entered session code.

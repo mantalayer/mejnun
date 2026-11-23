@@ -4337,6 +4337,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282629
+  - m_Id: 1048174142676992
+    m_Localized: '- {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 1048174142676993
+    m_Localized: Jiunge na kipindi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676994
+    m_Localized: Jiunge kwa msimbo wa kipindi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676995
+    m_Localized: Ubunifu wa Mchezo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676996
+    m_Localized: Muziki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676997
+    m_Localized: Shukrani Maalum
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4446,3 +4471,4 @@ MonoBehaviour:
         - id: 1042939504484355
         - id: 1042939504484356
         - id: 1042939504484357
+        - id: 1048174142676992

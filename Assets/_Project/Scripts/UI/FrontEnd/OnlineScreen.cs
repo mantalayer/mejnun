@@ -20,6 +20,8 @@ namespace Mejnun.UI.FrontEnd
 
         private readonly VisualElement root;
         private readonly VisualElement setupContainer;
+        private readonly VisualElement joinCodePanel;
+        private readonly VisualElement mainActions;
         private readonly TextField nicknameField;
         private readonly TextField codeField;
         private readonly SliderInt seatCountField;
@@ -29,6 +31,8 @@ namespace Mejnun.UI.FrontEnd
         private readonly Label playersLabel;
         private readonly Button createButton;
         private readonly Button joinButton;
+        private readonly Button joinCodeBackButton;
+        private readonly Button joinCodeSubmitButton;
         private readonly Button quickMatchButton;
         private readonly Button continueButton;
         private readonly Button backButton;
@@ -50,6 +54,8 @@ namespace Mejnun.UI.FrontEnd
         {
             root = documentRoot.Q<VisualElement>("online-screen");
             setupContainer = root.Q<VisualElement>("online-setup");
+            joinCodePanel = root.Q<VisualElement>("online-join-code");
+            mainActions = root.Q<VisualElement>("online-main-actions");
             nicknameField = root.Q<TextField>("online-nickname-field");
             RefreshNickname();
             codeField = root.Q<TextField>("online-code-field");
@@ -62,6 +68,8 @@ namespace Mejnun.UI.FrontEnd
             playersLabel = root.Q<Label>("online-lobby-players");
             createButton = root.Q<Button>("online-create-button");
             joinButton = root.Q<Button>("online-join-button");
+            joinCodeBackButton = root.Q<Button>("online-join-code-back-button");
+            joinCodeSubmitButton = root.Q<Button>("online-join-code-submit-button");
             quickMatchButton = root.Q<Button>("online-quick-match-button");
             continueButton = root.Q<Button>("online-continue-button");
             backButton = root.Q<Button>("online-back-button");
@@ -69,7 +77,9 @@ namespace Mejnun.UI.FrontEnd
             RenderTimerChoices();
 
             createButton.clicked += () => Request(OnlineAction.Create);
-            joinButton.clicked += () => Request(OnlineAction.JoinByCode);
+            joinButton.clicked += ShowJoinCodePanel;
+            joinCodeBackButton.clicked += HideJoinCodePanel;
+            joinCodeSubmitButton.clicked += () => Request(OnlineAction.JoinByCode);
             quickMatchButton.clicked += () => Request(OnlineAction.QuickMatch);
             continueButton.clicked += () => ContinueRequested?.Invoke();
             backButton.clicked += back;
@@ -150,6 +160,8 @@ namespace Mejnun.UI.FrontEnd
         {
             createButton.SetEnabled(!busy);
             joinButton.SetEnabled(!busy);
+            joinCodeBackButton.SetEnabled(!busy);
+            joinCodeSubmitButton.SetEnabled(!busy);
             quickMatchButton.SetEnabled(!busy);
             continueButton.SetEnabled(!busy && isLobby && isHost);
             backButton.SetEnabled(!busy);
@@ -196,6 +208,23 @@ namespace Mejnun.UI.FrontEnd
             codeLabel.text = string.IsNullOrWhiteSpace(code) ? Loc.Get("online.lobby.code_unavailable") : code;
             codeLabel.style.display = DisplayStyle.Flex;
             continueButton.style.display = DisplayStyle.Flex;
+        }
+
+        private void ShowJoinCodePanel()
+        {
+            setupContainer.style.display = DisplayStyle.None;
+            joinCodePanel.style.display = DisplayStyle.Flex;
+            mainActions.style.display = DisplayStyle.None;
+            codeLabel.style.display = DisplayStyle.None;
+            playersLabel.style.display = DisplayStyle.None;
+            SetStatus(string.Empty);
+            codeField.Focus();
+        }
+
+        private void HideJoinCodePanel()
+        {
+            ApplySetupContent();
+            SetStatus(string.Empty);
         }
 
         public void ShowLobby(string code, bool host, IReadOnlyList<string> playerNames, int maxPlayers)
@@ -296,6 +325,8 @@ namespace Mejnun.UI.FrontEnd
         private void ApplyLobbyContent()
         {
             setupContainer.style.display = DisplayStyle.None;
+            joinCodePanel.style.display = DisplayStyle.None;
+            mainActions.style.display = DisplayStyle.Flex;
             codeLabel.text = string.IsNullOrWhiteSpace(lobbyCode) ? Loc.Get("online.lobby.code_unavailable") : lobbyCode;
             codeLabel.style.display = DisplayStyle.Flex;
             playersLabel.text = FormatPlayerNames(lobbyPlayerNames);
@@ -312,6 +343,8 @@ namespace Mejnun.UI.FrontEnd
         private void ApplySetupContent()
         {
             setupContainer.style.display = DisplayStyle.Flex;
+            joinCodePanel.style.display = DisplayStyle.None;
+            mainActions.style.display = DisplayStyle.Flex;
             codeLabel.style.display = DisplayStyle.None;
             playersLabel.text = string.Empty;
             playersLabel.style.display = DisplayStyle.None;

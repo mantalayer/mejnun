@@ -1,0 +1,4 @@
+table,key,en,comment
+UI,credits.role.game_design,Game Design,Credits role heading for the game designers.
+UI,credits.role.music,Music,Credits role heading for the composer.
+UI,credits.role.special_thanks,Special Thanks,Credits role heading introducing people who receive special thanks.

@@ -48,7 +48,8 @@ namespace Mejnun.Game
         public void Tick(float deltaTime)
         {
             if (DurationSeconds <= 0 || matchFlow == null || controller == null || controller.Game == null ||
-                matchFlow.Screen != MatchFlowScreen.Turn)
+                matchFlow.Screen != MatchFlowScreen.Turn ||
+                (matchFlow.Table != null && matchFlow.Table.IsDealing))
             {
                 ResetTurn();
                 return;

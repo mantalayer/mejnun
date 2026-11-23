@@ -79,6 +79,10 @@
     flex-direction: column;
 }
 
+.online-screen .online-join-code {
+    flex-direction: column;
+}
+
 .online-screen .setup-fields,
 .online-screen .cosmetic-picker-panel {
     width: 100%;

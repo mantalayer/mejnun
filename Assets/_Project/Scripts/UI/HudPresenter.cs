@@ -79,6 +79,9 @@ namespace Mejnun.UI
         private Button fastForwardButton;
         private Button reactionsButton;
         private VisualElement reactionsPanel;
+        private bool reactionsPanelOpen;
+        private int reactionsClosedByPressFrame = -1;
+        private bool reactionsButtonPressedWhileOpen;
         private readonly Dictionary<Reaction, Button> reactionButtons = new Dictionary<Reaction, Button>();
         private readonly Dictionary<Reaction, float> nextReactionRequestAt = new Dictionary<Reaction, float>();
         private Button markSetButton;
@@ -90,7 +93,9 @@ namespace Mejnun.UI
         private OnlineWaitingOverlayPresenter onlineWaitingOverlay;
         private Label turnPopup;
         private Label halasPopup;
-        private Label hurryUpPopup;
+        private VisualElement hurryUpPopup;
+        private Label reactionPopupMessage;
+        private Label reactionPopupSender;
         private Label timerLabel;
         private Label goneDownPopup;
         private Label goodMovePopup;
@@ -1108,6 +1113,7 @@ namespace Mejnun.UI
             if (IsReactionsPanelOpen && (target == null || !reactionsPanel.Contains(target)) &&
                 (reactionsButton == null || target == null || !reactionsButton.Contains(target)))
             {
+                reactionsClosedByPressFrame = Time.frameCount;
                 CloseReactionsPanel();
             }
 
@@ -1214,7 +1220,9 @@ namespace Mejnun.UI
             reactionButtons.Add(Reaction.FinishThreat, root.Q<Button>("reaction-finish-threat-button"));
             reactionButtons.Add(Reaction.NiceMove, root.Q<Button>("reaction-nice-move-button"));
             reactionButtons.Add(Reaction.ThankYou, root.Q<Button>("reaction-thank-you-button"));
-            hurryUpPopup = root.Q<Label>("hurry-up-popup");
+            hurryUpPopup = root.Q<VisualElement>("hurry-up-popup");
+            reactionPopupMessage = root.Q<Label>("reaction-popup-message");
+            reactionPopupSender = root.Q<Label>("reaction-popup-sender");
             markSetButton = root.Q<Button>("mark-set-button");
             skipTutorialButton = root.Q<Button>("skip-tutorial-button");
             roomCodeLabel = root.Q<Label>("room-code-label");
@@ -1235,7 +1243,12 @@ namespace Mejnun.UI
             if (compactBoardButton != null) compactBoardButton.clicked += CompactBoard;
             if (hintButton != null) hintButton.clicked += ToggleHints;
             if (fastForwardButton != null) fastForwardButton.clicked += ToggleFastForward;
-            if (reactionsButton != null) reactionsButton.clicked += ToggleReactionsPanel;
+            if (reactionsButton != null)
+            {
+                reactionsButton.clicked += ToggleReactionsPanel;
+                reactionsButton.RegisterCallback<PointerDownEvent>(OnReactionsButtonPointerDown,
+                    TrickleDown.TrickleDown);
+            }
             foreach (var reactionButton in reactionButtons)
             {
                 var reaction = reactionButton.Key;
@@ -1521,24 +1534,33 @@ namespace Mejnun.UI
 
         private void ToggleReactionsPanel()
         {
+            var wasPressedWhileOpen = reactionsButtonPressedWhileOpen;
+            reactionsButtonPressedWhileOpen = false;
             if (reactionsPanel == null || matchFlow == null || !matchFlow.CanShowReactions)
             {
                 return;
             }
 
-            if (IsReactionsPanelOpen)
+            if (IsReactionsPanelOpen || wasPressedWhileOpen)
             {
                 CloseReactionsPanel();
                 return;
             }
 
+            reactionsPanelOpen = true;
             reactionsPanel.style.display = DisplayStyle.Flex;
             RefreshReactionButtons();
             UpdateReactionsPanelPosition();
         }
 
-        private bool IsReactionsPanelOpen =>
-            reactionsPanel != null && reactionsPanel.resolvedStyle.display == DisplayStyle.Flex;
+        private bool IsReactionsPanelOpen => reactionsPanel != null && reactionsPanelOpen;
+
+        private void OnReactionsButtonPointerDown(PointerDownEvent evt)
+        {
+            reactionsButtonPressedWhileOpen = IsReactionsPanelOpen ||
+                                              (reactionsClosedByPressFrame >= 0 &&
+                                               Time.frameCount - reactionsClosedByPressFrame <= 1);
+        }
 
         private void CloseReactionsPanelOnOutsidePress()
         {
@@ -1558,11 +1580,13 @@ namespace Mejnun.UI
                 return;
             }
 
+            reactionsClosedByPressFrame = Time.frameCount;
             CloseReactionsPanel();
         }
 
         private void CloseReactionsPanel()
         {
+            reactionsPanelOpen = false;
             if (reactionsPanel != null)
             {
                 reactionsPanel.style.display = DisplayStyle.None;
@@ -1648,37 +1672,41 @@ namespace Mejnun.UI
 
         private void ShowReactionPopupText()
         {
-            if (hurryUpPopup == null)
+            if (hurryUpPopup == null || reactionPopupMessage == null || reactionPopupSender == null)
             {
                 return;
             }
 
             hurryUpPopup.EnableInClassList("reaction-popup-positive", ReactionRules.IsPositive(reactionPopupReaction));
             var playerName = matchFlow == null ? string.Empty : matchFlow.GetPlayerName(reactionPopupFromSeat);
+            var message = string.Empty;
             switch (reactionPopupReaction)
             {
                 case Reaction.HurryUp:
-                    hurryUpPopup.text = Loc.Format("hud.popup.hurry_up_from", playerName);
+                    message = Loc.Get("hud.button.hurry_up");
                     break;
                 case Reaction.NiceMove:
-                    hurryUpPopup.text = Loc.Format("hud.popup.nice_move", playerName);
+                    message = Loc.Get("hud.reactions.nice_move");
                     break;
                 case Reaction.ThankYou:
-                    hurryUpPopup.text = Loc.Format("hud.popup.thank_you", playerName);
+                    message = Loc.Get("hud.reactions.thank_you");
                     break;
                 case Reaction.MessedMeUp:
-                    hurryUpPopup.text = Loc.Format("hud.popup.messed_me_up", playerName);
+                    message = Loc.Get("hud.reactions.messed_me_up");
                     break;
                 case Reaction.GoDown:
-                    hurryUpPopup.text = Loc.Format("hud.popup.go_down", playerName);
+                    message = Loc.Get("hud.reactions.go_down");
                     break;
                 case Reaction.CanYouFinish:
-                    hurryUpPopup.text = Loc.Format("hud.popup.can_you_finish", playerName);
+                    message = Loc.Get("hud.reactions.can_you_finish");
                     break;
                 case Reaction.FinishThreat:
-                    hurryUpPopup.text = Loc.Format("hud.popup.finish_threat", playerName);
+                    message = Loc.Get("hud.reactions.finish_threat");
                     break;
             }
+
+            reactionPopupMessage.text = message;
+            reactionPopupSender.text = Loc.Format("hud.popup.reaction_sender", playerName);
         }
 
         private void UpdateSetMarkers()
@@ -3312,7 +3340,7 @@ namespace Mejnun.UI
 
             if (keyboard.escapeKey.wasPressedThisFrame)
             {
-                if (reactionsPanel != null && reactionsPanel.resolvedStyle.display == DisplayStyle.Flex)
+                if (IsReactionsPanelOpen)
                 {
                     CloseReactionsPanel();
                     return;

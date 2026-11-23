@@ -124,6 +124,7 @@ namespace Mejnun.Game
         private bool dealArmed;
         private bool dealPending;
         private bool dealStarted;
+        private bool dealHeld;
         private bool collectionNotified;
         private float boardDealRequestedAt;
         private float boardDealDelay;
@@ -143,7 +144,24 @@ namespace Mejnun.Game
         public int ActiveCardCount => activeCards.Count;
         public int BoardCardCount => boardCleared ? 0 : CountBoardCards(CurrentState);
         public bool DealAnimationEnabled { get; set; }
-        public bool IsDealing => dealArmed || dealPending || initialDealFlights.Count > 0;
+        public bool DealHeld
+        {
+            get => dealHeld;
+            set
+            {
+                if (dealHeld == value)
+                {
+                    return;
+                }
+
+                dealHeld = value;
+                if (!dealHeld && !dealArmed && !dealPending && initialDealFlights.Count == 0)
+                {
+                    DealCompleted?.Invoke();
+                }
+            }
+        }
+        public bool IsDealing => DealHeld || dealArmed || dealPending || initialDealFlights.Count > 0;
         public CardSlotResolver SeatCardSlotResolver { get; set; }
         public bool IsCollectingCards => boardCollecting || boardCollectFlights.Count > 0;
         public bool HandVisible => handVisible;
@@ -1481,6 +1499,12 @@ namespace Mejnun.Game
         {
             if (!dealPending || CurrentState == null || CurrentState.Phase != GamePhase.Playing)
             {
+                return;
+            }
+
+            if (DealHeld)
+            {
+                dealRequestedAt = Time.unscaledTime;
                 return;
             }
 

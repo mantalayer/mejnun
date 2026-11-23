@@ -3240,6 +3240,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262618743
+  - m_Id: 1048174142676993
+    m_Key: online.action.join_session
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315364245505
+  - m_Id: 1048174142676994
+    m_Key: online.join_code.title
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315364245506
   - m_Id: 6549031346191
     m_Key: online.action.quick_match
     m_Metadata:
@@ -4070,6 +4080,21 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250262618909
+  - m_Id: 1048174142676995
+    m_Key: credits.role.game_design
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315364245507
+  - m_Id: 1048174142676996
+    m_Key: credits.role.music
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315364245508
+  - m_Id: 1048174142676997
+    m_Key: credits.role.special_thanks
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315364245509
   - m_Id: 6549035540520
     m_Key: hud.button.end_turn
     m_Metadata:
@@ -5145,6 +5170,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848315037089798
+  - m_Id: 1048174142676992
+    m_Key: hud.popup.reaction_sender
+    m_Metadata:
+      m_Items:
+      - rid: 4825848315364245504
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9927,3 +9957,30 @@ MonoBehaviour:
       data:
         m_CommentText: Received hurry-up popup shown to the turn taker; {0} is the
           sender's player name.
+    - rid: 4825848315364245504
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Sender attribution shown below a received reaction message;
+          {0} is the sender's player name.
+    - rid: 4825848315364245505
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Button that submits the entered session code.
+    - rid: 4825848315364245506
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Title shown above the session code field when joining an online
+          match by code.
+    - rid: 4825848315364245507
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Credits role heading for the game designers.
+    - rid: 4825848315364245508
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Credits role heading for the composer.
+    - rid: 4825848315364245509
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Credits role heading introducing people who receive special
+          thanks.

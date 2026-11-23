@@ -251,6 +251,12 @@
     background-color: rgb(54, 68, 57);
 }
 
+.flow-root .seat-choice--winner,
+.flow-root .seat-choice--winner:disabled {
+    color: rgb(22, 32, 24);
+    background-color: rgb(239, 195, 92);
+}
+
 .flow-root .primary-flow-button {
     color: rgb(22, 32, 24);
     background-color: rgb(177, 224, 120);

@@ -87,7 +87,10 @@
         <ui:VisualElement name="top-opponents" class="opponents-top" picking-mode="Ignore" />
         <ui:VisualElement name="popup-layer" class="popup-layer" picking-mode="Ignore">
             <ui:Label name="turn-popup" class="turn-popup" picking-mode="Ignore" />
-            <ui:Label name="hurry-up-popup" class="hurry-up-popup" picking-mode="Ignore" />
+            <ui:VisualElement name="hurry-up-popup" class="hurry-up-popup" picking-mode="Ignore">
+                <ui:Label name="reaction-popup-message" class="reaction-popup-message" picking-mode="Ignore" />
+                <ui:Label name="reaction-popup-sender" class="reaction-popup-sender" picking-mode="Ignore" />
+            </ui:VisualElement>
             <ui:Label name="online-notice" class="online-notice" picking-mode="Ignore" />
             <ui:Label name="online-waiting" class="online-waiting" picking-mode="Ignore" />
             <ui:Label name="halas-popup" class="halas-popup" picking-mode="Ignore">

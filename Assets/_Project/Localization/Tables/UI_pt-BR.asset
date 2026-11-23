@@ -4352,6 +4352,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848250703282627
+  - m_Id: 1048174142676992
+    m_Localized: '- {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282627
+  - m_Id: 1048174142676993
+    m_Localized: "Participar da sess\xE3o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676994
+    m_Localized: "Participar usando o c\xF3digo de sess\xE3o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676995
+    m_Localized: Design de jogos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676996
+    m_Localized: "M\xFAsica"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1048174142676997
+    m_Localized: Agradecimentos especiais
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4461,3 +4486,4 @@ MonoBehaviour:
         - id: 1042939504484355
         - id: 1042939504484356
         - id: 1042939504484357
+        - id: 1048174142676992
