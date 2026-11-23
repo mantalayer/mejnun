@@ -5175,6 +5175,66 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4825848315364245504
+  - m_Id: 9876543210987
+    m_Key: settings.tab.graphics
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620000
+  - m_Id: 9876543210988
+    m_Key: settings.graphics.section
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620001
+  - m_Id: 9876543210989
+    m_Key: settings.graphics.display_mode
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620002
+  - m_Id: 9876543210990
+    m_Key: settings.graphics.display_mode.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620003
+  - m_Id: 9876543210991
+    m_Key: settings.graphics.display_mode.windowed
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620004
+  - m_Id: 9876543210992
+    m_Key: settings.graphics.display_mode.fullscreen
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620005
+  - m_Id: 9876543210993
+    m_Key: settings.graphics.vsync
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620006
+  - m_Id: 9876543210994
+    m_Key: settings.graphics.vsync.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620007
+  - m_Id: 9876543210995
+    m_Key: settings.graphics.frame_rate_limit
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620008
+  - m_Id: 9876543210996
+    m_Key: settings.graphics.frame_rate_limit.tooltip
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620009
+  - m_Id: 9876543210997
+    m_Key: settings.graphics.frame_rate_limit.fps
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620010
+  - m_Id: 9876543210998
+    m_Key: settings.graphics.frame_rate_limit.unlimited
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250262620011
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -9984,3 +10044,51 @@ MonoBehaviour:
       data:
         m_CommentText: Credits role heading introducing people who receive special
           thanks.
+    - rid: 4825848250262620000
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Settings panel tab: graphics page.'
+    - rid: 4825848250262620001
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Settings section title on the Graphics page.
+    - rid: 4825848250262620002
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Settings option label: choose between a windowed and fullscreen display.'
+    - rid: 4825848250262620003
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Help text for the display mode setting.
+    - rid: 4825848250262620004
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Display mode option: game runs in a window.'
+    - rid: 4825848250262620005
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Display mode option: game fills the screen.'
+    - rid: 4825848250262620006
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Settings toggle label: vertical synchronization.'
+    - rid: 4825848250262620007
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Help text for the VSync setting.
+    - rid: 4825848250262620008
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Settings option label: dropdown for the maximum frame rate.'
+    - rid: 4825848250262620009
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Help text for the frame rate limit setting.
+    - rid: 4825848250262620010
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: '{0} = frame rate in frames per second.'
+    - rid: 4825848250262620011
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Frame rate limit option: no explicit frame-rate cap.'

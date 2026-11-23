@@ -4385,6 +4385,56 @@ MonoBehaviour:
     m_Localized: Ringraziamenti speciali
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: Grafica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Display
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: "Modalit\xE0 di visualizzazione"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: Scegli se riprodurre in una finestra o a schermo intero.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: Con finestra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: A schermo intero
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: Sincronizza i fotogrammi con il display per ridurre lo strappo dell'immagine.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: limite della frequenza dei fotogrammi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "Imposta la frequenza dei fotogrammi massima. In alternativa, VSync
+      pu\xF2 impostare la frequenza dei fotogrammi effettiva."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282613
+  - m_Id: 9876543210998
+    m_Localized: Illimitato
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4495,3 +4545,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

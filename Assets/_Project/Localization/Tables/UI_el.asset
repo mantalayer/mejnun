@@ -5195,6 +5195,65 @@ MonoBehaviour:
     m_Localized: "\u0395\u03B9\u03B4\u03B9\u03BA\u03AD\u03C2 \u03B5\u03C5\u03C7\u03B1\u03C1\u03B9\u03C3\u03C4\u03AF\u03B5\u03C2"
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: "\u0393\u03C1\u03B1\u03C6\u03B9\u03BA\u03AC"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: "\u0395\u03C0\u03AF\u03B4\u03B5\u03B9\u03BE\u03B7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: "\u039B\u03B5\u03B9\u03C4\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03B5\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7\u03C2"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: "\u0395\u03C0\u03B9\u03BB\u03AD\u03BE\u03C4\u03B5 \u03B1\u03BD \u03B8\u03B1
+      \u03B1\u03BD\u03B1\u03C0\u03B1\u03C1\u03B1\u03C7\u03B8\u03B5\u03AF \u03C3\u03B5
+      \u03C0\u03B1\u03C1\u03AC\u03B8\u03C5\u03C1\u03BF \u03AE \u03C3\u03B5 \u03C0\u03BB\u03AE\u03C1\u03B7
+      \u03BF\u03B8\u03CC\u03BD\u03B7."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: "\u03A0\u03B1\u03C1\u03B1\u03B8\u03C5\u03C1\u03C9\u03BC\u03AD\u03BD\u03BF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: "\u03A0\u03BB\u03AE\u03C1\u03B7\u03C2 \u03BF\u03B8\u03CC\u03BD\u03B7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: "\u03A3\u03C5\u03B3\u03C7\u03C1\u03BF\u03BD\u03AF\u03C3\u03C4\u03B5
+      \u03C4\u03B1 \u03BA\u03B1\u03C1\u03AD \u03BC\u03B5 \u03C4\u03B7\u03BD \u03BF\u03B8\u03CC\u03BD\u03B7
+      \u03C3\u03B1\u03C2 \u03B3\u03B9\u03B1 \u03BD\u03B1 \u03BC\u03B5\u03B9\u03CE\u03C3\u03B5\u03C4\u03B5
+      \u03C4\u03BF \u03C3\u03BA\u03AF\u03C3\u03B9\u03BC\u03BF."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: "\u038C\u03C1\u03B9\u03BF \u03C1\u03C5\u03B8\u03BC\u03BF\u03CD \u03BA\u03B1\u03C1\u03AD"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "\u039F\u03C1\u03AF\u03C3\u03C4\u03B5 \u03C4\u03BF\u03BD \u03BC\u03AD\u03B3\u03B9\u03C3\u03C4\u03BF
+      \u03C1\u03C5\u03B8\u03BC\u03CC \u03BA\u03B1\u03C1\u03AD. \u03A4\u03BF VSync
+      \u03B5\u03BD\u03B4\u03AD\u03C7\u03B5\u03C4\u03B1\u03B9 \u03BD\u03B1 \u03BF\u03C1\u03AF\u03C3\u03B5\u03B9
+      \u03C4\u03BF\u03BD \u03C0\u03C1\u03B1\u03B3\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC
+      \u03C1\u03C5\u03B8\u03BC\u03CC \u03BA\u03B1\u03C1\u03AD."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848269831405569
+  - m_Id: 9876543210998
+    m_Localized: "\u0391\u03C0\u03B5\u03C1\u03B9\u03CC\u03C1\u03B9\u03C3\u03C4\u03BF\u03C2"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -5305,3 +5364,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

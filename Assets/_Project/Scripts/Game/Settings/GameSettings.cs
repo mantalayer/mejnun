@@ -40,6 +40,9 @@ namespace Mejnun.Game
         private const string VolumeMusicKey = "settings.audio.music";
         private const string VolumeSfxKey = "settings.audio.sfx";
         private const string VolumeVoiceKey = "settings.audio.voice";
+        public const string DisplayModeKey = "settings.graphics.displayMode";
+        public const string VSyncKey = "settings.graphics.vsync";
+        public const string FrameRateLimitKey = "settings.graphics.frameRateLimit";
         private const string LanguageKey = Mejnun.Localization.LanguagePreference.PlayerPrefsKey;
         private const string QuickMatchBotFillKey = "settings.online.botFill";
         private const string OnlineNicknameKey = "settings.online.nickname";
@@ -291,6 +294,24 @@ namespace Mejnun.Game
             set => Set(VolumeVoiceKey, Mathf.Clamp01(value));
         }
 
+        public static int DisplayMode
+        {
+            get => Mathf.Clamp(Get(DisplayModeKey, SettingsDefaults.Active.DisplayMode), 0, 1);
+            set => Set(DisplayModeKey, Mathf.Clamp(value, 0, 1));
+        }
+
+        public static bool VSync
+        {
+            get => Get(VSyncKey, SettingsDefaults.Active.VSync);
+            set => Set(VSyncKey, value);
+        }
+
+        public static int FrameRateLimit
+        {
+            get => Mathf.Clamp(Get(FrameRateLimitKey, SettingsDefaults.Active.FrameRateLimit), 0, 3);
+            set => Set(FrameRateLimitKey, Mathf.Clamp(value, 0, 3));
+        }
+
         // Locale code chosen in Settings, or empty to follow the platform
         // (Steam game language / device languages). Switching the running
         // language goes through Loc.SetLanguage, which saves the same key.
@@ -335,7 +356,8 @@ namespace Mejnun.Game
                 TouchPanStartSpeedKey,
                 ZoomSensitivityKey, UiScaleKey, CpuSpeedKey, LegacyCpuSpeedKey, ShowFastForwardKey,
                 OverlapSetsKey, OrganicBoardKey, BoardCardSpreadKey, CardMessinessKey, EasyOpeningDealKey,
-                VolumeMasterKey, VolumeMusicKey, VolumeSfxKey, VolumeVoiceKey, QuickMatchBotFillKey
+                VolumeMasterKey, VolumeMusicKey, VolumeSfxKey, VolumeVoiceKey,
+                DisplayModeKey, VSyncKey, FrameRateLimitKey, QuickMatchBotFillKey
             };
 
             for (var index = 0; index < changedKeys.Length; index++)
@@ -388,6 +410,9 @@ namespace Mejnun.Game
             PlayerPrefs.DeleteKey(VolumeMusicKey);
             PlayerPrefs.DeleteKey(VolumeSfxKey);
             PlayerPrefs.DeleteKey(VolumeVoiceKey);
+            PlayerPrefs.DeleteKey(DisplayModeKey);
+            PlayerPrefs.DeleteKey(VSyncKey);
+            PlayerPrefs.DeleteKey(FrameRateLimitKey);
             PlayerPrefs.DeleteKey(LanguageKey);
             PlayerPrefs.DeleteKey(QuickMatchBotFillKey);
             PlayerPrefs.DeleteKey(OnlineNicknameKey);
@@ -400,9 +425,21 @@ namespace Mejnun.Game
             return PlayerPrefs.GetInt(key, defaultValue ? 1 : 0) != 0;
         }
 
+        private static int Get(string key, int defaultValue)
+        {
+            return PlayerPrefs.GetInt(key, defaultValue);
+        }
+
         private static void Set(string key, bool value)
         {
             PlayerPrefs.SetInt(key, value ? 1 : 0);
+            PlayerPrefs.Save();
+            Changed?.Invoke(key);
+        }
+
+        private static void Set(string key, int value)
+        {
+            PlayerPrefs.SetInt(key, value);
             PlayerPrefs.Save();
             Changed?.Invoke(key);
         }

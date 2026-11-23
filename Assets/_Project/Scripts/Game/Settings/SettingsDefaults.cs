@@ -61,6 +61,11 @@ namespace Mejnun.Game
         [Range(0f, 1f)] public float VolumeSfx = 1f;
         [Range(0f, 1f)] public float VolumeVoice = 1f;
 
+        [Header("Graphics")]
+        public int DisplayMode;
+        public bool VSync = true;
+        public int FrameRateLimit = 1;
+
         [Header("Online")]
         public int QuickMatchBotFill = 30;
 

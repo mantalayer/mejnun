@@ -703,6 +703,19 @@
     border-color: rgba(0, 0, 0, 0);
 }
 
+.desktop-layout .bottom-bar {
+    flex-wrap: nowrap;
+}
+
+.desktop-layout .bottom-bar .hud-button {
+    flex-shrink: 1;
+    min-width: 0;
+    padding-left: 6px;
+    padding-right: 6px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
 .bottom-bar.active-turn {
     border-color: rgb(177, 224, 120);
 }

@@ -4345,7 +4345,55 @@ MonoBehaviour:
     m_Localized: '- {0}'
     m_Metadata:
       m_Items:
+  - m_Id: 9876543210987
+    m_Localized: Graphics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Display
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: Display mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: Choose whether to play in a window or fullscreen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: Windowed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: Fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: Synchronize frames with your display to reduce tearing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: Frame rate limit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: Set the maximum frame rate. VSync may set the effective frame rate instead.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
       - rid: 4825848250262618112
+  - m_Id: 9876543210998
+    m_Localized: Unlimited
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -4362,6 +4362,56 @@ MonoBehaviour:
     m_Localized: Shukrani Maalum
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: Michoro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Onyesho
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: Hali ya kuonyesha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: Chagua kama utacheza kwenye dirisha au skrini nzima.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: Dirisha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: Skrini nzima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: Sawazisha fremu na skrini yako ili kupunguza kuraruka.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: Kikomo cha kiwango cha fremu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: Weka kiwango cha juu cha fremu. VSync inaweza kuweka kiwango cha
+      fremu kinachofaa badala yake.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} Ramprogramu za kielektroniki'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282629
+  - m_Id: 9876543210998
+    m_Localized: Isiyo na kikomo
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4472,3 +4522,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

@@ -12,7 +12,7 @@ namespace Mejnun.UI
         public const float CompactWidthThreshold = 560f;
 
         private static readonly string[] SettingsPageKeys =
-            { "gameplay", "table", "hints", "accessibility", "audio", "general", "rules", "credits" };
+            { "gameplay", "table", "hints", "accessibility", "audio", "graphics", "general", "rules", "credits" };
         private VisualElement root;
         private Label tooltipLabel;
         private TableView tableView;
@@ -53,12 +53,19 @@ namespace Mejnun.UI
             if (batterySaverToggle != null)
                 batterySaverToggle.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.Flex : DisplayStyle.None;
 
+            var graphicsTab = root.Q<Button>("settings-tab-graphics");
+            if (graphicsTab != null)
+            {
+                graphicsTab.style.display = DeviceProfile.IsMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
+            }
+
             root.Q<Button>("settings-close-button")?.RegisterCallback<ClickEvent>(_ => Closed?.Invoke());
             BindSettingsTab("gameplay");
             BindSettingsTab("table");
             BindSettingsTab("hints");
             BindSettingsTab("accessibility");
             BindSettingsTab("audio");
+            BindSettingsTab("graphics");
             BindSettingsTab("general");
             BindSettingsTab("rules");
             BindSettingsTab("credits");
@@ -84,6 +91,8 @@ namespace Mejnun.UI
                 value => GameSettings.ReducedMotion = value);
             BindToggle("haptics-toggle", () => GameSettings.HapticsEnabled,
                 value => GameSettings.HapticsEnabled = value);
+            BindToggle("vsync-toggle", () => GameSettings.VSync,
+                value => GameSettings.VSync = value);
             BindToggle("four-colour-deck-toggle", () => GameSettings.FourColourDeck,
                 value => GameSettings.FourColourDeck = value, RefreshTable);
             BindToggle("left-handed-toggle", () => GameSettings.LeftHanded,
@@ -137,6 +146,7 @@ namespace Mejnun.UI
             BindCpuSpeed();
             BindLanguage();
             BindBotFill();
+            BindGraphicsDropdowns();
             BindTooltips();
             var resetButton = root.Q<Button>("settings-reset-button");
             if (resetButton != null)
@@ -321,6 +331,57 @@ namespace Mejnun.UI
             };
         }
 
+        private static List<string> DisplayModeLabels()
+        {
+            return new List<string>
+            {
+                Loc.Get("settings.graphics.display_mode.windowed"),
+                Loc.Get("settings.graphics.display_mode.fullscreen")
+            };
+        }
+
+        private static List<string> FrameRateLimitLabels()
+        {
+            return new List<string>
+            {
+                Loc.Format("settings.graphics.frame_rate_limit.fps", 30),
+                Loc.Format("settings.graphics.frame_rate_limit.fps", 60),
+                Loc.Format("settings.graphics.frame_rate_limit.fps", 120),
+                Loc.Get("settings.graphics.frame_rate_limit.unlimited")
+            };
+        }
+
+        private void BindGraphicsDropdowns()
+        {
+            var displayMode = root.Q<DropdownField>("display-mode-dropdown");
+            if (displayMode != null)
+            {
+                displayMode.choices = DisplayModeLabels();
+                displayMode.RegisterValueChangedCallback(_ =>
+                {
+                    if (displayMode.index >= 0)
+                    {
+                        GameSettings.DisplayMode = displayMode.index;
+                    }
+                });
+                SetDropdownIndex(displayMode, GameSettings.DisplayMode);
+            }
+
+            var frameRateLimit = root.Q<DropdownField>("frame-rate-limit-dropdown");
+            if (frameRateLimit != null)
+            {
+                frameRateLimit.choices = FrameRateLimitLabels();
+                frameRateLimit.RegisterValueChangedCallback(_ =>
+                {
+                    if (frameRateLimit.index >= 0)
+                    {
+                        GameSettings.FrameRateLimit = frameRateLimit.index;
+                    }
+                });
+                SetDropdownIndex(frameRateLimit, GameSettings.FrameRateLimit);
+            }
+        }
+
         private void BindLanguage()
         {
             var dropdown = root.Q<DropdownField>("language-dropdown");
@@ -408,6 +469,18 @@ namespace Mejnun.UI
                 botFill.choices = BotFillLabels();
             }
 
+            var displayMode = root.Q<DropdownField>("display-mode-dropdown");
+            if (displayMode != null)
+            {
+                displayMode.choices = DisplayModeLabels();
+            }
+
+            var frameRateLimit = root.Q<DropdownField>("frame-rate-limit-dropdown");
+            if (frameRateLimit != null)
+            {
+                frameRateLimit.choices = FrameRateLimitLabels();
+            }
+
             RefreshValues();
         }
 
@@ -466,6 +539,7 @@ namespace Mejnun.UI
             SetToggle("hover-highlight-toggle", GameSettings.CardHoverHighlight);
             SetToggle("reduced-motion-toggle", GameSettings.ReducedMotion);
             SetToggle("haptics-toggle", GameSettings.HapticsEnabled);
+            SetToggle("vsync-toggle", GameSettings.VSync);
             SetToggle("four-colour-deck-toggle", GameSettings.FourColourDeck);
             SetToggle("left-handed-toggle", GameSettings.LeftHanded);
             SetToggle("battery-saver-toggle", GameSettings.BatterySaver);
@@ -493,6 +567,8 @@ namespace Mejnun.UI
             SetDropdownIndex(root.Q<DropdownField>("cpu-speed-dropdown"), GameSettings.CpuSpeed);
             SetDropdownIndex(root.Q<DropdownField>("quick-match-bot-fill-dropdown"),
                 GameSettings.QuickMatchBotFill / 30);
+            SetDropdownIndex(root.Q<DropdownField>("display-mode-dropdown"), GameSettings.DisplayMode);
+            SetDropdownIndex(root.Q<DropdownField>("frame-rate-limit-dropdown"), GameSettings.FrameRateLimit);
         }
 
         private void RefreshTable()

@@ -4377,6 +4377,56 @@ MonoBehaviour:
     m_Localized: Agradecimentos especiais
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: "Gr\xE1ficos"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Mostrar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: "Modo de exibi\xE7\xE3o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: Escolha se deseja jogar em uma janela ou em tela cheia.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: Com janelas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: Tela cheia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: "Sincroniza\xE7\xE3o vertical (VSync)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: Sincronize os quadros com o seu monitor para reduzir o tearing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: limite de taxa de quadros
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "Defina a taxa de quadros m\xE1xima. O VSync pode definir a taxa
+      de quadros efetiva."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282614
+  - m_Id: 9876543210998
+    m_Localized: Ilimitado
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4487,3 +4537,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

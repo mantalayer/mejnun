@@ -1,0 +1,13 @@
+table,key,en,comment
+UI,settings.tab.graphics,Graphics,Settings panel tab: graphics page.
+UI,settings.graphics.section,Display,Settings section title on the Graphics page.
+UI,settings.graphics.display_mode,Display mode,Settings option label: choose between a windowed and fullscreen display.
+UI,settings.graphics.display_mode.tooltip,Choose whether to play in a window or fullscreen.,Help text for the display mode setting.
+UI,settings.graphics.display_mode.windowed,Windowed,Display mode option: game runs in a window.
+UI,settings.graphics.display_mode.fullscreen,Fullscreen,Display mode option: game fills the screen.
+UI,settings.graphics.vsync,VSync,Settings toggle label: vertical synchronization.
+UI,settings.graphics.vsync.tooltip,Synchronize frames with your display to reduce tearing.,Help text for the VSync setting.
+UI,settings.graphics.frame_rate_limit,Frame rate limit,Settings option label: dropdown for the maximum frame rate.
+UI,settings.graphics.frame_rate_limit.tooltip,Set the maximum frame rate. VSync may set the effective frame rate instead.,Help text for the frame rate limit setting.
+UI,settings.graphics.frame_rate_limit.fps,{0} FPS,{0} = frame rate in frames per second.
+UI,settings.graphics.frame_rate_limit.unlimited,Unlimited,Frame rate limit option: no explicit frame-rate cap.

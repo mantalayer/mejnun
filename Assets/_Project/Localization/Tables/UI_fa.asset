@@ -5086,6 +5086,66 @@ MonoBehaviour:
     m_Localized: "\u062A\u0634\u06A9\u0631 \u0648\u06CC\u0698\u0647"
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: "\u06AF\u0631\u0627\u0641\u06CC\u06A9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: "\u0646\u0645\u0627\u06CC\u0634"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: "\u062D\u0627\u0644\u062A \u0646\u0645\u0627\u06CC\u0634"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: "\u0627\u0646\u062A\u062E\u0627\u0628 \u06A9\u0646\u06CC\u062F \u06A9\u0647
+      \u0622\u06CC\u0627 \u062F\u0631 \u06CC\u06A9 \u067E\u0646\u062C\u0631\u0647
+      \u06CC\u0627 \u062A\u0645\u0627\u0645 \u0635\u0641\u062D\u0647 \u067E\u062E\u0634
+      \u0634\u0648\u062F."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: "\u067E\u0646\u062C\u0631\u0647\u200C\u062F\u0627\u0631"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: "\u062A\u0645\u0627\u0645 \u0635\u0641\u062D\u0647"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: "\u0647\u0645\u06AF\u0627\u0645\u200C\u0633\u0627\u0632\u06CC V"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: "\u0641\u0631\u06CC\u0645\u200C\u0647\u0627 \u0631\u0627 \u0628\u0627
+      \u0635\u0641\u062D\u0647 \u0646\u0645\u0627\u06CC\u0634 \u062E\u0648\u062F
+      \u0647\u0645\u06AF\u0627\u0645\u200C\u0633\u0627\u0632\u06CC \u06A9\u0646\u06CC\u062F
+      \u062A\u0627 \u067E\u0627\u0631\u06AF\u06CC \u062A\u0635\u0648\u06CC\u0631
+      \u06A9\u0627\u0647\u0634 \u06CC\u0627\u0628\u062F."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: "\u0645\u062D\u062F\u0648\u062F\u06CC\u062A \u0646\u0631\u062E \u0641\u0631\u06CC\u0645"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "\u062D\u062F\u0627\u06A9\u062B\u0631 \u0646\u0631\u062E \u0641\u0631\u06CC\u0645
+      \u0631\u0627 \u062A\u0646\u0638\u06CC\u0645 \u06A9\u0646\u06CC\u062F. VSync
+      \u0645\u0645\u06A9\u0646 \u0627\u0633\u062A \u0628\u0647 \u062C\u0627\u06CC
+      \u0622\u0646 \u0646\u0631\u062E \u0641\u0631\u06CC\u0645 \u0645\u0624\u062B\u0631
+      \u0631\u0627 \u062A\u0646\u0638\u06CC\u0645 \u06A9\u0646\u062F."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: "{0} \u0641\u0631\u06CC\u0645 \u062F\u0631 \u062B\u0627\u0646\u06CC\u0647"
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282620
+  - m_Id: 9876543210998
+    m_Localized: "\u0646\u0627\u0645\u062D\u062F\u0648\u062F"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -5196,3 +5256,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

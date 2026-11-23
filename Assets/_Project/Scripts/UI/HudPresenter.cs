@@ -786,6 +786,7 @@ namespace Mejnun.UI
                 var phoneLayout = DeviceProfile.IsPhoneLayout;
                 root.EnableInClassList("portrait-layout", Screen.height > Screen.width);
                 root.EnableInClassList("phone-layout", phoneLayout);
+                root.EnableInClassList("desktop-layout", !DeviceProfile.IsMobilePlatform);
                 ApplyPhoneSafeArea(phoneLayout);
                 UpdateOnlineWaiting();
                 var tallPhoneLayout = phoneLayout && Screen.height > Screen.width;

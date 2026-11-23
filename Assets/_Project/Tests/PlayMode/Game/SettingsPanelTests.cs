@@ -20,6 +20,110 @@ namespace Mejnun.Game.Tests
             Assert.That(SettingsPanel.IsCompactWidth(width), Is.EqualTo(expected));
         }
 
+        [TestCase(0, FullScreenMode.Windowed)]
+        [TestCase(1, FullScreenMode.FullScreenWindow)]
+        [TestCase(2, FullScreenMode.Windowed)]
+        public void DisplayModeIndexResolvesToSupportedFullScreenMode(int displayMode, FullScreenMode expected)
+        {
+            Assert.That(DisplaySettings.ResolveFullScreenMode(displayMode), Is.EqualTo(expected));
+        }
+
+        [TestCase(0, 30)]
+        [TestCase(1, 60)]
+        [TestCase(2, 120)]
+        [TestCase(3, -1)]
+        [TestCase(4, -1)]
+        public void FrameRateLimitIndexResolvesToTargetRate(int frameRateLimit, int expected)
+        {
+            Assert.That(DisplaySettings.ResolveTargetFrameRate(frameRateLimit), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void GraphicsSettingsDefaultToWindowedWithVSyncAt60Fps()
+        {
+            var hadDisplayMode = PlayerPrefs.HasKey(GameSettings.DisplayModeKey);
+            var previousDisplayMode = PlayerPrefs.GetInt(GameSettings.DisplayModeKey);
+            var hadVSync = PlayerPrefs.HasKey(GameSettings.VSyncKey);
+            var previousVSync = PlayerPrefs.GetInt(GameSettings.VSyncKey);
+            var hadFrameRateLimit = PlayerPrefs.HasKey(GameSettings.FrameRateLimitKey);
+            var previousFrameRateLimit = PlayerPrefs.GetInt(GameSettings.FrameRateLimitKey);
+
+            try
+            {
+                PlayerPrefs.DeleteKey(GameSettings.DisplayModeKey);
+                PlayerPrefs.DeleteKey(GameSettings.VSyncKey);
+                PlayerPrefs.DeleteKey(GameSettings.FrameRateLimitKey);
+
+                Assert.That(GameSettings.DisplayMode, Is.EqualTo(0));
+                Assert.That(GameSettings.VSync, Is.True);
+                Assert.That(DisplaySettings.ResolveTargetFrameRate(GameSettings.FrameRateLimit), Is.EqualTo(60));
+            }
+            finally
+            {
+                RestoreIntSetting(GameSettings.DisplayModeKey, hadDisplayMode, previousDisplayMode);
+                RestoreIntSetting(GameSettings.VSyncKey, hadVSync, previousVSync);
+                RestoreIntSetting(GameSettings.FrameRateLimitKey, hadFrameRateLimit, previousFrameRateLimit);
+                PlayerPrefs.Save();
+            }
+        }
+
+        [Test]
+        public void GraphicsControlsStayBoundToSettings()
+        {
+            var hadDisplayMode = PlayerPrefs.HasKey(GameSettings.DisplayModeKey);
+            var previousDisplayMode = PlayerPrefs.GetInt(GameSettings.DisplayModeKey);
+            var hadVSync = PlayerPrefs.HasKey(GameSettings.VSyncKey);
+            var previousVSync = PlayerPrefs.GetInt(GameSettings.VSyncKey);
+            var hadFrameRateLimit = PlayerPrefs.HasKey(GameSettings.FrameRateLimitKey);
+            var previousFrameRateLimit = PlayerPrefs.GetInt(GameSettings.FrameRateLimitKey);
+            PlayerPrefs.DeleteKey(GameSettings.DisplayModeKey);
+            PlayerPrefs.DeleteKey(GameSettings.VSyncKey);
+            PlayerPrefs.DeleteKey(GameSettings.FrameRateLimitKey);
+
+            var root = new VisualElement();
+            var displayMode = new DropdownField { name = "display-mode-dropdown" };
+            var vsync = new Toggle { name = "vsync-toggle" };
+            var frameRateLimit = new DropdownField { name = "frame-rate-limit-dropdown" };
+            root.Add(displayMode);
+            root.Add(vsync);
+            root.Add(frameRateLimit);
+            var document = AttachToRuntimePanel(root);
+            var panel = new SettingsPanel();
+
+            try
+            {
+                panel.Initialize(root);
+                Assert.That(displayMode.index, Is.EqualTo(GameSettings.DisplayMode));
+                Assert.That(vsync.value, Is.EqualTo(GameSettings.VSync));
+                Assert.That(frameRateLimit.index, Is.EqualTo(GameSettings.FrameRateLimit));
+
+                displayMode.value = displayMode.choices[1];
+                vsync.value = false;
+                frameRateLimit.value = frameRateLimit.choices[0];
+
+                Assert.That(GameSettings.DisplayMode, Is.EqualTo(1));
+                Assert.That(GameSettings.VSync, Is.False);
+                Assert.That(GameSettings.FrameRateLimit, Is.EqualTo(0));
+
+                GameSettings.DisplayMode = 0;
+                GameSettings.VSync = true;
+                GameSettings.FrameRateLimit = 2;
+
+                Assert.That(displayMode.index, Is.EqualTo(0));
+                Assert.That(vsync.value, Is.True);
+                Assert.That(frameRateLimit.index, Is.EqualTo(2));
+            }
+            finally
+            {
+                panel.Dispose();
+                DestroyRuntimePanel(document);
+                RestoreIntSetting(GameSettings.DisplayModeKey, hadDisplayMode, previousDisplayMode);
+                RestoreIntSetting(GameSettings.VSyncKey, hadVSync, previousVSync);
+                RestoreIntSetting(GameSettings.FrameRateLimitKey, hadFrameRateLimit, previousFrameRateLimit);
+                PlayerPrefs.Save();
+            }
+        }
+
         [Test]
         public void SettingsChangesStayInSyncAcrossPanelInstances()
         {

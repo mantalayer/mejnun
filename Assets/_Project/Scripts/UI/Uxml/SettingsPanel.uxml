@@ -1,632 +1,658 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Style src="../Uss/common.uss" />
-    <ui:Style src="../Uss/table.uss" />
-    <ui:VisualElement name="settings-panel" class="hud-dialog settings-panel" style="display: none">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/Scripts/UI/Uss/common.uss?fileID=7433441132597879392&amp;guid=820f33ee3865d42fe9d615b12cf9cf59&amp;type=3#common"/>
+    <Style src="project://database/Assets/_Project/Scripts/UI/Uss/table.uss?fileID=7433441132597879392&amp;guid=bcfe6146a5e324737a9509b87e456394&amp;type=3#table"/>
+    <ui:VisualElement name="settings-panel" class="hud-dialog settings-panel" style="display: none;">
         <ui:Label class="dialog-title">
             <Bindings>
-                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.title" />
+                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.title"/>
             </Bindings>
         </ui:Label>
         <ui:VisualElement class="settings-tabs">
             <ui:Button name="settings-tab-gameplay" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.gameplay" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.gameplay"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-table" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.table" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.table"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-hints" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.hints" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.hints"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-accessibility" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.accessibility" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.accessibility"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-audio" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.audio" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.audio"/>
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="settings-tab-graphics" class="settings-tab">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.graphics"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-general" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.general" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.general"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-rules" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.rules" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.rules"/>
                 </Bindings>
             </ui:Button>
             <ui:Button name="settings-tab-credits" class="settings-tab">
                 <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.credits" />
+                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.tab.credits"/>
                 </Bindings>
             </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement class="settings-pages">
-        <ui:ScrollView name="settings-page-gameplay" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.gameplay.section" />
-                </Bindings>
-            </ui:Label>
-            <ui:Toggle name="confirm-revert-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_revert" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_revert.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="confirm-draw-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_draw" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_draw.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="confirm-fix-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_fix" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_fix.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="confirm-leave-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_leave" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_leave.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.gameplay.cpu_speed" />
-                    </Bindings>
-                </ui:Label>
-                <ui:DropdownField name="cpu-speed-dropdown">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.cpu_speed.tooltip" />
-                    </Bindings>
-                </ui:DropdownField>
-            </ui:VisualElement>
-            <ui:Toggle name="easy-opening-deal-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.easy_opening_deal" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.easy_opening_deal.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="show-fast-forward-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.show_fast_forward" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.show_fast_forward.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-table" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.section" />
-                </Bindings>
-            </ui:Label>
-            <ui:Toggle name="hover-highlight-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.hover_highlight" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.hover_highlight.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.arc_amount" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.arc_amount.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="hand-arc-amount-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.card_spread" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="hand-spread-slider" low-value="0.25" high-value="0.9">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.card_spread.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="hand-spread-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.card_size" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="hand-card-scale-slider" low-value="0.5" high-value="1.5">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.card_size.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="hand-card-scale-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.opponent_card_size" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="opponent-card-scale-slider" low-value="0.5" high-value="2">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.opponent_card_size.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="opponent-card-scale-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:Toggle name="hide-opponent-hands-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.hide_opponent_hands" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.hide_opponent_hands.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.zoom_sensitivity" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.zoom_sensitivity.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="zoom-sensitivity-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_width" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="edge-pan-width-slider" low-value="0" high-value="0.25">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_pan_width.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="edge-pan-width-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_scroll_width" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="edge-scroll-width-slider" low-value="0" high-value="0.25">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_scroll_width.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="edge-scroll-width-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_speed" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="edge-pan-speed-slider" low-value="0.25" high-value="3">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_pan_speed.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="edge-pan-speed-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.pickup_hold" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="long-press-seconds-slider" low-value="0.1" high-value="0.8">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.pickup_hold.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="long-press-seconds-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.pan_start_speed" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="pan-start-speed-slider" low-value="50" high-value="400">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.pan_start_speed.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="pan-start-speed-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.raise_hand" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.raise_hand.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="hand-lift-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:Toggle name="overlap-sets-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.overlap_sets" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.overlap_sets.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="organic-board-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.organic_board" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.organic_board.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.board_card_spread" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.board_card_spread.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="board-card-spread-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.card_messiness" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="card-messiness-slider" low-value="0" high-value="1">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.card_messiness.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="card-messiness-value" class="setting-value" />
-            </ui:VisualElement>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-hints" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.hints.section" />
-                </Bindings>
-            </ui:Label>
-            <ui:Toggle name="hint-jiggle-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.hints.jiggle" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.hints.jiggle.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-accessibility" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.accessibility.section" />
-                </Bindings>
-            </ui:Label>
-            <ui:Toggle name="reduced-motion-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.reduced_motion" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.reduced_motion.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="haptics-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.haptics" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.haptics.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="four-colour-deck-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.four_colour_deck" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.four_colour_deck.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="left-handed-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.left_handed" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.left_handed.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:Toggle name="battery-saver-toggle">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.battery_saver" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.battery_saver.tooltip" />
-                </Bindings>
-            </ui:Toggle>
-            <ui:VisualElement name="ui-scale-row" class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.accessibility.ui_size" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="ui-scale-slider" low-value="0.8" high-value="3">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.ui_size.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="ui-scale-value" class="setting-value" />
-            </ui:VisualElement>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-audio" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.section" />
-                </Bindings>
-            </ui:Label>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.master_volume" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="volume-master-slider" low-value="0" high-value="1">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.master_volume.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="volume-master-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.music_volume" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="volume-music-slider" low-value="0" high-value="1">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.music_volume.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="volume-music-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.effects_volume" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="volume-sfx-slider" low-value="0" high-value="1">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.effects_volume.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="volume-sfx-value" class="setting-value" />
-            </ui:VisualElement>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.voice_volume" />
-                    </Bindings>
-                </ui:Label>
-                <ui:Slider name="volume-voice-slider" low-value="0" high-value="1">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.voice_volume.tooltip" />
-                    </Bindings>
-                </ui:Slider>
-                <ui:Label name="volume-voice-value" class="setting-value" />
-            </ui:VisualElement>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-general" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.language_section" />
-                </Bindings>
-            </ui:Label>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.language" />
-                    </Bindings>
-                </ui:Label>
-                <ui:DropdownField name="language-dropdown">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.language.tooltip" />
-                    </Bindings>
-                </ui:DropdownField>
-            </ui:VisualElement>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.online_section" />
-                </Bindings>
-            </ui:Label>
-            <ui:VisualElement class="settings-row">
-                <ui:Label class="setting-label">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.bot_fill" />
-                    </Bindings>
-                </ui:Label>
-                <ui:DropdownField name="quick-match-bot-fill-dropdown">
-                    <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.bot_fill.tooltip" />
-                    </Bindings>
-                </ui:DropdownField>
-            </ui:VisualElement>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.reset_section" />
-                </Bindings>
-            </ui:Label>
-            <ui:Button name="settings-reset-button">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.reset_defaults" />
-                    <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.reset_defaults.tooltip" />
-                </Bindings>
-            </ui:Button>
-
-            <ui:VisualElement name="account-settings-section">
+            <ui:ScrollView name="settings-page-gameplay" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page">
                 <ui:Label class="settings-section-title">
                     <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.account_section" />
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.gameplay.section"/>
                     </Bindings>
                 </ui:Label>
-                <ui:Button name="account-placeholder-button" enabled="false">
+                <ui:Toggle name="confirm-revert-toggle">
                     <Bindings>
-                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.account_placeholder" />
-                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.account_placeholder.tooltip" />
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_revert"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_revert.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="confirm-draw-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_draw"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_draw.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="confirm-fix-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_fix"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_fix.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="confirm-leave-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.confirm_leave"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.confirm_leave.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.gameplay.cpu_speed"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:DropdownField name="cpu-speed-dropdown">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.cpu_speed.tooltip"/>
+                        </Bindings>
+                    </ui:DropdownField>
+                </ui:VisualElement>
+                <ui:Toggle name="easy-opening-deal-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.easy_opening_deal"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.easy_opening_deal.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="show-fast-forward-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.gameplay.show_fast_forward"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.gameplay.show_fast_forward.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-table" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Toggle name="hover-highlight-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.hover_highlight"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.hover_highlight.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.arc_amount"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="hand-arc-amount-slider" low-value="0" high-value="1.5">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.arc_amount.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="hand-arc-amount-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.card_spread"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="hand-spread-slider" low-value="0.25" high-value="0.9">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.card_spread.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="hand-spread-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.card_size"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="hand-card-scale-slider" low-value="0.5" high-value="1.5">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.card_size.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="hand-card-scale-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.opponent_card_size"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="opponent-card-scale-slider" low-value="0.5" high-value="2">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.opponent_card_size.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="opponent-card-scale-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:Toggle name="hide-opponent-hands-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.hide_opponent_hands"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.hide_opponent_hands.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.zoom_sensitivity"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="zoom-sensitivity-slider" low-value="0.25" high-value="5">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.zoom_sensitivity.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="zoom-sensitivity-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_width"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="edge-pan-width-slider" low-value="0" high-value="0.25">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_pan_width.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="edge-pan-width-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_scroll_width"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="edge-scroll-width-slider" low-value="0" high-value="0.25">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_scroll_width.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="edge-scroll-width-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.edge_pan_speed"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="edge-pan-speed-slider" low-value="0.25" high-value="3">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.edge_pan_speed.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="edge-pan-speed-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.pickup_hold"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="long-press-seconds-slider" low-value="0.1" high-value="0.8">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.pickup_hold.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="long-press-seconds-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.pan_start_speed"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="pan-start-speed-slider" low-value="50" high-value="400">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.pan_start_speed.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="pan-start-speed-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.raise_hand"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="hand-lift-slider" low-value="0" high-value="1.5">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.raise_hand.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="hand-lift-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:Toggle name="overlap-sets-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.overlap_sets"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.overlap_sets.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="organic-board-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.table.organic_board"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.organic_board.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.board_card_spread"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="board-card-spread-slider" low-value="0.5" high-value="1.5">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.board_card_spread.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="board-card-spread-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.table.card_messiness"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="card-messiness-slider" low-value="0" high-value="1">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.table.card_messiness.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="card-messiness-value" class="setting-value"/>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-hints" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.hints.section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Toggle name="hint-jiggle-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.hints.jiggle"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.hints.jiggle.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-accessibility" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.accessibility.section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Toggle name="reduced-motion-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.reduced_motion"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.reduced_motion.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="haptics-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.haptics"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.haptics.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="four-colour-deck-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.four_colour_deck"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.four_colour_deck.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="left-handed-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.left_handed"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.left_handed.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:Toggle name="battery-saver-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.accessibility.battery_saver"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.battery_saver.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:VisualElement name="ui-scale-row" class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.accessibility.ui_size"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="ui-scale-slider" low-value="0.8" high-value="3">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.accessibility.ui_size.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="ui-scale-value" class="setting-value"/>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-audio" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.master_volume"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="volume-master-slider" low-value="0" high-value="1">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.master_volume.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="volume-master-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.music_volume"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="volume-music-slider" low-value="0" high-value="1">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.music_volume.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="volume-music-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.effects_volume"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="volume-sfx-slider" low-value="0" high-value="1">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.effects_volume.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="volume-sfx-value" class="setting-value"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.audio.voice_volume"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Slider name="volume-voice-slider" low-value="0" high-value="1">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.audio.voice_volume.tooltip"/>
+                        </Bindings>
+                    </ui:Slider>
+                    <ui:Label name="volume-voice-value" class="setting-value"/>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-graphics" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.graphics.section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.graphics.display_mode"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:DropdownField name="display-mode-dropdown">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.graphics.display_mode.tooltip"/>
+                        </Bindings>
+                    </ui:DropdownField>
+                </ui:VisualElement>
+                <ui:Toggle name="vsync-toggle">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="UI" entry="settings.graphics.vsync"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.graphics.vsync.tooltip"/>
+                    </Bindings>
+                </ui:Toggle>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.graphics.frame_rate_limit"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:DropdownField name="frame-rate-limit-dropdown">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.graphics.frame_rate_limit.tooltip"/>
+                        </Bindings>
+                    </ui:DropdownField>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-general" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.language_section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.language"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:DropdownField name="language-dropdown">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.language.tooltip"/>
+                        </Bindings>
+                    </ui:DropdownField>
+                </ui:VisualElement>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.online_section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label class="setting-label">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.bot_fill"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:DropdownField name="quick-match-bot-fill-dropdown">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.bot_fill.tooltip"/>
+                        </Bindings>
+                    </ui:DropdownField>
+                </ui:VisualElement>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.reset_section"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Button name="settings-reset-button">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.reset_defaults"/>
+                        <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.reset_defaults.tooltip"/>
                     </Bindings>
                 </ui:Button>
-            </ui:VisualElement>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-rules" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.components.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.components.body" />
-                </Bindings>
-            </ui:Label>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.first_player.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.first_player.body_1" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.first_player.body_2" />
-                </Bindings>
-            </ui:Label>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.goal.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.goal.body_1" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.goal.body_2" />
-                </Bindings>
-            </ui:Label>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.going_down.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.going_down.body_1" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.going_down.body_2" />
-                </Bindings>
-            </ui:Label>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.turn_actions.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.turn_actions.body_1" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.turn_actions.body_2" />
-                </Bindings>
-            </ui:Label>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.timed_turns.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.timed_turns.body" />
-                </Bindings>
-            </ui:Label>
-
-            <ui:Label class="settings-section-title">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.empty_pile.title" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.empty_pile.body" />
-                </Bindings>
-            </ui:Label>
-        </ui:ScrollView>
-
-        <ui:ScrollView name="settings-page-credits" class="settings-scroll settings-page" mode="Vertical" horizontal-scroller-visibility="Hidden" style="display: none">
-            <ui:Label class="settings-credit-role">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.game_design" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text loc-ignore" text="Brennan Anderson" />
-            <ui:Label class="settings-body-text loc-ignore" text="Natalie Gedeon" />
-            <ui:Label class="settings-credit-role">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.music" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text loc-ignore" text="Brennan Anderson" />
-            <ui:Label class="settings-credit-role">
-                <Bindings>
-                    <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.special_thanks" />
-                </Bindings>
-            </ui:Label>
-            <ui:Label class="settings-body-text loc-ignore" text="Fred Gedeon" />
-            <ui:Label class="settings-body-text loc-ignore" text="Sue Gedeon" />
-            <ui:Label class="settings-body-text loc-ignore" text="Stan Gedeon" />
-            <ui:Label class="settings-body-text loc-ignore" text="Sandra Gedeon" />
-            <ui:Label class="settings-body-text loc-ignore" text="Ann Gedeon" />
-            <ui:Label class="settings-body-text loc-ignore" text="Anthony Gedeon" />
-            <ui:Label class="settings-body-text loc-ignore" text="Dina Bassio" />
-        </ui:ScrollView>
+                <ui:VisualElement name="account-settings-section">
+                    <ui:Label class="settings-section-title">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.account_section"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:Button name="account-placeholder-button" enabled="false">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="settings.general.account_placeholder"/>
+                            <UnityEngine.Localization.LocalizedString property="tooltip" table="UI" entry="settings.general.account_placeholder.tooltip"/>
+                        </Bindings>
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-rules" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.components.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.components.body"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.first_player.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.first_player.body_1"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.first_player.body_2"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.goal.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.goal.body_1"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.goal.body_2"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.going_down.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.going_down.body_1"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.going_down.body_2"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.turn_actions.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.turn_actions.body_1"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.turn_actions.body_2"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.timed_turns.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.timed_turns.body"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-section-title">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.empty_pile.title"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label class="settings-body-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="rules.section.empty_pile.body"/>
+                    </Bindings>
+                </ui:Label>
+            </ui:ScrollView>
+            <ui:ScrollView name="settings-page-credits" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-scroll settings-page" style="display: none;">
+                <ui:Label class="settings-credit-role">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.game_design"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label text="Brennan Anderson" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Natalie Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label class="settings-credit-role">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.music"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label text="Brennan Anderson" class="settings-body-text loc-ignore"/>
+                <ui:Label class="settings-credit-role">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="credits.role.special_thanks"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label text="Fred Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Sue Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Stan Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Sandra Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Ann Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Anthony Gedeon" class="settings-body-text loc-ignore"/>
+                <ui:Label text="Dina Bseiso" class="settings-body-text loc-ignore"/>
+            </ui:ScrollView>
         </ui:VisualElement>
-        <ui:Label name="settings-tooltip" class="settings-tooltip" picking-mode="Ignore" />
+        <ui:Label name="settings-tooltip" picking-mode="Ignore" class="settings-tooltip"/>
         <ui:Button name="settings-close-button" class="hud-button primary-button">
             <Bindings>
-                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.done" />
+                <UnityEngine.Localization.LocalizedString property="text" table="UI" entry="common.done"/>
             </Bindings>
         </ui:Button>
     </ui:VisualElement>

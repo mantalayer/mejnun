@@ -4387,6 +4387,58 @@ MonoBehaviour:
     m_Localized: "Remerciements sp\xE9ciaux"
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: Graphique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Afficher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: Mode d'affichage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: "Choisissez si vous souhaitez jouer en mode fen\xEAtr\xE9 ou en
+      plein \xE9cran."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: "Fen\xEAtre"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: "Plein \xE9cran"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: "Synchronisez les images avec votre \xE9cran pour r\xE9duire les
+      d\xE9chirures."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: "Limite de fr\xE9quence d'images"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "D\xE9finissez la fr\xE9quence d'images maximale. La synchronisation
+      verticale (VSync) peut d\xE9finir la fr\xE9quence d'images effective."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282630
+  - m_Id: 9876543210998
+    m_Localized: "Illimit\xE9"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4497,3 +4549,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

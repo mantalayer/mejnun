@@ -4372,6 +4372,56 @@ MonoBehaviour:
     m_Localized: Speciale dankbetuigingen
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: Grafische weergave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Weergave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: Weergavemodus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: Kies of je in een venster of op volledig scherm wilt spelen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: Raam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: Volledig scherm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: Synchroniseer de frames met je beeldscherm om tearing te verminderen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: Beeldsnelheidlimiet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: Stel de maximale framesnelheid in. VSync kan in plaats daarvan de
+      effectieve framesnelheid instellen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282621
+  - m_Id: 9876543210998
+    m_Localized: Onbeperkt
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4482,3 +4532,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

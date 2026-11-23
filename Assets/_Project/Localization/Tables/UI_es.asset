@@ -4373,6 +4373,57 @@ MonoBehaviour:
     m_Localized: Agradecimientos especiales
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: "Gr\xE1ficos"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: Mostrar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: "Modo de visualizaci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: Elige si quieres jugar en modo ventana o en pantalla completa.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: Con ventanas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: Pantalla completa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: "Sincronizaci\xF3n vertical"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: Sincroniza los fotogramas con tu pantalla para reducir el efecto
+      de desgarro.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: "l\xEDmite de velocidad de fotogramas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "Establece la velocidad de fotogramas m\xE1xima. VSync puede establecer
+      la velocidad de fotogramas efectiva en su lugar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282625
+  - m_Id: 9876543210998
+    m_Localized: Ilimitado
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4483,3 +4534,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997

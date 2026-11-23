@@ -4280,6 +4280,55 @@ MonoBehaviour:
     m_Localized: "\u7279\u5225\u306A\u611F\u8B1D"
     m_Metadata:
       m_Items: []
+  - m_Id: 9876543210987
+    m_Localized: "\u30B0\u30E9\u30D5\u30A3\u30C3\u30AF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210988
+    m_Localized: "\u753B\u9762"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210989
+    m_Localized: "\u8868\u793A\u30E2\u30FC\u30C9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210990
+    m_Localized: "\u30A6\u30A3\u30F3\u30C9\u30A6\u30E2\u30FC\u30C9\u3067\u518D\u751F\u3059\u308B\u304B\u3001\u30D5\u30EB\u30B9\u30AF\u30EA\u30FC\u30F3\u30E2\u30FC\u30C9\u3067\u518D\u751F\u3059\u308B\u304B\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210991
+    m_Localized: "\u30A6\u30A3\u30F3\u30C9\u30A6\u4ED8\u304D"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210992
+    m_Localized: "\u5168\u753B\u9762\u8868\u793A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210993
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210994
+    m_Localized: "\u753B\u9762\u306E\u3061\u3089\u3064\u304D\u3092\u8EFD\u6E1B\u3059\u308B\u305F\u3081\u306B\u3001\u30D5\u30EC\u30FC\u30E0\u3092\u30C7\u30A3\u30B9\u30D7\u30EC\u30A4\u3068\u540C\u671F\u3055\u305B\u3066\u304F\u3060\u3055\u3044\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210995
+    m_Localized: "\u30D5\u30EC\u30FC\u30E0\u30EC\u30FC\u30C8\u5236\u9650"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210996
+    m_Localized: "\u6700\u5927\u30D5\u30EC\u30FC\u30E0\u30EC\u30FC\u30C8\u3092\u8A2D\u5B9A\u3057\u307E\u3059\u3002VSync\u306F\u4EE3\u308F\u308A\u306B\u5B9F\u52B9\u30D5\u30EC\u30FC\u30E0\u30EC\u30FC\u30C8\u3092\u8A2D\u5B9A\u3059\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9876543210997
+    m_Localized: '{0} FPS'
+    m_Metadata:
+      m_Items:
+      - rid: 4825848250703282617
+  - m_Id: 9876543210998
+    m_Localized: "\u7121\u5236\u9650"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -4390,3 +4439,4 @@ MonoBehaviour:
         - id: 1042939504484356
         - id: 1042939504484357
         - id: 1048174142676992
+        - id: 9876543210997
